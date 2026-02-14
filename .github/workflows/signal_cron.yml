@@ -1,0 +1,41 @@
+name: signal-cron
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"  # every 30 minutes
+  workflow_dispatch:
+
+jobs:
+  signal:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Update candles (optional)
+        env:
+          POLYGON_API_KEY: ${{ secrets.POLYGON_API_KEY }}
+          DATA_DIR: "./data/market_candles"
+          SYMBOL: "GBPUSD"
+        run: |
+          if [ -z "$POLYGON_API_KEY" ]; then
+            echo "POLYGON_API_KEY not set; skipping candle update."
+          else
+            python cli/update_polygon.py --out "$DATA_DIR" --symbol "$SYMBOL" --api_key "$POLYGON_API_KEY" --from "2024-01-01"
+          fi
+      - name: Generate signal report
+        env:
+          HORIZON: "30m"
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: python cli/signal_report.py
+      - name: Upload signal db artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-db
+          path: data/app.db

@@ -1,0 +1,19 @@
+[tool.pytest.ini_options]
+minversion = "8.0"
+addopts = "-q --strict-markers --disable-warnings --cov=. --cov-report=term-missing --cov-fail-under=85"
+testpaths = ["tests"]
+pythonpath = ["."]
+
+[tool.coverage.run]
+branch = true
+source = ["."]
+omit = [
+  "*/__init__.py",
+  "benchmarks/*",
+  "infra/*",
+  "cli/*",
+  "services/dashboard/*",
+  "services/paper_broker/*",
+  "mt5_bridge/*",
+  "models/train.py",
+]
