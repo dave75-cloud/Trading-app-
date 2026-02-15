@@ -36,5 +36,8 @@ variable "alarm_email" {
 }
 
 
-variable "enable_alb_access_logs" { type = bool default = true }
+variable "enable_alb_access_logs" {
+  type    = bool
+  default = true
+}
 variable "alb_access_logs_bucket" { type = string default = "" }

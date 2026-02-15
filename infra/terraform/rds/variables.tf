@@ -7,4 +7,7 @@ variable "db_password"       { type = string }
 variable "db_instance_class" { type = string }
 variable "db_allocated_storage" { type = number }
 
-variable "alarms_topic_arn" { type = string default = "" }
+variable "alarms_topic_arn" {
+  type    = string
+  default = ""
+}
