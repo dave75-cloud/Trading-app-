@@ -4,35 +4,43 @@ on:
   workflow_dispatch:
     inputs:
       action:
-        description: "plan or apply"
+        description: plan or apply
         required: true
-        default: "plan"
+        default: plan
         type: choice
-        options:
-          - plan
-          - apply
+        options: [plan, apply]
+
+permissions:
+  contents: read
 
 jobs:
   terraform:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_wrapper: false
 
-      - name: Terraform Init
+      - name: Terraform init (no backend, visibility smoke)
         run: terraform -chdir=infra/terraform init -backend=false
 
-      - name: Terraform Validate
+      - name: Terraform validate
         run: terraform -chdir=infra/terraform validate
 
-      - name: Terraform Plan
-        if: ${{ github.event.inputs.action == 'plan' }}
+      - name: Terraform plan
+        if: ${{ inputs.action == 'plan' }}
         run: terraform -chdir=infra/terraform plan
 
-      - name: Terraform Apply
-        if: ${{ github.event.inputs.action == 'apply' }}
+      - name: Terraform apply
+        if: ${{ inputs.action == 'apply' }}
         run: terraform -chdir=infra/terraform apply -auto-approve

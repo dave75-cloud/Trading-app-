@@ -2,16 +2,17 @@ name: Build and Push (ECR)
 
 on:
   push:
-    branches: [ "main" ]
-  workflow_dispatch: {}
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
   build_push:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -29,36 +30,17 @@ jobs:
           aws ecr describe-repositories --repository-names trading-app >/dev/null 2>&1 || \
           aws ecr create-repository --repository-name trading-app >/dev/null
 
-      - name: Build and push
+      - name: Build and push image
         env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          IMAGE_TAG: ${{ github.sha }}
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          TAG: ${{ github.sha }}
         run: |
-          IMAGE_URI="$ECR_REGISTRY/trading-app:$IMAGE_TAG"
+          IMAGE_URI="$REGISTRY/trading-app:$TAG"
           docker build -t "$IMAGE_URI" .
           docker push "$IMAGE_URI"
+          echo "$IMAGE_URI" > image_uri.txt
 
-Control + O
-Enter
-Control + X
-nano .github/workflows/terraform_deploy.yml
-name: Terraform Deploy
-
-on:
-  workflow_dispatch:
-
-jobs:
-  terraform:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-git add .github/workflows
-git commit -m "Add deployment workflows"
-git push
-
-
-cd ~/Projects/Trading-app-
-ls -la .github/workflows
-
+      - uses: actions/upload-artifact@v4
+        with:
+          name: image-uri
+          path: image_uri.txt
