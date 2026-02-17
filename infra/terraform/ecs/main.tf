@@ -192,7 +192,6 @@ resource "aws_ecs_task_definition" "api" {
         # DB_URL and POLYGON_API_KEY are injected via Secrets Manager
       ]
       secrets = local.api_secrets
-      
       logConfiguration = {
         logDriver = "awslogs"
         options = {
@@ -265,7 +264,6 @@ resource "aws_ecs_task_definition" "runner" {
         # DB_URL and POLYGON_API_KEY are injected via Secrets Manager
       ]
       secrets = local.api_secrets
-      ]
 logConfiguration = {
         logDriver = "awslogs"
         options = {
