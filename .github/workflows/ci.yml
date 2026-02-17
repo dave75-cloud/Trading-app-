@@ -39,7 +39,10 @@ jobs:
         uses: hashicorp/setup-terraform@v3
 
       - name: Terraform fmt
-        run: terraform fmt -check -recursive
+  	run: terraform -chdir=infra/terraform fmt -recursive
+
+      - name: Fail if terraform fmt changed files
+  	run: git diff --exit-code
 
       - name: Terraform init
         run: terraform init -backend=false
