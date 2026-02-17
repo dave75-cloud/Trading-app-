@@ -2,7 +2,10 @@ variable "region" {
   type    = string
   default = "***"
 }
-variable "project"               { type = string  default = "gbpusd-signal" }
+variable "project" {
+  type    = string
+  default = "gbpusd-signal"
+}
 variable "vpc_id"                { type = string }
 variable "public_subnets"        { type = list(string) }
 variable "private_subnets"       { type = list(string) }
@@ -10,11 +13,26 @@ variable "ecs_security_group"    { type = string }
 variable "alb_security_group"    { type = string }
 variable "api_image"             { type = string }
 variable "broker_image"          { type = string }
-variable "dashboard_image"       { type = string  default = "" }
-variable "db_username"           { type = string  default = "signal_user" }
-variable "db_password"           { type = string  default = "ChangeMe123!" }
-variable "db_instance_class"     { type = string  default = "db.t4g.micro" }
-variable "db_allocated_storage"  { type = number  default = 20 }
+variable "dashboard_image"       { 
+	type = string
+  	default = "" 
+}
+variable "db_username"           { 
+type = string  
+default = "signal_user" 
+}
+variable "db_password"           { 
+type = string  
+default = "ChangeMe123!" 
+}
+variable "db_instance_class"     { 
+type = string  
+default = "db.t4g.micro" 
+}
+variable "db_allocated_storage"  { 
+type = number  
+default = 20 
+}
 
 # ---- Secrets handling ----
 # Recommended: provide existing Secrets Manager ARNs below and set create_secrets=false.
