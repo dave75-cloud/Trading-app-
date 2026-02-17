@@ -54,7 +54,7 @@ resource "aws_cloudwatch_metric_alarm" "db_cpu_high" {
   threshold           = 80
   comparison_operator = "GreaterThanOrEqualToThreshold"
   treat_missing_data  = "notBreaching"
-  dimensions = { DBInstanceIdentifier = aws_db_instance.this.id }
+dimensions = { DBInstanceIdentifier = aws_db_instance.postgres.id }
   alarm_actions = [var.alarms_topic_arn]
 }
 
@@ -70,7 +70,7 @@ resource "aws_cloudwatch_metric_alarm" "db_free_storage_low" {
   threshold           = 10737418240 # 10 GiB
   comparison_operator = "LessThanOrEqualToThreshold"
   treat_missing_data  = "notBreaching"
-  dimensions = { DBInstanceIdentifier = aws_db_instance.this.id }
+dimensions = { DBInstanceIdentifier = aws_db_instance.postgres.id }
   alarm_actions = [var.alarms_topic_arn]
 }
 
@@ -86,6 +86,6 @@ resource "aws_cloudwatch_metric_alarm" "db_freeable_memory_low" {
   threshold           = 268435456 # 256 MiB
   comparison_operator = "LessThanOrEqualToThreshold"
   treat_missing_data  = "notBreaching"
-  dimensions = { DBInstanceIdentifier = aws_db_instance.this.id }
+dimensions = { DBInstanceIdentifier = aws_db_instance.postgres.id }
   alarm_actions = [var.alarms_topic_arn]
 }
