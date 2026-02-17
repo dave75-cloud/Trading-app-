@@ -64,8 +64,8 @@ resource "aws_secretsmanager_secret_version" "slack_webhook_url" {
 locals {
   effective_db_url_secret_arn = var.db_url_secret_arn != "" ? var.db_url_secret_arn : aws_secretsmanager_secret.db_url[0].arn
 
-  effective_polygon_api_key_secret_arn = var.polygon_api_key_secret_arn != "" ? var.polygon_api_key_secret_arn :
-    (length(aws_secretsmanager_secret.polygon_api_key) > 0 ? aws_secretsmanager_secret.polygon_api_key[0].arn : "")
+effective_polygon_api_key_secret_arn = var.polygon_api_key_secret_arn != "" ? var.polygon_api_key_secret_arn : (length(aws_secretsmanager_secret.polygon_api_key) > 0 ? aws_secretsmanager_secret.polygon_api_key[0].arn : "")
+
 
   effective_slack_webhook_url_secret_arn = var.slack_webhook_url_secret_arn != "" ? var.slack_webhook_url_secret_arn :
     (length(aws_secretsmanager_secret.slack_webhook_url) > 0 ? aws_secretsmanager_secret.slack_webhook_url[0].arn : "")
@@ -143,7 +143,10 @@ locals {
     (length(aws_s3_bucket.alb_logs) > 0 ? aws_s3_bucket.alb_logs[0].bucket : "")
 }
 
-module "s3"  { source = "./s3";  project = var.project }
+module "s3" {
+  source  = "./s3"
+  project = var.project
+}
 module "rds" {
   source = "./rds"
   project = var.project
