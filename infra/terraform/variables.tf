@@ -78,3 +78,45 @@ variable "alb_access_logs_bucket" {
   type    = string
   default = ""
 }
+
+variable "create_kms_key" {
+  type    = bool
+  default = true
+}
+
+variable "kms_key_arn" {
+  type    = string
+  default = ""
+}
+
+variable "polygon_api_key" {
+  type    = string
+  default = ""
+}
+
+variable "slack_webhook_url" {
+  type    = string
+  default = ""
+}
+
+variable "db_username" {
+  type    = string
+  default = "app"
+}
+
+variable "db_password" {
+  type      = string
+  sensitive = true
+  default   = ""
+}
+
+variable "db_instance_class" {
+  type    = string
+  default = "db.t3.micro"
+}
+
+variable "db_allocated_storage" {
+  type    = number
+  default = 20
+}
+
