@@ -139,8 +139,7 @@ resource "aws_s3_bucket_policy" "alb_logs" {
 }
 
 locals {
-  effective_alb_logs_bucket = var.alb_access_logs_bucket != "" ? var.alb_access_logs_bucket :
-    (length(aws_s3_bucket.alb_logs) > 0 ? aws_s3_bucket.alb_logs[0].bucket : "")
+  effective_alb_logs_bucket = var.alb_access_logs_bucket != "" ? var.alb_access_logs_bucket : (length(aws_s3_bucket.alb_logs) > 0 ? aws_s3_bucket.alb_logs[0].bucket : "")
 }
 
 module "s3" {
