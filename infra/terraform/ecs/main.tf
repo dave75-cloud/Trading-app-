@@ -446,7 +446,8 @@ resource "aws_cloudwatch_metric_alarm" "api_mem_high" {
 resource "aws_cloudwatch_log_metric_filter" "api_errors" {
   name           = "${var.project}-api-errors"
   log_group_name = aws_cloudwatch_log_group.api.name
-  pattern        = ""ERROR""
+  pattern = "ERROR"
+
 
   metric_transformation {
     name      = "${var.project}-api-error-count"
