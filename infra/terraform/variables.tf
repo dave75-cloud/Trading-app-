@@ -1,4 +1,7 @@
-variable "region"                { type = string  default = "ap-southeast-2" }
+variable "region" {
+  type    = string
+  default = "***"
+}
 variable "project"               { type = string  default = "gbpusd-signal" }
 variable "vpc_id"                { type = string }
 variable "public_subnets"        { type = list(string) }
