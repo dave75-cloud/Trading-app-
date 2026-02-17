@@ -1,4 +1,8 @@
-variable "region"             { type = string }
+variable "region" {
+  type    = string
+  default = "***"
+}
+
 variable "project"            { type = string }
 variable "vpc_id"             { type = string }
 variable "public_subnets"     { type = list(string) }
