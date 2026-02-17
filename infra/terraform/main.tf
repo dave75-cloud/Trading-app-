@@ -160,6 +160,7 @@ module "rds" {
 }
 
 module "ecs" {
+  db_url_secret_arn = var.db_url_secret_arn
   source = "./ecs"
   region = var.region
   project = var.project
