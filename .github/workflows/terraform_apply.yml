@@ -8,6 +8,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
+      TF_VAR_region: ap-southeast-2
       TF_VAR_vpc_id: ${{ secrets.TF_VAR_vpc_id }}
       TF_VAR_public_subnets: ${{ secrets.TF_VAR_public_subnets }}
       TF_VAR_private_subnets: ${{ secrets.TF_VAR_private_subnets }}
@@ -29,8 +30,8 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}  
-	
+          aws-region: ap-southeast-2
+
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
@@ -39,3 +40,6 @@ jobs:
 
       - name: Terraform Apply
         run: terraform -chdir=infra/terraform apply -auto-approve -input=false
+
+      - name: Terraform Outputs
+        run: terraform -chdir=infra/terraform output || true
