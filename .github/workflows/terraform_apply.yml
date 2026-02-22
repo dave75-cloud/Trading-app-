@@ -1,6 +1,4 @@
 name: Terraform Apply
-# trigger
-# trigger
 
 on:
   workflow_dispatch:
@@ -39,18 +37,17 @@ jobs:
           aws sts get-caller-identity
           aws configure list
 
-      - name: Terraform Plan (preview)
-        run: terraform -chdir=infra/terraform plan -no-color -input=false
-
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
       - name: Terraform Init
         run: terraform -chdir=infra/terraform init -input=false
 
+      - name: Terraform Plan
+        run: terraform -chdir=infra/terraform plan -no-color -input=false
+
       - name: Terraform Apply
         run: terraform -chdir=infra/terraform apply -auto-approve -input=false
 
       - name: Terraform Outputs
         run: terraform -chdir=infra/terraform output || true
-      Add AWS debug + plan preview to terraform apply
