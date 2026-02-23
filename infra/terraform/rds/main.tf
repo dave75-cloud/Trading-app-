@@ -43,7 +43,7 @@ resource "aws_db_instance" "postgres" {
     43	
     44	# ---- RDS alarms (optional) ----
     45	resource "aws_cloudwatch_metric_alarm" "db_cpu_high" {
-    46	  count               = var.alarms_topic_arn != "" ? 1 : 0
+
     47	  alarm_name          = "${var.project}-db-cpu-high"
     48	  alarm_description   = "RDS CPU utilization is high."
     49	  namespace           = "AWS/RDS"
@@ -58,8 +58,10 @@ resource "aws_db_instance" "postgres" {
     58	  alarm_actions = [var.alarms_topic_arn]
     59	}
     60	
+        alarm_actions = var.alarms_topic_arn != "" ? [var.alarms_topic_arn] : []
+        ok_actions    = var.alarms_topic_arn != "" ? [var.alarms_topic_arn] : []
     61	resource "aws_cloudwatch_metric_alarm" "db_free_storage_low" {
-    62	  count               = var.alarms_topic_arn != "" ? 1 : 0
+
     63	  alarm_name          = "${var.project}-db-free-storage-low"
     64	  alarm_description   = "RDS free storage is low."
     65	  namespace           = "AWS/RDS"
@@ -74,8 +76,10 @@ resource "aws_db_instance" "postgres" {
     74	  alarm_actions = [var.alarms_topic_arn]
     75	}
     76	
+          alarm_actions = var.alarms_topic_arn != "" ? [var.alarms_topic_arn] : []
+          ok_actions    = var.alarms_topic_arn != "" ? [var.alarms_topic_arn] : []
     77	resource "aws_cloudwatch_metric_alarm" "db_freeable_memory_low" {
-    78	  count               = var.alarms_topic_arn != "" ? 1 : 0
+
     79	  alarm_name          = "${var.project}-db-freeable-memory-low"
     80	  alarm_description   = "RDS freeable memory is low."
     81	  namespace           = "AWS/RDS"
@@ -89,3 +93,6 @@ resource "aws_db_instance" "postgres" {
     89	dimensions = { DBInstanceIdentifier = aws_db_instance.postgres.id }
     90	  alarm_actions = [var.alarms_topic_arn]
     91	}
+
+        alarm_actions = var.alarms_topic_arn != "" ? [var.alarms_topic_arn] : []
+        ok_actions    = var.alarms_topic_arn != "" ? [var.alarms_topic_arn] : []
