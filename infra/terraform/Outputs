@@ -2,16 +2,20 @@ output "alb_dns_name" {
   value = module.ecs.alb_dns_name
 }
 
+output "ecs_cluster_name" {
+  value = module.ecs.cluster_name
+}
+
+output "api_service_name" {
+  value = module.ecs.api_service_name
+}
+
+output "dashboard_service_name" {
+  value = module.ecs.dashboard_service_name
+}
+
 output "db_endpoint" {
   value = module.rds.db_endpoint
-}
-
-output "db_port" {
-  value = module.rds.db_port
-}
-
-output "db_name" {
-  value = module.rds.db_name
 }
 
 output "db_url" {
