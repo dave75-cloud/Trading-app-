@@ -11,7 +11,7 @@ resource "aws_security_group" "db" {
     protocol        = "tcp"
     security_groups = [var.ecs_security_group_id]
   }
-egress {
+  egress {
   from_port   = 0
   to_port     = 0
   protocol    = "-1"
@@ -31,15 +31,15 @@ resource "aws_db_instance" "postgres" {
   skip_final_snapshot     = true
   vpc_security_group_ids  = [aws_security_group.db.id]
   db_subnet_group_name    = aws_db_subnet_group.this.name
-}
-  35	output "db_endpoint" { value = aws_db_instance.postgres.address }
-    36	output "db_port" { value = aws_db_instance.postgres.port }
-    37	output "db_name" { value = aws_db_instance.postgres.db_name }
-    38	
-    39	output "db_url" {
-    40	  value     = "postgresql://${var.db_username}:${var.db_password}@${aws_db_instance.postgres.address}:${aws_db_instance.postgres.port}/${aws_db_instance.postgres.db_name}"
-    41	  sensitive = true
-    42	}
+  }
+  output "db_endpoint" { value = aws_db_instance.postgres.address }
+  output "db_port" { value = aws_db_instance.postgres.port }
+  output "db_name" { value = aws_db_instance.postgres.db_name }
+
+  output "db_url" {
+  value     = "postgresql://${var.db_username}:${var.db_password}@${aws_db_instance.postgres.address}:${aws_db_instance.postgres.port}/${aws_db_instance.postgres.db_name}"
+  sensitive = true
+  }
     43	
     44	# ---- RDS alarms (optional) ----
     45	resource "aws_cloudwatch_metric_alarm" "db_cpu_high" {
