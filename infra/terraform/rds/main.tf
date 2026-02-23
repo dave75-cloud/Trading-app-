@@ -3,4 +3,92 @@ resource "aws_db_subnet_group" "this" {
   subnet_ids = var.private_subnets
 }
 
-resource
+resource "aws_security_group" "db" {
+  name   = "${var.project}-db-sg"
+  vpc_id = var.vpc_id
+
+  ingress {
+    from_port       = 5432
+    to_port         = 5432
+    protocol        = "tcp"
+    security_groups = [var.ecs_security_group_id]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+resource "aws_db_instance" "postgres" {
+  identifier             = "${var.project}-db"
+  engine                 = "postgres"
+  engine_version         = "15"
+  instance_class         = var.db_instance_class
+  allocated_storage      = var.db_allocated_storage
+  db_name                = "signals"
+  username               = var.db_username
+  password               = var.db_password
+  publicly_accessible    = false
+  skip_final_snapshot    = true
+  vpc_security_group_ids = [aws_security_group.db.id]
+  db_subnet_group_name   = aws_db_subnet_group.this.name
+}
+
+# ---- RDS alarms (optional) ----
+# IMPORTANT: no `count` (count on unknown values breaks plan).
+resource "aws_cloudwatch_metric_alarm" "db_cpu_high" {
+  alarm_name          = "${var.project}-db-cpu-high"
+  alarm_description   = "RDS CPU utilization is high."
+  namespace           = "AWS/RDS"
+  metric_name         = "CPUUtilization"
+  statistic           = "Average"
+  period              = 300
+  evaluation_periods  = 2
+  threshold           = 80
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  treat_missing_data  = "notBreaching"
+
+  dimensions = { DBInstanceIdentifier = aws_db_instance.postgres.id }
+
+  alarm_actions = var.alarms_topic_arn == "" ? [] : [var.alarms_topic_arn]
+  ok_actions    = var.alarms_topic_arn == "" ? [] : [var.alarms_topic_arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "db_free_storage_low" {
+  alarm_name          = "${var.project}-db-free-storage-low"
+  alarm_description   = "RDS free storage is low."
+  namespace           = "AWS/RDS"
+  metric_name         = "FreeStorageSpace"
+  statistic           = "Average"
+  period              = 300
+  evaluation_periods  = 1
+  threshold           = 10737418240 # 10 GiB
+  comparison_operator = "LessThanOrEqualToThreshold"
+  treat_missing_data  = "notBreaching"
+
+  dimensions = { DBInstanceIdentifier = aws_db_instance.postgres.id }
+
+  alarm_actions = var.alarms_topic_arn == "" ? [] : [var.alarms_topic_arn]
+  ok_actions    = var.alarms_topic_arn == "" ? [] : [var.alarms_topic_arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "db_freeable_memory_low" {
+  alarm_name          = "${var.project}-db-freeable-memory-low"
+  alarm_description   = "RDS freeable memory is low."
+  namespace           = "AWS/RDS"
+  metric_name         = "FreeableMemory"
+  statistic           = "Average"
+  period              = 300
+  evaluation_periods  = 1
+  threshold           = 268435456 # 256 MiB
+  comparison_operator = "LessThanOrEqualToThreshold"
+  treat_missing_data  = "notBreaching"
+
+  dimensions = { DBInstanceIdentifier = aws_db_instance.postgres.id }
+
+  alarm_actions = var.alarms_topic_arn == "" ? [] : [var.alarms_topic_arn]
+  ok_actions    = var.alarms_topic_arn == "" ? [] : [var.alarms_topic_arn]
+}
