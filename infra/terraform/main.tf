@@ -156,7 +156,6 @@ module "rds" {
   db_password = var.db_password
   db_instance_class = var.db_instance_class
   db_allocated_storage = var.db_allocated_storage
-
 module "ecs" {
   db_url_secret_arn = var.db_url_secret_arn
   source = "./ecs"
