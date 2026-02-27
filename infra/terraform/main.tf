@@ -153,8 +153,7 @@ module "s3" {
   project = var.project
 }
 
-module "ecs" {
-  source = "./ecs"
+module "ecs" {  source = "./ecs"
 
   region  = var.region
   project = var.project
