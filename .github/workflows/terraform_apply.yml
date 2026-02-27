@@ -37,20 +37,6 @@ jobs:
           aws sts get-caller-identity
           aws configure list
 
-      - name: List ALBs (Sydney)
-        run: |
-          aws elbv2 describe-load-balancers --region ap-southeast-2 \
-            --query "LoadBalancers[?Type=='application'].[LoadBalancerName,DNSName,Scheme,VpcId]" \
-            --output table
-
-      - name: Debug AWS identity
-        run: |
-          aws sts get-caller-identity
-          aws configure list
-
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
-
       - name: Terraform Init
         run: terraform -chdir=infra/terraform init -input=false
 
