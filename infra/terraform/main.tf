@@ -16,14 +16,38 @@ provider "aws" {
 data "aws_caller_identity" "current" {}
 
 # -------------------------------------------------------------------
+# Optional KMS key (for Secrets Manager encryption, if you want a project key)
+# -------------------------------------------------------------------
+
+resource "aws_kms_key" "secrets" {
+  count                   = var.create_kms_key && var.kms_key_arn == "" ? 1 : 0
+  description             = "${var.project} secrets"
+  deletion_window_in_days = 7
+  enable_key_rotation     = true
+}
+
+resource "aws_kms_alias" "secrets" {
+  count         = var.create_kms_key && var.kms_key_arn == "" ? 1 : 0
+  name          = "alias/${var.project}-secrets"
+  target_key_id = aws_kms_key.secrets[0].key_id
+}
+
+locals {
+  effective_kms_key_arn = var.kms_key_arn != "" ? var.kms_key_arn : (
+    length(aws_kms_key.secrets) > 0 ? aws_kms_key.secrets[0].arn : ""
+  )
+}
+
+# -------------------------------------------------------------------
 # Optional: create runtime secrets in Secrets Manager
-# If create_secrets=true AND the corresponding *_secret_arn is empty,
-# Terraform creates the secret (and version) here.
+# If create_secrets=true AND *_secret_arn is empty, root creates the secret.
+# Otherwise we assume you supplied an existing ARN.
 # -------------------------------------------------------------------
 
 resource "aws_secretsmanager_secret" "db_url" {
-  count = var.create_secrets && var.db_url_secret_arn == "" ? 1 : 0
-  name  = "${var.project}/db_url"
+  count      = var.create_secrets && var.db_url_secret_arn == "" ? 1 : 0
+  name       = "${var.project}/db_url"
+  kms_key_id = local.effective_kms_key_arn != "" ? local.effective_kms_key_arn : null
 }
 
 resource "aws_secretsmanager_secret_version" "db_url" {
@@ -33,8 +57,9 @@ resource "aws_secretsmanager_secret_version" "db_url" {
 }
 
 resource "aws_secretsmanager_secret" "polygon_api_key" {
-  count = var.create_secrets && var.polygon_api_key_secret_arn == "" && var.polygon_api_key != "" ? 1 : 0
-  name  = "${var.project}/polygon_api_key"
+  count      = var.create_secrets && var.polygon_api_key_secret_arn == "" && var.polygon_api_key != "" ? 1 : 0
+  name       = "${var.project}/polygon_api_key"
+  kms_key_id = local.effective_kms_key_arn != "" ? local.effective_kms_key_arn : null
 }
 
 resource "aws_secretsmanager_secret_version" "polygon_api_key" {
@@ -44,8 +69,9 @@ resource "aws_secretsmanager_secret_version" "polygon_api_key" {
 }
 
 resource "aws_secretsmanager_secret" "slack_webhook_url" {
-  count = var.create_secrets && var.slack_webhook_url_secret_arn == "" && var.slack_webhook_url != "" ? 1 : 0
-  name  = "${var.project}/slack_webhook_url"
+  count      = var.create_secrets && var.slack_webhook_url_secret_arn == "" && var.slack_webhook_url != "" ? 1 : 0
+  name       = "${var.project}/slack_webhook_url"
+  kms_key_id = local.effective_kms_key_arn != "" ? local.effective_kms_key_arn : null
 }
 
 resource "aws_secretsmanager_secret_version" "slack_webhook_url" {
@@ -63,6 +89,83 @@ locals {
 
   effective_slack_webhook_url_secret_arn = var.slack_webhook_url_secret_arn != "" ? var.slack_webhook_url_secret_arn : (
     length(aws_secretsmanager_secret.slack_webhook_url) > 0 ? aws_secretsmanager_secret.slack_webhook_url[0].arn : ""
+  )
+}
+
+# -------------------------------------------------------------------
+# Optional: ALB access logs bucket (if enabled and no bucket provided)
+# -------------------------------------------------------------------
+
+resource "aws_s3_bucket" "alb_logs" {
+  count  = var.enable_alb_access_logs && var.alb_access_logs_bucket == "" ? 1 : 0
+  bucket = "${var.project}-alb-logs-${data.aws_caller_identity.current.account_id}"
+}
+
+resource "aws_s3_bucket_ownership_controls" "alb_logs" {
+  count  = var.enable_alb_access_logs && var.alb_access_logs_bucket == "" ? 1 : 0
+  bucket = aws_s3_bucket.alb_logs[0].id
+  rule { object_ownership = "BucketOwnerEnforced" }
+}
+
+resource "aws_s3_bucket_public_access_block" "alb_logs" {
+  count  = var.enable_alb_access_logs && var.alb_access_logs_bucket == "" ? 1 : 0
+  bucket = aws_s3_bucket.alb_logs[0].id
+
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+
+data "aws_iam_policy_document" "alb_logs" {
+  count = var.enable_alb_access_logs && var.alb_access_logs_bucket == "" ? 1 : 0
+
+  statement {
+    sid     = "AWSALBLogDeliveryWrite"
+    effect  = "Allow"
+    actions = ["s3:PutObject"]
+    resources = ["${aws_s3_bucket.alb_logs[0].arn}/*"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["delivery.logs.amazonaws.com"]
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "aws:SourceAccount"
+      values   = [data.aws_caller_identity.current.account_id]
+    }
+  }
+
+  statement {
+    sid     = "AWSALBLogDeliveryAclCheck"
+    effect  = "Allow"
+    actions = ["s3:GetBucketAcl", "s3:ListBucket"]
+    resources = [aws_s3_bucket.alb_logs[0].arn]
+
+    principals {
+      type        = "Service"
+      identifiers = ["delivery.logs.amazonaws.com"]
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "aws:SourceAccount"
+      values   = [data.aws_caller_identity.current.account_id]
+    }
+  }
+}
+
+resource "aws_s3_bucket_policy" "alb_logs" {
+  count  = var.enable_alb_access_logs && var.alb_access_logs_bucket == "" ? 1 : 0
+  bucket = aws_s3_bucket.alb_logs[0].id
+  policy = data.aws_iam_policy_document.alb_logs[0].json
+}
+
+locals {
+  effective_alb_logs_bucket = var.alb_access_logs_bucket != "" ? var.alb_access_logs_bucket : (
+    length(aws_s3_bucket.alb_logs) > 0 ? aws_s3_bucket.alb_logs[0].bucket : ""
   )
 }
 
@@ -87,7 +190,7 @@ module "rds" {
   db_instance_class    = var.db_instance_class
   db_allocated_storage = var.db_allocated_storage
 
-  # keep deterministic; don't depend on other module outputs existing
+  # keep deterministic (don’t depend on ecs outputs existing)
   alarms_topic_arn = ""
 }
 
@@ -112,24 +215,24 @@ module "ecs" {
 
   polygon_api_key_secret_arn   = local.effective_polygon_api_key_secret_arn
   slack_webhook_url_secret_arn = local.effective_slack_webhook_url_secret_arn
+
+  alarm_email             = var.alarm_email
+  enable_alb_access_logs  = var.enable_alb_access_logs
+  alb_access_logs_bucket  = local.effective_alb_logs_bucket
 }
 
 # -------------------------------------------------------------------
-# Root outputs (handy for “where is it?” after apply)
+# Root outputs (useful after apply)
 # -------------------------------------------------------------------
 
 output "aws_account_id" {
   value = data.aws_caller_identity.current.account_id
 }
 
+output "alb_logs_bucket" {
+  value = local.effective_alb_logs_bucket
+}
+
 output "db_url_secret_arn" {
   value = local.effective_db_url_secret_arn
-}
-
-output "alb_dns_name" {
-  value = try(module.ecs.alb_dns_name, "")
-}
-
-output "cluster_name" {
-  value = try(module.ecs.cluster_name, "")
 }
