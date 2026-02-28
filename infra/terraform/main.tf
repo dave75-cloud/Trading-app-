@@ -23,7 +23,7 @@ resource "aws_kms_key" "secrets" {
   count                   = var.create_kms_key && var.kms_key_arn == "" ? 1 : 0
   description             = "${var.project} secrets"
   deletion_window_in_days = 7
-  enable_key_rotation     = true
+  enable_key_rotation     = false
 }
 
 resource "aws_kms_alias" "secrets" {
@@ -236,3 +236,4 @@ output "alb_logs_bucket" {
 output "db_url_secret_arn" {
   value = local.effective_db_url_secret_arn
 }
+
