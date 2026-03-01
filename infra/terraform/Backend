@@ -1,0 +1,9 @@
+terraform {
+  backend "s3" {
+    bucket         = "gbpusd-signal-tfstate-156876768682"
+    key            = "gbpusd-signal/terraform.tfstate"
+    region         = "ap-southeast-2"
+    dynamodb_table = "gbpusd-signal-tflock"
+    encrypt        = true
+  }
+}
