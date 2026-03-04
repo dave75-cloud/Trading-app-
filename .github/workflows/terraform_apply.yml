@@ -26,10 +26,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - uses: hashicorp/setup-terraform@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
         with:
-          terraform_version: 1.6.6
-          
+          terraform_version: "1.6.6"
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -38,18 +40,13 @@ jobs:
           aws-region: ap-southeast-2
 
       - name: AWS identity
-        run: aws sts get-caller-identity
-
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
+        run: |
+          aws sts get-caller-identity
+          aws configure list
 
       - name: Terraform Version
         run: terraform version
-        
-      - uses: hashicorp/setup-terraform@v3
-        with:
-        terraform_version: 1.6.6
-        
+
       - name: Terraform Init
         run: terraform -chdir=infra/terraform init -input=false
 
@@ -63,4 +60,4 @@ jobs:
         run: terraform -chdir=infra/terraform apply -auto-approve -input=false
 
       - name: Terraform Outputs
-        run: terraform -chdir=infra/terraform output
+        run: terraform -chdir=infra/terraform output || true
