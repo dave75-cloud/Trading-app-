@@ -83,7 +83,7 @@ module "rds" {
   project             = var.project
   vpc_id              = var.vpc_id
   private_subnets     = var.private_subnets
-  ecs_security_group  = var.ecs_security_group
+  ecs_security_group_id = var.ecs_security_group
   db_instance_class   = var.db_instance_class
   db_allocated_storage = var.db_allocated_storage
   db_username         = var.db_username
