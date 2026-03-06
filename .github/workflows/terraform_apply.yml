@@ -52,7 +52,29 @@ jobs:
 
       - name: Terraform Validate
         run: terraform -chdir=infra/terraform validate
+        
+     -  name: Import existing AWS resources (one-time)
+        run: |
+            terraform -chdir=infra/terraform import 'aws_kms_alias.secrets[0]' 'alias/gbpusd-signal-secrets' || true
 
+            terraform -chdir=infra/terraform import 'aws_s3_bucket.alb_logs[0]' 'gbpusd-signal-alb-logs-156876768682' || true
+            terraform -chdir=infra/terraform import 'module.s3.aws_s3_bucket.data_lake' 'gbpusd-signal-data' || true
+
+            terraform -chdir=infra/terraform import 'module.ecs.aws_iam_role.task_execution' 'gbpusd-signal-ecsTaskExecutionRole' || true
+            terraform -chdir=infra/terraform import 'module.ecs.aws_iam_role.task' 'gbpusd-signal-taskRole' || true
+            terraform -chdir=infra/terraform import 'module.ecs.aws_iam_role.events' 'gbpusd-signal-eventsRole' || true
+
+            terraform -chdir=infra/terraform import 'module.ecs.aws_cloudwatch_log_group.api' '/ecs/gbpusd-signal/api' || true
+            terraform -chdir=infra/terraform import 'module.ecs.aws_cloudwatch_log_group.dashboard' '/ecs/gbpusd-signal/dashboard' || true
+            terraform -chdir=infra/terraform import 'module.ecs.aws_cloudwatch_log_group.runner' '/ecs/gbpusd-signal/runner' || true
+
+            terraform -chdir=infra/terraform import 'module.ecs.aws_lb.alb' 'gbpusd-signal-alb' || true
+            terraform -chdir=infra/terraform import 'module.ecs.aws_lb_target_group.api' 'gbpusd-signal-api-tg' || true
+            terraform -chdir=infra/terraform import 'module.ecs.aws_lb_target_group.dashboard' 'gbpusd-signal-dash-tg' || true
+
+            terraform -chdir=infra/terraform import 'module.rds.aws_db_subnet_group.this' 'gbpusd-signal-db-subnets' || true
+
+    terraform -chdir=infra/terraform import 'module.s3.aws_s3_bucket.data_lake' 'gbpusd-signal-data' || true
       - name: Terraform Plan
         run: terraform -chdir=infra/terraform plan -no-color -input=false
 
