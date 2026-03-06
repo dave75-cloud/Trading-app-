@@ -12,8 +12,8 @@ jobs:
     env:
       TF_VAR_region: ap-southeast-2
       TF_VAR_vpc_id: ${{ secrets.TF_VAR_vpc_id }}
-      TF_VAR_public_subnets: ${{ secrets.TF_VAR_public_subnets }}
-      TF_VAR_private_subnets: ${{ secrets.TF_VAR_private_subnets }}
+      TF_VAR_public_subnets: '["subnet-0231cc910a84a9e6f","subnet-025d7e1fc3f3fdcee","subnet-020b0f3325ef68ff3"]'
+      TF_VAR_private_subnets: '["subnet-041849406847b77b1","subnet-0e15c1b2ed19abc66"]'
       TF_VAR_ecs_security_group: ${{ secrets.TF_VAR_ecs_security_group }}
       TF_VAR_alb_security_group: ${{ secrets.TF_VAR_alb_security_group }}
       TF_VAR_api_image: ${{ secrets.TF_VAR_api_image }}
