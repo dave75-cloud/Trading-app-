@@ -78,7 +78,7 @@ resource "aws_iam_role_policy" "task" {
       {
         Effect = "Allow"
         Action = ["secretsmanager:GetSecretValue"]
-        Resource = compact([
+        Resource = "*"          
           var.db_url_secret_arn,
           var.polygon_api_key_secret_arn,
           var.slack_webhook_url_secret_arn
@@ -100,8 +100,8 @@ resource "aws_cloudwatch_log_group" "api" {
   name              = "/ecs/${var.project}/api"
   retention_in_days = 14
 }
-resource "aws_cloudwatch_log_group" "dashboard" {
-  name              = "/ecs/${var.project}/dashboard"
+resource "aws_cloudwatch_log_group" "" {
+  name              = "/ecs/${var.project}/"
   retention_in_days = 14
 }
 resource "aws_cloudwatch_log_group" "runner" {
@@ -161,7 +161,7 @@ resource "aws_lb_listener_rule" "api_paths" {
 }
 
 # ---- Task Definitions ----
-resource "aws_ecs_task_definition" "api" {
+ "aws_ecs_task_definition" "api" {
   family                   = "${var.project}-api"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
@@ -195,7 +195,7 @@ resource "aws_ecs_task_definition" "api" {
   ])
 }
 
-resource "aws_ecs_task_definition" "dashboard" {
+ "aws_ecs_task_definition" "dashboard" {
   family                   = "${var.project}-dashboard"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
@@ -233,7 +233,7 @@ resource "aws_ecs_task_definition" "dashboard" {
   ])
 }
 
-resource "aws_ecs_task_definition" "runner" {
+ "aws_ecs_task_definition" "runner" {
   family                   = "${var.project}-runner"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
