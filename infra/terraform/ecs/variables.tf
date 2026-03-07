@@ -1,19 +1,53 @@
-variable "region" {
-  type    = string
-  default = "***"
+variable "project" {
+  type = string
 }
 
-variable "project"            { type = string }
-variable "vpc_id"             { type = string }
-variable "public_subnets"     { type = list(string) }
-variable "private_subnets"    { type = list(string) }
-variable "ecs_security_group" { type = string }
-variable "alb_security_group" { type = string }
-variable "api_image"          { type = string }
-variable "broker_image"       { type = string }
-variable "dashboard_image"    { type = string }
+variable "region" {
+  type = string
+}
 
-# Secrets are sourced from AWS Secrets Manager at runtime (recommended).
+variable "vpc_id" {
+  type = string
+}
+
+variable "public_subnets" {
+  type = list(string)
+
+  validation {
+    condition     = length(var.public_subnets) >= 2
+    error_message = "public_subnets must contain at least two subnet IDs."
+  }
+}
+
+variable "private_subnets" {
+  type = list(string)
+
+  validation {
+    condition     = length(var.private_subnets) >= 2
+    error_message = "private_subnets must contain at least two subnet IDs."
+  }
+}
+
+variable "ecs_security_group" {
+  type = string
+}
+
+variable "alb_security_group" {
+  type = string
+}
+
+variable "api_image" {
+  type = string
+}
+
+variable "broker_image" {
+  type = string
+}
+
+variable "dashboard_image" {
+  type = string
+}
+
 variable "db_url_secret_arn" {
   type = string
 }
@@ -33,18 +67,7 @@ variable "signal_cron" {
   default = "rate(30 minutes)"
 }
 
-# Optional: create an email subscription to the alarms SNS topic.
 variable "alarm_email" {
-  type    = string
-  default = ""
-}
-
-
-variable "enable_alb_access_logs" {
-  type    = bool
-  default = true
-}
-variable "alb_access_logs_bucket" {
   type    = string
   default = ""
 }
