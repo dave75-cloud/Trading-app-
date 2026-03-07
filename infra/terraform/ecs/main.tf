@@ -111,15 +111,6 @@ resource "aws_cloudwatch_log_group" "runner" {
 
 # ---- ALB ----
 resource "aws_lb" "alb" {
-
-dynamic "access_logs" {
-  for_each = var.enable_alb_access_logs && var.alb_access_logs_bucket != "" ? [1] : []
-  content {
-    bucket  = var.alb_access_logs_bucket
-    enabled = true
-    prefix  = "${var.project}/alb"
-  }
-}
   name               = "${var.project}-alb"
   internal           = false
   load_balancer_type = "application"
