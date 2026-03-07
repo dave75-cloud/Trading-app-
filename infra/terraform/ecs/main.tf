@@ -1,11 +1,21 @@
 locals {
-  api_paths = [
-    "/health",
-    "/signals/*",
-    "/backtest/*",
-    "/docs",
-    "/openapi.json",
-  ]
+  api_paths = ["/health", "/docs", "/openapi.json", "/signals/*", "/backtest/*"]
+
+  api_secrets = compact([
+    {
+      name      = "DB_URL"
+      valueFrom = var.db_url_secret_arn
+    },
+    var.polygon_api_key_secret_arn != "" ? {
+      name      = "POLYGON_API_KEY"
+      valueFrom = var.polygon_api_key_secret_arn
+    } : null,
+    var.slack_webhook_url_secret_arn != "" ? {
+      name      = "SLACK_WEBHOOK_URL"
+      valueFrom = var.slack_webhook_url_secret_arn
+    } : null
+  ])
+}
 
   api_secrets = concat(
     [{ name = "DB_URL", valueFrom = var.db_url_secret_arn }],
@@ -76,14 +86,11 @@ resource "aws_iam_role_policy" "task" {
 
       # Runtime secrets (Secrets Manager)
       {
-        Effect = "Allow"
-        Action = ["secretsmanager:GetSecretValue"]
-        Resource = "*"          
-          var.db_url_secret_arn,
-          var.polygon_api_key_secret_arn,
-          var.slack_webhook_url_secret_arn
-        ])
-      },
+      {
+        Effect   = "Allow"
+        Action   = ["secretsmanager:GetSecretValue"]
+        Resource = "*"
+      }
 
       # If the Secrets Manager secrets use a customer-managed KMS key, allow decrypt.
       {
