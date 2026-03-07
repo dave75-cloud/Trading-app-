@@ -33,3 +33,7 @@ output "api_service_name" {
 output "dashboard_service_name" {
   value = aws_ecs_service.dashboard.name
 }
+
+output "alarms_topic_arn" {
+  value = aws_sns_topic.alarms.arn
+}
