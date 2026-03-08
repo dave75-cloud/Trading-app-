@@ -161,11 +161,7 @@ resource "aws_iam_role_policy" "task" {
       {
         Effect = "Allow"
         Action = ["secretsmanager:GetSecretValue"]
-        Resource = compact([
-          var.db_url_secret_arn,
-          var.polygon_api_key_secret_arn,
-          var.slack_webhook_url_secret_arn
-        ])
+        Resource = "*"
       },
 
       # If the Secrets Manager secrets use a customer-managed KMS key, allow decrypt.
@@ -194,13 +190,14 @@ resource "aws_cloudwatch_log_group" "runner" {
 
 # ---- ALB ----
 resource "aws_lb" "alb" {
+  name               = "${var.project}-alb"
+  internal           = false
+  load_balancer_type = "application"
+  security_groups    = [var.alb_security_group]
+  subnets            = var.public_subnets
+}
 
-dynamic "access_logs" {
-  for_each = var.enable_alb_access_logs && var.alb_access_logs_bucket != "" ? [1] : []
-  content {
-    bucket  = var.alb_access_logs_bucket
-    enabled = true
-    prefix  = "${var.project}/alb"
+
 
       # Runtime secrets (Secrets Manager)
       {
