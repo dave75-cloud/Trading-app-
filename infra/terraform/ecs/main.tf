@@ -1,5 +1,11 @@
 locals {
-  api_paths = ["/health", "/docs", "/openapi.json", "/signals/*", "/backtest/*"]
+  api_paths = [
+    "/health",
+    "/signals/*",
+    "/backtest/*",
+    "/docs",
+    "/openapi.json",
+  ]
 
   api_secrets = concat(
     [
@@ -23,18 +29,6 @@ locals {
   )
 
   runner_secrets = local.api_secrets
-}
-
-  api_secrets = concat(
-    [{ name = "DB_URL", valueFrom = var.db_url_secret_arn }],
-    var.polygon_api_key_secret_arn != "" ? [{ name = "POLYGON_API_KEY", valueFrom = var.polygon_api_key_secret_arn }] : []
-  )
-
-  runner_secrets = concat(
-    [{ name = "DB_URL", valueFrom = var.db_url_secret_arn }],
-    var.polygon_api_key_secret_arn != "" ? [{ name = "POLYGON_API_KEY", valueFrom = var.polygon_api_key_secret_arn }] : [],
-    var.slack_webhook_url_secret_arn != "" ? [{ name = "SLACK_WEBHOOK_URL", valueFrom = var.slack_webhook_url_secret_arn }] : []
-  )
 }
 
 resource "aws_ecs_cluster" "this" {
@@ -71,16 +65,37 @@ resource "aws_iam_role" "task" {
   })
 }
 
-# If you later move secrets to Secrets Manager/SSM, add explicit permissions here.
 resource "aws_iam_role_policy" "task" {
   name = "${var.project}-taskRoleInline"
   role = aws_iam_role.task.id
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
-      # App logs
       {
-        sed -n '1,120p' infra/terraform/ecs/main.tf
+        Effect = "Allow"
+        Action = [
+          "logs:CreateLogStream",
+          "logs:PutLogEvents"
+        ]
+        Resource = [
+          "${aws_cloudwatch_log_group.api.arn}:*",
+          "${aws_cloudwatch_log_group.dashboard.arn}:*",
+          "${aws_cloudwatch_log_group.runner.arn}:*"
+        ]
+      },
+      {
+        Effect   = "Allow"
+        Action   = ["secretsmanager:GetSecretValue"]
+        Resource = "*"
+      },
+      {
+        Effect   = "Allow"
+        Action   = ["kms:Decrypt"]
+        Resource = "*"
+      }
+    ]
+  })
+}
 locals {
   api_paths = [
     "/health",
