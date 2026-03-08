@@ -43,6 +43,13 @@ jobs:
       - name: Terraform Init
         run: terraform -chdir=infra/terraform init -input=false
 
+        - name: Import existing AWS resources
+        run: |
+        terraform -chdir=infra/terraform import 'module.ecs.aws_lb.alb' 'arn:aws:elasticloadbalancing:ap-southeast-2:156876768682:loadbalancer/app/gbpusd-signal-alb/f786febcb9a6676a' || true
+        terraform -chdir=infra/terraform import 'module.ecs.aws_lb_target_group.api' 'arn:aws:elasticloadbalancing:ap-southeast-2:156876768682:targetgroup/gbpusd-signal-api-tg/d1734ae2bdb20dd4' || true
+        terraform -chdir=infra/terraform import 'module.ecs.aws_lb_target_group.dashboard' 'arn:aws:elasticloadbalancing:ap-southeast-2:156876768682:targetgroup/gbpusd-signal-dash-tg/7dd9fc45ee1d3aaf' || true
+        terraform -chdir=infra/terraform import 'module.rds.aws_security_group.db' 'sg-0edcf1c82d8a1d8dd' || true
+
       - name: Terraform Validate
         run: terraform -chdir=infra/terraform validate
 
