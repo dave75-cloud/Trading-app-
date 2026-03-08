@@ -1,20 +1,28 @@
 locals {
   api_paths = ["/health", "/docs", "/openapi.json", "/signals/*", "/backtest/*"]
 
-  api_secrets = compact([
-    {
-      name      = "DB_URL"
-      valueFrom = var.db_url_secret_arn
-    },
-    var.polygon_api_key_secret_arn != "" ? {
-      name      = "POLYGON_API_KEY"
-      valueFrom = var.polygon_api_key_secret_arn
-    } : null,
-    var.slack_webhook_url_secret_arn != "" ? {
-      name      = "SLACK_WEBHOOK_URL"
-      valueFrom = var.slack_webhook_url_secret_arn
-    } : null
-  ])
+  api_secrets = concat(
+    [
+      {
+        name      = "DB_URL"
+        valueFrom = var.db_url_secret_arn
+      }
+    ],
+    var.polygon_api_key_secret_arn != "" ? [
+      {
+        name      = "POLYGON_API_KEY"
+        valueFrom = var.polygon_api_key_secret_arn
+      }
+    ] : [],
+    var.slack_webhook_url_secret_arn != "" ? [
+      {
+        name      = "SLACK_WEBHOOK_URL"
+        valueFrom = var.slack_webhook_url_secret_arn
+      }
+    ] : []
+  )
+
+  runner_secrets = local.api_secrets
 }
 
   api_secrets = concat(
