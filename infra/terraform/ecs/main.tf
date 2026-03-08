@@ -80,6 +80,71 @@ resource "aws_iam_role_policy" "task" {
     Statement = [
       # App logs
       {
+        sed -n '1,120p' infra/terraform/ecs/main.tf
+locals {
+  api_paths = [
+    "/health",
+    "/signals/*",
+    "/backtest/*",
+    "/docs",
+    "/openapi.json",
+  ]
+
+  api_secrets = concat(
+    [{ name = "DB_URL", valueFrom = var.db_url_secret_arn }],
+    var.polygon_api_key_secret_arn != "" ? [{ name = "POLYGON_API_KEY", valueFrom = var.polygon_api_key_secret_arn }] : []
+  )
+
+  runner_secrets = concat(
+    [{ name = "DB_URL", valueFrom = var.db_url_secret_arn }],
+    var.polygon_api_key_secret_arn != "" ? [{ name = "POLYGON_API_KEY", valueFrom = var.polygon_api_key_secret_arn }] : [],
+    var.slack_webhook_url_secret_arn != "" ? [{ name = "SLACK_WEBHOOK_URL", valueFrom = var.slack_webhook_url_secret_arn }] : []
+  )
+}
+
+resource "aws_ecs_cluster" "this" {
+  name = "${var.project}-cluster"
+}
+
+# ---- IAM (execution + task) ----
+resource "aws_iam_role" "task_execution" {
+  name = "${var.project}-ecsTaskExecutionRole"
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Action = "sts:AssumeRole"
+      Effect = "Allow"
+      Principal = { Service = "ecs-tasks.amazonaws.com" }
+    }]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "task_execution" {
+  role       = aws_iam_role.task_execution.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+}
+
+resource "aws_iam_role" "task" {
+  name = "${var.project}-taskRole"
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Action = "sts:AssumeRole"
+      Effect = "Allow"
+      Principal = { Service = "ecs-tasks.amazonaws.com" }
+    }]
+  })
+}
+
+# If you later move secrets to Secrets Manager/SSM, add explicit permissions here.
+resource "aws_iam_role_policy" "task" {
+  name = "${var.project}-taskRoleInline"
+  role = aws_iam_role.task.id
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      # App logs
+      {
         Effect = "Allow"
         Action = [
           "logs:CreateLogStream",
@@ -91,6 +156,51 @@ resource "aws_iam_role_policy" "task" {
           "${aws_cloudwatch_log_group.runner.arn}:*"
         ]
       },
+
+      # Runtime secrets (Secrets Manager)
+      {
+        Effect = "Allow"
+        Action = ["secretsmanager:GetSecretValue"]
+        Resource = compact([
+          var.db_url_secret_arn,
+          var.polygon_api_key_secret_arn,
+          var.slack_webhook_url_secret_arn
+        ])
+      },
+
+      # If the Secrets Manager secrets use a customer-managed KMS key, allow decrypt.
+      {
+        Effect = "Allow"
+        Action = ["kms:Decrypt"]
+        Resource = "*"
+      }
+    ]
+  })
+}
+
+# ---- Logs ----
+resource "aws_cloudwatch_log_group" "api" {
+  name              = "/ecs/${var.project}/api"
+  retention_in_days = 14
+}
+resource "aws_cloudwatch_log_group" "dashboard" {
+  name              = "/ecs/${var.project}/dashboard"
+  retention_in_days = 14
+}
+resource "aws_cloudwatch_log_group" "runner" {
+  name              = "/ecs/${var.project}/runner"
+  retention_in_days = 14
+}
+
+# ---- ALB ----
+resource "aws_lb" "alb" {
+
+dynamic "access_logs" {
+  for_each = var.enable_alb_access_logs && var.alb_access_logs_bucket != "" ? [1] : []
+  content {
+    bucket  = var.alb_access_logs_bucket
+    enabled = true
+    prefix  = "${var.project}/alb"
 
       # Runtime secrets (Secrets Manager)
       {
