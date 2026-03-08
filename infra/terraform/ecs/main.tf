@@ -97,13 +97,7 @@ resource "aws_iam_role_policy" "task" {
   })
 }
 locals {
-  api_paths = [
-    "/health",
-    "/signals/*",
-    "/backtest/*",
-    "/docs",
-    "/openapi.json",
-  ]
+
 
   api_secrets = concat(
     [{ name = "DB_URL", valueFrom = var.db_url_secret_arn }],
