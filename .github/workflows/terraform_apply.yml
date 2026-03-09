@@ -41,7 +41,7 @@ jobs:
         run: aws sts get-caller-identity
 
       - name: Terraform Init
-        run: terraform -chdir=infra/terraform init -input=false
+        run: terraform -chdir=infra/terraform init -reconfigure
 
       - name: Import existing resources
         run: |
