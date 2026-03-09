@@ -59,7 +59,8 @@ jobs:
           terraform -chdir=infra/terraform import 'module.rds.aws_db_subnet_group.this' 'gbpusd-signal-db-subnets' || true
           terraform -chdir=infra/terraform import 'module.ecs.aws_ecs_service.api' 'gbpusd-signal-cluster/gbpusd-signal-api-svc' || true
           terraform -chdir=infra/terraform import 'module.ecs.aws_ecs_service.dashboard' 'gbpusd-signal-cluster/gbpusd-signal-dashboard-svc' || true
-
+          terraform -chdir=infra/terraform import 'module.rds.aws_db_instance.postgres' 'gbpusd-signal-db' || true
+          
       - name: Terraform Validate
         run: terraform -chdir=infra/terraform validate
 
