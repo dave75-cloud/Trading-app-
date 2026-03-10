@@ -415,3 +415,32 @@ resource "aws_cloudwatch_log_metric_filter" "api_errors" {
     value     = "1"
   }
 }
+
+resource "aws_iam_role_policy" "task_execution_secrets" {
+  name = "${var.project}-ecsTaskExecutionSecrets"
+  role = aws_iam_role.task_execution.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "secretsmanager:GetSecretValue"
+        ]
+        Resource = compact([
+          var.db_url_secret_arn,
+          var.polygon_api_key_secret_arn,
+          var.slack_webhook_url_secret_arn
+        ])
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "kms:Decrypt"
+        ]
+        Resource = "*"
+      }
+    ]
+  })
+}
