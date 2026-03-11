@@ -37,14 +37,17 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v2
 
       - name: Build and push image
+        id: build-image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: trading-app
           IMAGE_TAG: latest
         run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-
+          IMAGE_URI=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          docker build -t $IMAGE_URI .
+          docker push $IMAGE_URI
+          echo "image_uri=$IMAGE_URI" >> $GITHUB_OUTPUT
+          
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
@@ -78,6 +81,9 @@ jobs:
         run: terraform -chdir=infra/terraform validate
 
       - name: Terraform Plan
+        env:
+          TF_VAR_api_image: ${{ steps.build-image.outputs.image_uri }}
+          TF_VAR_dashboard_image: ${{ steps.build-image.outputs.image_uri }}
         run: terraform -chdir=infra/terraform plan -no-color -input=false
 
       - name: Terraform Apply
