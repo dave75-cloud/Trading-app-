@@ -46,9 +46,9 @@ module "ecs" {
   ecs_security_group = var.ecs_security_group
   alb_security_group = var.alb_security_group
 
-  api_image       = var.api_image
-  broker_image    = var.broker_image
-  dashboard_image = var.dashboard_image != "" ? var.dashboard_image : var.api_image
+  api_image       = trimspace(var.api_image)
+  broker_image    = trimspace(var.broker_image)
+  dashboard_image = trimspace(var.dashboard_image != "" ? var.dashboard_image : var.api_image)
 
   db_url_secret_arn             = var.db_url_secret_arn
   polygon_api_key_secret_arn    = var.polygon_api_key_secret_arn
