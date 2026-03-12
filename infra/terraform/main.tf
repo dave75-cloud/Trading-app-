@@ -61,3 +61,7 @@ module "ecs" {
 output "aws_account_id" {
   value = data.aws_caller_identity.current.account_id
 }
+
+output "alb_dns_name" {
+  value = module.ecs.alb_dns_name
+}
