@@ -187,10 +187,14 @@ resource "aws_lb_target_group" "dashboard" {
   target_type = "ip"
   vpc_id      = var.vpc_id
 
-  health_check {
-    path = "/"
+   health_check {
+    path                = "/"
+    interval            = 60
+    timeout             = 10
+    healthy_threshold   = 2
+    unhealthy_threshold = 5
+    matcher             = "200-399"
   }
-}
 
 resource "aws_lb_listener" "http" {
   load_balancer_arn = aws_lb.alb.arn
