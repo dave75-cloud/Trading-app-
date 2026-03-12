@@ -340,7 +340,7 @@ resource "aws_ecs_task_definition" "runner" {
 
 # ---- Services ----
 resource "aws_ecs_service" "api" {
-  name            = "${var.project}-api-svc"
+  name            = "${var.project}-api-svc-v2"
   cluster         = aws_ecs_cluster.this.id
   task_definition = aws_ecs_task_definition.api.arn
   desired_count   = 1
@@ -360,7 +360,7 @@ resource "aws_ecs_service" "api" {
 }
 
 resource "aws_ecs_service" "dashboard" {
-  name            = "${var.project}-dashboard-svc"
+  name            = "${var.project}-dashboard-svc-v2"
   cluster         = aws_ecs_cluster.this.id
   task_definition = aws_ecs_task_definition.dashboard.arn
   desired_count   = 1
