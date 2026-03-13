@@ -284,13 +284,13 @@ resource "aws_ecs_task_definition" "dashboard" {
         }
       ]
       command = [
-			  "streamlit",
-			  "run",
-			  "services/dashboard/app.py",
-			  "--server.address=0.0.0.0",
-			  "--server.port=8501",
-			  "--server.headless=true",
-			  "--browser.gatherUsageStats=false"
+		 "streamlit",
+		 "run",
+		 "services/dashboard/app.py",
+		 "--server.address=0.0.0.0",
+		 "--server.port=8501",
+		 "--server.headless=true",
+	     "--browser.gatherUsageStats=false"
 			]
       environment = [
         { name = "API_BASE_URL", value = "http://${aws_lb.alb.dns_name}" }
