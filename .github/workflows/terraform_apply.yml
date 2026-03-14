@@ -50,6 +50,10 @@ jobs:
           terraform -chdir=infra/terraform import 'module.rds.aws_security_group.db' 'sg-0edcf1c82d8a1d8dd' || true
           terraform -chdir=infra/terraform import 'module.rds.aws_db_instance.postgres' 'gbpusd-signal-db' || true
 
+          terraform -chdir=infra/terraform import 'module.ecs.aws_lb.alb' 'arn:aws:elasticloadbalancing:ap-southeast-2:156876768682:loadbalancer/app/gbpusd-signal-alb/f786febcb9a6676a' || true
+          terraform -chdir=infra/terraform import 'module.ecs.aws_lb_target_group.api' 'arn:aws:elasticloadbalancing:ap-southeast-2:156876768682:targetgroup/gbpusd-signal-api-tg/d1734ae2bdb20dd4' || true
+          terraform -chdir=infra/terraform import 'module.ecs.aws_lb_target_group.dashboard' 'arn:aws:elasticloadbalancing:ap-southeast-2:156876768682:targetgroup/gbpusd-signal-dash-tg/7dd9fc45ee1d3aaf' || true
+
           terraform -chdir=infra/terraform import 'module.ecs.aws_iam_role.task_execution' 'gbpusd-signal-ecsTaskExecutionRole' || true
           terraform -chdir=infra/terraform import 'module.ecs.aws_iam_role.task' 'gbpusd-signal-taskRole' || true
           terraform -chdir=infra/terraform import 'module.ecs.aws_iam_role.events' 'gbpusd-signal-eventsRole' || true
