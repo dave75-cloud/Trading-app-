@@ -35,7 +35,10 @@ resource "aws_ecs_cluster" "this" {
   name = "${var.project}-cluster"
 }
 
-# ---- IAM (execution + task) ----
+# -----------------------------
+# IAM
+# -----------------------------
+
 resource "aws_iam_role" "task_execution" {
   name = "${var.project}-ecsTaskExecutionRole"
 
@@ -54,6 +57,35 @@ resource "aws_iam_role" "task_execution" {
 resource "aws_iam_role_policy_attachment" "task_execution" {
   role       = aws_iam_role.task_execution.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+}
+
+resource "aws_iam_role_policy" "task_execution_secrets" {
+  name = "${var.project}-ecsTaskExecutionSecrets"
+  role = aws_iam_role.task_execution.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "secretsmanager:GetSecretValue"
+        ]
+        Resource = compact([
+          var.db_url_secret_arn,
+          var.polygon_api_key_secret_arn,
+          var.slack_webhook_url_secret_arn
+        ])
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "kms:Decrypt"
+        ]
+        Resource = "*"
+      }
+    ]
+  })
 }
 
 resource "aws_iam_role" "task" {
@@ -132,8 +164,8 @@ resource "aws_iam_role_policy" "events" {
         Resource = "*"
       },
       {
-        Effect   = "Allow"
-        Action   = ["iam:PassRole"]
+        Effect = "Allow"
+        Action = ["iam:PassRole"]
         Resource = [
           aws_iam_role.task_execution.arn,
           aws_iam_role.task.arn
@@ -143,7 +175,10 @@ resource "aws_iam_role_policy" "events" {
   })
 }
 
-# ---- Logs ----
+# -----------------------------
+# Logs
+# -----------------------------
+
 resource "aws_cloudwatch_log_group" "api" {
   name              = "/ecs/${var.project}/api"
   retention_in_days = 14
@@ -159,7 +194,10 @@ resource "aws_cloudwatch_log_group" "runner" {
   retention_in_days = 14
 }
 
-# ---- ALB ----
+# -----------------------------
+# Load balancer
+# -----------------------------
+
 resource "aws_lb" "alb" {
   name               = "${var.project}-alb"
   internal           = false
@@ -224,7 +262,10 @@ resource "aws_lb_listener_rule" "api_paths" {
   }
 }
 
-# ---- Task Definitions ----
+# -----------------------------
+# Task definitions
+# -----------------------------
+
 resource "aws_ecs_task_definition" "api" {
   family                   = "${var.project}-api"
   network_mode             = "awsvpc"
@@ -237,7 +278,7 @@ resource "aws_ecs_task_definition" "api" {
   container_definitions = jsonencode([
     {
       name      = "api"
-      image     = var.api_image
+      image     = trimspace(var.api_image)
       essential = true
       portMappings = [
         {
@@ -275,7 +316,7 @@ resource "aws_ecs_task_definition" "dashboard" {
   container_definitions = jsonencode([
     {
       name      = "dashboard"
-      image     = var.dashboard_image
+      image     = trimspace(var.dashboard_image)
       essential = true
       portMappings = [
         {
@@ -284,14 +325,12 @@ resource "aws_ecs_task_definition" "dashboard" {
         }
       ]
       command = [
-		 "streamlit",
-		 "run",
-		 "services/dashboard/app.py",
-		 "--server.address=0.0.0.0",
-		 "--server.port=8501",
-		 "--server.headless=true",
-	     "--browser.gatherUsageStats=false"
-			]
+        "streamlit",
+        "run",
+        "services/dashboard/app.py",
+        "--server.address=0.0.0.0",
+        "--server.port=8501"
+      ]
       environment = [
         { name = "API_BASE_URL", value = "http://${aws_lb.alb.dns_name}" }
       ]
@@ -319,7 +358,7 @@ resource "aws_ecs_task_definition" "runner" {
   container_definitions = jsonencode([
     {
       name      = "runner"
-      image     = var.api_image
+      image     = trimspace(var.api_image)
       essential = true
       command   = ["python", "cli/signal_report.py"]
       environment = [
@@ -340,7 +379,10 @@ resource "aws_ecs_task_definition" "runner" {
   ])
 }
 
-# ---- Services ----
+# -----------------------------
+# Services
+# -----------------------------
+
 resource "aws_ecs_service" "api" {
   name            = "${var.project}-api-svc-v2"
   cluster         = aws_ecs_cluster.this.id
@@ -381,7 +423,10 @@ resource "aws_ecs_service" "dashboard" {
   }
 }
 
-# ---- Schedule ----
+# -----------------------------
+# Schedule
+# -----------------------------
+
 resource "aws_cloudwatch_event_rule" "signal" {
   name                = "${var.project}-signal"
   schedule_expression = var.signal_cron
@@ -406,7 +451,10 @@ resource "aws_cloudwatch_event_target" "signal" {
   }
 }
 
-# ---- Monitoring ----
+# -----------------------------
+# Monitoring
+# -----------------------------
+
 resource "aws_sns_topic" "alarms" {
   name = "${var.project}-alarms"
 }
@@ -421,33 +469,4 @@ resource "aws_cloudwatch_log_metric_filter" "api_errors" {
     namespace = "${var.project}/logs"
     value     = "1"
   }
-}
-
-resource "aws_iam_role_policy" "task_execution_secrets" {
-  name = "${var.project}-ecsTaskExecutionSecrets"
-  role = aws_iam_role.task_execution.id
-
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Effect = "Allow"
-        Action = [
-          "secretsmanager:GetSecretValue"
-        ]
-        Resource = compact([
-          var.db_url_secret_arn,
-          var.polygon_api_key_secret_arn,
-          var.slack_webhook_url_secret_arn
-        ])
-      },
-      {
-        Effect = "Allow"
-        Action = [
-          "kms:Decrypt"
-        ]
-        Resource = "*"
-      }
-    ]
-  })
 }
