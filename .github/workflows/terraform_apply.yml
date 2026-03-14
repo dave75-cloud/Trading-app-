@@ -61,7 +61,7 @@ jobs:
           TF_VAR_api_image: ${{ steps.build-image.outputs.image_uri }}
           TF_VAR_dashboard_image: ${{ steps.build-image.outputs.image_uri }}
           TF_VAR_broker_image: ${{ steps.build-image.outputs.image_uri }}
-        run: terraform -chdir=infra/terraform validate
+        run: terraform -chdir=infra/terraform validate -no-color
 
       - name: Import existing resources
         run: |
