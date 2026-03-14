@@ -82,6 +82,9 @@ jobs:
 
           terraform -chdir=infra/terraform import 'module.s3.aws_s3_bucket.data_lake' 'gbpusd-signal-data' || true
 
+          terraform -chdir=infra/terraform import 'module.ecs.aws_ecs_service.dashboard' 'gbpusd-signal-cluster/gbpusd-signal-dashboard-svc-v2' || true
+          terraform -chdir=infra/terraform import 'module.rds.aws_db_instance.postgres' 'gbpusd-signal-db' || true
+
       - name: Terraform Validate
         run: terraform -chdir=infra/terraform validate
 
