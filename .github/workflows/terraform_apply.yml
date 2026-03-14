@@ -72,6 +72,16 @@ jobs:
           terraform -chdir=infra/terraform import 'module.ecs.aws_ecs_service.api' 'gbpusd-signal-cluster/gbpusd-signal-api-svc-v2' || true
           terraform -chdir=infra/terraform import 'module.ecs.aws_ecs_service.dashboard' 'gbpusd-signal-cluster/gbpusd-signal-dashboard-svc-v2' || true
 
+          terraform -chdir=infra/terraform import 'module.ecs.aws_iam_role.events' 'gbpusd-signal-eventsRole' || true
+
+          terraform -chdir=infra/terraform import 'module.ecs.aws_cloudwatch_log_group.runner' '/ecs/gbpusd-signal/runner' || true
+
+          terraform -chdir=infra/terraform import 'module.ecs.aws_lb_target_group.dashboard' 'arn:aws:elasticloadbalancing:ap-southeast-2:156876768682:targetgroup/gbpusd-signal-dash-tg/7dd9fc45ee1d3aaf' || true
+
+          terraform -chdir=infra/terraform import 'module.rds.aws_security_group.db' 'sg-0edcf1c82d8a1d8dd' || true
+
+          terraform -chdir=infra/terraform import 'module.s3.aws_s3_bucket.data_lake' 'gbpusd-signal-data' || true
+
       - name: Terraform Validate
         run: terraform -chdir=infra/terraform validate
 
