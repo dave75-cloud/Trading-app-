@@ -65,6 +65,11 @@ jobs:
 
       - name: Import existing resources
         run: |
+        env:
+          TF_VAR_api_image: ${{ steps.build-image.outputs.image_uri }}
+          TF_VAR_dashboard_image: ${{ steps.build-image.outputs.image_uri }}
+          TF_VAR_broker_image: ${{ steps.build-image.outputs.image_uri }}
+
           terraform -chdir=infra/terraform import 'module.ecs.aws_ecs_service.api' 'gbpusd-signal-cluster/gbpusd-signal-api-svc-v2' || true
           terraform -chdir=infra/terraform import 'module.ecs.aws_ecs_service.dashboard' 'gbpusd-signal-cluster/gbpusd-signal-dashboard-svc-v2' || true
 
