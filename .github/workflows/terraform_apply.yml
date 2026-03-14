@@ -62,6 +62,9 @@ jobs:
           terraform -chdir=infra/terraform import 'module.ecs.aws_lb_target_group.api' 'arn:aws:elasticloadbalancing:ap-southeast-2:156876768682:targetgroup/gbpusd-signal-api-tg/d1734ae2bdb20dd4' || true
           terraform -chdir=infra/terraform import 'module.ecs.aws_lb_target_group.dashboard' 'arn:aws:elasticloadbalancing:ap-southeast-2:156876768682:targetgroup/gbpusd-signal-dash-tg/7dd9fc45ee1d3aaf' || true
 
+          terraform -chdir=infra/terraform import 'module.ecs.aws_ecs_service.api' 'gbpusd-signal-cluster/gbpusd-signal-api-svc-v2' || true
+          terraform -chdir=infra/terraform import 'module.ecs.aws_ecs_service.dashboard' 'gbpusd-signal-cluster/gbpusd-signal-dashboard-svc-v2' || true
+
       - name: Terraform Validate
         run: terraform -chdir=infra/terraform validate
 
