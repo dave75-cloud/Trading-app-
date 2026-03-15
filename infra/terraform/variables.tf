@@ -120,3 +120,12 @@ variable "db_allocated_storage" {
   default = 20
 }
 
+variable "domain_name" {
+  type    = string
+  default = ""
+}
+
+variable "hosted_zone_id" {
+  type    = string
+  default = ""
+}
