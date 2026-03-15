@@ -229,6 +229,10 @@ resource "aws_cloudwatch_log_group" "runner" {
 # Load balancer
 # -----------------------------
 
+# -----------------------------
+# Load balancer
+# -----------------------------
+
 resource "aws_lb" "alb" {
   name               = "${var.project}-alb"
   internal           = false
