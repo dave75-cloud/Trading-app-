@@ -37,3 +37,7 @@ output "dashboard_service_name" {
 output "alarms_topic_arn" {
   value = aws_sns_topic.alarms.arn
 }
+
+output "https_url" {
+  value = var.domain_name != "" ? "https://${var.domain_name}" : null
+}
