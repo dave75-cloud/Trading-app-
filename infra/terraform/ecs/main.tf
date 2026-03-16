@@ -225,14 +225,6 @@ resource "aws_cloudwatch_log_group" "runner" {
 # Load balancer
 # -----------------------------
 
-# -----------------------------
-# Load balancer
-# -----------------------------
-
-# -----------------------------
-# Load balancer
-# -----------------------------
-
 resource "aws_lb" "alb" {
   name               = "${var.project}-alb"
   internal           = false
@@ -296,49 +288,6 @@ resource "aws_lb_listener_rule" "api_paths" {
     }
   }
 }
-
-# -----------------------------
-# Load balancer
-# -----------------------------
-
-resource "aws_lb" "alb" {
-  name               = "${var.project}-alb"
-  internal           = false
-  load_balancer_type = "application"
-  security_groups    = [var.alb_security_group]
-  subnets            = var.public_subnets
-}
-
-resource "aws_lb_target_group" "api" {
-  name        = "${var.project}-api-tg"
-  port        = 8080
-  protocol    = "HTTP"
-  target_type = "ip"
-  vpc_id      = var.vpc_id
-
-  health_check {
-    path = "/health"
-  }
-}
-
-resource "aws_lb_target_group" "dashboard" {
-  name        = "${var.project}-dash-tg"
-  port        = 8501
-  protocol    = "HTTP"
-  target_type = "ip"
-  vpc_id      = var.vpc_id
-
-  health_check {
-    path                = "/"
-    interval            = 60
-    timeout             = 10
-    healthy_threshold   = 2
-    unhealthy_threshold = 5
-    matcher             = "200-399"
-  }
-}
-
-
 # -----------------------------
 # Task definitions
 # -----------------------------
