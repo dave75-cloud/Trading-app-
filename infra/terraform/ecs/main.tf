@@ -470,3 +470,92 @@ resource "aws_cloudwatch_log_metric_filter" "api_errors" {
     value     = "1"
   }
 }
+
+resource "aws_cloudwatch_metric_alarm" "alb_5xx" {
+  alarm_name          = "${var.project}-alb-5xx"
+  alarm_description   = "ALB is returning 5xx responses."
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = 1
+  metric_name         = "HTTPCode_ELB_5XX_Count"
+  namespace           = "AWS/ApplicationELB"
+  period              = 300
+  statistic           = "Sum"
+  threshold           = 1
+  treat_missing_data  = "notBreaching"
+
+  dimensions = {
+    LoadBalancer = aws_lb.alb.arn_suffix
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "api_target_latency_high" {
+  alarm_name          = "${var.project}-api-target-latency-high"
+  alarm_description   = "API target response time is high."
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = 2
+  metric_name         = "TargetResponseTime"
+  namespace           = "AWS/ApplicationELB"
+  period              = 300
+  statistic           = "Average"
+  threshold           = 3
+  treat_missing_data  = "notBreaching"
+
+  dimensions = {
+    LoadBalancer = aws_lb.alb.arn_suffix
+    TargetGroup  = aws_lb_target_group.api.arn_suffix
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "dashboard_target_latency_high" {
+  alarm_name          = "${var.project}-dashboard-target-latency-high"
+  alarm_description   = "Dashboard target response time is high."
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = 2
+  metric_name         = "TargetResponseTime"
+  namespace           = "AWS/ApplicationELB"
+  period              = 300
+  statistic           = "Average"
+  threshold           = 5
+  treat_missing_data  = "notBreaching"
+
+  dimensions = {
+    LoadBalancer = aws_lb.alb.arn_suffix
+    TargetGroup  = aws_lb_target_group.dashboard.arn_suffix
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "api_unhealthy_hosts" {
+  alarm_name          = "${var.project}-api-unhealthy-hosts"
+  alarm_description   = "API target group has unhealthy hosts."
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = 1
+  metric_name         = "UnHealthyHostCount"
+  namespace           = "AWS/ApplicationELB"
+  period              = 60
+  statistic           = "Maximum"
+  threshold           = 1
+  treat_missing_data  = "notBreaching"
+
+  dimensions = {
+    LoadBalancer = aws_lb.alb.arn_suffix
+    TargetGroup  = aws_lb_target_group.api.arn_suffix
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "dashboard_unhealthy_hosts" {
+  alarm_name          = "${var.project}-dashboard-unhealthy-hosts"
+  alarm_description   = "Dashboard target group has unhealthy hosts."
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = 1
+  metric_name         = "UnHealthyHostCount"
+  namespace           = "AWS/ApplicationELB"
+  period              = 60
+  statistic           = "Maximum"
+  threshold           = 1
+  treat_missing_data  = "notBreaching"
+
+  dimensions = {
+    LoadBalancer = aws_lb.alb.arn_suffix
+    TargetGroup  = aws_lb_target_group.dashboard.arn_suffix
+  }
+}
