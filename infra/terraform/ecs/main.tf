@@ -482,7 +482,7 @@ resource "aws_cloudwatch_metric_alarm" "alb_5xx" {
   statistic           = "Sum"
   threshold           = 1
   treat_missing_data  = "notBreaching"
-	alarm_actions = [aws_sns_topic.alarms.arn]
+alarm_actions = [aws_sns_topic.alarms.arn]
 
   dimensions = {
     LoadBalancer = aws_lb.alb.arn_suffix
