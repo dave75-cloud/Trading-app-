@@ -482,6 +482,7 @@ resource "aws_cloudwatch_metric_alarm" "alb_5xx" {
   statistic           = "Sum"
   threshold           = 1
   treat_missing_data  = "notBreaching"
+	alarm_actions = [aws_sns_topic.alarms.arn]
 
   dimensions = {
     LoadBalancer = aws_lb.alb.arn_suffix
@@ -499,6 +500,7 @@ resource "aws_cloudwatch_metric_alarm" "api_target_latency_high" {
   statistic           = "Average"
   threshold           = 3
   treat_missing_data  = "notBreaching"
+	alarm_actions = [aws_sns_topic.alarms.arn]
 
   dimensions = {
     LoadBalancer = aws_lb.alb.arn_suffix
@@ -517,6 +519,7 @@ resource "aws_cloudwatch_metric_alarm" "dashboard_target_latency_high" {
   statistic           = "Average"
   threshold           = 5
   treat_missing_data  = "notBreaching"
+	alarm_actions = [aws_sns_topic.alarms.arn]
 
   dimensions = {
     LoadBalancer = aws_lb.alb.arn_suffix
@@ -535,6 +538,7 @@ resource "aws_cloudwatch_metric_alarm" "api_unhealthy_hosts" {
   statistic           = "Maximum"
   threshold           = 1
   treat_missing_data  = "notBreaching"
+	alarm_actions = [aws_sns_topic.alarms.arn]
 
   dimensions = {
     LoadBalancer = aws_lb.alb.arn_suffix
@@ -553,6 +557,7 @@ resource "aws_cloudwatch_metric_alarm" "dashboard_unhealthy_hosts" {
   statistic           = "Maximum"
   threshold           = 1
   treat_missing_data  = "notBreaching"
+	alarm_actions = [aws_sns_topic.alarms.arn]
 
   dimensions = {
     LoadBalancer = aws_lb.alb.arn_suffix
