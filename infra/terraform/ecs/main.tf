@@ -8,12 +8,6 @@ locals {
   ]
 
   api_secrets = concat(
-    [
-      {
-        name      = "DB_URL"
-        valueFrom = var.db_url_secret_arn
-      }
-    ],
     var.polygon_api_key_secret_arn != "" ? [
       {
         name      = "POLYGON_API_KEY"
@@ -289,7 +283,8 @@ resource "aws_ecs_task_definition" "api" {
       environment = [
         { name = "MODEL_REGISTRY", value = "/models_registry/gbpusd" },
         { name = "DATA_DIR",       value = "/data/market_candles" },
-        { name = "SYMBOL",         value = "GBPUSD" }
+        { name = "SYMBOL",         value = "GBPUSD" },
+        { name = "DB_URL",         value = "postgresql://postgres:Ne1410is1975@gbpusd-signal-db.cpiwo4s0ilo0.ap-southeast-2.rds.amazonaws.com:5432/postgres" }
       ]
       secrets = local.api_secrets
       logConfiguration = {
@@ -364,7 +359,8 @@ resource "aws_ecs_task_definition" "runner" {
       environment = [
         { name = "MODEL_REGISTRY", value = "/models_registry/gbpusd" },
         { name = "DATA_DIR",       value = "/data/market_candles" },
-        { name = "SYMBOL",         value = "GBPUSD" }
+        { name = "SYMBOL",         value = "GBPUSD" },
+        { name = "DB_URL",         value = "postgresql://postgres:Ne1410is1975@gbpusd-signal-db.cpiwo4s0ilo0.ap-southeast-2.rds.amazonaws.com:5432/postgres" }
       ]
       secrets = local.runner_secrets
       logConfiguration = {
