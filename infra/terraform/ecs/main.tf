@@ -284,7 +284,7 @@ resource "aws_ecs_task_definition" "api" {
         { name = "MODEL_REGISTRY", value = "/models_registry/gbpusd" },
         { name = "DATA_DIR",       value = "/data/market_candles" },
         { name = "SYMBOL",         value = "GBPUSD" },
-        { name = "DB_URL",         value = "postgresql://postgres:Ne1410is1975@gbpusd-signal-db.cpiwo4s0ilo0.ap-southeast-2.rds.amazonaws.com:5432/postgres" }
+        { name = "DB_URL",         value = "postgresql+psycopg://postgres:SignalDb2026@gbpusd-signal-db.cpiwo4s0ilo0.ap-southeast-2.rds.amazonaws.com:5432/postgres" }
       ]
       secrets = local.api_secrets
       logConfiguration = {
@@ -360,7 +360,7 @@ resource "aws_ecs_task_definition" "runner" {
         { name = "MODEL_REGISTRY", value = "/models_registry/gbpusd" },
         { name = "DATA_DIR",       value = "/data/market_candles" },
         { name = "SYMBOL",         value = "GBPUSD" },
-        { name = "DB_URL",         value = "postgresql://postgres:Ne1410is1975@gbpusd-signal-db.cpiwo4s0ilo0.ap-southeast-2.rds.amazonaws.com:5432/postgres" }
+        { name = "DB_URL",         value = "postgresql+psycopg://postgres:SignalDb2026@gbpusd-signal-db.cpiwo4s0ilo0.ap-southeast-2.rds.amazonaws.com:5432/postgres" }
       ]
       secrets = local.runner_secrets
       logConfiguration = {
