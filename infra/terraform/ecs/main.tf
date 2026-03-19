@@ -8,6 +8,12 @@ locals {
   ]
 
   api_secrets = concat(
+    [
+      {
+        name      = "DB_URL"
+        valueFrom = var.db_url_secret_arn
+      }
+    ],
     var.polygon_api_key_secret_arn != "" ? [
       {
         name      = "POLYGON_API_KEY"
