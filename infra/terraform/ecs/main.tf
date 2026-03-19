@@ -286,11 +286,10 @@ resource "aws_ecs_task_definition" "api" {
           hostPort      = 8080
         }
       ]
-      environment = [
+            environment = [
         { name = "MODEL_REGISTRY", value = "/models_registry/gbpusd" },
         { name = "DATA_DIR",       value = "/data/market_candles" },
-        { name = "SYMBOL",         value = "GBPUSD" },
-				{ name = "DB_URL", value = "postgresql+psycopg://app:SignalDb2026@gbpusd-signal-db.cpiwo4s0ilo0.ap-southeast-2.rds.amazonaws.com:5432/postgres?sslmode=require" }
+        { name = "SYMBOL",         value = "GBPUSD" }
       ]
       secrets = local.api_secrets
       logConfiguration = {
