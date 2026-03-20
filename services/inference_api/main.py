@@ -68,10 +68,30 @@ def rsi(series: pd.Series, n: int = 14) -> pd.Series:
     rs = gain / (loss + 1e-12)
     return 100 - (100 / (1 + rs))
 
+from datetime import datetime, timezone
+from sqlalchemy import text
+from storage.db_store import get_store
+
 @app.get("/health")
 def health():
-    return {"status": "ok", "time": datetime.utcnow().isoformat()}
+    try:
+        store = get_store()
+        with store.engine.connect() as conn:
+            conn.execute(text("SELECT 1"))
 
+        return {
+            "status": "ok",
+            "time": datetime.now(timezone.utc).isoformat(),
+            "db": "ok",
+        }
+
+    except Exception as e:
+        return {
+            "status": "degraded",
+            "time": datetime.now(timezone.utc).isoformat(),
+            "db": "error",
+            "error": str(e),
+        }
 @app.get("/signals/latest")
 def latest(h: str = "30m"):
     now = datetime.utcnow(); sess = session_flags(now)
