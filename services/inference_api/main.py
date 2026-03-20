@@ -72,18 +72,14 @@ from datetime import datetime, timezone
 from sqlalchemy import text
 from storage.db_store import get_store
 
+from datetime import datetime, timezone
+
 @app.get("/health")
 def health():
-    try:
-        store = get_store()
-        with store.engine.connect() as conn:
-            conn.execute(text("SELECT 1"))
-
-        return {
-            "status": "ok",
-            "time": datetime.now(timezone.utc).isoformat(),
-            "db": "ok",
-        }
+    return {
+        "status": "ok",
+        "time": datetime.now(timezone.utc).isoformat(),
+    }
 
     except Exception as e:
         return {
