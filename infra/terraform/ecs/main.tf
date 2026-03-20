@@ -285,7 +285,7 @@ resource "aws_ecs_task_definition" "api" {
 			  { name = "DATA_DIR",       value = "/data/market_candles" },
 			  { name = "SYMBOL",         value = "GBPUSD" },
 			  { name = "DB_URL",         value = "postgresql+psycopg://app:SignalDb2026@gbpusd-signal-db.cpiwo4s0ilo0.ap-southeast-2.rds.amazonaws.com:5432/postgres?sslmode=require" }
-]
+			]
       secrets = local.api_secrets
       logConfiguration = {
         logDriver = "awslogs"
