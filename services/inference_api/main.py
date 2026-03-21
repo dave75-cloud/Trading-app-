@@ -1,3 +1,29 @@
+import logging
+logger = logging.getLogger(__name__)
+
+@app.get("/signals/latest")
+def signals_latest(h: str = "30m"):
+    try:
+        result = ...  # your existing logic
+
+        if result is None:
+            return {
+                "status": "no_data",
+                "horizon": h,
+                "message": "No signal available"
+            }
+
+        return result
+
+    except Exception as e:
+        logger.exception("signals_latest failed")
+        return {
+            "status": "error",
+            "message": str(e)
+        }
+        
+        logger = logging.getLogger(__name__)
+        
 from fastapi import FastAPI
 from pydantic import BaseModel
 from datetime import datetime
