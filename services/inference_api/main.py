@@ -99,7 +99,9 @@ from datetime import datetime, timezone
 
 @app.get("/health")
 def health():
-    return {"status": "ok"}
+    return {
+        "status": "ok",
+        "source": "health_debug_marker_v1"
     }
 
     except Exception as e:
