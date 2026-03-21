@@ -99,9 +99,7 @@ from datetime import datetime, timezone
 
 @app.get("/health")
 def health():
-    return {
-        "status": "ok",
-        "time": datetime.now(timezone.utc).isoformat(),
+    return {"status": "ok"}
     }
 
     except Exception as e:
