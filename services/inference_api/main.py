@@ -3,15 +3,12 @@ logger = logging.getLogger(__name__)
 
 @app.get("/signals/latest")
 def signals_latest(h: str = "30m"):
-    try:
-        result = ...  # your existing logic
-
-        if result is None:
-            return {
-                "status": "no_data",
-                "horizon": h,
-                "message": "No signal available"
-            }
+    return {
+        "status": "ok",
+        "symbol": "GBPUSD",
+        "horizon": h,
+        "source": "debug_stub"
+    }
 
         return result
 
