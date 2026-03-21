@@ -1,13 +1,12 @@
+import glob
+import json
 import logging
-from datetime import datetime
+import os
+import pathlib
+from datetime import datetime, timezone
 from functools import lru_cache
 
 import joblib
-import json
-import glob
-import os
-import pathlib
-
 import numpy as np
 import pandas as pd
 from fastapi import FastAPI
@@ -28,17 +27,11 @@ SYMBOL = os.getenv("SYMBOL", "GBPUSD")
 BAR_MINUTES = int(os.getenv("BAR_MINUTES", "5"))
 
 
-# -----------------------
-# BASIC HEALTH (KEEP SIMPLE)
-# -----------------------
 @app.get("/health")
 def health():
     return {"status": "ok"}
 
 
-# -----------------------
-# DEBUG STUB (CRITICAL TEST)
-# -----------------------
 @app.get("/signals/latest")
 def signals_latest(h: str = "30m"):
     return {
@@ -49,17 +42,11 @@ def signals_latest(h: str = "30m"):
     }
 
 
-# -----------------------
-# STORE
-# -----------------------
 @lru_cache(maxsize=1)
 def _store():
     return get_store()
 
 
-# -----------------------
-# MODELS / DATA
-# -----------------------
 class OrderSuggestion(BaseModel):
     entry_type: str
     entry_px: float
