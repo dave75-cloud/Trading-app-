@@ -203,16 +203,104 @@ def history(days: int = 30, h: str = "30m", limit: int = 2000):
 
 @app.get("/signals/evaluate")
 def evaluate(days: int = 30, h: str = "30m", limit: int = 2000):
-    return {
-        "summary": {
-            "count": 0,
-            "horizon": h,
-            "accuracy": 0.0,
-            "brier": None,
-        },
-        "rows": [],
-        "source": "debug_stub",
-    }
+    try:
+        h = h if h in ("30m", "2h") else "30m"
+        horizon_minutes = 30 if h == "30m" else 120
+        horizon_bars = max(1, int(round(horizon_minutes / max(BAR_MINUTES, 1))))
+
+        rows = _store().fetch_signals(
+            days=days,
+            horizon=h,
+            symbol=SYMBOL,
+            timeframe=f"{BAR_MINUTES}m",
+            limit=limit,
+        )
+        if not rows:
+            return {
+                "summary": {"count": 0, "horizon": h},
+                "rows": [],
+                "source": "empty_history",
+            }
+
+        df = _load_recent_parquet().copy().sort_values("ts")
+        df = df[["ts", "c"]].dropna()
+
+        sig = pd.DataFrame(
+            {
+                "asof_ts": pd.to_datetime(
+                    [r["asof_ts"] for r in rows], utc=True, errors="coerce"
+                ),
+                "side": [r.get("side") for r in rows],
+                "prob_up": [r.get("prob_up") for r in rows],
+            }
+        ).dropna(subset=["asof_ts"])
+
+        if sig.empty:
+            return {
+                "summary": {"count": 0, "horizon": h},
+                "rows": [],
+                "source": "empty_history",
+            }
+
+        sig = sig.sort_values("asof_ts")
+        sig["target_ts"] = sig["asof_ts"] + pd.Timedelta(minutes=horizon_minutes)
+
+        base = df.rename(columns={"ts": "asof_ts", "c": "c0"}).sort_values("asof_ts")
+        sig = pd.merge_asof(sig, base, on="asof_ts", direction="backward")
+
+        fut = df.rename(columns={"ts": "target_ts", "c": "c1"}).sort_values("target_ts")
+        sig = pd.merge_asof(sig, fut, on="target_ts", direction="backward")
+
+        sig = sig.dropna(subset=["c0", "c1"])
+        if sig.empty:
+            return {
+                "summary": {"count": 0, "horizon": h},
+                "rows": [],
+                "source": "empty_join",
+            }
+
+        sig["realized_up"] = (sig["c1"] > sig["c0"]).astype(int)
+        sig["signal_buy"] = (sig["side"].astype(str).str.lower() == "buy").astype(int)
+        sig["hit"] = (sig["signal_buy"] == sig["realized_up"]).astype(int)
+
+        n = int(len(sig))
+        acc = float(sig["hit"].mean()) if n else 0.0
+
+        if sig["prob_up"].notna().any():
+            p = sig["prob_up"].astype(float).clip(0, 1)
+            y = sig["realized_up"].astype(float)
+            brier = float(((p - y) ** 2).mean())
+        else:
+            brier = None
+
+        out_rows = sig[
+            ["asof_ts", "target_ts", "side", "prob_up", "c0", "c1", "realized_up", "hit"]
+        ].copy()
+        out_rows["asof_ts"] = out_rows["asof_ts"].dt.strftime("%Y-%m-%dT%H:%M:%SZ")
+        out_rows["target_ts"] = out_rows["target_ts"].dt.strftime("%Y-%m-%dT%H:%M:%SZ")
+
+        return {
+            "summary": {
+                "count": n,
+                "horizon": h,
+                "bar_minutes": BAR_MINUTES,
+                "horizon_bars": horizon_bars,
+                "accuracy": acc,
+                "brier": brier,
+            },
+            "rows": out_rows.to_dict(orient="records"),
+        }
+
+    except Exception as e:
+        logger.exception("evaluate failed")
+        return {
+            "summary": {"count": 0, "horizon": h},
+            "rows": [],
+            "status": "error",
+            "message": str(e),
+        }
+
+
 
 
 class BacktestRequest(BaseModel):
