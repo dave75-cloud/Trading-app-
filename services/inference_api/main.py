@@ -185,7 +185,6 @@ def latest(h: str = "30m"):
             "source": "signals_latest_guard",
         }
 
-
 @app.get("/signals/history")
 def history(days: int = 30, h: str = "30m", limit: int = 2000):
     try:
