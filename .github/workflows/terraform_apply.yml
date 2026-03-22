@@ -34,7 +34,7 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Build and push image
+     -  name: Build and push image
         id: build-image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
@@ -91,13 +91,13 @@ jobs:
 
           terraform -chdir=infra/terraform import 'module.s3.aws_s3_bucket.data_lake' 'gbpusd-signal-data' || true
 
-      - name: Terraform Plan
+       -name: Terraform Plan
         env:
           TF_VAR_api_image: ${{ steps.build-image.outputs.image_uri }}
           TF_VAR_dashboard_image: ${{ steps.build-image.outputs.image_uri }}
           TF_VAR_broker_image: ${{ steps.build-image.outputs.image_uri }}
         run: terraform -chdir=infra/terraform plan -no-color -input=false
-
+        
       - name: Terraform Apply
         env:
           TF_VAR_api_image: ${{ steps.build-image.outputs.image_uri }}
