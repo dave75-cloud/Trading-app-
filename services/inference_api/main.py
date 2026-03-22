@@ -188,12 +188,18 @@ def latest(h: str = "30m"):
 
 @app.get("/signals/history")
 def history(days: int = 30, h: str = "30m", limit: int = 2000):
-    return {
-        "count": 0,
-        "rows": [],
-        "source": "debug_stub",
-    }
-
+    try:
+        rows = _store().fetch_signals(
+            days=days,
+            horizon=h,
+            symbol=SYMBOL,
+            timeframe=f"{BAR_MINUTES}m",
+            limit=limit,
+        )
+        return {"count": len(rows), "rows": rows}
+    except Exception as e:
+        logger.exception("history failed")
+        return {"count": 0, "rows": [], "error": str(e)}
 
 @app.get("/signals/evaluate")
 def evaluate(days: int = 30, h: str = "30m", limit: int = 2000):
