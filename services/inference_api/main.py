@@ -187,7 +187,7 @@ def latest(h: str = "30m"):
             "status": "ok",
             "now": now.isoformat(),
             "asof_ts": asof_ts.isoformat(),
-            "symbol": "GBPUSD",
+            "symbol": SYMBOL,
             "horizon": h,
             "prob_up": prob_up,
             "side": side,
