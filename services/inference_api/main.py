@@ -24,7 +24,7 @@ def latest(h: str = "30m"):
         parts = sorted(base.rglob("*.parquet"))[-10:]
 
         if not parts:
-            np.random.seed(42)
+            np.random.seed()
             c = np.cumsum(np.random.randn(500)) / 10000 + 1.27
             df = pd.DataFrame({
                 "o": c,
