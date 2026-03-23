@@ -63,6 +63,7 @@ def latest(h: str = "30m"):
 
         return {
             "status": "ok",
+            "now": datetime.utcnow().isoformat(),
             "symbol": "GBPUSD",
             "horizon": h,
             "prob_up": prob_up,
