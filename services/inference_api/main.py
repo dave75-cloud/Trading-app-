@@ -253,11 +253,3 @@ def run_backtest(req: BacktestRequest):
         "source": "debug_stub",
     }
     
-@app.get("/health")
-def health():
-    return {"status": "ok"}
-
-
-@app.get("/signals/latest")
-def latest(...):
-    ...
