@@ -11,11 +11,30 @@ def health():
 
 @app.get("/signals/latest")
 def latest(h: str = "30m"):
-    return {
-        "status": "ok",
-        "note": "THIS IS NEW CODE",
-        "horizon": h
-    }
+    try:
+        # minimal safe payload to satisfy dashboard
+        return {
+            "status": "ok",
+            "symbol": "GBPUSD",
+            "horizon": h,
+            "side": "buy",
+            "prob_up": 0.55,
+            "session": {"london": 1},
+            "suggestion": {
+                "entry_type": "market",
+                "entry_px": 1.2700,
+                "sl_px": 1.2690,
+                "tp_px": 1.2720,
+                "size": 1000,
+                "tif": "GTD-5m",
+            },
+            "source": "phase_1_stub",
+        }
+    except Exception as e:
+        return {
+            "status": "error",
+            "message": str(e),
+        }
 
 
 @app.get("/signals/history")
