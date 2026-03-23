@@ -27,37 +27,80 @@ def health():
 @app.get("/signals/latest")
 def latest(h: str = "30m"):
     try:
-        from datetime import datetime
-        import numpy as np
-        import pandas as pd
-        import pathlib
-
         now = datetime.utcnow()
+        sess = session_flags(now)
 
-        # --- load data (safe fallback if none exists) ---
-        base = pathlib.Path("./data/market_candles") / "GBPUSD"
-        parts = sorted(base.rglob("*.parquet"))[-10:]
+        h = h if h in ("30m", "2h") else "30m"
+        df = _load_recent_parquet()
+        asof_ts = df.sort_values("ts")["ts"].iloc[-1]
+        timeframe = f"{BAR_MINUTES}m"
 
-        if not parts:
-            np.random.seed()
-            c = np.cumsum(np.random.randn(500)) / 10000 + 1.27
-            df = pd.DataFrame({
-                "o": c,
-                "h": c + np.abs(np.random.randn(500)) * 0.0005,
-                "l": c - np.abs(np.random.randn(500)) * 0.0005,
-                "c": c,
-            })
-            df["ts"] = pd.date_range(
-                end=pd.Timestamp.utcnow(),
-                periods=len(df),
-                freq="T",
-                tz="UTC",
-            )
-        else:
-            dfs = [pd.read_parquet(p) for p in parts]
-            df = pd.concat(dfs, ignore_index=True).sort_values("ts")
+        model_pkl, meta_json = _latest_artifacts(h)
 
-        # --- simple signal ---
+        # Phase 3: model path
+        if model_pkl and meta_json and os.path.exists(meta_json):
+            model = joblib.load(model_pkl)
+            with open(meta_json) as f:
+                meta = json.load(f)
+
+            X = _build_features(df)
+            feats = [f for f in meta.get("features", []) if f in X.columns]
+
+            if not feats:
+                raise ValueError("No matching model features found in live feature frame")
+
+            Xn = X[feats].values
+            p = float(model.predict_proba(Xn)[-1, 1])
+
+            price = float(X["c"].iloc[-1])
+            atr = float(X["rng"].rolling(14).mean().iloc[-1])
+            d_sl = max(atr * 0.8, 0.0008)
+            rr = 1.4
+
+            if p >= 0.5:
+                entry_type = "stop"
+                entry_px = price + 0.5 * d_sl
+                sl_px = entry_px - d_sl
+                tp_px = entry_px + rr * d_sl
+                side = "buy"
+            else:
+                entry_type = "stop"
+                entry_px = price - 0.5 * d_sl
+                sl_px = entry_px + d_sl
+                tp_px = entry_px - rr * d_sl
+                side = "sell"
+
+            payload = {
+                "status": "ok",
+                "now": now.isoformat(),
+                "asof_ts": asof_ts.isoformat(),
+                "symbol": SYMBOL,
+                "timeframe": timeframe,
+                "horizon": h,
+                "prob_up": p,
+                "side": side,
+                "expected_move": float((p - 0.5) * 2 * d_sl),
+                "regime": {"mr": 0.5, "bo": 0.5},
+                "session": sess,
+                "suggestion": {
+                    "entry_type": entry_type,
+                    "entry_px": round(entry_px, 5),
+                    "sl_px": round(sl_px, 5),
+                    "tp_px": round(tp_px, 5),
+                    "size": 1000,
+                    "tif": "GTD-5m",
+                },
+                "source": "registry",
+            }
+
+            try:
+                _store().upsert_signal(payload)
+            except Exception:
+                logger.exception("upsert_signal failed")
+
+            return payload
+
+        # Phase 2 fallback: real-data heuristic path
         last = df.tail(50)
         ret = last["c"].pct_change().mean()
 
@@ -71,14 +114,15 @@ def latest(h: str = "30m"):
             "entry_type": "market",
             "entry_px": round(price, 5),
             "sl_px": round(price - d, 5) if side == "buy" else round(price + d, 5),
-            "tp_px": round(price + 2*d, 5) if side == "buy" else round(price - 2*d, 5),
+            "tp_px": round(price + 2 * d, 5) if side == "buy" else round(price - 2 * d, 5),
             "size": 1000,
             "tif": "GTD-5m",
         }
 
-        return {
+        payload = {
             "status": "ok",
-            "now": datetime.utcnow().isoformat(),
+            "now": now.isoformat(),
+            "asof_ts": asof_ts.isoformat(),
             "symbol": "GBPUSD",
             "horizon": h,
             "prob_up": prob_up,
@@ -88,12 +132,21 @@ def latest(h: str = "30m"):
             "source": "phase_2_real_data",
         }
 
+        try:
+            _store().upsert_signal(payload)
+        except Exception:
+            logger.exception("upsert_signal failed")
+
+        return payload
+
     except Exception as e:
+        logger.exception("signals_latest failed")
         return {
             "status": "error",
             "message": str(e),
+            "horizon": h,
+            "source": "signals_latest_guard",
         }
-
 @app.get("/signals/history")
 def history(days: int = 30, h: str = "30m", limit: int = 2000):
     return {
@@ -101,7 +154,6 @@ def history(days: int = 30, h: str = "30m", limit: int = 2000):
         "rows": [],
         "source": "debug_stub",
     }
-
 
 @app.get("/signals/evaluate")
 def evaluate(days: int = 30, h: str = "30m", limit: int = 2000):
