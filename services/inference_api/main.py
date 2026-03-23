@@ -1,4 +1,3 @@
-cat > services/inference_api/main.py << 'EOF'
 from fastapi import FastAPI
 
 app = FastAPI()
@@ -16,4 +15,3 @@ def latest(h: str = "30m"):
         "note": "THIS IS NEW CODE",
         "horizon": h
     }
-EOF
