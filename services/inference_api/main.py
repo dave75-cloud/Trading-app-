@@ -14,10 +14,6 @@ from pydantic import BaseModel
 
 from lib.sessions import session_flags
 from storage.db_store import get_store
-from fastapi import FastAPI
-from pydantic import BaseModel
-
-app = FastAPI()
 
 logger = logging.getLogger(__name__)
 
