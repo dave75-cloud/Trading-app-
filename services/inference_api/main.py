@@ -24,10 +24,6 @@ DATA_DIR = os.getenv("DATA_DIR", "./data/market_candles")
 SYMBOL = os.getenv("SYMBOL", "GBPUSD")
 BAR_MINUTES = int(os.getenv("BAR_MINUTES", "5"))
 
-<<<<<<< HEAD
-=======
-
->>>>>>> Restore model and fallback signals latest
 @lru_cache(maxsize=1)
 def _store():
     return get_store()
@@ -86,10 +82,6 @@ def _build_features(df: pd.DataFrame):
     x["london"] = x["ts"].dt.hour.between(7, 16).astype(int)
     x["newyork"] = x["ts"].dt.hour.between(12, 21).astype(int)
     return x.dropna().reset_index(drop=True)
-<<<<<<< HEAD
-=======
-
->>>>>>> Restore model and fallback signals latest
 
 @app.get("/health")
 def health():
@@ -108,15 +100,6 @@ def latest(h: str = "30m"):
         timeframe = f"{BAR_MINUTES}m"
 
         model_pkl, meta_json = _latest_artifacts(h)
-
-<<<<<<< HEAD
-        # Phase 3: model path
-=======
->>>>>>> Restore model and fallback signals latest
-        if model_pkl and meta_json and os.path.exists(meta_json):
-            model = joblib.load(model_pkl)
-            with open(meta_json) as f:
-                meta = json.load(f)
 
             X = _build_features(df)
             feats = [f for f in meta.get("features", []) if f in X.columns]
@@ -175,10 +158,6 @@ def latest(h: str = "30m"):
 
             return payload
 
-<<<<<<< HEAD
-        # Phase 2 fallback: real-data heuristic path
-=======
->>>>>>> Restore model and fallback signals latest
         last = df.tail(50)
         ret = last["c"].pct_change().mean()
 
@@ -225,11 +204,7 @@ def latest(h: str = "30m"):
             "horizon": h,
             "source": "signals_latest_guard",
         }
-<<<<<<< HEAD
-=======
 
-
->>>>>>> Restore model and fallback signals latest
 @app.get("/signals/history")
 def history(days: int = 30, h: str = "30m", limit: int = 2000):
     return {
@@ -238,10 +213,6 @@ def history(days: int = 30, h: str = "30m", limit: int = 2000):
         "source": "debug_stub",
     }
 
-<<<<<<< HEAD
-=======
-
->>>>>>> Restore model and fallback signals latest
 @app.get("/signals/evaluate")
 def evaluate(days: int = 30, h: str = "30m", limit: int = 2000):
     return {
