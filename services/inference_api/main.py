@@ -101,7 +101,13 @@ def latest(h: str = "30m"):
 
         model_pkl, meta_json = _latest_artifacts(h)
 
+        if model_pkl and meta_json and os.path.exists(meta_json):
+            model = joblib.load(model_pkl)
+            with open(meta_json) as f:
+                meta = json.load(f)
+
             X = _build_features(df)
+            feats = [f for f in meta.get(X = _build_features(df)
             feats = [f for f in meta.get("features", []) if f in X.columns]
 
             if not feats:
