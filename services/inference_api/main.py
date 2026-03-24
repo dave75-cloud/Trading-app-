@@ -24,6 +24,7 @@ DATA_DIR = os.getenv("DATA_DIR", "./data/market_candles")
 SYMBOL = os.getenv("SYMBOL", "GBPUSD")
 BAR_MINUTES = int(os.getenv("BAR_MINUTES", "5"))
 
+
 @lru_cache(maxsize=1)
 def _store():
     return get_store()
@@ -82,6 +83,7 @@ def _build_features(df: pd.DataFrame):
     x["london"] = x["ts"].dt.hour.between(7, 16).astype(int)
     x["newyork"] = x["ts"].dt.hour.between(12, 21).astype(int)
     return x.dropna().reset_index(drop=True)
+
 
 @app.get("/health")
 def health():
@@ -211,6 +213,7 @@ def latest(h: str = "30m"):
             "source": "signals_latest_guard",
         }
 
+
 @app.get("/signals/history")
 def history(days: int = 30, h: str = "30m", limit: int = 2000):
     return {
@@ -218,6 +221,7 @@ def history(days: int = 30, h: str = "30m", limit: int = 2000):
         "rows": [],
         "source": "debug_stub",
     }
+
 
 @app.get("/signals/evaluate")
 def evaluate(days: int = 30, h: str = "30m", limit: int = 2000):
@@ -252,4 +256,3 @@ def run_backtest(req: BacktestRequest):
         "raw": {},
         "source": "debug_stub",
     }
-    
