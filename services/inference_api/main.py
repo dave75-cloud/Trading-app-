@@ -1,3 +1,4 @@
+
 import glob
 import json
 import logging
@@ -108,8 +109,7 @@ def latest(h: str = "30m"):
             with open(meta_json) as f:
                 meta = json.load(f)
 
-            X = _build_features(df)
-            feats = [f for f in meta.get(X = _build_features(df)
+	 X = _build_features(df)
             feats = [f for f in meta.get("features", []) if f in X.columns]
 
             if not feats:
