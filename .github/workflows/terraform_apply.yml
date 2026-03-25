@@ -37,6 +37,18 @@ jobs:
         run: |
           python -m py_compile services/inference_api/main.py
 
+      - name: Install dev tools
+        run: |
+          pip install -r requirements-dev.txt
+
+      - name: Check formatting
+        run: |
+          black --check services/inference_api/main.py
+
+      - name: Lint inference API
+        run: |
+          ruff check services/inference_api/main.py
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
