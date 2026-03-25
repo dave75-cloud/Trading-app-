@@ -40,11 +40,6 @@ jobs:
       - name: Install dev tools
         run: |
           pip install -r requirements-dev.txt
-          pytest==8.3.4
-          pytest-cov==6.0.0
-          responses==0.25.3
-          black
-          ruff
            
       - name: Check formatting
         run: |
