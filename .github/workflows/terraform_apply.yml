@@ -39,8 +39,8 @@ jobs:
 
       - name: Install dev tools
         run: |
-          pip install -r 
-
+          pip install -r requirements-dev.txt
+           
       - name: Check formatting
         run: |
           black --check services/inference_api/main.py
