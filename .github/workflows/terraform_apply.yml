@@ -131,6 +131,28 @@ jobs:
           TF_VAR_broker_image: ${{ steps.build-image.outputs.image_uri }}
         run: terraform -chdir=infra/terraform apply -auto-approve -input=false
 
+      - name: Smoke test health
+        run: |
+          curl -fsS "https://YOUR_API_HOST/health"
+
+      - name: Smoke test latest signal
+        run: |
+          curl -fsS "https://YOUR_API_HOST/signals/latest?h=30m"
+
+      - name: Smoke test latest signal payload
+        run: |
+          python - <<'PY'
+          import json, urllib.request
+
+          url = "https://YOUR_API_HOST/signals/latest?h=30m"
+          with urllib.request.urlopen(url, timeout=30) as r:
+          data = json.load(r)
+
+          assert "status" in data
+          assert "source" in data
+          print(data)
+          PY
+
       - name: Terraform Outputs
         env:
           TF_VAR_api_image: ${{ steps.build-image.outputs.image_uri }}
