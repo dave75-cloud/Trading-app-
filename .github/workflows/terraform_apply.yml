@@ -131,13 +131,16 @@ jobs:
           TF_VAR_broker_image: ${{ steps.build-image.outputs.image_uri }}
         run: terraform -chdir=infra/terraform apply -auto-approve -input=false
 
+      - name: Wait for service to stabilise
+        run: sleep 60
+
       - name: Smoke test health
         run: |
-          curl -fsS "https://YOUR_API_HOST/health"
+          curl -fsS "https://gbpusd-signal-alb-211206090.ap-southeast-2.elb.amazonaws.com/health"
 
       - name: Smoke test latest signal
         run: |
-          curl -fsS "https://YOUR_API_HOST/signals/latest?h=30m"
+          curl -fsS "https://gbpusd-signal-alb-211206090.ap-southeast-2.elb.amazonaws.com/signals/latest?h=30m"
 
       - name: Smoke test latest signal payload
         run: |
