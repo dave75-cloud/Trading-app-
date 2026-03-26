@@ -145,13 +145,13 @@ jobs:
 
       - name: Smoke test health
         run: |
-          curl -fsS "http://${{ steps.tf-output.outputs.api_host }}/health"
+          curl -fsS "http://${{ steps.tf-alb_dns_name.outputs.api_host }}/health"
 
       - name: Smoke test latest signal payload
         run: |
           python - <<'PY'
           import json, urllib.request
-          url = "http://${{ steps.tf-output.outputs.api_host }}/signals/latest?h=30m"
+          url = "http://${{ steps.tf-alb_dns_name.outputs.api_host }}/signals/latest?h=30m"
           with urllib.request.urlopen(url, timeout=30) as r:
               data = json.load(r)
           assert "status" in data
