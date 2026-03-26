@@ -137,7 +137,7 @@ jobs:
 
       - name: Smoke test health
         run: |
-          curl -fsS "http://${{ steps.tf-alb_dns_name.outputs.api_host }}/health"
+          curl -fsS "http://${{ steps.tf-output.outputs.api_host }}/health"
 
       - name: Smoke test latest signal payload
         run: |
