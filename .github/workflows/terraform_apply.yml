@@ -128,7 +128,7 @@ jobs:
         run: terraform -chdir=infra/terraform apply -auto-approve -input=false
 
       - name: Wait for service to stabilise
-        run: sleep 60
+        run: sleep 120
 
       - name: Smoke test health
         run: |
