@@ -145,7 +145,7 @@ jobs:
 
           url = "http://YOUR_API_HOST/signals/latest?h=30m"
           with urllib.request.urlopen(url, timeout=30) as r:
-          data = json.load(r)
+              data = json.load(r)
 
           assert "status" in data
           assert "source" in data
