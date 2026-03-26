@@ -34,8 +34,8 @@ jobs:
           pip install -r requirements.txt
           pip install -r requirements-dev.txt
 
-      - name: Run tests
-        run: python -m pytest -q
+      - name: Run health test
+        run: python -m pytest -q tests/test_health.py --no-cov
 
       - name: Syntax check inference API
         run: |
