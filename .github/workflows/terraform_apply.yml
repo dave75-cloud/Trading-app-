@@ -140,9 +140,6 @@ jobs:
       - name: Wait for service to stabilise
         run: sleep 120
 
-      - name: Wait for service to stabilise
-        run: sleep 120
-
       - name: Smoke test health
         run: |
           curl -fsS "http://${{ steps.tf-alb_dns_name.outputs.api_host }}/health"
