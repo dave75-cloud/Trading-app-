@@ -162,3 +162,7 @@ jobs:
           TF_VAR_dashboard_image: ${{ steps.build-image.outputs.image_uri }}
           TF_VAR_broker_image: ${{ steps.build-image.outputs.image_uri }}
         run: terraform -chdir=infra/terraform output || true
+
+      - name: Debug API host
+        run: |
+          echo "API host is ${{ steps.tf-output.outputs.api_host }}"
