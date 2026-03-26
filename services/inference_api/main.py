@@ -166,7 +166,7 @@ def latest(h: str = "30m"):
 
             return payload
 
-        last = df.tail(50)
+                last = df.tail(50)
         ret = last["c"].pct_change().mean()
 
         prob_up = float(0.5 + np.tanh(ret * 1000) * 0.2)
@@ -184,21 +184,21 @@ def latest(h: str = "30m"):
             "tif": "GTD-5m",
         }
 
-            payload = {
-                "status": "ok",
-                "now": now.isoformat(),
-                "asof_ts": asof_ts.isoformat(),
-                "symbol": SYMBOL,
-                "timeframe": timeframe,
-                "horizon": h,
-                "prob_up": prob_up,
-                "side": side,
-                "expected_move": float((prob_up - 0.5) * 2 * d),
-                "regime": {"mr": 0.5, "bo": 0.5},
-                "session": sess,
-                "suggestion": suggestion,
-                "source": "fallback",
-            }
+        payload = {
+            "status": "ok",
+            "now": now.isoformat(),
+            "asof_ts": asof_ts.isoformat(),
+            "symbol": SYMBOL,
+            "timeframe": timeframe,
+            "horizon": h,
+            "prob_up": prob_up,
+            "side": side,
+            "expected_move": float((prob_up - 0.5) * 2 * d),
+            "regime": {"mr": 0.5, "bo": 0.5},
+            "session": sess,
+            "suggestion": suggestion,
+            "source": "fallback",
+        }
 
         try:
             _store().upsert_signal(payload)
