@@ -184,18 +184,21 @@ def latest(h: str = "30m"):
             "tif": "GTD-5m",
         }
 
-        payload = {
-            "status": "ok",
-            "now": now.isoformat(),
-            "asof_ts": asof_ts.isoformat(),
-            "symbol": SYMBOL,
-            "horizon": h,
-            "prob_up": prob_up,
-            "side": side,
-            "session": {"london": int(7 <= datetime.utcnow().hour <= 16)},
-            "suggestion": suggestion,
-            "source": "phase_2_real_data",
-        }
+            payload = {
+                "status": "ok",
+                "now": now.isoformat(),
+                "asof_ts": asof_ts.isoformat(),
+                "symbol": SYMBOL,
+                "timeframe": timeframe,
+                "horizon": h,
+                "prob_up": prob_up,
+                "side": side,
+                "expected_move": float((prob_up - 0.5) * 2 * d),
+                "regime": {"mr": 0.5, "bo": 0.5},
+                "session": sess,
+                "suggestion": suggestion,
+                "source": "fallback",
+            }
 
         try:
             _store().upsert_signal(payload)
