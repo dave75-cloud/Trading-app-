@@ -207,6 +207,13 @@ def latest(h: str = "30m"):
 
         return payload
 
+        try:
+            _store().upsert_signal(payload)
+        except Exception:
+            logger.exception("upsert_signal failed")
+
+        return payload
+
     except Exception as e:
         logger.exception("signals_latest failed")
         return {
