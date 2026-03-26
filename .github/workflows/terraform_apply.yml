@@ -132,11 +132,6 @@ jobs:
         run: |
           echo "api_host=$(terraform -chdir=infra/terraform output -raw alb_dns_name)" >> "$GITHUB_OUTPUT"
 
-      - name: Read API host from Terraform output
-        id: tf-output
-        run: |
-          echo "api_host=$(terraform -chdir=infra/terraform output -raw alb_dns_name)" >> "$GITHUB_OUTPUT"
-
       - name: Wait for service to stabilise
         run: sleep 120
 
