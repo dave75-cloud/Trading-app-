@@ -132,18 +132,18 @@ jobs:
 
       - name: Smoke test health
         run: |
-          curl -fsS "https://gbpusd-signal-alb-211206090.ap-southeast-2.elb.amazonaws.com/health"
+          curl -fsS "http://gbpusd-signal-alb-211206090.ap-southeast-2.elb.amazonaws.com/health"
 
       - name: Smoke test latest signal
         run: |
-          curl -fsS "https://gbpusd-signal-alb-211206090.ap-southeast-2.elb.amazonaws.com/signals/latest?h=30m"
+          curl -fsS "http://gbpusd-signal-alb-211206090.ap-southeast-2.elb.amazonaws.com/signals/latest?h=30m"
 
       - name: Smoke test latest signal payload
         run: |
           python - <<'PY'
           import json, urllib.request
 
-          url = "https://YOUR_API_HOST/signals/latest?h=30m"
+          url = "http://YOUR_API_HOST/signals/latest?h=30m"
           with urllib.request.urlopen(url, timeout=30) as r:
           data = json.load(r)
 
