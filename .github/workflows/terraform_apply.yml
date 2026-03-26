@@ -132,8 +132,18 @@ jobs:
         run: |
           echo "api_host=$(terraform -chdir=infra/terraform output -raw alb_dns_name)" >> "$GITHUB_OUTPUT"
 
-      - name: Wait for service to stabilise
-        run: sleep 120
+      - name: Wait for service to become healthy
+        run: |
+          for i in {1..30}; do
+            if curl -fsS "http://${{ steps.tf-output.outputs.api_host }}/health"; then
+              echo "Service is healthy"
+              exit 0
+            fi
+            echo "Waiting for service..."
+            sleep 5
+          done
+          echo "Service did not become healthy in time"
+          exit 1
 
       - name: Smoke test health
         run: |
