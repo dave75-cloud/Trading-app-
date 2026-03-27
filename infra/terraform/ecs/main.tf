@@ -362,7 +362,7 @@ resource "aws_ecs_task_definition" "runner" {
 			  { name = "SYMBOL",         value = "GBPUSD" },
 			  { name = "DB_URL"
 				  valueFrom = var.db_url_secret_arn
-			}
+				}
 			]
       secrets = local.runner_secrets
       logConfiguration = {
