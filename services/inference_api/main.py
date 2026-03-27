@@ -16,6 +16,16 @@ from pydantic import BaseModel
 from lib.sessions import session_flags
 from storage.db_store import get_store
 
+def horizon_to_minutes(h: str) -> int:
+    try:
+        if h.endswith("m"):
+            return int(h[:-1])
+        if h.endswith("h"):
+            return int(h[:-1]) * 60
+    except Exception:
+        pass
+    return 30
+
 logger = logging.getLogger(__name__)
 
 app = FastAPI()
