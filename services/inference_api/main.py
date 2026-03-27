@@ -290,7 +290,7 @@ def history(days: int = 30, h: str = "30m", limit: int = 2000):
 @app.get("/signals/evaluate")
 def evaluate(days: int = 30, h: str = "30m", limit: int = 2000):
     try:
-        rows = _store().get_signals(limit=limit)
+        rows = _store().get_signals(days=days, horizon=h, limit=limit)
 
         if not rows:
             return {
