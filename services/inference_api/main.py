@@ -281,43 +281,63 @@ def evaluate(days: int = 30, h: str = "30m", limit: int = 2000):
             "source": "no_data",
         }
 
-    results = []
+    df = _load_recent_parquet().sort_values("ts").copy()
+    df["ts"] = pd.to_datetime(df["ts"], utc=True, errors="coerce")
+    df = df.dropna(subset=["ts"])
+
+    horizon_minutes = {"30m": 30, "2h": 120}.get(h, 30)
+
+    out = []
     correct = 0
     brier_sum = 0.0
 
     for r in rows:
-        p = r.get("prob_up")
-        y = r.get("outcome")  # you'll need this later
-
-        if p is None or y is None:
+        if r.get("horizon") != h:
             continue
 
-        pred = 1 if p >= 0.5 else 0
+        p = r.get("prob_up")
+        ref_px = r.get("ref_px")
+        asof_ts = r.get("asof_ts")
 
-        if pred == y:
-            correct += 1
+        if p is None or ref_px is None or asof_ts is None:
+            continue
 
-        brier_sum += (p - y) ** 2
+        ts = pd.to_datetime(asof_ts, utc=True, errors="coerce")
+        if pd.isna(ts):
+            continue
 
-        results.append({
-            "ts": r.get("asof_ts"),
-            "prob_up": p,
-            "actual": y,
+        target_ts = ts + pd.Timedelta(minutes=horizon_minutes)
+        future = df[df["ts"] >= target_ts]
+        if future.empty:
+            continue
+
+        future_px = float(future.iloc[0]["c"])
+        y = 1 if future_px > float(ref_px) else 0
+        pred = 1 if float(p) >= 0.5 else 0
+
+        correct += int(pred == y)
+        brier_sum += (float(p) - y) ** 2
+
+        out.append({
+            "asof_ts": asof_ts,
+            "ref_px": ref_px,
+            "future_px": round(future_px, 5),
+            "prob_up": float(p),
+            "actual_up": y,
+            "pred_up": pred,
         })
 
-    n = len(results)
-
-    summary = {
-        "count": n,
-        "horizon": h,
-        "accuracy": round(correct / n, 4) if n else 0.0,
-        "brier": round(brier_sum / n, 4) if n else None,
-    }
+    n = len(out)
 
     return {
-        "summary": summary,
-        "rows": results[:50],  # cap output
-        "source": "computed",
+        "summary": {
+            "count": n,
+            "horizon": h,
+            "accuracy": round(correct / n, 4) if n else 0.0,
+            "brier": round(brier_sum / n, 4) if n else None,
+        },
+        "rows": out[:50],
+        "source": "computed_from_parquet",
     }
 
 @app.post("/backtest/run")
