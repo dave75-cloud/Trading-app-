@@ -161,6 +161,7 @@ class Store:
 
         out: List[Dict[str, Any]] = []
         for r in rows:
+            raw = r.raw or {}
             out.append(
                 {
                     "asof_ts": r.asof_ts.isoformat().replace("+00:00", "Z"),
@@ -177,10 +178,15 @@ class Store:
                     "size": r.size,
                     "tif": r.tif,
                     "source": r.source,
-                    "raw": r.raw,
+                    "ref_px": raw.get("ref_px"),
+                    "session": raw.get("session"),
+                    "regime": raw.get("regime"),
+                    "suggestion": raw.get("suggestion"),
+                    "raw": raw,
                     "created_at": r.created_at.isoformat() if isinstance(r.created_at, datetime) else str(r.created_at),
                 }
             )
+            
         return out
 
     def get_signals(
