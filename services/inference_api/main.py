@@ -355,6 +355,10 @@ def evaluate(days: int = 30, h: str = "30m", limit: int = 2000):
         "source": "computed_from_parquet",
     }
 
+class BacktestRequest(BaseModel):
+    horizon: str = "30m"
+    days: int = 90
+
 @app.post("/backtest/run")
 def run_backtest(req: BacktestRequest):
     return {
