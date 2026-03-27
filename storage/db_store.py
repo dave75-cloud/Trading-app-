@@ -207,9 +207,17 @@ class Store:
         
 def get_store(db_url: Optional[str] = None) -> Store:
     url = db_url or default_db_url()
-    engine = create_engine(
-        url,
-        pool_pre_ping=True,
-        connect_args={"connect_timeout": 5},
-    )
+
+    if url.startswith("sqlite"):
+        engine = create_engine(
+            url,
+            pool_pre_ping=True,
+        )
+    else:
+        engine = create_engine(
+            url,
+            pool_pre_ping=True,
+            connect_args={"connect_timeout": 5},
+        )
+
     return Store(engine=engine)
