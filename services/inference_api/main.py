@@ -258,12 +258,27 @@ def latest(h: str = "30m"):
 
 @app.get("/signals/history")
 def history(days: int = 30, h: str = "30m", limit: int = 2000):
-    return {
-        "count": 0,
-        "rows": [],
-        "source": "debug_stub",
-    }
+    try:
+        rows = _store().get_signals(limit=limit)
 
+        filtered = [
+            r for r in rows
+            if r.get("horizon") == h
+        ]
+
+        return {
+            "count": len(filtered),
+            "rows": filtered,
+            "source": "store",
+        }
+    except Exception as e:
+        logger.exception("signals_history failed")
+        return {
+            "count": 0,
+            "rows": [],
+            "source": "signals_history_guard",
+            "message": str(e),
+        }
 
 @app.get("/signals/evaluate")
 def evaluate(days: int = 30, h: str = "30m", limit: int = 2000):
