@@ -111,9 +111,6 @@ class Store:
             created_at=utc_now(),
         )
 
-        db_url = str(self.engine.url)
-        is_sqlite = db_url.startswith("sqlite")
-
         with Session(self.engine) as s:
             # Cross-DB "upsert": lookup then update/insert. Fine for MVP volumes.
             existing = s.scalar(
