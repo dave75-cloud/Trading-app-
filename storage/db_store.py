@@ -152,7 +152,7 @@ class Store:
                     Signal.horizon == horizon,
                     Signal.asof_ts >= cutoff,
                 )
-                .order_by(Signal.asof_ts.asc())
+                .order_by(Signal.asof_ts.desc())
                 .limit(limit)
             ).all()
 
