@@ -326,7 +326,7 @@ def evaluate(days: int = 30, h: str = "30m", limit: int = 2000):
     df["ts"] = pd.to_datetime(df["ts"], utc=True, errors="coerce")
     df = df.dropna(subset=["ts"])
 
-    horizon_minutes = {"30m": 30, "2h": 120}.get(h, 30)
+    horizon_minutes = horizon_to_minutes(h)
 
     out = []
     correct = 0
