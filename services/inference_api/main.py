@@ -259,16 +259,18 @@ def latest(h: str = "30m"):
 @app.get("/signals/history")
 def history(days: int = 30, h: str = "30m", limit: int = 2000):
     try:
-        rows = _store().get_signals(limit=limit)
+        rows = _store().get_signals(limit=limit * 2)
 
         filtered = [
             r for r in rows
             if r.get("horizon") == h
         ]
 
+        filtered.sort(key=lambda r: r.get("asof_ts", ""), reverse=True)
+
         return {
             "count": len(filtered),
-            "rows": filtered,
+            "rows": filtered[:limit],
             "source": "store",
         }
     except Exception as e:
