@@ -265,22 +265,58 @@ def history(days: int = 30, h: str = "30m", limit: int = 2000):
 
 @app.get("/signals/evaluate")
 def evaluate(days: int = 30, h: str = "30m", limit: int = 2000):
-    return {
-        "summary": {
-            "count": 0,
-            "horizon": h,
-            "accuracy": 0.0,
-            "brier": None,
-        },
-        "rows": [],
-        "source": "debug_stub",
+    rows = _store().get_signals(limit=limit)
+
+    if not rows:
+        return {
+            "summary": {
+                "count": 0,
+                "horizon": h,
+                "accuracy": 0.0,
+                "brier": None,
+            },
+            "rows": [],
+            "source": "no_data",
+        }
+
+    results = []
+    correct = 0
+    brier_sum = 0.0
+
+    for r in rows:
+        p = r.get("prob_up")
+        y = r.get("outcome")  # you'll need this later
+
+        if p is None or y is None:
+            continue
+
+        pred = 1 if p >= 0.5 else 0
+
+        if pred == y:
+            correct += 1
+
+        brier_sum += (p - y) ** 2
+
+        results.append({
+            "ts": r.get("asof_ts"),
+            "prob_up": p,
+            "actual": y,
+        })
+
+    n = len(results)
+
+    summary = {
+        "count": n,
+        "horizon": h,
+        "accuracy": round(correct / n, 4) if n else 0.0,
+        "brier": round(brier_sum / n, 4) if n else None,
     }
 
-
-class BacktestRequest(BaseModel):
-    horizon: str = "30m"
-    days: int = 90
-
+    return {
+        "summary": summary,
+        "rows": results[:50],  # cap output
+        "source": "computed",
+    }
 
 @app.post("/backtest/run")
 def run_backtest(req: BacktestRequest):
