@@ -256,16 +256,29 @@ def latest(h: str = "30m"):
         }
 
 
+from datetime import datetime, timedelta, timezone
+
 @app.get("/signals/history")
 def history(days: int = 30, h: str = "30m", limit: int = 2000):
     try:
         rows = _store().get_signals(limit=limit * 2)
 
+        cutoff = datetime.now(timezone.utc) - timedelta(days=days)
+
+        def parse_ts(s):
+            try:
+                return datetime.fromisoformat(s.replace("Z", "+00:00"))
+            except Exception:
+                return None
+
         filtered = [
             r for r in rows
             if r.get("horizon") == h
+            and (ts := parse_ts(r.get("asof_ts"))) is not None
+            and ts >= cutoff
         ]
 
+        # Sort newest first
         filtered.sort(key=lambda r: r.get("asof_ts", ""), reverse=True)
 
         return {
@@ -273,6 +286,7 @@ def history(days: int = 30, h: str = "30m", limit: int = 2000):
             "rows": filtered[:limit],
             "source": "store",
         }
+
     except Exception as e:
         logger.exception("signals_history failed")
         return {
