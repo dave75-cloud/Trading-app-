@@ -308,9 +308,90 @@ def history(days: int = 30, h: str = "30m", limit: int = 2000):
 
 @app.get("/signals/evaluate")
 def evaluate(days: int = 30, h: str = "30m", limit: int = 2000):
-    rows = _store().get_signals(limit=limit)
+    try:
+        rows = _store().get_signals(limit=limit)
 
-    if not rows:
+        if not rows:
+            return {
+                "summary": {
+                    "count": 0,
+                    "horizon": h,
+                    "accuracy": 0.0,
+                    "brier": None,
+                },
+                "rows": [],
+                "source": "no_data",
+            }
+
+        cutoff = datetime.now(timezone.utc) - timedelta(days=days)
+        df = _load_recent_parquet().sort_values("ts").copy()
+        df["ts"] = pd.to_datetime(df["ts"], utc=True, errors="coerce")
+        df = df.dropna(subset=["ts"])
+
+        horizon_minutes = horizon_to_minutes(h)
+
+        def parse_ts(s):
+            try:
+                return datetime.fromisoformat(str(s).replace("Z", "+00:00"))
+            except Exception:
+                return None
+
+        out = []
+        correct = 0
+        brier_sum = 0.0
+
+        for r in rows:
+            if not isinstance(r, dict):
+                continue
+            if r.get("horizon") != h:
+                continue
+
+            ts = parse_ts(r.get("asof_ts"))
+            if ts is None or ts < cutoff:
+                continue
+
+            p = r.get("prob_up")
+            ref_px = r.get("ref_px")
+            if p is None or ref_px is None:
+                continue
+
+            target_ts = ts + timedelta(minutes=horizon_minutes)
+            future = df[df["ts"] >= target_ts]
+            if future.empty:
+                continue
+
+            future_px = float(future.iloc[0]["c"])
+            y = 1 if future_px > float(ref_px) else 0
+            pred = 1 if float(p) >= 0.5 else 0
+
+            correct += int(pred == y)
+            brier_sum += (float(p) - y) ** 2
+
+            out.append({
+                "asof_ts": r.get("asof_ts"),
+                "horizon": r.get("horizon"),
+                "prob_up": float(p),
+                "ref_px": float(ref_px),
+                "future_px": future_px,
+                "actual_up": y,
+                "pred_up": pred,
+            })
+
+        n = len(out)
+
+        return {
+            "summary": {
+                "count": n,
+                "horizon": h,
+                "accuracy": round(correct / n, 4) if n else 0.0,
+                "brier": round(brier_sum / n, 4) if n else None,
+            },
+            "rows": out[:100],
+            "source": "computed_from_parquet",
+        }
+
+    except Exception as e:
+        logger.exception("signals_evaluate failed")
         return {
             "summary": {
                 "count": 0,
@@ -319,67 +400,9 @@ def evaluate(days: int = 30, h: str = "30m", limit: int = 2000):
                 "brier": None,
             },
             "rows": [],
-            "source": "no_data",
+            "source": "signals_evaluate_guard",
+            "message": str(e),
         }
-
-    df = _load_recent_parquet().sort_values("ts").copy()
-    df["ts"] = pd.to_datetime(df["ts"], utc=True, errors="coerce")
-    df = df.dropna(subset=["ts"])
-
-    horizon_minutes = horizon_to_minutes(h)
-
-    out = []
-    correct = 0
-    brier_sum = 0.0
-
-    for r in rows:
-        if r.get("horizon") != h:
-            continue
-
-        p = r.get("prob_up")
-        ref_px = r.get("ref_px")
-        asof_ts = r.get("asof_ts")
-
-        if p is None or ref_px is None or asof_ts is None:
-            continue
-
-        ts = pd.to_datetime(asof_ts, utc=True, errors="coerce")
-        if pd.isna(ts):
-            continue
-
-        target_ts = ts + pd.Timedelta(minutes=horizon_minutes)
-        future = df[df["ts"] >= target_ts]
-        if future.empty:
-            continue
-
-        future_px = float(future.iloc[0]["c"])
-        y = 1 if future_px > float(ref_px) else 0
-        pred = 1 if float(p) >= 0.5 else 0
-
-        correct += int(pred == y)
-        brier_sum += (float(p) - y) ** 2
-
-        out.append({
-            "asof_ts": asof_ts,
-            "ref_px": ref_px,
-            "future_px": round(future_px, 5),
-            "prob_up": float(p),
-            "actual_up": y,
-            "pred_up": pred,
-        })
-
-    n = len(out)
-
-    return {
-        "summary": {
-            "count": n,
-            "horizon": h,
-            "accuracy": round(correct / n, 4) if n else 0.0,
-            "brier": round(brier_sum / n, 4) if n else None,
-        },
-        "rows": out[:50],
-        "source": "computed_from_parquet",
-    }
 
 class BacktestRequest(BaseModel):
     horizon: str = "30m"
