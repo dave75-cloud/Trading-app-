@@ -183,7 +183,21 @@ class Store:
             )
         return out
 
-
+def get_signals(
+    self,
+    days: int = 30,
+    horizon: str = "30m",
+    symbol: Optional[str] = None,
+    timeframe: Optional[str] = None,
+    limit: int = 5000,
+) -> List[Dict[str, Any]]:
+    return self.fetch_signals(
+        days=days,
+        horizon=horizon,
+        symbol=symbol,
+        timeframe=timeframe,
+        limit=limit,
+    )
 def get_store(db_url: Optional[str] = None) -> Store:
     url = db_url or default_db_url()
     engine = create_engine(
