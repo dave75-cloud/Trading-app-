@@ -281,22 +281,17 @@ resource "aws_ecs_task_definition" "api" {
         }
       ]
       environment = [
-			  { name = "MODEL_REGISTRY", value = "/models_registry/gbpusd" },
-			  { name = "DATA_DIR",       value = "/data/market_candles" },
-			  { name = "SYMBOL",         value = "GBPUSD" },
-			
-			]
-      secrets = local.api_secrets
-      logConfiguration = {
-        logDriver = "awslogs"
-        options = {
-          awslogs-group         = aws_cloudwatch_log_group.api.name
-          awslogs-region        = var.region
-          awslogs-stream-prefix = "ecs"
-        }
-      }
-    }
-  ])
+  { name = "MODEL_REGISTRY", value = "/models_registry/gbpusd" },
+  { name = "DATA_DIR",       value = "/data/market_candles" },
+  { name = "SYMBOL",         value = "GBPUSD" }
+]
+
+secrets = concat(local.api_secrets, [
+  {
+    name      = "DB_URL"
+    valueFrom = var.db_url_secret_arn
+  }
+])
 }
 
 resource "aws_ecs_task_definition" "dashboard" {
