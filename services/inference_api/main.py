@@ -35,6 +35,9 @@ DATA_DIR = os.getenv("DATA_DIR", "./data/market_candles")
 SYMBOL = os.getenv("SYMBOL", "GBPUSD")
 BAR_MINUTES = int(os.getenv("BAR_MINUTES", "5"))
 
+logger.info("DB_URL present=%s", bool(os.getenv("DB_URL")))
+logger.info("DB_URL prefix=%s", (os.getenv("DB_URL") or "")[:25])
+
 logger.info(
     "Starting inference API | symbol=%s | data_dir=%s | registry=%s | bar_minutes=%s",
     SYMBOL, 
