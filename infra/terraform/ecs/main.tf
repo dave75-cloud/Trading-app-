@@ -291,7 +291,7 @@ resource "aws_ecs_task_definition" "api" {
 			secrets = [
 			  {
 			    name      = "DB_URL"
-			    valueFrom = arn:aws:secretsmanager:ap-southeast-2:156876768682:secret:gbpusd-signal/db_url-ZAdvKD
+					valueFrom = var.db_url_secret_arn
 			  }
 			]
 
