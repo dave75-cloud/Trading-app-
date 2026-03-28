@@ -37,6 +37,7 @@ BAR_MINUTES = int(os.getenv("BAR_MINUTES", "5"))
 
 logger.info("DB_URL present=%s", bool(os.getenv("DB_URL")))
 logger.info("DB_URL prefix=%s", (os.getenv("DB_URL") or "")[:25])
+logger.info("DB_URL repr=%r", os.getenv("DB_URL"))
 
 logger.info(
     "Starting inference API | symbol=%s | data_dir=%s | registry=%s | bar_minutes=%s",
