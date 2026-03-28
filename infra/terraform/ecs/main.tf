@@ -351,22 +351,17 @@ resource "aws_ecs_task_definition" "runner" {
       essential = true
       command   = ["python", "cli/signal_report.py"]
       environment = [
-			  { name = "MODEL_REGISTRY", value = "/models_registry/gbpusd" },
-			  { name = "DATA_DIR",       value = "/data/market_candles" },
-			  { name = "SYMBOL",         value = "GBPUSD" },
-			  
+				 { name = "MODEL_REGISTRY", value = "/models_registry/gbpusd" },
+				 { name = "DATA_DIR",       value = "/data/market_candles" },
+				 { name = "SYMBOL",         value = "GBPUSD" }
 			]
-      secrets = local.runner_secrets
-      logConfiguration = {
-        logDriver = "awslogs"
-        options = {
-          awslogs-group         = aws_cloudwatch_log_group.runner.name
-          awslogs-region        = var.region
-          awslogs-stream-prefix = "ecs"
-        }
-      }
-    }
-  ])
+
+			secrets = concat(local.runner_secrets, [
+			  {
+			    name      = "DB_URL"
+				  valueFrom = var.db_url_secret_arn
+			  }
+			])
 }
 
 # -----------------------------
