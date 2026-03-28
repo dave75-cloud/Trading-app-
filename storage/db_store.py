@@ -27,6 +27,7 @@ def utc_now() -> datetime:
 
 
 def default_db_url() -> str:
+    # Prefer Postgres/RDS via DB_URL, otherwise fall back to sqlite file.
     db_url = os.getenv("DB_URL")
     if db_url:
         return db_url.strip()
