@@ -286,11 +286,12 @@ resource "aws_ecs_task_definition" "api" {
 			  { name = "SYMBOL",         value = "GBPUSD" }
 			]
 
-			secrets = concat(local.api_secrets, [
+			secrets = [
 			  {
 			    name      = "DB_URL"
 			    valueFrom = var.db_url_secret_arn
 			  }
+			]
 			])
 
 resource "aws_ecs_task_definition" "dashboard" {
