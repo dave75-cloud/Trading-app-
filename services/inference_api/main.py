@@ -34,6 +34,8 @@ REGISTRY = os.getenv("MODEL_REGISTRY", "./models_registry/gbpusd")
 DATA_DIR = os.getenv("DATA_DIR", "./data/market_candles")
 SYMBOL = os.getenv("SYMBOL", "GBPUSD")
 BAR_MINUTES = int(os.getenv("BAR_MINUTES", "5"))
+print("DB_URL_REPR =", repr(os.getenv("DB_URL")))
+print("DB_URL_STRIPPED_REPR =", repr((os.getenv("DB_URL") or "").strip()))
 
 logger.info("DB_URL present=%s", bool(os.getenv("DB_URL")))
 logger.info("DB_URL prefix=%s", (os.getenv("DB_URL") or "")[:25])
