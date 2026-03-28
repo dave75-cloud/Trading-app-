@@ -281,18 +281,17 @@ resource "aws_ecs_task_definition" "api" {
         }
       ]
       environment = [
-  { name = "MODEL_REGISTRY", value = "/models_registry/gbpusd" },
-  { name = "DATA_DIR",       value = "/data/market_candles" },
-  { name = "SYMBOL",         value = "GBPUSD" }
-]
+			  { name = "MODEL_REGISTRY", value = "/models_registry/gbpusd" },
+			  { name = "DATA_DIR",       value = "/data/market_candles" },
+			  { name = "SYMBOL",         value = "GBPUSD" }
+			]
 
-secrets = concat(local.api_secrets, [
-  {
-    name      = "DB_URL"
-    valueFrom = var.db_url_secret_arn
-  }
-])
-}
+			secrets = concat(local.api_secrets, [
+			  {
+			    name      = "DB_URL"
+			    valueFrom = var.db_url_secret_arn
+			  }
+			])
 
 resource "aws_ecs_task_definition" "dashboard" {
   family                   = "${var.project}-dashboard"
