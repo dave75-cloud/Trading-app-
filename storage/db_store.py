@@ -27,16 +27,17 @@ def utc_now() -> datetime:
 
 
 def default_db_url() -> str:
-    # Prefer Postgres/RDS via DB_URL, otherwise fall back to sqlite file.
     db_url = os.getenv("DB_URL")
     if db_url:
-        return db_url.strip()
+        db_url = db_url.strip()
+        if db_url.startswith('"') and db_url.endswith('"'):
+            db_url = db_url[1:-1]
+        return db_url
     db_path = os.getenv("DB_PATH", "./data/app.db")
     return f"sqlite:///{db_path}"
 
 class Base(DeclarativeBase):
     pass
-
 
 class Signal(Base):
     __tablename__ = "signals"
