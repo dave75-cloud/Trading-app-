@@ -33,9 +33,7 @@ def default_db_url() -> str:
         if db_url.startswith('"') and db_url.endswith('"'):
             db_url = db_url[1:-1]
         return db_url
-    db_path = os.getenv("DB_PATH", "./data/app.db")
-    return f"sqlite:///{db_path}"
-
+    
 class Base(DeclarativeBase):
     pass
 
