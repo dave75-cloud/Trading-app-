@@ -105,13 +105,7 @@ def _build_features(df: pd.DataFrame):
 
 @app.get("/health")
 def health():
-    v = os.getenv("DB_URL") or ""
-    return {
-        "status": "ok",
-        "db_url_present": bool(v),
-        "db_url_prefix": v[:50],
-        "db_url_repr": repr(v)[:120],
-    }
+    return {"status": "ok"}
 
 @app.get("/signals/latest")
 def latest(h: str = "30m"):
