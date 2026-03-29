@@ -286,13 +286,7 @@ resource "aws_ecs_task_definition" "api" {
 			  { name = "MODEL_REGISTRY", value = "/models_registry/gbpusd" },
 			  { name = "DATA_DIR",       value = "/data/market_candles" },
 			  { name = "SYMBOL",         value = "GBPUSD" },
-			]
-
-			secrets = [
-			  {
-			    name      = "DB_URL"
-					valueFrom = var.db_url_secret_arn
-			  }
+			  { name = "DB_URL",         value = "postgresql+psycopg://app:FreshDb2026Qwerty9@gbpusd-signal-db.cpiwo4s0ilo0.ap-southeast-2.rds.amazonaws.com:5432/postgres?sslmode=require" }
 			]
 
       logConfiguration = {
