@@ -408,12 +408,3 @@ def run_backtest(req: BacktestRequest):
         "raw": {},
         "source": "debug_stub",
     }
-
-@app.get("/debug/db-url")
-def debug_db_url():
-    v = os.getenv("DB_URL")
-    return {
-        "present": bool(v),
-        "repr": repr(v),
-        "stripped_repr": repr((v or "").strip()),
-    }
