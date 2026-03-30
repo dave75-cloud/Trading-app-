@@ -111,7 +111,7 @@ def load_market_data(
     if not files:
         return pd.DataFrame(columns=CANONICAL_COLUMNS)
 
-    dfs = [pd.read_parquet(f) for f in files]
+    dfs = [pd.read_csv(f) for f in files]
     out = normalize_market_df(pd.concat(dfs, ignore_index=True))
 
     if start is not None:
