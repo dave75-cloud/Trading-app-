@@ -33,7 +33,7 @@ class MarketDataLayout:
             / f"{day.year:04d}"
             / f"{day.month:02d}"
             / f"{day.day:02d}"
-            / "data.parquet"
+            / "data.csv"
         )
 
 
