@@ -90,7 +90,7 @@ def append_day_parquet(
         else:
             merged = normalize_market_df(chunk)
 
-        merged.to_parquet(path, index=False)
+        merged.to_csv(path, index=False)
         written.append(path)
 
     return written
