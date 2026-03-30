@@ -107,7 +107,7 @@ def load_market_data(
     if not base.exists():
         return pd.DataFrame(columns=CANONICAL_COLUMNS)
 
-    files = sorted(base.rglob("*.parquet"))
+    files = sorted(base.rglob("*.csv"))
     if not files:
         return pd.DataFrame(columns=CANONICAL_COLUMNS)
 
