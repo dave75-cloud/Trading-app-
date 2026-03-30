@@ -84,7 +84,7 @@ def append_day_parquet(
         chunk = chunk.drop(columns=["day"]).copy()
 
         if path.exists():
-            existing = pd.read_parquet(path)
+            existing = pd.read_csv(path)
             merged = pd.concat([existing, chunk], ignore_index=True)
             merged = normalize_market_df(merged)
         else:
