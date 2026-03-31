@@ -88,7 +88,16 @@ def fetch_polygon_forex_day(
         except Exception as e:
             last_err = e
             logger.warning("Fetch failed for %s attempt %s/%s: %s", from_date, attempt, retries, e)
-            time.sleep(min(2**attempt, 8))
+            if getattr(last_err, "response", None) is not None and last_err.response is not None:
+                if last_err.response.status_code == 429:
+                    wait_s = 20 * attempt
+                else:
+                    wait_s = min(2**attempt, 8)
+            else:
+                wait_s = min(2**attempt, 8)
+
+            logger.warning("Sleeping %s seconds before retry", wait_s)
+            time.sleep(wait_s)
 
     raise RuntimeError(f"Polygon fetch failed for {from_date}: {last_err}") from last_err
 
