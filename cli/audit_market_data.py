@@ -52,28 +52,26 @@ def main():
                 }
             )
 
-    gaps = gap_report(df, args.timeframe)
-    duplicates = 0 if df.empty else int(df.duplicated(subset=["ts", "symbol", "timeframe"]).sum())
-    nulls = int(df.isna().sum().sum()) if not df.empty else 0
-
     report = {
-        "symbol": args.symbol.upper(),
+        "symbol": args.symbol,
         "timeframe": args.timeframe,
+        "daily_summary": daily_summary,
         "row_count": int(len(df)),
         "min_ts": None if df.empty else df["ts"].min().isoformat(),
         "max_ts": None if df.empty else df["ts"].max().isoformat(),
-        "duplicate_count": duplicates,
-        "gap_count": int(len(gaps)),
-        "null_count": nulls,
-        "invalid_ohlc_count": invalid_ohlc_count(df),
-        "latest_bar_age_minutes": None if df.empty else float((pd.Timestamp.now(tz="UTC") - df["ts"].max()) / pd.Timedelta(minutes=1)),
-        "sample_gaps": gaps.head(20).to_dict(orient="records"),
-        "daily_summary": daily_summary,
+        "duplicate_count": duplicate_count,
+        "gap_count": len(gaps),
+        "null_count": null_count,
+        "invalid_ohlc_count": invalid_ohlc_count,
+        "latest_bar_age_minutes": None if df.empty else float(
+            (pd.Timestamp.now(tz="UTC") - df["ts"].max())
+            / pd.Timedelta(minutes=1)
+        ),
+        "sample_gaps": gaps[:10],
     }
 
-    print(json.dumps(report, indent=2, default=str))
+    print(json.dumps(report, indent=2))
     return 0
-
 
 if __name__ == "__main__":
     raise SystemExit(main())
