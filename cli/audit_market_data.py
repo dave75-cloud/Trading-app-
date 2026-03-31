@@ -17,7 +17,6 @@ def gap_report(df: pd.DataFrame, timeframe: str) -> list[dict]:
     for i in range(1, len(ts)):
         prev_ts = ts.iloc[i - 1]
         next_ts = ts.iloc[i]
-
         delta = next_ts - prev_ts
 
         if delta > expected_delta:
@@ -57,11 +56,11 @@ def main() -> int:
     if not df.empty:
         invalid_ohlc_count = int(
             (
-                (df["high"] < df["low"])
-                | (df["open"] > df["high"])
-                | (df["open"] < df["low"])
-                | (df["close"] > df["high"])
-                | (df["close"] < df["low"])
+                (df["h"] < df["l"])
+                | (df["o"] > df["h"])
+                | (df["o"] < df["l"])
+                | (df["c"] > df["h"])
+                | (df["c"] < df["l"])
             ).sum()
         )
 
@@ -81,6 +80,9 @@ def main() -> int:
                 }
             )
 
+    expected_gaps = [g for g in gaps if g["gap_minutes"] > 1000]
+    unexpected_gaps = [g for g in gaps if g["gap_minutes"] <= 1000]
+
     report = {
         "symbol": args.symbol.upper(),
         "timeframe": args.timeframe,
@@ -90,6 +92,8 @@ def main() -> int:
         "max_ts": None if df.empty else df["ts"].max().isoformat(),
         "duplicate_count": duplicates,
         "gap_count": len(gaps),
+        "expected_gap_count": len(expected_gaps),
+        "unexpected_gap_count": len(unexpected_gaps),
         "null_count": nulls,
         "invalid_ohlc_count": invalid_ohlc_count,
         "latest_bar_age_minutes": None
@@ -99,6 +103,7 @@ def main() -> int:
             / pd.Timedelta(minutes=1)
         ),
         "sample_gaps": gaps[:10],
+        "sample_unexpected_gaps": unexpected_gaps[:10],
     }
 
     print(json.dumps(report, indent=2))
