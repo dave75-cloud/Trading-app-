@@ -145,16 +145,17 @@ def main() -> int:
     written_files = 0
 
     for day in daterange(start, end):
-        logger.info("Fetching %s %s", args.symbol, day.date())
-        df = fetch_polygon_forex_day(session, args.api_key, args.symbol, day)
-        if df.empty:
-            logger.info("No rows for %s", day.date())
-            continue
+    logger.info("Fetching %s %s", args.symbol, day.date())
+    df = fetch_polygon_forex_day(session, args.api_key, args.symbol, day)
+    if df.empty:
+        logger.info("No rows for %s", day.date())
+        continue
 
-        written = append_day_parquet(out_root, df)
-        total_rows += len(df)
-        written_files += len(written)
-        logger.info("Stored %s rows into %s files for %s", len(df), len(written), day.date())
+    written = append_day_parquet(out_root, df)
+    total_rows += len(df)
+    written_files += len(written)
+    logger.info("Stored %s rows into %s files for %s", len(df), len(written), day.date())
+    time.sleep(2)
 
     logger.info("Done. total_rows=%s written_files=%s out=%s", total_rows, written_files, out_root)
     return 0
