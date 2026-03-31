@@ -80,9 +80,6 @@ def main() -> int:
                 }
             )
 
-    expected_gaps = [g for g in gaps if g["gap_minutes"] > 1000]
-    unexpected_gaps = [g for g in gaps if g["gap_minutes"] <= 1000]
-
     report = {
         "symbol": args.symbol.upper(),
         "timeframe": args.timeframe,
@@ -92,8 +89,6 @@ def main() -> int:
         "max_ts": None if df.empty else df["ts"].max().isoformat(),
         "duplicate_count": duplicates,
         "gap_count": len(gaps),
-        "expected_gap_count": len(expected_gaps),
-        "unexpected_gap_count": len(unexpected_gaps),
         "null_count": nulls,
         "invalid_ohlc_count": invalid_ohlc_count,
         "latest_bar_age_minutes": None
@@ -103,7 +98,6 @@ def main() -> int:
             / pd.Timedelta(minutes=1)
         ),
         "sample_gaps": gaps[:10],
-        "sample_unexpected_gaps": unexpected_gaps[:10],
     }
 
     print(json.dumps(report, indent=2))

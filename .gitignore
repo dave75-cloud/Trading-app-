@@ -7,3 +7,8 @@
 
 __pycache__/
 *.pyc
+
+data/
+
+__pycache__/
+*.pyc

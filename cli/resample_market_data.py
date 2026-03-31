@@ -62,8 +62,8 @@ def main() -> int:
     out_dir = Path(args.out)
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    file_path = out_dir / f"{args.symbol.upper()}_{args.out_timeframe}.parquet"
-    out.to_parquet(file_path, index=False)
+    file_path = out_dir / f"{args.symbol.upper()}_{args.out_timeframe}.csv"
+    out.to_csv(file_path, index=False)
 
     print(f"Wrote {len(out)} rows to {file_path}")
     return 0
