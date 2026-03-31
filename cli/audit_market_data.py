@@ -43,6 +43,22 @@ def main() -> int:
     )
     df = normalize_market_df(df)
 
+    daily_summary = []
+
+    if not df.empty:
+        tmp = df.copy()
+        tmp["day"] = tmp["ts"].dt.strftime("%Y-%m-%d")
+
+        for day, chunk in tmp.groupby("day"):
+            daily_summary.append(
+                {
+                    "day": day,
+                    "row_count": int(len(chunk)),
+                    "first_ts": chunk["ts"].min().isoformat(),
+                    "last_ts": chunk["ts"].max().isoformat(),
+                }
+            )
+
     gaps = gap_report(df, args.timeframe)
     duplicates = 0 if df.empty else int(df.duplicated(subset=["ts", "symbol", "timeframe"]).sum())
     nulls = int(df.isna().sum().sum()) if not df.empty else 0
@@ -59,6 +75,7 @@ def main() -> int:
         "invalid_ohlc_count": invalid_ohlc_count(df),
         "latest_bar_age_minutes": None if df.empty else float((pd.Timestamp.now(tz="UTC") - df["ts"].max()) / pd.Timedelta(minutes=1)),
         "sample_gaps": gaps.head(20).to_dict(orient="records"),
+        "daily_summary": daily_summary,
     }
 
     print(json.dumps(report, indent=2, default=str))
