@@ -32,16 +32,9 @@ def invalid_ohlc_count(df: pd.DataFrame) -> int:
     return int(mask.sum())
 
 
-def main() -> int:
-    args = parse_args()
-    df = load_market_data(
-        root=args.path,
-        symbol=args.symbol,
-        timeframe=args.timeframe,
-        start=args.start,
-        end=args.end,
-    )
-    df = normalize_market_df(df)
+def main():
+    ...
+    df = load_market_data(...)
 
     daily_summary = []
 
