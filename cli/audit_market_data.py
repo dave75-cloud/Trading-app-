@@ -1,40 +1,69 @@
-from __future__ import annotations
-
 import argparse
 import json
-from pathlib import Path
-
 import pandas as pd
 
-from storage.market_data import gap_report, load_market_data, normalize_market_df
+from storage.market_data import load_market_data
 
 
-def parse_args() -> argparse.Namespace:
-    p = argparse.ArgumentParser()
-    p.add_argument("--symbol", default="GBPUSD")
-    p.add_argument("--timeframe", default="1m")
-    p.add_argument("--path", default="./data/market_candles")
-    p.add_argument("--start", default=None)
-    p.add_argument("--end", default=None)
-    return p.parse_args()
-
-
-def invalid_ohlc_count(df: pd.DataFrame) -> int:
+def gap_report(df: pd.DataFrame, timeframe: str) -> list[dict]:
     if df.empty:
-        return 0
-    mask = (
-        (df["h"] < df["o"]) |
-        (df["h"] < df["c"]) |
-        (df["l"] > df["o"]) |
-        (df["l"] > df["c"]) |
-        (df["h"] < df["l"])
+        return []
+
+    expected_delta = pd.Timedelta(minutes=1)
+    gaps = []
+
+    ts = df["ts"].sort_values().reset_index(drop=True)
+
+    for i in range(1, len(ts)):
+        prev_ts = ts.iloc[i - 1]
+        next_ts = ts.iloc[i]
+
+        delta = next_ts - prev_ts
+
+        if delta > expected_delta:
+            gaps.append(
+                {
+                    "prev_ts": str(prev_ts),
+                    "next_ts": str(next_ts),
+                    "gap_minutes": float(delta / pd.Timedelta(minutes=1)),
+                }
+            )
+
+    return gaps
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--symbol", required=True)
+    ap.add_argument("--timeframe", required=True)
+    ap.add_argument("--path", required=True)
+    args = ap.parse_args()
+
+    df = load_market_data(
+        args.path,
+        symbol=args.symbol,
+        timeframe=args.timeframe,
     )
-    return int(mask.sum())
 
+    gaps = gap_report(df, args.timeframe)
+    duplicates = (
+        0
+        if df.empty
+        else int(df.duplicated(subset=["ts", "symbol", "timeframe"]).sum())
+    )
+    nulls = int(df.isna().sum().sum()) if not df.empty else 0
 
-def main():
-    ...
-    df = load_market_data(...)
+    invalid_ohlc_count = 0
+    if not df.empty:
+        invalid_ohlc_count = int(
+            (
+                (df["high"] < df["low"])
+                | (df["open"] > df["high"])
+                | (df["open"] < df["low"])
+                | (df["close"] > df["high"])
+                | (df["close"] < df["low"])
+            ).sum()
+        )
 
     daily_summary = []
 
@@ -53,17 +82,19 @@ def main():
             )
 
     report = {
-        "symbol": args.symbol,
+        "symbol": args.symbol.upper(),
         "timeframe": args.timeframe,
         "daily_summary": daily_summary,
         "row_count": int(len(df)),
         "min_ts": None if df.empty else df["ts"].min().isoformat(),
         "max_ts": None if df.empty else df["ts"].max().isoformat(),
-        "duplicate_count": duplicate_count,
+        "duplicate_count": duplicates,
         "gap_count": len(gaps),
-        "null_count": null_count,
+        "null_count": nulls,
         "invalid_ohlc_count": invalid_ohlc_count,
-        "latest_bar_age_minutes": None if df.empty else float(
+        "latest_bar_age_minutes": None
+        if df.empty
+        else float(
             (pd.Timestamp.now(tz="UTC") - df["ts"].max())
             / pd.Timedelta(minutes=1)
         ),
@@ -72,6 +103,7 @@ def main():
 
     print(json.dumps(report, indent=2))
     return 0
+
 
 if __name__ == "__main__":
     raise SystemExit(main())
