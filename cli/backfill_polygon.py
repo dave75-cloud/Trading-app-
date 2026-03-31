@@ -85,7 +85,7 @@ def fetch_polygon_forex_day(
 
             return normalize_market_df(pd.DataFrame(rows))
 
-                except Exception as e:
+        except Exception as e:
             last_err = e
 
             wait_s = min(2**attempt, 8)
@@ -93,12 +93,13 @@ def fetch_polygon_forex_day(
 
             if isinstance(e, requests.HTTPError) and e.response is not None:
                 status_code = e.response.status_code
+
                 if status_code == 429:
                     retry_after = e.response.headers.get("Retry-After")
                     if retry_after and retry_after.isdigit():
                         wait_s = int(retry_after)
                     else:
-                        wait_s = 20 * attempt
+                        wait_s = 30 * attempt
 
             logger.warning(
                 "Fetch failed for %s attempt %s/%s status=%s: %s",
