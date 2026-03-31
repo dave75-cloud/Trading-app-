@@ -57,7 +57,7 @@ def main() -> int:
         "gap_count": int(len(gaps)),
         "null_count": nulls,
         "invalid_ohlc_count": invalid_ohlc_count(df),
-        "latest_bar_age_minutes": None if df.empty else float((pd.Timestamp.utcnow(tz="UTC") - df["ts"].max()) / pd.Timedelta(minutes=1)),
+        "latest_bar_age_minutes": None if df.empty else float((pd.Timestamp.now(tz="UTC") - df["ts"].max()) / pd.Timedelta(minutes=1)),
         "sample_gaps": gaps.head(20).to_dict(orient="records"),
     }
 
