@@ -156,7 +156,7 @@ def main() -> int:
     total_rows += len(df)
     written_files += len(written)
     logger.info("Stored %s rows into %s files for %s", len(df), len(written), day.date())
-    time.sleep(2)
+    time.sleep(5)
 
     logger.info("Done. total_rows=%s written_files=%s out=%s", total_rows, written_files, out_root)
     return 0
