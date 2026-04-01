@@ -41,9 +41,6 @@ def fetch_polygon_forex_day(
     retries: int = 3,
     timeout: int = 30,
 ) -> pd.DataFrame:
-    # NOTE:
-    # Polygon forex aggregates syntax may vary by plan/product.
-    # Replace endpoint details if your exact endpoint differs.
     pair = symbol.upper()
     from_date = day.strftime("%Y-%m-%d")
     to_date = from_date
@@ -57,6 +54,7 @@ def fetch_polygon_forex_day(
     }
 
     last_err: Exception | None = None
+
     for attempt in range(1, retries + 1):
         try:
             r = session.get(url, params=params, timeout=timeout)
@@ -65,7 +63,9 @@ def fetch_polygon_forex_day(
 
             results = payload.get("results", [])
             if not results:
-                return pd.DataFrame(columns=["ts", "symbol", "timeframe", "o", "h", "l", "c", "v", "source"])
+                return pd.DataFrame(
+                    columns=["ts", "symbol", "timeframe", "o", "h", "l", "c", "v", "source"]
+                )
 
             rows = []
             for x in results:
@@ -93,7 +93,6 @@ def fetch_polygon_forex_day(
 
             if isinstance(e, requests.HTTPError) and e.response is not None:
                 status_code = e.response.status_code
-
                 if status_code == 429:
                     retry_after = e.response.headers.get("Retry-After")
                     if retry_after and retry_after.isdigit():
@@ -146,17 +145,25 @@ def main() -> int:
     written_files = 0
 
     for day in daterange(start, end):
-    logger.info("Fetching %s %s", args.symbol, day.date())
-    df = fetch_polygon_forex_day(session, args.api_key, args.symbol, day)
-    if df.empty:
-        logger.info("No rows for %s", day.date())
-        continue
+        logger.info("Fetching %s %s", args.symbol, day.date())
+        df = fetch_polygon_forex_day(session, args.api_key, args.symbol, day)
 
-    written = append_day_parquet(out_root, df)
-    total_rows += len(df)
-    written_files += len(written)
-    logger.info("Stored %s rows into %s files for %s", len(df), len(written), day.date())
-    time.sleep(5)
+        if df.empty:
+            logger.info("No rows for %s", day.date())
+            continue
+
+        written = append_day_parquet(out_root, df)
+        total_rows += len(df)
+        written_files += len(written)
+
+        logger.info(
+            "Stored %s rows into %s files for %s",
+            len(df),
+            len(written),
+            day.date(),
+        )
+
+        time.sleep(5)
 
     logger.info("Done. total_rows=%s written_files=%s out=%s", total_rows, written_files, out_root)
     return 0
