@@ -103,3 +103,25 @@ pip install -r requirements-mt5.txt
 If you want this running on the internet:
 - Use `infra/terraform` (plan first; apply only when ready).
 - See `infra/terraform/README.md` for plain-English steps.
+
+
+
+# Champion Baseline v2 — Q1 2025
+
+Parameters:
+- fast = 20
+- slow = 50
+- start_hour = 11
+- end_hour = 14
+- vol_window = 12
+- vol_threshold = 0.0005
+- cost_per_turn = 0.00005
+
+Validation sample:
+- 2025-01-01 to 2025-03-31
+
+Performance:
+- total_return = 0.6901%
+- max_drawdown = -0.3954%
+- sharpe_proxy = 1.6937
+- trades = 54
