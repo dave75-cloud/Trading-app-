@@ -106,16 +106,14 @@ If you want this running on the internet:
 
 
 
-# Champion Baseline v2 — Q1 2025
+# Champion Baseline v3. — Q1 2025
 
-Parameters:
-- fast = 20
-- slow = 50
-- start_hour = 11
-- end_hour = 14
-- vol_window = 12
-- vol_threshold = 0.0005
-- cost_per_turn = 0.00005
+fast = 20
+slow = 50
+window = 11:00–12:00 UTC
+vol_window = 12
+vol_threshold = 0.0005
+cost_per_turn = 0.00005
 
 Validation sample:
 - 2025-01-01 to 2025-03-31
