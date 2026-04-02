@@ -108,21 +108,19 @@ If you want this running on the internet:
 
 # Champion Baseline v3. — Q1 2025
 
+SYMBOL: GBPUSD
+TIMEFRAME: 5m
+
 fast = 20
 slow = 50
-window = 11:00–12:00 UTC
+
+execution_window = 11:00–12:00 UTC
+
 vol_window = 12
 vol_threshold = 0.0005
+
 cost_per_turn = 0.00005
-
-Validation sample:
-- 2025-01-01 to 2025-03-31
-
-Performance:
-- total_return = 0.6901%
-- max_drawdown = -0.3954%
-- sharpe_proxy = 1.6937
-- trades = 54
+sides = both
 
 Note: side_filtered_backtest.py "Trades" counts execution events,
 while extract_trade_log.py counts completed round-trip trades.
