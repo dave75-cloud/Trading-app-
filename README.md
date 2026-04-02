@@ -104,23 +104,25 @@ If you want this running on the internet:
 - Use `infra/terraform` (plan first; apply only when ready).
 - See `infra/terraform/README.md` for plain-English steps.
 
+## Champion Baseline (v3 — current)
 
+Validated through Q1 2025 in-sample with April–May 2025 forward testing.
 
-# Champion Baseline v3. — Q1 2025
+Parameters:
+- fast = 20
+- slow = 50
+- execution window = 11:00–12:00 UTC
+- volatility window = 12
+- volatility threshold = 0.0005
+- cost per turn = 0.00005
+- both sides
 
-SYMBOL: GBPUSD
-TIMEFRAME: 5m
+Validation summary:
+- Q1 2025: +0.5839%, Sharpe 2.64
+- April 2025: +0.5947%, Sharpe 5.11
+- May 2025: +0.0830%, Sharpe 1.46
 
-fast = 20
-slow = 50
-
-execution_window = 11:00–12:00 UTC
-
-vol_window = 12
-vol_threshold = 0.0005
-
-cost_per_turn = 0.00005
-sides = both
+Supersedes prior 11:00–14:00 baseline due to improved forward stability and materially lower drawdowns.
 
 Note: side_filtered_backtest.py "Trades" counts execution events,
 while extract_trade_log.py counts completed round-trip trades.
