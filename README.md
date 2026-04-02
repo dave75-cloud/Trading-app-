@@ -125,3 +125,7 @@ Performance:
 - max_drawdown = -0.3954%
 - sharpe_proxy = 1.6937
 - trades = 54
+
+Note: side_filtered_backtest.py "Trades" counts execution events,
+while extract_trade_log.py counts completed round-trip trades.
+Use extractor for true trade count.
