@@ -127,3 +127,7 @@ Supersedes prior 11:00–14:00 baseline due to improved forward stability and ma
 Note: side_filtered_backtest.py "Trades" counts execution events,
 while extract_trade_log.py counts completed round-trip trades.
 Use extractor for true trade count.
+
+Paper deployment started via launchd on 2026-04-04.
+Strategy frozen: Champion v3.
+Next review checkpoint: after 10 trading sessions.
