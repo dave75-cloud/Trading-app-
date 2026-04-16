@@ -7,7 +7,10 @@ LOG_DIR="$PROJECT_ROOT/logs"
 cd "$PROJECT_ROOT"
 
 export PYTHONPATH=.
-export POLYGON_API_KEY="0wbOXaTXqruPMHGZ6GKFqSvZeL4EnF6a"
+if [ -z "$POLYGON_API_KEY" ]; then
+  echo "POLYGON_API_KEY is not set"
+  exit 1
+fi
 PYTHON_BIN="/Library/Frameworks/Python.framework/Versions/3.13/bin/python3"
 
 RUN_DATE=$(date -u -v-1d +%F)
@@ -97,5 +100,35 @@ with open(summary_file, "a", newline="", encoding="utf-8") as f:
 print("Updated", summary_file)
 print(row)
 PY
+
+"$PYTHON_BIN" cli/extract_trade_log.py \
+  --input ./data/resampled/GBPUSD_5m.csv \
+  --output ./data/backtest_ready/trade_log_gbpusd_forward.csv \
+  --fast 20 \
+  --slow 50 \
+  --start-hour 11 \
+  --end-hour 12 \
+  --vol-window 12 \
+  --vol-threshold 0.0005 \
+  --cost-per-turn 0.00005 \
+  >> "$LOG_FILE" 2>&1
+
+TRADE_COUNT=$("$PYTHON_BIN" - <<'PY'
+import pandas as pd
+df = pd.read_csv("./data/backtest_ready/trade_log_gbpusd_forward.csv")
+print(len(df))
+PY
+)
+
+echo "Forward trade count: $TRADE_COUNT" >> "$LOG_FILE"
+
+if [ "$TRADE_COUNT" -ge 50 ]; then
+  echo "=== 50+ trades reached: running attribution summary ===" >> "$LOG_FILE"
+  "$PYTHON_BIN" cli/trade_attribution_summary.py \
+    --input ./data/backtest_ready/trade_log_gbpusd_forward.csv \
+    >> "$LOG_FILE" 2>&1
+else
+  echo "=== Not enough trades yet for full review ===" >> "$LOG_FILE"
+fi
 
 cat "$LOG_FILE"
