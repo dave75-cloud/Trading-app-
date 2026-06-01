@@ -1,18 +1,47 @@
 import argparse
 from pathlib import Path
-
 import pandas as pd
 
 
+def build_positions(signals, min_bars_held=None):
+    positions = []
+    current_position = 0
+    bars_held = 0
+
+    for current_signal in signals:
+        positions.append(current_position)
+
+        if current_position == 0:
+            if current_signal != 0:
+                current_position = current_signal
+                bars_held = 0
+            continue
+
+        bars_held += 1
+
+        if min_bars_held is not None and bars_held < min_bars_held:
+            continue
+
+        if current_signal == 0:
+            current_position = 0
+            bars_held = 0
+        elif current_signal != current_position:
+            current_position = current_signal
+            bars_held = 0
+
+    return pd.Series(positions, dtype=int)
+
+
 def build_signals(
-    df: pd.DataFrame,
-    fast: int,
-    slow: int,
-    start_hour: int,
-    end_hour: int,
-    vol_window: int,
-    vol_threshold: float,
-) -> pd.DataFrame:
+    df,
+    fast,
+    slow,
+    start_hour,
+    end_hour,
+    vol_window,
+    vol_threshold,
+    min_bars_held=None,
+):
     x = df.copy()
 
     x["hour"] = x["ts"].dt.hour
@@ -31,11 +60,18 @@ def build_signals(
     x["signal"] = 0
     x.loc[session_mask & vol_mask, "signal"] = x.loc[session_mask & vol_mask, "raw_signal"]
 
-    x["position"] = x["signal"].shift(1).fillna(0).astype(int)
+    if min_bars_held is None:
+        x["position"] = x["signal"].shift(1).fillna(0).astype(int)
+    else:
+        x["position"] = build_positions(
+            x["signal"].tolist(),
+            min_bars_held=min_bars_held,
+        ).set_axis(x.index)
+
     return x
 
 
-def extract_trades(df: pd.DataFrame, cost_per_turn: float) -> pd.DataFrame:
+def extract_trades(df, cost_per_turn):
     trades = []
     current_side = 0
     entry_idx = None
@@ -64,7 +100,6 @@ def extract_trades(df: pd.DataFrame, cost_per_turn: float) -> pd.DataFrame:
                 gross_return = (entry_px / exit_px) - 1.0
                 side = "short"
 
-            # one turn = entry + exit, so charge twice the per-turn-half assumption
             net_return = gross_return - (2 * cost_per_turn)
             bars_held = i - entry_idx
 
@@ -95,7 +130,7 @@ def extract_trades(df: pd.DataFrame, cost_per_turn: float) -> pd.DataFrame:
     return pd.DataFrame(trades)
 
 
-def main() -> int:
+def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--input", required=True)
     ap.add_argument("--output", required=True)
@@ -106,6 +141,7 @@ def main() -> int:
     ap.add_argument("--vol-window", type=int, default=12)
     ap.add_argument("--vol-threshold", type=float, default=0.0010)
     ap.add_argument("--cost-per-turn", type=float, default=0.00005)
+    ap.add_argument("--min-bars-held", type=int, default=None)
     args = ap.parse_args()
 
     df = pd.read_csv(args.input)
@@ -113,16 +149,17 @@ def main() -> int:
     df = df.sort_values("ts").reset_index(drop=True)
 
     signal_df = build_signals(
-        df=df,
-        fast=args.fast,
-        slow=args.slow,
-        start_hour=args.start_hour,
-        end_hour=args.end_hour,
-        vol_window=args.vol_window,
-        vol_threshold=args.vol_threshold,
+        df,
+        args.fast,
+        args.slow,
+        args.start_hour,
+        args.end_hour,
+        args.vol_window,
+        args.vol_threshold,
+        args.min_bars_held,
     )
 
-    trades = extract_trades(signal_df, cost_per_turn=args.cost_per_turn)
+    trades = extract_trades(signal_df, args.cost_per_turn)
 
     out_path = Path(args.output)
     out_path.parent.mkdir(parents=True, exist_ok=True)
@@ -130,22 +167,10 @@ def main() -> int:
 
     print(f"Wrote {len(trades)} trades to {out_path}")
 
-    if not trades.empty:
-        wins = int((trades["net_return"] > 0).sum())
-        losses = int((trades["net_return"] <= 0).sum())
-        win_rate = wins / len(trades)
-
-        print(f"Wins: {wins}")
-        print(f"Losses: {losses}")
-        print(f"Win rate: {win_rate:.2%}")
-        print(f"Average net return/trade: {trades['net_return'].mean():.4%}")
-        print(f"Median net return/trade: {trades['net_return'].median():.4%}")
-        print(f"Best trade: {trades['net_return'].max():.4%}")
-        print(f"Worst trade: {trades['net_return'].min():.4%}")
-        print(f"Average bars held: {trades['bars_held'].mean():.2f}")
-
     return 0
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    main()
+
+
