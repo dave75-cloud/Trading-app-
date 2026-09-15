@@ -1,42 +1,105 @@
-# AGENT_BRIEF.md — GBPUSD Signal & Trade Assist
+# AGENT_BRIEF.md — Trading R&D Autonomous Agent
 
-You are an autonomous coding agent working on this repository. Your goal is to deliver the MVP described in the README and design spec, with a paper-trading pilot and a clean path to Phase‑2 execution via Eightcap MT5.
+Status: CURRENT GOVERNING AGENT BRIEF
+Effective: 2026-09-15
 
-Follow the **Tasks & Acceptance Criteria** below. PR-first, small increments, tests where appropriate, no secrets in repo.
+This file supersedes all earlier autonomous-agent instructions in this repository, including the historical GBPUSD / Eightcap MT5 brief and any execution-oriented language in older README material.
 
-## Tasks & Acceptance
+Read `AUTONOMY_POLICY.md` before doing any work. If this brief and another repository document conflict, `AUTONOMY_POLICY.md` controls unless a human explicitly approves a newer governance document.
 
-T1 — Polygon minute loader (flat files → Parquet)
-- Implement authenticated downloader for Polygon FX minute aggregates.
-- CLI: `python cli/backfill_polygon.py --from YYYY-MM-DD --to YYYY-MM-DD --out ./data/market_candles --api_key $POLY`
-- Accept when ≥1 day downloads to Parquet with schema `ts,symbol,timeframe,o,h,l,c,v,source`; tests mock HTTP.
+## Mission
 
-T2 — Backtest engine (walk‑forward)
-- ATR(14), RSI(14), session flags (Tokyo/London/NY), burst/compression signals.
-- Session-aware spread/slippage; intrabar TP/SL touch; partial fills for limits.
-- Monthly walk-forward; JSON report with PnL, Sharpe, max DD, hit rate, attribution.
-- Accept when `cli/backtest.py` runs and outputs metrics JSON on sample Parquet.
+The current system has entered frozen prospective forward observation.
 
-T3 — Train models + calibration + registry
-- Feature builder (lags, ATR, RSI, realized vol, session flags).
-- Train XGBoost & LightGBM per horizon; select by AUC/Brier; (optionally) Platt calibration.
-- Monthly walk-forward; save artifacts under `./models_registry/gbpusd/<horizon>/<date>/`.
-- Accept when `models/train.py` completes and writes `model.pkl`, `feature_spec.json`, `metadata.json` with AUC/Brier/thresholds.
+The agent's job is not to optimise, tune, repair, or activate the frozen trading system. The job is to:
 
-T4 — Inference API wiring
-- Load latest registry artifacts; build features from recent Parquet window.
-- Return calibrated `p_up`, `E[Δp]`, regime weights, and bracket with 2% risk sizing.
-- Accept when `/signals/latest?h=30m|2h` returns non-dummy probabilities and coherent bracket.
+1. preserve the accepted M006e experiment;
+2. improve research, diagnostics, tests, and documentation outside frozen components;
+3. analyse historical and prospective evidence without contaminating the observation cohort;
+4. prepare non-live M006f shadow-execution architecture and candidates;
+5. work PR-first on isolated `agent/rnd-*` branches;
+6. leave promotion, merge, strategy, risk, and broker-write decisions to a human.
 
-T5 — Terraform (S3, RDS, ECS, ALB)
-- Root + modules for S3, RDS Postgres, ECS Fargate (api + broker), ALB. All network IDs/images are variables.
-- Accept when `terraform plan` succeeds with example vars in `infra/terraform/README.md`.
+## Current authoritative state
 
-T6 — Eightcap MT5 mapping (demo-safe)
-- Implement `mt5_bridge.place_order()` (maps to `order_send`); add `dry_run()` validation.
-- Accept when `dry_run()` returns valid request for demo symbol and documents retcodes/usage.
+- M006e is frozen.
+- Execution mode: `ZERO_WRITE_DRY_RUN`.
+- OANDA environment: practice only.
+- Order writes: disabled.
+- Order endpoints: not expected and must not be introduced or invoked.
+- Canonical M005 must not be modified.
+- Automatic promotion: none.
+- Human review remains mandatory for session disposition and phase promotion.
 
-## Guardrails
-- Ask before big downloads or new heavy deps.
-- No secrets committed; read from env/Secrets Manager later.
-- Logging: INFO level, redact sensitive values.
+The provenance manifest under `tools/m006e/provenance/` is authoritative for accepted M006e component hashes.
+
+## Permitted autonomous work
+
+Without additional approval, the agent may:
+
+- research and analyse;
+- improve documentation;
+- write or improve tests outside frozen paths;
+- build non-production analytics;
+- analyse prospective and historical evidence without changing the experiment;
+- develop diagnostics outside frozen components;
+- design M006f shadow execution;
+- implement shadow candidates that are structurally incapable of broker writes;
+- prepare comparison tools, reports, and reproducibility tooling;
+- create `agent/rnd-*` branches and draft pull requests;
+- revise its own candidate work after test or review feedback.
+
+## Prohibited autonomous work
+
+Do not:
+
+- modify frozen M006e accepted components;
+- modify canonical M005;
+- alter accepted hashes or provenance manifests;
+- rewrite accepted forward-observation history or reviewed dispositions;
+- change strategy parameters, entry/exit rules, sizing, or risk limits;
+- change master-switch behaviour;
+- change broker credentials or account/environment authority;
+- add, enable, or invoke order-submission capability;
+- implement live broker execution;
+- convert `ZERO_WRITE_DRY_RUN` to a write-capable mode;
+- merge your own pull request;
+- promote M006e to M006f;
+- promote shadow execution to live execution.
+
+## Shadow-execution rule
+
+Shadow execution must be structurally incapable of becoming live trading through configuration error alone.
+
+A shadow component must not contain broker order-submission implementations, live trading endpoints, or production credentials. It may model hypothetical requests and fills only.
+
+## Branch and PR workflow
+
+Use branches named:
+
+    agent/rnd-<task>
+
+Keep changes small and reviewable. Run relevant tests before opening or updating a pull request. Do not merge autonomously.
+
+If work appears to require a frozen-path change, stop that line of implementation and report the dependency for human review. Do not create an in-place repair.
+
+## Secrets and local state
+
+Never commit API tokens, passwords, private keys, `.env` files, machine-local operational configuration, broker credentials, Terraform state, or private evidence archives.
+
+Do not assume untracked local files are safe to publish.
+
+## Historical repository material
+
+Older files may describe Polygon-centric MVP work, ML model training, Terraform deployment, Eightcap MT5, `place_order()`, or live-routing phases. Those materials are historical context only and are not current autonomous instructions.
+
+In particular, do not implement or restore the former Eightcap MT5 `order_send` / `place_order()` task.
+
+## Decision rule
+
+When uncertain, choose the action that preserves the frozen experiment and cannot increase trading authority.
+
+The current objective is:
+
+    accumulate evidence, improve the research layer,
+    and prepare a safe shadow phase without perturbing M006e.
