@@ -54,7 +54,7 @@ jobs:
           echo "Changed paths:"
           printf '%s\n' "$CHANGED"
 
-          PROTECTED_RE='^(tools/m006e/|tools/m006e9_forward_observation/accepted/|tools/pre_monday/|AUTONOMY_POLICY\.md$|AGENT_BRIEF\.md$|\.github/workflows/agent_guard\.yml$|\.github/workflows/signal_cron\.yml$|\.github/workflows/terraform_apply\.yml$|\.github/workflows/terraform_deploy\.yml$|\.github/workflows/ecr_build_push\.yml$)'
+          PROTECTED_RE='^(tools/m006e/|tools/m006e9_forward_observation/|tools/pre_monday/|AUTONOMY_POLICY\.md$|AGENT_BRIEF\.md$|\.gitignore$|\.github/workflows/agent_guard\.yml$|\.github/workflows/signal_cron\.yml$|\.github/workflows/terraform_apply\.yml$|\.github/workflows/terraform_deploy\.yml$|\.github/workflows/ecr_build_push\.yml$)'
 
           BAD="$(printf '%s\n' "$CHANGED" | grep -E "$PROTECTED_RE" || true)"
 
