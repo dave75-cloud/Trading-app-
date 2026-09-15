@@ -14,3 +14,55 @@ __pycache__/
 *.pyc
 
 logs/
+
+# ================================================================
+# Trading R&D automation safety exclusions — 2026-09-15
+# ================================================================
+
+# Credentials / local environment
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Local operational configuration
+config/
+
+# Runtime / evidence / generated state
+data/
+logs/
+research_archive/
+
+# Python / test artefacts
+.venv/
+venv/
+.pytest_cache/
+.coverage
+htmlcov/
+__pycache__/
+*.pyc
+
+# Local databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Terraform local state
+.terraform/
+*.tfstate
+*.tfstate.*
+
+# Historical/editor/back-up copies
+*.bak
+*.backup
+*.disabled
+*.pre_*
+*_backup
+*_backup.*
+README.md 2
+
+# macOS
+.DS_Store

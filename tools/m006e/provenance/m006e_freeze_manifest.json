@@ -1,0 +1,103 @@
+{
+  "candidate_components": {
+    "m006e3_hardening_candidate": {
+      "active": false,
+      "path": "tools/m006e/m006e3_zero_write_bridge.hardening_candidate.py",
+      "sha256": "72e9b1c76acf9bf7ac658f841654cf821496eabeab9e9de594be2ea1faf03b17"
+    },
+    "m006e3b_hardening_audit": {
+      "active": false,
+      "path": "tools/m006e/audit_m006e3b_hardening_candidate.py",
+      "sha256": "eda4ce5e1631cd4b866ed90aa1db11ab7daf821bcee9384793685da16a94653f"
+    }
+  },
+  "canonical_m005_modified": false,
+  "components": {
+    "m006e1_observer": {
+      "path": "tools/m006e/m006e1_oanda_authoritative_observer.py",
+      "sha256": "6dc02067094cb65c5c1bdc451825b9c02539bf5eef2cde19e95fbe2c492e49e4"
+    },
+    "m006e2_validator": {
+      "path": "tools/m006e/m006e2_twelve_validator.py",
+      "sha256": "d9c5b46b26d1cae4f000d5c584b9afa5e3a06805cb204559dae05013c6d2906d"
+    },
+    "m006e3_bridge_active": {
+      "path": "tools/m006e/m006e3_zero_write_bridge.py",
+      "sha256": "568e30e90e95df8c7e30519947f13699fe72305e22ad9a669d8fe3b04f9b43b5"
+    },
+    "m006e4_regression": {
+      "path": "tools/m006e/audit_m006e4_integration_regression.py",
+      "sha256": "a45ca6f104e3cc9bf4ac0b8c273b50dc6cf09448ee823c66a1bea23972308934"
+    },
+    "m006e5_audit": {
+      "path": "tools/m006e/m006e5/audit_m006e5_orchestration.py",
+      "sha256": "df398454d67b5769fb9216219a39a00721687ad4353baacc75203a7937273c11"
+    },
+    "m006e5_failure_injection_audit": {
+      "path": "tools/m006e/m006e5/failure_injection/audit_m006e5_failure_injection.py",
+      "sha256": "c978060a3f01bb13558bb676de3c14eef0019872497d90049630b9867b42a996"
+    },
+    "m006e5_installer": {
+      "path": "tools/m006e/m006e5/install_m006e5_launchd.sh",
+      "sha256": "55adb4aa60d6fa8f5eb774b8f4fe97e7bb7b5e6fb503be9f14ea7ca19f0d8cbb"
+    },
+    "m006e5_status": {
+      "path": "tools/m006e/m006e5/status_m006e5.sh",
+      "sha256": "46bd956d796dc4d9a025e548e59bdb03d960c1eee0dab39ab7bbe17efe22cfaf"
+    },
+    "m006e5_uninstaller": {
+      "path": "tools/m006e/m006e5/uninstall_m006e5_launchd.sh",
+      "sha256": "7f1e15e2513bad8ee5785b5492fafeb9c867275d27bcde2df27a6d1ffb6d88b5"
+    },
+    "m006e5_wrapper": {
+      "path": "tools/m006e/m006e5/run_m006e5_cycle.sh",
+      "sha256": "a5780b27af2d550a47d9163ece6e6db81e1f8e769ff13c8190fa8565743e036e"
+    },
+    "m006e6_health_audit": {
+      "path": "tools/m006e/m006e6/audit_m006e6_health_report.py",
+      "sha256": "02d04943e775c0b82ec70a54c8b4b8f5d0307c607f8784bdeb935577e7f6f046"
+    },
+    "m006e6_health_report": {
+      "path": "tools/m006e/m006e6/m006e6_health_report.py",
+      "sha256": "32c6baf0a374f699785170e7eb887b0a1ca3e9b6b6ec2f71f32e480be212362b"
+    },
+    "m006e6_health_runner": {
+      "path": "tools/m006e/m006e6/run_m006e6_health.sh",
+      "sha256": "08c6cd3eaa45a3f8b1a9e60bd24c10e5fbf405c08a44c4f4b041ce629964397e"
+    },
+    "m006e7_provider_path": {
+      "path": "tools/m006e/m006e7/m006e7_provider_path_diagnostics.py",
+      "sha256": "5e4a05a28b7ae38b021d5a768e65df707e8bd210dde0483884016f4a16bbc483"
+    },
+    "m006e7_provider_path_audit": {
+      "path": "tools/m006e/m006e7/audit_m006e7_provider_path.py",
+      "sha256": "9fd0bf07b5ca103990f8292d7458dd8abe5f961da94155b560c2033124a01a0c"
+    },
+    "m006e7_provider_path_runner": {
+      "path": "tools/m006e/m006e7/run_m006e7_provider_path.sh",
+      "sha256": "fd480c0918f04a8593e922e6f30bfb71b9a50ce216edd592a643a0cfff606838"
+    },
+    "m006e8_reconciliation": {
+      "path": "tools/m006e/m006e8/m006e8_reconciliation_timeline.py",
+      "sha256": "b8dc7fd83e5f6c96f1529ca670ce9fbc8f0685886ba2315d4a9e6a3f522814b6"
+    },
+    "m006e8_reconciliation_audit": {
+      "path": "tools/m006e/m006e8/audit_m006e8_reconciliation.py",
+      "sha256": "4aa1ed658354a144baa508b6ba97144efbf1fda463e296ee65feb2a12160024b"
+    },
+    "m006e8_reconciliation_runner": {
+      "path": "tools/m006e/m006e8/run_m006e8_reconciliation.sh",
+      "sha256": "6ef3e6376f86ef9c035953be907c08a7bd846739a060605a257d2b6330d44d88"
+    }
+  },
+  "execution_mode": "ZERO_WRITE_DRY_RUN",
+  "manifest_version": "M006e-PROVENANCE-1",
+  "safety": {
+    "canonical_m005_touch_allowed": false,
+    "oanda_environment": "practice",
+    "order_endpoints_expected": false,
+    "order_writes_enabled": false
+  },
+  "status": "ACCEPTED_PRE_SESSION_STACK",
+  "strategy_changed": false
+}

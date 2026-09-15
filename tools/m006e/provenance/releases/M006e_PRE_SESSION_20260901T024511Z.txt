@@ -1,0 +1,63 @@
+==============================================================================
+KQTRL M006e — PRE-SESSION RELEASE SNAPSHOT
+==============================================================================
+
+Release ID: M006e_PRE_SESSION_20260901T024511Z
+Created UTC: 2026-09-01T02:45:11.902132+00:00
+Execution mode: ZERO_WRITE_DRY_RUN
+OANDA environment: practice
+Live capital: FALSE
+Order writes enabled: FALSE
+Canonical M005 modified: FALSE
+
+ACTIVE CORE
+-----------
+M006e.5 wrapper: a5780b27af2d550a47d9163ece6e6db81e1f8e769ff13c8190fa8565743e036e
+M006e.6 health:  32c6baf0a374f699785170e7eb887b0a1ca3e9b6b6ec2f71f32e480be212362b
+
+PROVENANCE MANIFEST
+-------------------
+SHA256: 2ad4316b29f1bfe98feb091f90d89d0316fbf0bcf5ea97bd03ef69ef5eb023c1
+
+ADDITIONAL VERIFIED COMPONENTS
+------------------------------
+legacy_polygon_hardened_fetcher:
+  status: SECURITY_HARDENED_LEGACY
+  path: cli/backfill_polygon.py
+  sha256: fd92ceddbae0651739016d76287dc0205334d6848852736b860dd0d1c8fee86f
+m006e5a_stale_lock_audit:
+  status: INACTIVE_CANDIDATE
+  path: tools/m006e/m006e5/stale_lock_candidate/audit_m006e5_stale_lock.py
+  sha256: 7737925f25bcd6c9fc71edbbfff946d287390b09e71061d2d58389cba6791d2b
+m006e5a_stale_lock_helper:
+  status: INACTIVE_CANDIDATE
+  path: tools/m006e/m006e5/stale_lock_candidate/m006e5_stale_lock.sh
+  sha256: 8e236f422b74e0c8f5b5b785b2e825434157d15a5276b43a4b2d243eee4bb743
+m006e5a_stale_lock_wrapper:
+  status: INACTIVE_CANDIDATE
+  path: tools/m006e/m006e5/stale_lock_candidate/run_m006e5_cycle.stale_lock_candidate.sh
+  sha256: a3aa72bdf15562dac74f57de5acde883ae9d98806f67df124e6888a7d877515e
+m006e6a_session_coverage:
+  status: INACTIVE_CANDIDATE
+  path: tools/m006e/m006e6/coverage_candidate/m006e6a_session_coverage.py
+  sha256: aafec6d8d701c91641384550133bcda9b786256f6b43251f774758f1a0ba473e
+m006e6a_session_coverage_audit:
+  status: INACTIVE_CANDIDATE
+  path: tools/m006e/m006e6/coverage_candidate/audit_m006e6a_session_coverage.py
+  sha256: 362ccfb452d1b275b087d96f083cdd46b66b31b5b42a70eaafa891c8978ec2c5
+m006e6a_session_coverage_runner:
+  status: INACTIVE_CANDIDATE
+  path: tools/m006e/m006e6/coverage_candidate/run_m006e6a_coverage.sh
+  sha256: 3fecef7fe5cfefecce7148b9815ccd85a94ab76ee39a2fdd93b9946ab2ff223a
+
+SAFETY
+------
+OANDA practice: TRUE
+Order writes: FALSE
+Live capital: FALSE
+Canonical M005 touch: FALSE
+Candidate promotion: FALSE
+
+==============================================================================
+PRE_SESSION_RELEASE_SNAPSHOT: VERIFIED
+==============================================================================
