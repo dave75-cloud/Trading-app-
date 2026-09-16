@@ -1,0 +1,117 @@
+name: Autonomous R&D Guard
+
+on:
+  pull_request:
+  push:
+    branches:
+      - 'agent/rnd-**'
+
+permissions:
+  contents: read
+
+jobs:
+  frozen-integrity:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout candidate
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verify frozen M006e provenance
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=tools/m006e \
+            python3 tools/m006e/provenance/verify_m006e_freeze_manifest.py
+
+  autonomous-path-guard:
+    if: startsWith(github.head_ref, 'agent/rnd-') || startsWith(github.ref_name, 'agent/rnd-')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout candidate
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Reject autonomous changes to protected paths
+        shell: bash
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          set -euo pipefail
+
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            git fetch origin "$BASE_REF" --depth=1
+            RANGE="origin/$BASE_REF...HEAD"
+          else
+            RANGE="HEAD^...HEAD"
+          fi
+
+          CHANGED="$(git diff --name-only "$RANGE")"
+
+          echo "Changed paths:"
+          printf '%s\n' "$CHANGED"
+
+          PROTECTED_RE='^(tools/m006e/|tools/m006e9_forward_observation/|tools/pre_monday/|cli/generate_m005_frozen_signals\.py$|cli/capture_m005_signals\.py$|cli/check_m005_live_bar_gate\.py$|cli/init_m005_shadow\.py$|cli/update_m005_polygon_bars\.py$|cli/build_m005_provider_acceptance_ledger\.py$|cli/update_m005_twelve_data_bars\.py$|cli/run_m005_twelve_shadow_observer\.py$|run_m005_delayed_reconciliation\.sh$|run_m005_twelve_shadow_candidate\.sh$|AUTONOMY_POLICY\.md$|AGENT_BRIEF\.md$|\.gitignore$|\.github/workflows/agent_guard\.yml$|\.github/workflows/signal_cron\.yml$|\.github/workflows/terraform_apply\.yml$|\.github/workflows/terraform_deploy\.yml$|\.github/workflows/ecr_build_push\.yml$)'
+
+          BAD="$(printf '%s\n' "$CHANGED" | grep -E "$PROTECTED_RE" || true)"
+
+          if [ -n "$BAD" ]; then
+            echo
+            echo "AUTONOMOUS R&D GUARD: FAIL"
+            echo "Protected paths changed:"
+            printf '%s\n' "$BAD"
+            exit 1
+          fi
+
+          echo
+          echo "AUTONOMOUS R&D GUARD: PASS"
+          echo "No protected paths changed."
+
+  authority-scan:
+    if: startsWith(github.head_ref, 'agent/rnd-') || startsWith(github.ref_name, 'agent/rnd-')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout candidate
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Flag newly introduced execution-authority markers
+        shell: bash
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          set -euo pipefail
+
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            git fetch origin "$BASE_REF" --depth=1
+            RANGE="origin/$BASE_REF...HEAD"
+          else
+            RANGE="HEAD^...HEAD"
+          fi
+
+          ADDED="$(
+            git diff -U0 "$RANGE" \
+              | grep '^+' \
+              | grep -v '^+++' \
+              || true
+          )"
+
+          BAD="$(
+            printf '%s\n' "$ADDED" \
+              | grep -Ei 'order_send|place_order\(|api-fxtrade\.oanda\.com|OANDA.*LIVE|live[_ -]?trading.*enabled' \
+              || true
+          )"
+
+          if [ -n "$BAD" ]; then
+            echo "AUTONOMOUS AUTHORITY SCAN: REVIEW REQUIRED"
+            echo "New execution-authority markers were introduced."
+            echo "Inspect the candidate manually; do not merge autonomously."
+            exit 1
+          fi
+
+          echo "AUTONOMOUS AUTHORITY SCAN: PASS"

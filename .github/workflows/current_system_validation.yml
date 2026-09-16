@@ -1,0 +1,74 @@
+name: Current System Validation
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  frozen-provenance:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout candidate
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Verify frozen M006e manifest
+        run: |
+          PYTHONPATH=tools/m006e \
+            python3 tools/m006e/provenance/verify_m006e_freeze_manifest.py
+
+      - name: Audit provenance tooling
+        run: |
+          python3 tools/m006e/provenance/audit_m006e_provenance.py
+
+      - name: Compile current Python control-plane sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          find tools/m006e/provenance \
+               tools/m006e9_forward_observation \
+               tools/pre_monday \
+               -type f -name '*.py' -print0 \
+            | xargs -0 python3 -m py_compile
+
+      - name: Syntax-check current shell control-plane sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          find tools/m006e9_forward_observation \
+               tools/pre_monday \
+               -type f -name '*.sh' -print0 \
+            | xargs -0 -n1 bash -n
+
+      - name: Confirm obsolete operational workflows remain absent
+        shell: bash
+        run: |
+          set -euo pipefail
+          for path in \
+            .github/workflows/signal_cron.yml \
+            .github/workflows/ecr_build_push.yml \
+            .github/workflows/terraform_apply.yml \
+            .github/workflows/terraform_deploy.yml
+          do
+            if [ -e "$path" ]; then
+              echo "FAIL: obsolete operational workflow restored: $path"
+              exit 1
+            fi
+          done
+
+          echo "PASS: obsolete operational workflows absent"
+
+      - name: Declare CI authority boundary
+        run: |
+          echo "Network trading calls: NONE"
+          echo "Broker writes: NONE"
+          echo "Deployment actions: NONE"
+          echo "Live trading authority: NONE"

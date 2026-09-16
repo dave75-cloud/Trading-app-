@@ -1,0 +1,51 @@
+{
+  "version": "M006d.1",
+  "mode": "PRACTICE_ONLY",
+  "strategy_changed": false,
+  "canonical_m005_modified": false,
+  "execution_authority": {
+    "primary_feed": "OANDA",
+    "execution_venue": "OANDA practice",
+    "secondary_live_validator": "Twelve Data",
+    "delayed_reconciliation": "Polygon/Massive"
+  },
+  "freshness_minutes": {
+    "oanda_price_max": 5,
+    "twelve_bar_max": 10,
+    "signal_event_max": 20
+  },
+  "price_divergence_bps": {
+    "warning": 5.0,
+    "entry_block": 10.0
+  },
+  "entry_policy": {
+    "oanda_signal_required_nonzero": true,
+    "twelve_direction_must_match": true,
+    "twelve_volatility_eligibility_must_match": true,
+    "opposite_signal_blocks": true,
+    "flat_vs_nonflat_blocks": true,
+    "stale_or_missing_validator_blocks": true
+  },
+  "exit_policy": {
+    "risk_reducing_exit_not_blocked_by_twelve_disagreement": true,
+    "oanda_price_must_be_fresh": true,
+    "stale_signal_event_does_not_block_position_closure": true
+  },
+  "reversal_policy": {
+    "split_into_exit_then_new_entry": true,
+    "exit_leg_follows_exit_policy": true,
+    "new_entry_leg_follows_entry_policy": true
+  },
+  "polygon_policy": {
+    "never_used_as_real_time_execution_veto": true,
+    "record_after_the_fact_anomalies": true,
+    "exact_signal_match_not_required": true,
+    "original_10_session_checkpoint_result_preserved": "FAILED_7_OF_10"
+  },
+  "write_safety": {
+    "ENABLE_DEMO_EXECUTION_default": "NO",
+    "practice_only": true,
+    "no_live_capital": true,
+    "order_writes_enabled_by_this_package": false
+  }
+}

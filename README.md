@@ -1,133 +1,121 @@
-# GBPUSD Signal & Trade Assist — All-in-One (T1–T6)
-Created: 20260211-230639
+# Trading-app — Current System State
 
-This repository combines everything we prepared:
-- FastAPI inference API + paper-broker
-- Polygon backfill CLI
-- Backtest engine (monthly walk-forward)
-- Model training + registry
-- Terraform (S3, RDS, ECS Fargate, ALB stubs)
-- Eightcap MT5 bridge (dry-run + place_order)
-- AGENT_BRIEF.md for Codex/GitHub coding agents
+This repository contains the current KQTRL trading research, validation,
+forward-observation, and governance stack.
 
-## Quick start
-```bash
-python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt -r requirements-dev.txt
-make api
-# open http://127.0.0.1:8080/health and /signals/latest?h=30m
-```
+The old GBPUSD/FastAPI/Polygon/Eightcap MT5/AWS architecture is historical
+and is not the authoritative current trading system.
 
-## Signal dashboard (Streamlit)
+## Current phase
 
-Local (API must be running):
-```bash
-make dashboard
-# open http://127.0.0.1:8501
-```
+**FROZEN FORWARD OBSERVATION**
 
-Docker (API + dashboard + paper broker):
-```bash
-make up
-# API:       http://127.0.0.1:8080
-# Dashboard: http://127.0.0.1:8501
-# Broker:    http://127.0.0.1:8081
-```
+The objective is validation, not optimisation.
 
-## Tests (CI)
+Current controls:
 
-```bash
-make test
-```
+- M006e is the accepted frozen decision/validation stack.
+- M006e.9 is the forward-observation framework.
+- Operation is ZERO_WRITE_DRY_RUN.
+- OANDA environment is PRACTICE only.
+- Master execution switch: NO.
+- OANDA write methods implemented: NONE.
+- Order endpoints invoked: FALSE.
+- Live capital: NONE.
+- Automatic promotion: NONE.
 
-Coverage is enforced (>=85%) via `pytest-cov`.
+Active M006e.2 validator:
 
-## Benchmark harness
+    tools/m006e/m006e2_twelve_validator.py
 
-```bash
-make bench
-```
+Accepted SHA-256:
 
-## Data backfill
-```bash
-python cli/backfill_polygon.py --from 2025-01-01 --to 2025-01-07 --out ./data/market_candles --api_key YOUR_POLYGON_KEY
-```
+    d9c5b46b26d1cae4f000d5c584b9afa5e3a06805cb204559dae05013c6d2906d
 
-## Incremental candle updates
+## Forward-observation graduation
 
-This re-downloads the latest UTC day and then fills forward to now:
+Minimum evidence before consideration for shadow promotion:
 
-```bash
-export POLYGON_API_KEY=...
-make update_candles
-```
+- 25 completed and accepted trading sessions; and
+- 100 authoritative OANDA events.
 
-## Signal history + evaluation
+Both thresholds are required. Meeting them does not automatically promote
+the system.
 
-`/signals/latest` persists each payload into a local sqlite db (default `./data/app.db`).
+Permitted dispositions:
 
-Endpoints:
-- `/signals/history?days=30&h=30m`
-- `/signals/evaluate?days=30&h=30m` (directional realized-outcome check)
+- PROMOTE TO SHADOW
+- EXTEND OBSERVATION
+- REJECT / REENGINEER
 
-## Backtest
-```bash
-python cli/backtest.py --data_dir ./data/market_candles --symbol GBPUSD --horizon 30m --out ./backtests/run_30m.json
-```
+Promotion means shadow validation only, never live trading.
 
-## Train models
-```bash
-python models/train.py --data_dir ./data/market_candles
-```
+## Canonical M005
 
-## Terraform
-See `infra/terraform/README.md` for variables and example `plan` invocation.
+Canonical operational state:
 
-## Phase 2 (Eightcap MT5)
-See `mt5_bridge/bridge.py` for `dry_run()` and `place_order()` usage.
+    data/research_runs/M005_FORWARD_SHADOW_20260804T120245Z/
 
-Safety latch:
-- Default is **dry-run**.
-- Live routing requires `live=True` *and* `MT5_LIVE_ENABLED=1` in the environment.
+Frozen configuration SHA-256:
 
-An orchestration wrapper lives in `services/execution.py` (CI-safe `dry_run()` + MT5 live toggle scaffolding).
+    1ff432d515b955b1a2b16d06a0484166e3eea99d4449c8f9d9fab7147387d646
 
-Optional dependency:
-```bash
-pip install -r requirements-mt5.txt
-```
+Canonical M005 and its protected operational source must not be modified by
+autonomous R&D.
 
+See:
 
-## AWS deployment (optional)
+- AUTONOMY_POLICY.md
+- AGENT_BRIEF.md
+- .github/workflows/agent_guard.yml
 
-If you want this running on the internet:
-- Use `infra/terraform` (plan first; apply only when ready).
-- See `infra/terraform/README.md` for plain-English steps.
+## Autonomous R&D
 
-## Champion Baseline (v3 — current)
+Autonomous work belongs on `agent/rnd-*` branches and is PR-first.
 
-Validated through Q1 2025 in-sample with April–May 2025 forward testing.
+Autonomous agents may perform research, analysis, diagnostics, tests,
+documentation, historical analysis, and non-live candidate development.
 
-Parameters:
-- fast = 20
-- slow = 50
-- execution window = 11:00–12:00 UTC
-- volatility window = 12
-- volatility threshold = 0.0005
-- cost per turn = 0.00005
-- both sides
+They may not autonomously:
 
-Validation summary:
-- Q1 2025: +0.5839%, Sharpe 2.64
-- April 2025: +0.5947%, Sharpe 5.11
-- May 2025: +0.0830%, Sharpe 1.46
+- modify frozen M006e;
+- modify canonical M005;
+- change strategy, sizing, or risk authority;
+- enable broker writes;
+- add live trading authority;
+- promote candidates;
+- merge their own pull requests.
 
-Supersedes prior 11:00–14:00 baseline due to improved forward stability and materially lower drawdowns.
+Execution-adjacent candidates such as M007 require separate human review.
 
-Note: side_filtered_backtest.py "Trades" counts execution events,
-while extract_trade_log.py counts completed round-trip trades.
-Use extractor for true trade count.
+## Legacy components
 
-Paper deployment started via launchd on 2026-04-04.
-Strategy frozen: Champion v3.
-Next review checkpoint: after 10 trading sessions.
+Historical code remains from earlier development, including FastAPI,
+Streamlit, Polygon, MT5, AWS/Terraform, model-training, and backtesting
+components.
+
+These are not authoritative descriptions of the current system and must not
+be assumed to possess trading authority.
+
+Obsolete scheduled signal and AWS deployment workflows are being removed
+from the current governance branch.
+
+`.github/workflows/current_system_validation.yml` performs repository-contained validation of frozen
+M006e provenance and static control-plane syntax only. It has no broker,
+market-data, deployment, or external-write authority.
+
+## Governing rule
+
+During frozen forward observation:
+
+1. preserve accepted M006e;
+2. preserve canonical M005;
+3. collect prospective evidence;
+4. distinguish provider failures from system defects;
+5. keep broker-write authority absent;
+6. develop candidates outside the accepted stack;
+7. require human review before promotion or execution authority.
+
+Research may move quickly.
+
+The accepted trading system must move deliberately.
