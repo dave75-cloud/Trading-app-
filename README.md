@@ -100,8 +100,9 @@ be assumed to possess trading authority.
 Obsolete scheduled signal and AWS deployment workflows are being removed
 from the current governance branch.
 
-The inherited `.github/workflows/ci.yml` remains under review and is not yet
-authoritative validation of M005/M006e.
+`.github/workflows/ci.yml` performs repository-contained validation of frozen
+M006e provenance and static control-plane syntax only. It has no broker,
+market-data, deployment, or external-write authority.
 
 ## Governing rule
 

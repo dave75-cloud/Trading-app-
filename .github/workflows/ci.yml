@@ -1,69 +1,74 @@
-name: CI
+name: Current System Validation
 
 on:
   push:
   pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
-  test:
+  frozen-provenance:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ["3.11"]
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout candidate
+        uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: "3.13"
 
-      - name: Install deps
+      - name: Verify frozen M006e manifest
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt -r requirements-dev.txt
+          PYTHONPATH=tools/m006e \
+            python3 tools/m006e/provenance/verify_m006e_freeze_manifest.py
 
-      - name: Run tests
+      - name: Audit provenance tooling
         run: |
-          pytest
+          python3 tools/m006e/provenance/audit_m006e_provenance.py
 
-  terraform:
-    runs-on: ubuntu-latest
-    env:
-      TF_VAR_vpc_id: ${{ secrets.TF_VAR_vpc_id }}
-      TF_VAR_public_subnets: ${{ secrets.TF_VAR_public_subnets }}
-      TF_VAR_private_subnets: ${{ secrets.TF_VAR_private_subnets }}
-      TF_VAR_ecs_security_group: ${{ secrets.TF_VAR_ecs_security_group }}
-      TF_VAR_alb_security_group: ${{ secrets.TF_VAR_alb_security_group }}
-      TF_VAR_api_image: ${{ secrets.TF_VAR_api_image }}
-      TF_VAR_broker_image: ${{ secrets.TF_VAR_broker_image }}
-      TF_VAR_dashboard_image: ${{ secrets.TF_VAR_dashboard_image }}
-      TF_VAR_db_url_secret_arn: ${{ secrets.TF_VAR_db_url_secret_arn }}
-      TF_VAR_create_secrets: ${{ secrets.TF_VAR_create_secrets }}
-      TF_VAR_db_username: ${{ secrets.TF_VAR_db_username }}
-      TF_VAR_db_password: ${{ secrets.TF_VAR_db_password }}
+      - name: Compile current Python control-plane sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          find tools/m006e/provenance \
+               tools/m006e9_forward_observation \
+               tools/pre_monday \
+               -type f -name '*.py' -print0 \
+            | xargs -0 python3 -m py_compile
 
-    defaults:
-      run:
-        working-directory: infra/terraform
+      - name: Syntax-check current shell control-plane sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          find tools/m006e9_forward_observation \
+               tools/pre_monday \
+               -type f -name '*.sh' -print0 \
+            | xargs -0 -n1 bash -n
 
-    steps:
-      - uses: actions/checkout@v4
+      - name: Confirm obsolete operational workflows remain absent
+        shell: bash
+        run: |
+          set -euo pipefail
+          for path in \
+            .github/workflows/signal_cron.yml \
+            .github/workflows/ecr_build_push.yml \
+            .github/workflows/terraform_apply.yml \
+            .github/workflows/terraform_deploy.yml
+          do
+            if [ -e "$path" ]; then
+              echo "FAIL: obsolete operational workflow restored: $path"
+              exit 1
+            fi
+          done
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
+          echo "PASS: obsolete operational workflows absent"
 
-      - name: Terraform fmt
-        run: terraform fmt -recursive
-
-      - name: Fail if terraform fmt changed files
-        run: git diff --exit-code
-
-      - name: Terraform init
-        run: terraform init -backend=false
-
-      - name: Terraform validate
-        run: terraform validate
-
-      - name: Terraform plan
-        run: terraform plan -no-color -lock=false -input=false
+      - name: Declare CI authority boundary
+        run: |
+          echo "Network trading calls: NONE"
+          echo "Broker writes: NONE"
+          echo "Deployment actions: NONE"
+          echo "Live trading authority: NONE"
