@@ -115,3 +115,30 @@ The correct autonomous objective during forward observation is:
     accumulate evidence, build the next safe research layer,
     and prepare shadow-phase candidates without perturbing M006e.
 
+
+## Canonical M005 boundary
+
+Canonical M005 runtime root:
+
+    data/research_runs/M005_FORWARD_SHADOW_20260804T120245Z/
+
+This runtime tree is machine-local operational state and must not be
+modified, rewritten, reinitialised, or repurposed by autonomous R&D.
+
+The following tracked operational source paths are protected from
+autonomous modification:
+
+    cli/generate_m005_frozen_signals.py
+    cli/capture_m005_signals.py
+    cli/check_m005_live_bar_gate.py
+    cli/init_m005_shadow.py
+    cli/update_m005_polygon_bars.py
+    cli/build_m005_provider_acceptance_ledger.py
+    cli/update_m005_twelve_data_bars.py
+    cli/run_m005_twelve_shadow_observer.py
+    run_m005_delayed_reconciliation.sh
+    run_m005_twelve_shadow_candidate.sh
+
+These paths may be inspected for context but must not be altered on
+agent/rnd-* branches. Any human-authorized successor must be created as a
+distinct versioned candidate outside the protected paths.

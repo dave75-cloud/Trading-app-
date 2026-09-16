@@ -54,7 +54,7 @@ jobs:
           echo "Changed paths:"
           printf '%s\n' "$CHANGED"
 
-          PROTECTED_RE='^(tools/m006e/|tools/m006e9_forward_observation/|tools/pre_monday/|AUTONOMY_POLICY\.md$|AGENT_BRIEF\.md$|\.gitignore$|\.github/workflows/agent_guard\.yml$|\.github/workflows/signal_cron\.yml$|\.github/workflows/terraform_apply\.yml$|\.github/workflows/terraform_deploy\.yml$|\.github/workflows/ecr_build_push\.yml$)'
+          PROTECTED_RE='^(tools/m006e/|tools/m006e9_forward_observation/|tools/pre_monday/|cli/generate_m005_frozen_signals\.py$|cli/capture_m005_signals\.py$|cli/check_m005_live_bar_gate\.py$|cli/init_m005_shadow\.py$|cli/update_m005_polygon_bars\.py$|cli/build_m005_provider_acceptance_ledger\.py$|cli/update_m005_twelve_data_bars\.py$|cli/run_m005_twelve_shadow_observer\.py$|run_m005_delayed_reconciliation\.sh$|run_m005_twelve_shadow_candidate\.sh$|AUTONOMY_POLICY\.md$|AGENT_BRIEF\.md$|\.gitignore$|\.github/workflows/agent_guard\.yml$|\.github/workflows/signal_cron\.yml$|\.github/workflows/terraform_apply\.yml$|\.github/workflows/terraform_deploy\.yml$|\.github/workflows/ecr_build_push\.yml$)'
 
           BAD="$(printf '%s\n' "$CHANGED" | grep -E "$PROTECTED_RE" || true)"
 

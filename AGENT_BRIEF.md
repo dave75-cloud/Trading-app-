@@ -103,3 +103,17 @@ The current objective is:
 
     accumulate evidence, improve the research layer,
     and prepare a safe shadow phase without perturbing M006e.
+
+## Canonical M005 protection
+
+Canonical M005 runtime state is:
+
+    data/research_runs/M005_FORWARD_SHADOW_20260804T120245Z/
+
+Treat that directory and the M005 operational source paths protected by
+the autonomous guard as read-only accepted system components.
+
+Do not initialise, rewrite, repair, tune, or migrate canonical M005.
+Provider-candidate and reconciliation activity associated with that run
+must remain observational and must not be repurposed into strategy,
+risk, or execution changes.
