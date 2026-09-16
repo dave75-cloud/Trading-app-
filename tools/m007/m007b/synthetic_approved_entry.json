@@ -1,0 +1,11 @@
+{
+  "strategy_version": "CandidateA-M006e",
+  "pair": "EURUSD",
+  "bar_ts_utc": "2026-09-01T12:40:00Z",
+  "event_type": "entry",
+  "old_position": "flat",
+  "new_position": "long",
+  "signed_units": 12345,
+  "validation_decision": "APPROVED",
+  "sizing_decision": "APPROVED"
+}
