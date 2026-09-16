@@ -1,0 +1,36 @@
+{
+  "version": "M007-DESIGN-1",
+  "status": "DESIGN_ONLY",
+  "execution_enabled": false,
+  "live_capital": false,
+  "oanda_live_supported": false,
+  "canonical_m005_modified": false,
+  "active_m006e_modified": false,
+  "requirements": {
+    "practice_only": true,
+    "idempotent_event_identity": true,
+    "account_state_verified_before_write": true,
+    "duplicate_order_prevention": true,
+    "restart_reconciliation": true,
+    "ambiguous_write_reconciliation": true,
+    "partial_fill_handling": true,
+    "reversal_split_exit_then_entry": true,
+    "risk_reducing_exit_priority": true,
+    "m006d2_sizing_equivalence_required": true,
+    "execution_ledger_required": true,
+    "post_fill_position_verification": true,
+    "slippage_recording_required": true,
+    "source_hash_gate_required": true,
+    "human_promotion_required": true
+  },
+  "planned_stages": [
+    "M007a_SPECIFICATION",
+    "M007b_ORDER_CONSTRUCTION_ZERO_WRITE",
+    "M007c_MOCK_EXECUTION_ENGINE",
+    "M007d_FAILURE_INJECTION_RECONCILIATION",
+    "M007e_PRACTICE_EXECUTION_CANDIDATE_DISABLED",
+    "M007f_SINGLE_SUPERVISED_PRACTICE_ORDER",
+    "M007g_LIMITED_PROSPECTIVE_PRACTICE",
+    "M007h_EXTENDED_PRACTICE_VALIDATION"
+  ]
+}
