@@ -100,7 +100,7 @@ be assumed to possess trading authority.
 Obsolete scheduled signal and AWS deployment workflows are being removed
 from the current governance branch.
 
-`.github/workflows/ci.yml` performs repository-contained validation of frozen
+`.github/workflows/current_system_validation.yml` performs repository-contained validation of frozen
 M006e provenance and static control-plane syntax only. It has no broker,
 market-data, deployment, or external-write authority.
 
