@@ -1,0 +1,37 @@
+{
+  "version": "RND-0007-v1.0",
+  "status": "DESIGN_ONLY",
+  "deployment_authority": false,
+  "items": [
+    {
+      "id": "validation-row-linkage",
+      "candidate": "schema-aware list selection",
+      "frozen_change_now": false,
+      "acceptance": [
+        "rows list is authoritative",
+        "count/list mismatch fails closed",
+        "entry exit reversal coverage"
+      ]
+    },
+    {
+      "id": "provider-file-selection",
+      "candidate": "metadata day match",
+      "frozen_change_now": false,
+      "acceptance": [
+        "exact target day selected",
+        "ambiguous current candidates fail closed",
+        "older all-history file cannot shadow target day"
+      ]
+    },
+    {
+      "id": "concurrency-race",
+      "candidate": "scheduler serialization",
+      "frozen_change_now": false,
+      "acceptance": [
+        "no overlapping critical window",
+        "existing hash check preserved",
+        "delayed and long-runtime cases tested"
+      ]
+    }
+  ]
+}

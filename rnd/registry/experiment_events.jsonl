@@ -7,3 +7,18 @@
 {"experiment_id": "EXP-20260921T013735Z-m006c-m006e3-concurrency", "status": "planned", "task_id": "RND-0004", "timestamp_utc": "2026-09-21T01:37:35Z", "title": "M006c/M006e.3 concurrency-race design analysis"}
 {"experiment_id": "EXP-20260921T013735Z-m006c-m006e3-concurrency", "status": "running", "task_id": "RND-0004", "timestamp_utc": "2026-09-21T01:56:53Z", "title": "M006c/M006e.3 concurrency-race design analysis"}
 {"experiment_id": "EXP-20260921T013735Z-m006c-m006e3-concurrency", "status": "complete", "task_id": "RND-0004", "timestamp_utc": "2026-09-21T01:56:53Z", "title": "M006c/M006e.3 concurrency-race design analysis"}
+{"experiment_id": "EXP-20260921T020600Z-m006f-shadow-architecture", "status": "planned", "task_id": "RND-0005", "timestamp_utc": "2026-09-21T02:06:00Z", "title": "M006f shadow-execution architecture"}
+{"experiment_id": "EXP-20260921T020600Z-m006f-shadow-architecture", "status": "running", "task_id": "RND-0005", "timestamp_utc": "2026-09-21T02:06:00Z", "title": "M006f shadow-execution architecture"}
+{"experiment_id": "EXP-20260921T020600Z-m006f-shadow-architecture", "status": "complete", "task_id": "RND-0005", "timestamp_utc": "2026-09-21T02:06:00Z", "title": "M006f shadow-execution architecture"}
+{"experiment_id": "EXP-20260921T020601Z-m006f-offline-simulator", "status": "planned", "task_id": "RND-0006", "timestamp_utc": "2026-09-21T02:06:01Z", "title": "M006f offline shadow simulator"}
+{"experiment_id": "EXP-20260921T020601Z-m006f-offline-simulator", "status": "running", "task_id": "RND-0006", "timestamp_utc": "2026-09-21T02:06:01Z", "title": "M006f offline shadow simulator"}
+{"experiment_id": "EXP-20260921T020601Z-m006f-offline-simulator", "status": "complete", "task_id": "RND-0006", "timestamp_utc": "2026-09-21T02:06:01Z", "title": "M006f offline shadow simulator"}
+{"experiment_id": "EXP-20260921T020602Z-post-observation-remediation", "status": "planned", "task_id": "RND-0007", "timestamp_utc": "2026-09-21T02:06:02Z", "title": "Post-observation remediation package"}
+{"experiment_id": "EXP-20260921T020602Z-post-observation-remediation", "status": "running", "task_id": "RND-0007", "timestamp_utc": "2026-09-21T02:06:02Z", "title": "Post-observation remediation package"}
+{"experiment_id": "EXP-20260921T020602Z-post-observation-remediation", "status": "complete", "task_id": "RND-0007", "timestamp_utc": "2026-09-21T02:06:02Z", "title": "Post-observation remediation package"}
+{"experiment_id": "EXP-20260921T020603Z-m006f-validation-protocol", "status": "planned", "task_id": "RND-0008", "timestamp_utc": "2026-09-21T02:06:03Z", "title": "M006f shadow validation protocol"}
+{"experiment_id": "EXP-20260921T020603Z-m006f-validation-protocol", "status": "running", "task_id": "RND-0008", "timestamp_utc": "2026-09-21T02:06:03Z", "title": "M006f shadow validation protocol"}
+{"experiment_id": "EXP-20260921T020603Z-m006f-validation-protocol", "status": "complete", "task_id": "RND-0008", "timestamp_utc": "2026-09-21T02:06:03Z", "title": "M006f shadow validation protocol"}
+{"experiment_id": "EXP-20260921T020604Z-graduation-dossier", "status": "planned", "task_id": "RND-0009", "timestamp_utc": "2026-09-21T02:06:04Z", "title": "Forward-observation graduation dossier generator"}
+{"experiment_id": "EXP-20260921T020604Z-graduation-dossier", "status": "running", "task_id": "RND-0009", "timestamp_utc": "2026-09-21T02:06:04Z", "title": "Forward-observation graduation dossier generator"}
+{"experiment_id": "EXP-20260921T020604Z-graduation-dossier", "status": "complete", "task_id": "RND-0009", "timestamp_utc": "2026-09-21T02:06:04Z", "title": "Forward-observation graduation dossier generator"}
