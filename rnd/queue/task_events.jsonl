@@ -1,0 +1,2 @@
+{"human_gate_required": true, "protected_paths_allowed": false, "status": "complete", "task_id": "RND-0001", "timestamp_utc": "2026-09-17T11:08:21Z", "title": "Establish governed autonomous R&D framework"}
+{"human_gate_required": true, "protected_paths_allowed": false, "status": "queued", "task_id": "RND-0002", "timestamp_utc": "2026-09-17T11:08:21Z", "title": "Run first reproducible offline research experiment"}
