@@ -1,0 +1,27 @@
+{
+  "experiment_id": "EXP-20260921T010120Z-framework-self-test",
+  "task_id": "RND-0002",
+  "title": "Reproducibility and governance self-test",
+  "status": "complete",
+  "created_utc": "2026-09-21T01:01:20Z",
+  "git_base": "931143fd8393b326b21a854135b91681817a4eed",
+  "hypothesis": "A fixed offline JSON input produces the same canonical SHA-256 digest when reproduced from the documented method.",
+  "inputs": [
+    "input.json"
+  ],
+  "commands": [
+    "Canonical JSON: json.dumps(data, sort_keys=True, separators=(',', ':')) + newline",
+    "SHA-256 over canonical UTF-8 bytes"
+  ],
+  "outputs": [
+    "result.sha256"
+  ],
+  "result": "PASS: deterministic digest 8de8ce8723f9610568bb3954edc3eb5fc81a07431420b54a99d791926096c8a2 reproduced exactly.",
+  "safety": {
+    "broker_writes": false,
+    "protected_paths_modified": false,
+    "strategy_authority_changed": false,
+    "human_promotion_required": true
+  },
+  "completed_utc": "2026-09-21T01:20:23Z"
+}
