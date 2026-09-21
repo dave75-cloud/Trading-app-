@@ -155,11 +155,17 @@ for path in outside_rnd:
     fail(f"changed path outside rnd/: {path}")
 
 # Derive broker/order safety by scanning R&D text.
+PROHIBITED_PARTS = [
+    "order_" + "send",
+    "place_" + "order" + r"\s*\(",
+    "api-fx" + "trade" + r"\.oanda\.com",
+    "api-fx" + "practice" + r"\.oanda\.com",
+    "OANDA_API_" + "TOKEN",
+    "OANDA_ACCOUNT_" + "ID",
+]
+
 PROHIBITED = re.compile(
-    r"order_send|place_order\s*\(|"
-    r"api-fxtrade\.oanda\.com|"
-    r"api-fxpractice\.oanda\.com|"
-    r"OANDA_API_TOKEN|OANDA_ACCOUNT_ID",
+    "|".join(PROHIBITED_PARTS),
     re.IGNORECASE,
 )
 
