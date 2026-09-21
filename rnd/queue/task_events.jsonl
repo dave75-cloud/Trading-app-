@@ -5,3 +5,6 @@
 {"human_gate_required": true, "protected_paths_allowed": false, "status": "queued", "task_id": "RND-0003", "timestamp_utc": "2026-09-21T01:27:43Z", "title": "Analyse forward-observation operational reliability"}
 {"human_gate_required": true, "protected_paths_allowed": false, "status": "running", "task_id": "RND-0003", "timestamp_utc": "2026-09-21T01:33:20Z", "title": "Analyse forward-observation operational reliability"}
 {"human_gate_required": true, "protected_paths_allowed": false, "status": "complete", "task_id": "RND-0003", "timestamp_utc": "2026-09-21T01:33:20Z", "title": "Analyse forward-observation operational reliability"}
+{"human_gate_required": true, "protected_paths_allowed": false, "status": "queued", "task_id": "RND-0004", "timestamp_utc": "2026-09-21T01:37:35Z", "title": "Design non-invasive remedy for M006c/M006e.3 concurrency race"}
+{"human_gate_required": true, "protected_paths_allowed": false, "status": "running", "task_id": "RND-0004", "timestamp_utc": "2026-09-21T01:56:53Z", "title": "Design non-invasive remedy for M006c/M006e.3 concurrency race"}
+{"human_gate_required": true, "protected_paths_allowed": false, "status": "complete", "task_id": "RND-0004", "timestamp_utc": "2026-09-21T01:56:53Z", "title": "Design non-invasive remedy for M006c/M006e.3 concurrency race"}

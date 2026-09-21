@@ -4,3 +4,6 @@
 {"experiment_id": "EXP-20260921T012745Z-forward-observation-reliability", "status": "planned", "task_id": "RND-0003", "timestamp_utc": "2026-09-21T01:27:45Z", "title": "Forward-observation reliability analysis"}
 {"experiment_id": "EXP-20260921T012745Z-forward-observation-reliability", "status": "running", "task_id": "RND-0003", "timestamp_utc": "2026-09-21T01:33:20Z", "title": "Forward-observation reliability analysis"}
 {"experiment_id": "EXP-20260921T012745Z-forward-observation-reliability", "status": "complete", "task_id": "RND-0003", "timestamp_utc": "2026-09-21T01:33:20Z", "title": "Forward-observation reliability analysis"}
+{"experiment_id": "EXP-20260921T013735Z-m006c-m006e3-concurrency", "status": "planned", "task_id": "RND-0004", "timestamp_utc": "2026-09-21T01:37:35Z", "title": "M006c/M006e.3 concurrency-race design analysis"}
+{"experiment_id": "EXP-20260921T013735Z-m006c-m006e3-concurrency", "status": "running", "task_id": "RND-0004", "timestamp_utc": "2026-09-21T01:56:53Z", "title": "M006c/M006e.3 concurrency-race design analysis"}
+{"experiment_id": "EXP-20260921T013735Z-m006c-m006e3-concurrency", "status": "complete", "task_id": "RND-0004", "timestamp_utc": "2026-09-21T01:56:53Z", "title": "M006c/M006e.3 concurrency-race design analysis"}
