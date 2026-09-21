@@ -1,0 +1,41 @@
+{
+  "version": "M006e.9-session-disposition-v1.0",
+  "day": "2026-09-14",
+  "reviewed_disposition": "ACCEPTED_WITH_COVERAGE_WARNING",
+  "accepted": true,
+  "contained_upstream_failures": 0,
+  "coverage": {
+    "expected_cycles": 43,
+    "observed_cycles": 32,
+    "pass": 32,
+    "fail": 0,
+    "skip": 0,
+    "unknown": 0,
+    "coverage_percent": 74.4,
+    "raw_verdict": "WARN"
+  },
+  "coverage_warning": {
+    "classification": "UNEXPLAINED_SCHEDULER_AVAILABILITY_GAPS",
+    "large_gap_count": 4,
+    "gap_minutes": [
+      9.45,
+      15.75,
+      15.05,
+      7.033333333333333
+    ],
+    "orchestration_failures_recorded": 0,
+    "sleep_wake_cause_established": false
+  },
+  "authoritative_events": 0,
+  "event_path": {
+    "blocked_entry_legs": 0,
+    "risk_reducing_exit_actions": 0,
+    "retry_pending": 0
+  },
+  "integrity": {
+    "m006e2_hash_match": true,
+    "freeze_manifest_pass": true,
+    "trading_order_writes": 0
+  },
+  "notes": "Session accepted with an operational coverage warning. All 32 observed cycles passed. Four scheduler gaps were present, but no orchestration failures or Sleep/Wake cause were identified. No repair or change to frozen M006e is authorised."
+}

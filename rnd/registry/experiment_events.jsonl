@@ -1,3 +1,6 @@
 {"experiment_id": "EXP-20260921T010120Z-framework-self-test", "status": "planned", "task_id": "RND-0002", "timestamp_utc": "2026-09-21T01:01:20Z", "title": "Reproducibility and governance self-test"}
 {"experiment_id": "EXP-20260921T010120Z-framework-self-test", "status": "running", "task_id": "RND-0002", "timestamp_utc": "2026-09-21T01:20:23Z", "title": "Reproducibility and governance self-test"}
 {"experiment_id": "EXP-20260921T010120Z-framework-self-test", "status": "complete", "task_id": "RND-0002", "timestamp_utc": "2026-09-21T01:20:23Z", "title": "Reproducibility and governance self-test"}
+{"experiment_id": "EXP-20260921T012745Z-forward-observation-reliability", "status": "planned", "task_id": "RND-0003", "timestamp_utc": "2026-09-21T01:27:45Z", "title": "Forward-observation reliability analysis"}
+{"experiment_id": "EXP-20260921T012745Z-forward-observation-reliability", "status": "running", "task_id": "RND-0003", "timestamp_utc": "2026-09-21T01:33:20Z", "title": "Forward-observation reliability analysis"}
+{"experiment_id": "EXP-20260921T012745Z-forward-observation-reliability", "status": "complete", "task_id": "RND-0003", "timestamp_utc": "2026-09-21T01:33:20Z", "title": "Forward-observation reliability analysis"}

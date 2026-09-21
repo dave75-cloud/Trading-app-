@@ -1,0 +1,31 @@
+{
+  "version": "M006e.9-session-disposition-v1.0",
+  "day": "2026-09-17",
+  "reviewed_disposition": "ACCEPTED_WITH_CONTAINED_FAILURES",
+  "accepted": true,
+  "contained_upstream_failures": 1,
+  "contained_local_concurrency_failures": 1,
+  "coverage": {
+    "expected_cycles": 43,
+    "observed_cycles": 37,
+    "pass": 35,
+    "fail": 2,
+    "skip": 0,
+    "unknown": 0,
+    "coverage_percent": 86.0,
+    "raw_verdict": "ALERT"
+  },
+  "coverage_warning": null,
+  "authoritative_events": 5,
+  "event_path": {
+    "blocked_entry_legs": 2,
+    "risk_reducing_exit_actions": 3,
+    "retry_pending": 0
+  },
+  "integrity": {
+    "m006e2_hash_match": true,
+    "freeze_manifest_pass": true,
+    "trading_order_writes": 0
+  },
+  "notes": "Session accepted after human review with two contained fail-closed events. At 2026-09-17T12:14:29Z M006e.3 detected M006c state changing during its bridge run and failed closed. The concurrent scheduled com.kqtrl.m006c2.bridge report at 2026-09-17T12:14:59Z was OANDA practice / DRY_RUN_SUPPRESSED, with a flat account, zero OANDA writes and no order endpoint invocation; this is classified as one contained local concurrency/state-race failure, not an M006e safety defect. At 2026-09-17T14:18:15Z M006e.1 failed closed on OANDA invalid JSON; this is one contained upstream/provider failure. Five authoritative events were observed and subsequently represented in provider-path and reconciliation evidence. Provider diagnostics showed zero missing Twelve bars, zero direction disagreements, zero volatility-eligibility disagreements, zero >10 bps divergences, and maximum absolute close divergence 5.7619 bps. M006e.8 has two explained frozen diagnostic-linkage limitations: its validation loader misreads the current M006e.2 report schema, and its provider-file selection can choose an older m006e7_all file by lexicographic order. These diagnostic limitations do not alter authoritative event evidence and no frozen M006e component is authorised for modification during forward observation."
+}
