@@ -1,0 +1,20 @@
+{
+  "experiment_id": "EXP-20260922T104303Z-m006f-shadow-observation-monitor",
+  "task_id": "RND-0017",
+  "title": "M006f cumulative shadow observation monitor",
+  "status": "complete",
+  "created_utc": "2026-09-22T10:43:03Z",
+  "git_base": "604c3bbfcc4606d59edb11ff59dc3fb613f7269f",
+  "hypothesis": "A verified human-reviewed M006f session ledger can be converted into deterministic cumulative evidence progress without allowing numerical thresholds to become an automatic promotion decision.",
+  "inputs": [],
+  "commands": [],
+  "outputs": [],
+  "result": "PASS: source ledger and monitor hashes independently verified. Current reviewed evidence is 1/25 accepted sessions and 2/100 accepted replay events, with zero suppressed chains, zero accepted sessions ending open, no accepted review flags, and promotion authority NONE.",
+  "safety": {
+    "broker_writes": false,
+    "protected_paths_modified": false,
+    "strategy_authority_changed": false,
+    "human_promotion_required": true
+  },
+  "completed_utc": "2026-09-22T11:28:19Z"
+}
