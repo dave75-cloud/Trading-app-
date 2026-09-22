@@ -1,0 +1,56 @@
+{
+  "classifications": [
+    {
+      "detail": null,
+      "event_id": "synthetic-usdjpy-entry",
+      "event_type": "entry",
+      "leg": "entry",
+      "pair": "USDJPY",
+      "status": "APPROVED_ENTRY",
+      "timestamp_utc": "2026-10-01T12:35:00+00:00"
+    },
+    {
+      "detail": null,
+      "event_id": "synthetic-usdjpy-exit",
+      "event_type": "exit",
+      "leg": "exit",
+      "pair": "USDJPY",
+      "status": "APPROVED_EXIT",
+      "timestamp_utc": "2026-10-01T13:05:00+00:00"
+    }
+  ],
+  "replay_events": [
+    {
+      "action": "entry",
+      "ask": 155.56,
+      "base_to_aud": 1.5,
+      "bid": 155.54,
+      "event_id": "synthetic-usdjpy-entry",
+      "pair": "USDJPY",
+      "side": "long",
+      "timestamp_utc": "2026-10-01T12:35:00+00:00",
+      "units": 71174
+    },
+    {
+      "action": "exit",
+      "ask": 155.72,
+      "bid": 155.7,
+      "event_id": "synthetic-usdjpy-exit",
+      "pair": "USDJPY",
+      "quote_to_aud": 0.00965,
+      "timestamp_utc": "2026-10-01T13:05:00+00:00"
+    }
+  ],
+  "summary": {
+    "acceptance_gate_pass": true,
+    "accepted_sessions": 1,
+    "audit_records": 2,
+    "automatic_promotion": false,
+    "human_review_required": true,
+    "network_capability": false,
+    "replay_events": 2,
+    "source_events": 2,
+    "source_legs": 2,
+    "suppressed_chains": 0
+  }
+}

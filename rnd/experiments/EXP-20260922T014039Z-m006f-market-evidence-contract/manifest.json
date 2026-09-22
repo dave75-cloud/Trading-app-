@@ -1,0 +1,20 @@
+{
+  "experiment_id": "EXP-20260922T014039Z-m006f-market-evidence-contract",
+  "task_id": "RND-0012",
+  "title": "M006f prospective market-evidence contract",
+  "status": "complete",
+  "created_utc": "2026-09-22T01:40:39Z",
+  "git_base": "d6545b2c8f879a55051315424e982a3446276712",
+  "hypothesis": "A strict local market-evidence contract can preserve the exact pricing and AUD-conversion evidence required for deterministic M006f replay without adding connectivity or modifying the frozen trading stack.",
+  "inputs": [],
+  "commands": [],
+  "outputs": [],
+  "result": "PASS: strict prospective market-evidence contract validated; full synthetic accepted USDJPY chain produced 2 replay events and AUD 96.156074 shadow P&L, ending flat. Contract, adapter and simulator regression suites passed 19/19 tests. Network and submission capability remain false; automatic promotion remains false.",
+  "safety": {
+    "broker_writes": false,
+    "protected_paths_modified": false,
+    "strategy_authority_changed": false,
+    "human_promotion_required": true
+  },
+  "completed_utc": "2026-09-22T01:58:04Z"
+}

@@ -1,0 +1,2 @@
+{"action": "entry", "ask": 155.56, "base_to_aud": 1.5, "bid": 155.54, "event_id": "synthetic-usdjpy-entry", "pair": "USDJPY", "side": "long", "timestamp_utc": "2026-10-01T12:35:00+00:00", "units": 71174}
+{"action": "exit", "ask": 155.72, "bid": 155.7, "event_id": "synthetic-usdjpy-exit", "pair": "USDJPY", "quote_to_aud": 0.00965, "timestamp_utc": "2026-10-01T13:05:00+00:00"}

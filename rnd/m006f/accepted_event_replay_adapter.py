@@ -96,6 +96,23 @@ def attach_market(primitive, market):
     if m is None:
         return None
 
+    if "pair" in m:
+        market_pair = str(m["pair"]).strip().upper()
+        if market_pair != primitive["pair"]:
+            raise ReplayError(f"{key}: market-evidence pair mismatch")
+
+    if "event_timestamp_utc" in m:
+        market_ts = str(m["event_timestamp_utc"]).strip()
+        primitive_ts = str(primitive["timestamp_utc"]).strip()
+
+        norm_market = market_ts.replace("Z", "+00:00")
+        norm_primitive = primitive_ts.replace("Z", "+00:00")
+
+        if norm_market != norm_primitive:
+            raise ReplayError(
+                f"{key}: market-evidence event timestamp mismatch"
+            )
+
     bid = float(m["bid"])
     ask = float(m["ask"])
     if bid <= 0 or ask <= 0 or ask < bid:
