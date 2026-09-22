@@ -32,3 +32,5 @@
 {"experiment_id": "EXP-20260922T021435Z-m006f-evidence-capture-design", "status": "complete", "task_id": "RND-0013", "timestamp_utc": "2026-09-22T02:27:12Z", "title": "Prospective M006f evidence capture design"}
 {"experiment_id": "EXP-20260922T023249Z-m006f-shadow-session-package", "status": "planned", "task_id": "RND-0014", "timestamp_utc": "2026-09-22T02:32:49Z", "title": "M006f immutable shadow session package"}
 {"experiment_id": "EXP-20260922T023249Z-m006f-shadow-session-package", "status": "complete", "task_id": "RND-0014", "timestamp_utc": "2026-09-22T02:44:03Z", "title": "M006f immutable shadow session package"}
+{"experiment_id": "EXP-20260922T024758Z-m006f-shadow-session-review-dossier", "status": "planned", "task_id": "RND-0015", "timestamp_utc": "2026-09-22T02:47:58Z", "title": "M006f shadow session human review dossier"}
+{"experiment_id": "EXP-20260922T024758Z-m006f-shadow-session-review-dossier", "status": "complete", "task_id": "RND-0015", "timestamp_utc": "2026-09-22T03:22:08Z", "title": "M006f shadow session human review dossier"}
