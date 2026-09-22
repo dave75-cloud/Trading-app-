@@ -6,6 +6,7 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
@@ -88,6 +89,55 @@ class ProspectivePipelineTests(unittest.TestCase):
         self.assertEqual(result["event_count"], 2)
         self.assertAlmostEqual(result["realized_pnl_aud"], 1.0)
         self.assertEqual(result["open_positions"], {})
+
+    def test_session_date_mismatch_fails_before_temporary_output(self):
+        with mock.patch("prospective_shadow_session_pipeline.tempfile.mkdtemp") as mkdtemp:
+            with self.assertRaisesRegex(PipelineError, "does not match accepted-session day"):
+                run_pipeline(
+                    session_id="prospective-2026-10-02",
+                    session_date_utc="2026-10-02",
+                    accepted_session=self.session,
+                    reconciliation=self.reconciliation,
+                    disposition=None,
+                    market_evidence=self.market,
+                    output_dir=self.root / "output",
+                )
+            mkdtemp.assert_not_called()
+        self.assertFalse((self.root / "output").exists())
+
+    def test_explicit_paths_are_independent_of_adapter_filename_patterns(self):
+        accepted = self.root / "accepted-source.json"
+        reconciliation = self.root / "explicit-reconciliation.json"
+        disposition = self.root / "human-review.json"
+
+        session = json.loads(self.session.read_text())
+        session["orchestration"]["verdict"] = "ALERT"
+        session["reconciliation"]["source_file"] = "authoritative-reconciliation.json"
+        write_json(accepted, session)
+        reconciliation.write_bytes(self.reconciliation.read_bytes())
+        write_json(disposition, {
+            "day": "2026-10-01",
+            "accepted": True,
+            "authoritative_events": 2,
+            "reviewed_disposition": "ACCEPTED_WITH_CONTAINED_FAILURES",
+            "integrity": {
+                "freeze_manifest_pass": True,
+                "m006e2_hash_match": True,
+                "trading_order_writes": 0,
+            },
+        })
+
+        manifest = run_pipeline(
+            session_id="prospective-2026-10-01",
+            session_date_utc="2026-10-01",
+            accepted_session=accepted,
+            reconciliation=reconciliation,
+            disposition=disposition,
+            market_evidence=self.market,
+            output_dir=self.root / "explicit-output",
+        )
+        self.assertEqual(manifest["session_date_utc"], "2026-10-01")
+        self.assertTrue((self.root / "explicit-output/review_dossier.json").is_file())
 
     def test_invalid_market_evidence_fails_before_simulation(self):
         self.market.write_text("{}\n")
