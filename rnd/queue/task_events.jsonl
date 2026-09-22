@@ -32,3 +32,6 @@
 {"human_gate_required": true, "protected_paths_allowed": false, "status": "queued", "task_id": "RND-0012", "timestamp_utc": "2026-09-22T01:40:37Z", "title": "Design M006f prospective market-evidence contract"}
 {"human_gate_required": true, "protected_paths_allowed": false, "status": "running", "task_id": "RND-0012", "timestamp_utc": "2026-09-22T01:40:44Z", "title": "Design M006f prospective market-evidence contract"}
 {"human_gate_required": true, "protected_paths_allowed": false, "status": "complete", "task_id": "RND-0012", "timestamp_utc": "2026-09-22T01:58:24Z", "title": "Design M006f prospective market-evidence contract"}
+{"human_gate_required": true, "protected_paths_allowed": false, "status": "queued", "task_id": "RND-0013", "timestamp_utc": "2026-09-22T02:14:31Z", "title": "Design prospective M006f evidence capture"}
+{"human_gate_required": true, "protected_paths_allowed": false, "status": "running", "task_id": "RND-0013", "timestamp_utc": "2026-09-22T02:14:38Z", "title": "Design prospective M006f evidence capture"}
+{"human_gate_required": true, "protected_paths_allowed": false, "status": "complete", "task_id": "RND-0013", "timestamp_utc": "2026-09-22T02:27:12Z", "title": "Design prospective M006f evidence capture"}

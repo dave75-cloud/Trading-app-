@@ -1,0 +1,20 @@
+{
+  "experiment_id": "EXP-20260922T021435Z-m006f-evidence-capture-design",
+  "task_id": "RND-0013",
+  "title": "Prospective M006f evidence capture design",
+  "status": "complete",
+  "created_utc": "2026-09-22T02:14:35Z",
+  "git_base": "24dea1fab0ce49541649271622315a3dd48dabd5",
+  "hypothesis": "Exact prospective market evidence can be captured as a local immutable snapshot and transformed offline into the M006f market-evidence contract without introducing network, execution, strategy, risk, or promotion authority.",
+  "inputs": [],
+  "commands": [],
+  "outputs": [],
+  "result": "PASS: offline capture and sealing prototype preserves exact bid/ask, deterministic AUD conversion and byte-for-byte SHA-256 provenance, while remaining contract-valid and governance-isolated.",
+  "safety": {
+    "broker_writes": false,
+    "protected_paths_modified": false,
+    "strategy_authority_changed": false,
+    "human_promotion_required": true
+  },
+  "completed_utc": "2026-09-22T02:27:07Z"
+}

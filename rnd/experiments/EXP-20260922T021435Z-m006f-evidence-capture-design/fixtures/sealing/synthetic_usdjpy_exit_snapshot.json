@@ -1,0 +1,19 @@
+{
+  "capture_version": "M006f-capture-source-v0.1",
+  "event_id": "synthetic-usdjpy-exit-capture-001",
+  "leg": "exit",
+  "pair": "USDJPY",
+  "event_timestamp_utc": "2026-10-01T13:05:00+00:00",
+  "price_timestamp_utc": "2026-10-01T13:05:01+00:00",
+  "source_provider": "synthetic_fixture",
+  "prices": {
+    "AUDUSD": {
+      "bid": 0.6500,
+      "ask": 0.6502
+    },
+    "USDJPY": {
+      "bid": 150.00,
+      "ask": 150.02
+    }
+  }
+}

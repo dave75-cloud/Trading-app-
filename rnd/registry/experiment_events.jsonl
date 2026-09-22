@@ -28,3 +28,5 @@
 {"experiment_id": "EXP-20260922T010242Z-m006f-accepted-event-replay", "status": "complete", "task_id": "RND-0011", "timestamp_utc": "2026-09-22T01:35:40Z", "title": "M006f accepted-event replay adapter"}
 {"experiment_id": "EXP-20260922T014039Z-m006f-market-evidence-contract", "status": "planned", "task_id": "RND-0012", "timestamp_utc": "2026-09-22T01:40:39Z", "title": "M006f prospective market-evidence contract"}
 {"experiment_id": "EXP-20260922T014039Z-m006f-market-evidence-contract", "status": "complete", "task_id": "RND-0012", "timestamp_utc": "2026-09-22T01:58:24Z", "title": "M006f prospective market-evidence contract"}
+{"experiment_id": "EXP-20260922T021435Z-m006f-evidence-capture-design", "status": "planned", "task_id": "RND-0013", "timestamp_utc": "2026-09-22T02:14:35Z", "title": "Prospective M006f evidence capture design"}
+{"experiment_id": "EXP-20260922T021435Z-m006f-evidence-capture-design", "status": "complete", "task_id": "RND-0013", "timestamp_utc": "2026-09-22T02:27:12Z", "title": "Prospective M006f evidence capture design"}
