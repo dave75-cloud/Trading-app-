@@ -47,3 +47,6 @@
 {"human_gate_required": true, "protected_paths_allowed": false, "status": "queued", "task_id": "RND-0017", "timestamp_utc": "2026-09-22T10:43:02Z", "title": "Design M006f cumulative shadow observation monitor"}
 {"human_gate_required": true, "protected_paths_allowed": false, "status": "running", "task_id": "RND-0017", "timestamp_utc": "2026-09-22T10:43:04Z", "title": "Design M006f cumulative shadow observation monitor"}
 {"human_gate_required": true, "protected_paths_allowed": false, "status": "complete", "task_id": "RND-0017", "timestamp_utc": "2026-09-22T11:28:25Z", "title": "Design M006f cumulative shadow observation monitor"}
+{"human_gate_required": true, "protected_paths_allowed": false, "status": "queued", "task_id": "RND-0018", "timestamp_utc": "2026-09-22T14:08:27Z", "title": "M006f offline prospective shadow-session pipeline"}
+{"human_gate_required": true, "protected_paths_allowed": false, "status": "running", "task_id": "RND-0018", "timestamp_utc": "2026-09-22T14:08:28Z", "title": "M006f offline prospective shadow-session pipeline"}
+{"human_gate_required": true, "protected_paths_allowed": false, "status": "complete", "task_id": "RND-0018", "timestamp_utc": "2026-09-22T14:09:39Z", "title": "M006f offline prospective shadow-session pipeline"}
