@@ -38,3 +38,5 @@
 {"experiment_id": "EXP-20260922T095745Z-m006f-human-disposition-ledger", "status": "complete", "task_id": "RND-0016", "timestamp_utc": "2026-09-22T10:36:24Z", "title": "M006f human disposition and cumulative session ledger"}
 {"experiment_id": "EXP-20260922T104303Z-m006f-shadow-observation-monitor", "status": "planned", "task_id": "RND-0017", "timestamp_utc": "2026-09-22T10:43:03Z", "title": "M006f cumulative shadow observation monitor"}
 {"experiment_id": "EXP-20260922T104303Z-m006f-shadow-observation-monitor", "status": "complete", "task_id": "RND-0017", "timestamp_utc": "2026-09-22T11:28:25Z", "title": "M006f cumulative shadow observation monitor"}
+{"experiment_id": "EXP-20260922T140827Z-m006f-prospective-shadow-pipeline", "status": "running", "task_id": "RND-0018", "timestamp_utc": "2026-09-22T14:08:28Z", "title": "M006f offline prospective shadow-session pipeline"}
+{"experiment_id": "EXP-20260922T140827Z-m006f-prospective-shadow-pipeline", "status": "complete", "task_id": "RND-0018", "timestamp_utc": "2026-09-22T14:09:39Z", "title": "M006f offline prospective shadow-session pipeline"}
