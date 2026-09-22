@@ -24,3 +24,5 @@
 {"experiment_id": "EXP-20260921T020604Z-graduation-dossier", "status": "complete", "task_id": "RND-0009", "timestamp_utc": "2026-09-21T02:06:04Z", "title": "Forward-observation graduation dossier generator"}
 {"experiment_id": "EXP-20260922T003643Z-challenger-prospective-monitor", "status": "planned", "task_id": "RND-0010", "timestamp_utc": "2026-09-22T00:36:43Z", "title": "Prospective challenger cohort monitor"}
 {"experiment_id": "EXP-20260922T003643Z-challenger-prospective-monitor", "status": "complete", "task_id": "RND-0010", "timestamp_utc": "2026-09-22T00:44:10Z", "title": "Prospective challenger cohort monitor"}
+{"experiment_id": "EXP-20260922T010242Z-m006f-accepted-event-replay", "status": "planned", "task_id": "RND-0011", "timestamp_utc": "2026-09-22T01:02:42Z", "title": "M006f accepted-event replay adapter"}
+{"experiment_id": "EXP-20260922T010242Z-m006f-accepted-event-replay", "status": "complete", "task_id": "RND-0011", "timestamp_utc": "2026-09-22T01:35:40Z", "title": "M006f accepted-event replay adapter"}

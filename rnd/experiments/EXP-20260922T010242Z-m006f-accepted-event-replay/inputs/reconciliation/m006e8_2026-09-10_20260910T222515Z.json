@@ -1,0 +1,273 @@
+{
+  "day": "2026-09-10",
+  "mode": "READ_ONLY_POST_SESSION_RECONCILIATION",
+  "network_calls": 0,
+  "order_capability": false,
+  "summary": {
+    "blocked_entries": 4,
+    "events": 8,
+    "retry_pending": 0,
+    "with_bridge_action": 4,
+    "with_provider_path": 0,
+    "with_validation": 0
+  },
+  "timeline": [
+    {
+      "bar_ts_utc": "2026-09-10T12:35:00+00:00",
+      "blocked_entries": [
+        {
+          "decision": "BLOCK",
+          "leg": "entry",
+          "reasons": [
+            "TWELVE_MATCHING_BAR_MISSING"
+          ],
+          "status": "SUPPRESSED_DRY_RUN"
+        }
+      ],
+      "bridge_actions": [],
+      "close_divergence_bps": null,
+      "event_id": "20260910T124010Z|oanda|AUDUSD|2026-09-10T12:35:00+00:00|entry|flat|short",
+      "event_type": "entry",
+      "new_position": "short",
+      "oanda_close": 0.71594,
+      "oanda_delayed_signal": "short",
+      "oanda_volatility": 0.0005704485299556,
+      "oanda_volatility_ok": true,
+      "old_position": "flat",
+      "pair": "AUDUSD",
+      "provider_path_status": null,
+      "retry_pending": false,
+      "twelve_delayed_signal": null,
+      "twelve_volatility": null,
+      "twelve_volatility_ok": null,
+      "validation_decisions": [],
+      "validation_reasons": [],
+      "validation_rows": 0
+    },
+    {
+      "bar_ts_utc": "2026-09-10T12:35:00+00:00",
+      "blocked_entries": [
+        {
+          "decision": "BLOCK",
+          "leg": "entry",
+          "reasons": [
+            "TWELVE_MATCHING_BAR_MISSING"
+          ],
+          "status": "SUPPRESSED_DRY_RUN"
+        }
+      ],
+      "bridge_actions": [],
+      "close_divergence_bps": null,
+      "event_id": "20260910T124010Z|oanda|EURUSD|2026-09-10T12:35:00+00:00|entry|flat|short",
+      "event_type": "entry",
+      "new_position": "short",
+      "oanda_close": 1.15951,
+      "oanda_delayed_signal": "short",
+      "oanda_volatility": 0.0006247642458452,
+      "oanda_volatility_ok": true,
+      "old_position": "flat",
+      "pair": "EURUSD",
+      "provider_path_status": null,
+      "retry_pending": false,
+      "twelve_delayed_signal": null,
+      "twelve_volatility": null,
+      "twelve_volatility_ok": null,
+      "validation_decisions": [],
+      "validation_reasons": [],
+      "validation_rows": 0
+    },
+    {
+      "bar_ts_utc": "2026-09-10T12:35:00+00:00",
+      "blocked_entries": [
+        {
+          "decision": "BLOCK",
+          "leg": "entry",
+          "reasons": [
+            "TWELVE_MATCHING_BAR_MISSING"
+          ],
+          "status": "SUPPRESSED_DRY_RUN"
+        }
+      ],
+      "bridge_actions": [],
+      "close_divergence_bps": null,
+      "event_id": "20260910T124010Z|oanda|USDJPY|2026-09-10T12:35:00+00:00|entry|flat|long",
+      "event_type": "entry",
+      "new_position": "long",
+      "oanda_close": 154.483,
+      "oanda_delayed_signal": "long",
+      "oanda_volatility": 0.0006082555160965,
+      "oanda_volatility_ok": true,
+      "old_position": "flat",
+      "pair": "USDJPY",
+      "provider_path_status": null,
+      "retry_pending": false,
+      "twelve_delayed_signal": null,
+      "twelve_volatility": null,
+      "twelve_volatility_ok": null,
+      "validation_decisions": [],
+      "validation_reasons": [],
+      "validation_rows": 0
+    },
+    {
+      "bar_ts_utc": "2026-09-10T12:50:00+00:00",
+      "blocked_entries": [
+        {
+          "decision": "BLOCK",
+          "leg": "entry",
+          "reasons": [
+            "TWELVE_MATCHING_BAR_MISSING"
+          ],
+          "status": "SUPPRESSED_DRY_RUN"
+        }
+      ],
+      "bridge_actions": [],
+      "close_divergence_bps": null,
+      "event_id": "20260910T125616Z|oanda|GBPUSD|2026-09-10T12:50:00+00:00|entry|flat|short",
+      "event_type": "entry",
+      "new_position": "short",
+      "oanda_close": 1.35076,
+      "oanda_delayed_signal": "short",
+      "oanda_volatility": 0.0005290885237428,
+      "oanda_volatility_ok": true,
+      "old_position": "flat",
+      "pair": "GBPUSD",
+      "provider_path_status": null,
+      "retry_pending": false,
+      "twelve_delayed_signal": null,
+      "twelve_volatility": null,
+      "twelve_volatility_ok": null,
+      "validation_decisions": [],
+      "validation_reasons": [],
+      "validation_rows": 0
+    },
+    {
+      "bar_ts_utc": "2026-09-10T13:05:00+00:00",
+      "blocked_entries": [],
+      "bridge_actions": [
+        {
+          "allocation_x": null,
+          "approx_units": null,
+          "decision": "ALLOW_RISK_REDUCING_EXIT",
+          "leg": "exit",
+          "reason": null,
+          "status": "SUPPRESSED_DRY_RUN"
+        }
+      ],
+      "close_divergence_bps": null,
+      "event_id": "20260910T131212Z|oanda|EURUSD|2026-09-10T13:05:00+00:00|exit|short|flat",
+      "event_type": "exit",
+      "new_position": "flat",
+      "oanda_close": 1.16009,
+      "oanda_delayed_signal": "flat",
+      "oanda_volatility": 0.000687077682371,
+      "oanda_volatility_ok": true,
+      "old_position": "short",
+      "pair": "EURUSD",
+      "provider_path_status": null,
+      "retry_pending": false,
+      "twelve_delayed_signal": null,
+      "twelve_volatility": null,
+      "twelve_volatility_ok": null,
+      "validation_decisions": [],
+      "validation_reasons": [],
+      "validation_rows": 0
+    },
+    {
+      "bar_ts_utc": "2026-09-10T13:05:00+00:00",
+      "blocked_entries": [],
+      "bridge_actions": [
+        {
+          "allocation_x": null,
+          "approx_units": null,
+          "decision": "ALLOW_RISK_REDUCING_EXIT",
+          "leg": "exit",
+          "reason": null,
+          "status": "SUPPRESSED_DRY_RUN"
+        }
+      ],
+      "close_divergence_bps": null,
+      "event_id": "20260910T131212Z|oanda|GBPUSD|2026-09-10T13:05:00+00:00|exit|short|flat",
+      "event_type": "exit",
+      "new_position": "flat",
+      "oanda_close": 1.3502,
+      "oanda_delayed_signal": "flat",
+      "oanda_volatility": 0.0005517424578591,
+      "oanda_volatility_ok": true,
+      "old_position": "short",
+      "pair": "GBPUSD",
+      "provider_path_status": null,
+      "retry_pending": false,
+      "twelve_delayed_signal": null,
+      "twelve_volatility": null,
+      "twelve_volatility_ok": null,
+      "validation_decisions": [],
+      "validation_reasons": [],
+      "validation_rows": 0
+    },
+    {
+      "bar_ts_utc": "2026-09-10T13:05:00+00:00",
+      "blocked_entries": [],
+      "bridge_actions": [
+        {
+          "allocation_x": null,
+          "approx_units": null,
+          "decision": "ALLOW_RISK_REDUCING_EXIT",
+          "leg": "exit",
+          "reason": null,
+          "status": "SUPPRESSED_DRY_RUN"
+        }
+      ],
+      "close_divergence_bps": null,
+      "event_id": "20260910T131212Z|oanda|USDJPY|2026-09-10T13:05:00+00:00|exit|long|flat",
+      "event_type": "exit",
+      "new_position": "flat",
+      "oanda_close": 154.266,
+      "oanda_delayed_signal": "flat",
+      "oanda_volatility": 0.0006945439923762,
+      "oanda_volatility_ok": true,
+      "old_position": "long",
+      "pair": "USDJPY",
+      "provider_path_status": null,
+      "retry_pending": false,
+      "twelve_delayed_signal": null,
+      "twelve_volatility": null,
+      "twelve_volatility_ok": null,
+      "validation_decisions": [],
+      "validation_reasons": [],
+      "validation_rows": 0
+    },
+    {
+      "bar_ts_utc": "2026-09-10T13:45:00+00:00",
+      "blocked_entries": [],
+      "bridge_actions": [
+        {
+          "allocation_x": null,
+          "approx_units": null,
+          "decision": "ALLOW_RISK_REDUCING_EXIT",
+          "leg": "exit",
+          "reason": null,
+          "status": "SUPPRESSED_DRY_RUN"
+        }
+      ],
+      "close_divergence_bps": null,
+      "event_id": "20260910T135451Z|oanda|AUDUSD|2026-09-10T13:45:00+00:00|exit|short|flat",
+      "event_type": "exit",
+      "new_position": "flat",
+      "oanda_close": 0.71674,
+      "oanda_delayed_signal": "flat",
+      "oanda_volatility": 0.0004512899426287,
+      "oanda_volatility_ok": false,
+      "old_position": "short",
+      "pair": "AUDUSD",
+      "provider_path_status": null,
+      "retry_pending": false,
+      "twelve_delayed_signal": null,
+      "twelve_volatility": null,
+      "twelve_volatility_ok": null,
+      "validation_decisions": [],
+      "validation_reasons": [],
+      "validation_rows": 0
+    }
+  ],
+  "version": "M006e.8"
+}
