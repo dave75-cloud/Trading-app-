@@ -35,3 +35,6 @@
 {"human_gate_required": true, "protected_paths_allowed": false, "status": "queued", "task_id": "RND-0013", "timestamp_utc": "2026-09-22T02:14:31Z", "title": "Design prospective M006f evidence capture"}
 {"human_gate_required": true, "protected_paths_allowed": false, "status": "running", "task_id": "RND-0013", "timestamp_utc": "2026-09-22T02:14:38Z", "title": "Design prospective M006f evidence capture"}
 {"human_gate_required": true, "protected_paths_allowed": false, "status": "complete", "task_id": "RND-0013", "timestamp_utc": "2026-09-22T02:27:12Z", "title": "Design prospective M006f evidence capture"}
+{"human_gate_required": true, "protected_paths_allowed": false, "status": "queued", "task_id": "RND-0014", "timestamp_utc": "2026-09-22T02:32:44Z", "title": "Design M006f shadow session package"}
+{"human_gate_required": true, "protected_paths_allowed": false, "status": "running", "task_id": "RND-0014", "timestamp_utc": "2026-09-22T02:32:50Z", "title": "Design M006f shadow session package"}
+{"human_gate_required": true, "protected_paths_allowed": false, "status": "complete", "task_id": "RND-0014", "timestamp_utc": "2026-09-22T02:44:03Z", "title": "Design M006f shadow session package"}
