@@ -60,6 +60,26 @@ def run_pipeline(*, session_id, session_date_utc, accepted_session,
     if disposition is not None:
         sources["disposition"] = _regular_file(disposition, "disposition")
 
+    try:
+        accepted_payload = json.loads(sources["accepted_session"].read_text())
+    except (json.JSONDecodeError, OSError) as exc:
+        raise PipelineError(f"accepted_session: invalid JSON: {exc}") from exc
+
+    authoritative_day = str(accepted_payload.get("day", "")).strip()
+    if not authoritative_day:
+        raise PipelineError("accepted_session: missing authoritative day")
+    if str(session_date_utc).strip() != authoritative_day:
+        raise PipelineError(
+            f"session_date_utc {session_date_utc!r} does not match "
+            f"accepted-session day {authoritative_day!r}"
+        )
+
+    reconciliation_name = Path(
+        str(accepted_payload.get("reconciliation", {}).get("source_file", ""))
+    ).name
+    if not reconciliation_name:
+        raise PipelineError("accepted_session: reconciliation source_file is missing")
+
     output = Path(output_dir).resolve()
     if output.exists():
         raise PipelineError("session output directory already exists; refusing overwrite")
@@ -78,13 +98,20 @@ def run_pipeline(*, session_id, session_date_utc, accepted_session,
         dispositions = input_root / "dispositions"
         for directory in (sessions, reconciliations, dispositions):
             directory.mkdir(parents=True)
-        shutil.copyfile(sources["accepted_session"], sessions / sources["accepted_session"].name)
-        shutil.copyfile(sources["reconciliation"], reconciliations / sources["reconciliation"].name)
+
+        # The pipeline accepts explicit paths, while the established replay adapter
+        # intentionally discovers formal evidence by canonical filename patterns.
+        # Normalize only the temporary copies; never alter the source evidence.
+        shutil.copyfile(sources["accepted_session"], sessions / "m006e9a_explicit.json")
+        shutil.copyfile(sources["reconciliation"], reconciliations / reconciliation_name)
         if "disposition" in sources:
-            shutil.copyfile(sources["disposition"], dispositions / sources["disposition"].name)
+            shutil.copyfile(
+                sources["disposition"],
+                dispositions / "session_disposition_explicit.json",
+            )
 
         accepted_names = accepted_reconciliation_files(sessions, reconciliations, dispositions)
-        if accepted_names != [sources["reconciliation"].name]:
+        if accepted_names != [reconciliation_name]:
             raise PipelineError("explicit reconciliation was not uniquely accepted")
         source_rows = load_rows(reconciliations, accepted_names)
         replay = adapt(source_rows, load_market(sources["market_evidence"]))
