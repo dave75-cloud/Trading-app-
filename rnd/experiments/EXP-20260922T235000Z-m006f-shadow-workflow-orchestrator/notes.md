@@ -52,3 +52,10 @@ acceptance decision and the no-automatic-promotion gate.
 
 A focused regression covers the operational disposition shape, and the RND-0019
 end-to-end non-CLEAN test now uses that real schema.
+## Validation hardening after initial completion
+
+Independent review identified one untested documented path: accepted zero-event
+sessions. The downstream simulator, packager and dossier support that case, so
+an explicit end-to-end regression was added. Validation state is reopened until
+the exact final PR head passes 13 focused orchestrator tests, 6 replay-adapter
+tests, 106 total M006f tests, the workspace audit, and diff checks.
