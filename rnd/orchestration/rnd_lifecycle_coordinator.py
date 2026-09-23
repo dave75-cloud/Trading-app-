@@ -10,7 +10,9 @@ from pathlib import Path
 from task_spec_contract import (
     KNOWN_PROTECTED_PREFIXES,
     SHA256_RE,
+    TaskSpecError,
     canonical_hash,
+    normalize_repo_path,
     path_within,
     validate_task_spec,
 )
@@ -102,7 +104,13 @@ def _validate_evidence(evidence):
         isinstance(x, str) and x.strip() for x in changed
     ):
         raise LifecycleError("candidate evidence: changed_paths must be list[str]")
-    changed = [x.strip().rstrip("/") for x in changed]
+    try:
+        changed = [
+            normalize_repo_path(x, "candidate changed path")
+            for x in changed
+        ]
+    except TaskSpecError as exc:
+        raise LifecycleError(f"candidate evidence: {exc}") from exc
     if len(changed) != len(set(changed)):
         raise LifecycleError("candidate evidence: duplicate changed_paths")
 
@@ -113,9 +121,15 @@ def _validate_evidence(evidence):
     for row in outputs:
         if not isinstance(row, dict):
             raise LifecycleError("candidate evidence: output row must be object")
-        path = str(row.get("path", "")).strip().rstrip("/")
+        try:
+            path = normalize_repo_path(
+                row.get("path"),
+                "candidate output path",
+            )
+        except TaskSpecError as exc:
+            raise LifecycleError(f"candidate evidence: {exc}") from exc
         digest = str(row.get("sha256", "")).strip().lower()
-        if not path or not SHA256_RE.fullmatch(digest):
+        if not SHA256_RE.fullmatch(digest):
             raise LifecycleError("candidate evidence: invalid output record")
         if path in output_map:
             raise LifecycleError("candidate evidence: duplicate output path")
