@@ -11,6 +11,7 @@ from controlled_rnd_executor import (
     EVIDENCE_VERSION as EXECUTION_EVIDENCE_VERSION,
     EXECUTOR_AUTHORITY,
     EXECUTOR_CAPABILITIES,
+    validate_work_packet as validate_executor_work_packet,
 )
 from rnd_lifecycle_coordinator import (
     EVIDENCE_VERSION as CANDIDATE_EVIDENCE_VERSION,
@@ -83,37 +84,15 @@ def _require_sha256(value, role):
 
 
 def _validate_work_packet(packet):
-    _verify_hashed_object(
-        packet,
-        "work_packet_content_sha256",
-        "work packet",
-    )
-    task_id = str(packet.get("task_id", "")).strip()
-    git_base = str(packet.get("git_base", "")).strip().lower()
-    labels = packet.get("required_validation_labels")
-    if not task_id:
-        raise AssemblerError("work packet: task_id is required")
-    if not SHA40_RE.fullmatch(git_base):
-        raise AssemblerError("work packet: git_base is invalid")
-    if not isinstance(labels, list) or not labels:
+    try:
+        validated = validate_executor_work_packet(packet)
+    except Exception as exc:
+        raise AssemblerError(f"work packet: {exc}") from exc
+    if not validated["required_validation_labels"]:
         raise AssemblerError(
-            "work packet: required_validation_labels must be non-empty list[str]"
+            "work packet: required_validation_labels must not be empty"
         )
-    if not all(isinstance(x, str) and x.strip() for x in labels):
-        raise AssemblerError(
-            "work packet: required_validation_labels must be non-empty list[str]"
-        )
-    labels = [x.strip() for x in labels]
-    if len(labels) != len(set(labels)):
-        raise AssemblerError("work packet: duplicate validation labels")
-    return {
-        "task_id": task_id,
-        "git_base": git_base,
-        "required_validation_labels": labels,
-        "work_packet_content_sha256": packet[
-            "work_packet_content_sha256"
-        ],
-    }
+    return validated
 
 
 def _validate_execution_evidence(raw, packet):
