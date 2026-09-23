@@ -197,6 +197,31 @@ class ReplayAdapterTests(unittest.TestCase):
         finally:
             td.cleanup()
 
+    def test_alert_with_operational_disposition_schema_is_accepted(self):
+        td, sessions, recon, dispositions = self.fixture(
+            verdict="ALERT",
+            disposition=False,
+        )
+
+        try:
+            write_json(dispositions / "session_disposition_2026-10-01.json", {
+                "day": "2026-10-01",
+                "reviewed_disposition": "ACCEPTED_WITH_CONTAINED_FAILURES",
+                "accepted": True,
+                "contained_upstream_failures": 1,
+                "contained_local_concurrency_failures": 0,
+                "raw_verdict": "ALERT",
+                "review_basis": "Contained upstream failure; safety gates intact.",
+                "human_reviewed": True,
+                "automatic_promotion": False,
+            })
+            accepted = accepted_reconciliation_files(
+                sessions, recon, dispositions
+            )
+            self.assertEqual(accepted, ["recon.json"])
+        finally:
+            td.cleanup()
+
     def test_nonzero_write_evidence_fails_closed(self):
         td, sessions, recon, dispositions = self.fixture(writes=1)
 
