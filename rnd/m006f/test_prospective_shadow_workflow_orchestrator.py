@@ -149,14 +149,14 @@ class ProspectiveShadowWorkflowTests(unittest.TestCase):
         if verdict != "CLEAN" and with_disposition:
             write_json(disposition_path, {
                 "day": day,
-                "accepted": True,
-                "authoritative_events": 2,
                 "reviewed_disposition": "ACCEPTED_WITH_CONTAINED_FAILURES",
-                "integrity": {
-                    "freeze_manifest_pass": True,
-                    "m006e2_hash_match": True,
-                    "trading_order_writes": 0,
-                },
+                "accepted": True,
+                "contained_upstream_failures": 1,
+                "contained_local_concurrency_failures": 0,
+                "raw_verdict": "ALERT",
+                "review_basis": "Contained failure; accepted after human review.",
+                "human_reviewed": True,
+                "automatic_promotion": False,
             })
 
         return {
