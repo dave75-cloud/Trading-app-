@@ -108,3 +108,22 @@ The test was corrected so the same task specification is used to build the work
 packet and to evaluate the resulting candidate evidence. No executor runtime
 logic changed. RND-0021 remains RUNNING pending re-validation of the corrected
 head.
+## Final security hardening before completion
+
+The final review removed `worktree-clean-check` from executor authority.
+
+On the project's older Git generation, repository-local `core.fsmonitor` may
+name a command that Git invokes during status/index refresh. Treating
+`git status` as inherently non-executable would therefore be unsafe.
+
+RND-0021 now executes only commit-to-commit operations:
+
+- `diff-check`;
+- `scope-check`.
+
+Both disable external diff, text conversion, and submodule worktree inspection.
+A regression verifies that `git status` is rejected before
+`subprocess.run`.
+
+Worktree cleanliness remains externally produced evidence. RND-0021 remains
+RUNNING pending final re-validation of this hardened head.
