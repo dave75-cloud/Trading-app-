@@ -21,7 +21,7 @@
     "rnd/orchestration/test_controlled_rnd_executor.py",
     "rnd/orchestration/RND_CONTROLLED_EXECUTOR.md"
   ],
-  "result": "PENDING independent validation on the exact RND-0021 branch head. Unit-test and repository-script execution are intentionally excluded from executor authority pending a separately reviewed OS-level sandbox.",
+  "result": "PENDING re-validation on corrected head. Initial independent run: 40/41 orchestration tests passed with one integration-test provenance setup error; 106/106 M006f tests passed; workspace audit PASS at 21 tasks / 20 experiments; diff check clean. The failing test was corrected to build and evaluate against the same task-spec/work-packet contract.",
   "safety": {
     "broker_writes": false,
     "protected_paths_modified": false,
