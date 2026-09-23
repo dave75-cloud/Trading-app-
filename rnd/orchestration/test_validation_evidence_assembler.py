@@ -215,6 +215,21 @@ class EvidenceAssemblerTests(unittest.TestCase):
             canonical_hash(candidate),
         )
 
+    def test_tampered_work_packet_authority_fails_closed(self):
+        wp = packet()
+        wp["authority"]["automatic_merge"] = True
+        wp["work_packet_content_sha256"] = canonical_hash(
+            {k: v for k, v in wp.items() if k != "work_packet_content_sha256"}
+        )
+        with self.assertRaisesRegex(AssemblerError, "authority boundary invalid"):
+            assemble_evidence(
+                wp,
+                execution_evidence(packet()),
+                [],
+                path_manifest(packet()),
+                output_manifest(packet()),
+            )
+
     def test_tampered_executor_authority_fails_closed(self):
         wp = packet()
         execution = execution_evidence(wp)
