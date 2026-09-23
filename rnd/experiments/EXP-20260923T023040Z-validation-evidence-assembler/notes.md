@@ -92,8 +92,8 @@ or automatic promotion authority.
 
 ## Validation state
 
-COMPLETE as a non-operational R&D candidate. Human merge and promotion remain
-external.
+RUNNING pending user-supplied independent validation of the exact final PR head.
+Human merge and promotion remain external.
 
 Final validation target:
 - 65 orchestration tests;
@@ -124,7 +124,7 @@ assembler rejects it.
 Final independent validation target is now 65 orchestration tests, 106 M006f
 tests, workspace audit PASS, and a clean diff check.
 
-## Final independent validation
+## Earlier validation of code head
 
 Exact tested code head: `be4de484ed38f2e5bb46e11c305de1a86f51ed07`.
 
@@ -135,8 +135,18 @@ Exact tested code head: `be4de484ed38f2e5bb46e11c305de1a86f51ed07`.
 - Promotion authority: human-only.
 - `git diff --check agent/rnd-foundation-20260916...HEAD`: clean.
 
-These results complete RND-0022 evidence assembly as an R&D candidate. External
+These results validate that code revision. External
 validation attestations remain assertions about test execution, and the
 assembler cannot independently prove that the external runner ran a test.
 Human review, merge, trading-system promotion, execution and capital authority
 remain external.
+
+## Status correction
+
+The validation above ran against code head
+`be4de484ed38f2e5bb46e11c305de1a86f51ed07`. The later bookkeeping commit
+`0e52598397a66f2c8f30aa98d389780316aef75e` prematurely appended COMPLETE
+records. The append-only registry now records a subsequent RUNNING state; the
+earlier test results remain historical evidence, not final-head validation.
+Await independent validation output from the user on the exact final PR head
+before another completion decision. Human approval is required for merge.
