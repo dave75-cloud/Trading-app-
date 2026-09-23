@@ -81,3 +81,17 @@ RUNNING.
 RND-0020 must not be marked complete until the exact branch head passes the
 focused orchestration tests, the existing M006f suite, the R&D workspace audit,
 and diff checks.
+## Independent review hardening
+
+Pre-completion review found two integration risks and corrected them before
+validation:
+
+1. evaluation CLI exit semantics now preserve candidate status:
+   PASS exits 0, REVIEW_REQUIRED exits 2, and FAIL_CLOSED exits 1; and
+2. the review dossier now binds the normalized candidate evidence with a
+   SHA-256 and retains the output hashes and validation-evidence hashes that it
+   evaluated.
+
+RND-0020 remains RUNNING. Final validation target is 21 focused orchestration
+tests, 106 M006f tests, workspace audit PASS, and a clean diff check on the
+exact final head.
