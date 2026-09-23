@@ -1,0 +1,33 @@
+{
+  "experiment_id": "EXP-20260923T005100Z-rnd-lifecycle-coordinator",
+  "task_id": "RND-0020",
+  "title": "Governed R&D lifecycle coordinator",
+  "status": "running",
+  "created_utc": "2026-09-23T00:51:00Z",
+  "git_base": "986ed2f51c427e46045c70afeeade85a857245a6",
+  "hypothesis": "An offline contract-based planner/evaluator can coordinate an R&D task between human approval, a coding agent and external validation evidence without gaining shell, network, merge, promotion or trading authority.",
+  "inputs": [
+    "Human-approved local R&D task specification using RND-task-spec-v0.1",
+    "Externally produced candidate evidence manifest; coordinator does not execute validation commands"
+  ],
+  "commands": [
+    "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s rnd/orchestration -p 'test_*.py'",
+    "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s rnd/m006f -p 'test_*.py'",
+    "python3 rnd/tools/audit_workspace.py",
+    "git diff --check agent/rnd-foundation-20260916...HEAD"
+  ],
+  "outputs": [
+    "rnd/orchestration/task_spec_contract.py",
+    "rnd/orchestration/rnd_lifecycle_coordinator.py",
+    "rnd/orchestration/test_task_spec_contract.py",
+    "rnd/orchestration/test_rnd_lifecycle_coordinator.py",
+    "rnd/orchestration/RND_LIFECYCLE_COORDINATOR.md"
+  ],
+  "result": "PENDING independent validation on the exact RND-0020 branch head.",
+  "safety": {
+    "broker_writes": false,
+    "protected_paths_modified": false,
+    "strategy_authority_changed": false,
+    "human_promotion_required": true
+  }
+}
