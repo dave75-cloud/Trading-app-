@@ -40,3 +40,5 @@
 {"experiment_id": "EXP-20260922T104303Z-m006f-shadow-observation-monitor", "status": "complete", "task_id": "RND-0017", "timestamp_utc": "2026-09-22T11:28:25Z", "title": "M006f cumulative shadow observation monitor"}
 {"experiment_id": "EXP-20260922T140827Z-m006f-prospective-shadow-pipeline", "status": "running", "task_id": "RND-0018", "timestamp_utc": "2026-09-22T14:08:28Z", "title": "M006f offline prospective shadow-session pipeline"}
 {"experiment_id": "EXP-20260922T140827Z-m006f-prospective-shadow-pipeline", "status": "complete", "task_id": "RND-0018", "timestamp_utc": "2026-09-22T14:09:39Z", "title": "M006f offline prospective shadow-session pipeline"}
+{"experiment_id": "EXP-20260922T235000Z-m006f-shadow-workflow-orchestrator", "status": "planned", "task_id": "RND-0019", "timestamp_utc": "2026-09-22T23:50:00Z", "title": "M006f bounded prospective shadow-workflow orchestrator"}
+{"experiment_id": "EXP-20260922T235000Z-m006f-shadow-workflow-orchestrator", "status": "running", "task_id": "RND-0019", "timestamp_utc": "2026-09-22T23:50:01Z", "title": "M006f bounded prospective shadow-workflow orchestrator"}
