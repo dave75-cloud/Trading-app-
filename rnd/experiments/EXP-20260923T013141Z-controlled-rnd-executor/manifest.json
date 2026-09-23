@@ -21,7 +21,7 @@
     "rnd/orchestration/test_controlled_rnd_executor.py",
     "rnd/orchestration/RND_CONTROLLED_EXECUTOR.md"
   ],
-  "result": "PENDING re-validation on corrected head. Initial independent run: 40/41 orchestration tests passed with one integration-test provenance setup error; 106/106 M006f tests passed; workspace audit PASS at 21 tasks / 20 experiments; diff check clean. The failing test was corrected to build and evaluate against the same task-spec/work-packet contract.",
+  "result": "PENDING final re-validation after security hardening. Final review removed worktree-clean-check because Git 2.17 repository-local core.fsmonitor can cause status/index refresh to invoke an external helper. Executor authority is now restricted to commit-to-commit diff-check and scope-check with external diff/textconv and submodule worktree inspection disabled. Final target remains 41 orchestration tests, 106 M006f tests, workspace audit PASS, clean diff check.",
   "safety": {
     "broker_writes": false,
     "protected_paths_modified": false,
