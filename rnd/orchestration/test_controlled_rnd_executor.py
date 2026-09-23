@@ -262,8 +262,10 @@ class ControlledExecutorTests(unittest.TestCase):
             run.assert_not_called()
 
     def test_execution_validations_are_consumable_by_rnd0020_evaluator(self):
-        packet = work_packet()
-        plan = build_execution_plan(packet, ["diff-check", "scope-check"])
+        labels = ["diff-check", "scope-check"]
+        spec = task_spec(labels=labels)
+        packet = build_work_packet(spec)
+        plan = build_execution_plan(packet, labels)
         execution = execute_plan(packet, plan, runner=FakeRunner())
 
         candidate = {
@@ -285,7 +287,7 @@ class ControlledExecutorTests(unittest.TestCase):
             "validations": execution["validations"],
             "safety": dict(SAFETY),
         }
-        review = evaluate_candidate(task_spec(labels=["diff-check", "scope-check"]), packet, candidate)
+        review = evaluate_candidate(spec, packet, candidate)
         self.assertEqual(review["machine_status"], "PASS")
 
     def test_output_overwrite_refusal_helper_contract(self):
