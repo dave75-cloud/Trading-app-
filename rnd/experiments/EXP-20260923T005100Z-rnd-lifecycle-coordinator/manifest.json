@@ -23,7 +23,7 @@
     "rnd/orchestration/test_rnd_lifecycle_coordinator.py",
     "rnd/orchestration/RND_LIFECYCLE_COORDINATOR.md"
   ],
-  "result": "PENDING independent validation on the exact RND-0020 branch head.",
+  "result": "PENDING independent validation on hardened RND-0020 head. Independent review added fail-closed CLI exit semantics and review-dossier binding to normalized candidate output/validation evidence hashes. Final target: 21 focused orchestration tests, 106 M006f tests, workspace audit PASS, clean diff check.",
   "safety": {
     "broker_writes": false,
     "protected_paths_modified": false,
