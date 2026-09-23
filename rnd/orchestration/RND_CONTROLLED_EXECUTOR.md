@@ -31,20 +31,22 @@ sandbox exists.
 
 ## Allowlisted actions
 
-Exactly three action IDs exist:
+Exactly two action IDs exist:
 
 - `diff-check`
-  - read-only `git diff --check` from the exact work-packet base to HEAD;
-  - external diff and text conversion are disabled.
+  - commit-to-commit `git diff --check` from the exact work-packet base to HEAD;
+  - external diff, text conversion and submodule worktree inspection are disabled.
 
 - `scope-check`
-  - read-only changed-path discovery from the exact base to HEAD;
+  - commit-to-commit changed-path discovery from the exact base to HEAD;
+  - external diff, text conversion and submodule worktree inspection are disabled;
   - paths are compared with work-packet allowed, prohibited and protected
     prefixes.
 
-- `worktree-clean-check`
-  - read-only Git status;
-  - any tracked or untracked working-tree change fails the action.
+Worktree status is deliberately excluded. On older Git versions, repository
+configuration such as `core.fsmonitor` can cause a status/index refresh to
+invoke an external helper. Worktree cleanliness therefore remains external
+validation evidence rather than executor authority.
 
 No caller supplies an executable, argv array, working directory or shell text.
 
@@ -92,7 +94,7 @@ Each action records:
 - SHA-256 and byte count for stderr;
 - bounded previews;
 - action-evidence SHA-256;
-- scope/worktree observations where applicable.
+- scope observations where applicable.
 
 The bundle also records:
 
