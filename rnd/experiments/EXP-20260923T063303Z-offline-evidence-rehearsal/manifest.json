@@ -2,18 +2,19 @@
   "experiment_id": "EXP-20260923T063303Z-offline-evidence-rehearsal",
   "task_id": "RND-0023",
   "title": "Offline evidence-chain rehearsal",
-  "status": "running",
+  "status": "complete",
   "created_utc": "2026-09-23T06:33:03Z",
   "git_base": "7f09d33213d0aab1afeb9e7311d9957ea8d060ff",
   "hypothesis": "The merged RND-0020/21/22 contracts can produce a deterministic review dossier from one exact-head evidence set while missing, failed and cross-revision evidence retain fail-closed semantics and human-only authority.",
   "inputs": ["RND-0020 task specification", "RND-0021 evidence bundle", "Externally attested validation records", "Changed-path manifest", "Output-hash manifest"],
   "commands": ["PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s rnd/orchestration -p 'test_*.py'", "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s rnd/m006f -p 'test_*.py'", "python3 rnd/tools/audit_workspace.py", "git diff --check agent/rnd-foundation-20260916...HEAD"],
   "outputs": ["rnd/orchestration/offline_evidence_rehearsal.py", "rnd/orchestration/test_offline_evidence_rehearsal.py", "rnd/orchestration/RND_OFFLINE_EVIDENCE_REHEARSAL.md", "rnd/rehearsal/fixture.txt"],
-  "result": "RUNNING. On exact code head ea2164b8506dbfc55af9310a0ef90a8e08c6db61, 72 orchestration tests, 106 M006f tests and workspace audit (23 tasks / 22 experiments) passed. A separate local smoke used actual RND-0021 read-only Git diff/scope evidence for eight changed rnd/ paths and external log-hash attestations for those suites and audit. RND-0023 emitted PASS with human disposition unset. Focused integration tests cover incomplete, failed and mismatched evidence. Independent final-head validation and human review remain pending.",
+  "result": "PASS on exact independently tested PR head 158444d673e50eb9a12d9f699024fd9c0bddee98: 72 orchestration tests and 106 M006f tests passed; workspace audit passed with 23 tasks, 22 experiments, broker writes false, protected paths modified false and human-only promotion; git diff --check was clean. A prior local smoke on code head ea2164b8506dbfc55af9310a0ef90a8e08c6db61 used actual read-only Git evidence and externally attested test/audit logs to produce a PASS dossier with human disposition unset. The user explicitly authorized PR merge. Completion changes only R&D documentation and append-only records, with no operational authority change.",
   "safety": {
     "broker_writes": false,
     "protected_paths_modified": false,
     "strategy_authority_changed": false,
     "human_promotion_required": true
-  }
+  },
+  "completed_utc": "2026-09-23T10:30:59Z"
 }
