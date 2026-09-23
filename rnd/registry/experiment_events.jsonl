@@ -48,3 +48,5 @@
 {"experiment_id": "EXP-20260923T005100Z-rnd-lifecycle-coordinator", "status": "planned", "task_id": "RND-0020", "timestamp_utc": "2026-09-23T00:51:00Z", "title": "Governed R&D lifecycle coordinator"}
 {"experiment_id": "EXP-20260923T005100Z-rnd-lifecycle-coordinator", "status": "running", "task_id": "RND-0020", "timestamp_utc": "2026-09-23T00:51:01Z", "title": "Governed R&D lifecycle coordinator"}
 {"experiment_id": "EXP-20260923T005100Z-rnd-lifecycle-coordinator", "status": "complete", "task_id": "RND-0020", "timestamp_utc": "2026-09-23T01:05:38Z", "title": "Governed R&D lifecycle coordinator"}
+{"experiment_id": "EXP-20260923T013141Z-controlled-rnd-executor", "status": "planned", "task_id": "RND-0021", "timestamp_utc": "2026-09-23T01:31:41Z", "title": "Controlled local R&D work-packet executor"}
+{"experiment_id": "EXP-20260923T013141Z-controlled-rnd-executor", "status": "running", "task_id": "RND-0021", "timestamp_utc": "2026-09-23T01:31:42Z", "title": "Controlled local R&D work-packet executor"}
