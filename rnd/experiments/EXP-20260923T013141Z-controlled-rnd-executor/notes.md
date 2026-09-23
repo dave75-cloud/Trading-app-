@@ -94,3 +94,17 @@ RUNNING.
 RND-0021 must not be marked complete until the exact branch head passes the
 focused orchestration suite, existing M006f suite, workspace audit, and diff
 check.
+## Initial independent validation finding
+
+The first independent run passed 40 of 41 orchestration tests, all 106 M006f
+tests, the workspace audit, and the diff check.
+
+The single failure was an integration-test setup error: the test built a work
+packet authorized for all three executor labels, then asked RND-0020 to evaluate
+that packet against a task specification containing only two labels. RND-0020
+correctly rejected the provenance mismatch.
+
+The test was corrected so the same task specification is used to build the work
+packet and to evaluate the resulting candidate evidence. No executor runtime
+logic changed. RND-0021 remains RUNNING pending re-validation of the corrected
+head.
