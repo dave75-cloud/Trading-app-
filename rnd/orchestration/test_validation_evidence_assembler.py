@@ -9,6 +9,8 @@ from controlled_rnd_executor import (
     EVIDENCE_VERSION as EXECUTION_EVIDENCE_VERSION,
     EXECUTOR_AUTHORITY,
     EXECUTOR_CAPABILITIES,
+    VERSION as EXECUTOR_VERSION,
+    _action_argv,
 )
 from rnd_lifecycle_coordinator import (
     SAFETY,
@@ -76,7 +78,7 @@ def hashed_action(label, status, digest_seed):
     row = {
         "action_id": label,
         "validation_label": label,
-        "argv": ["/usr/bin/git", "diff"],
+        "argv": _action_argv(label, BASE),
         "working_directory": "REPOSITORY_ROOT",
         "exit_code": 0 if status == "PASS" else 1,
         "timed_out": False,
@@ -106,7 +108,7 @@ def execution_evidence(work_packet):
     ]
     body = {
         "execution_evidence_version": EXECUTION_EVIDENCE_VERSION,
-        "executor_version": "RND-controlled-executor-v0.1",
+        "executor_version": EXECUTOR_VERSION,
         "task_id": "RND-0022",
         "git_base": BASE,
         "repository_head_sha": HEAD,
@@ -228,6 +230,28 @@ class EvidenceAssemblerTests(unittest.TestCase):
                 [],
                 path_manifest(packet()),
                 output_manifest(packet()),
+            )
+
+    def test_forged_executor_argv_fails_closed(self):
+        wp = packet()
+        execution = execution_evidence(wp)
+        execution["actions"][0]["argv"] = ["/usr/bin/git", "status"]
+        execution["actions"][0]["action_evidence_sha256"] = canonical_hash(
+            {k: v for k, v in execution["actions"][0].items() if k != "action_evidence_sha256"}
+        )
+        execution["validations"][0]["evidence_sha256"] = execution["actions"][0][
+            "action_evidence_sha256"
+        ]
+        execution["execution_evidence_content_sha256"] = canonical_hash(
+            {k: v for k, v in execution.items() if k != "execution_evidence_content_sha256"}
+        )
+        with self.assertRaisesRegex(AssemblerError, "argv does not match executor allowlist"):
+            assemble_evidence(
+                wp,
+                execution,
+                [],
+                path_manifest(wp),
+                output_manifest(wp),
             )
 
     def test_tampered_executor_authority_fails_closed(self):
