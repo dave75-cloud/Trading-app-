@@ -143,6 +143,13 @@ class LifecycleCoordinatorTests(unittest.TestCase):
         self.assertEqual(dossier["machine_status"], "FAIL_CLOSED")
         self.assertIn("FAILED_REQUIRED_VALIDATION", dossier["flags"])
 
+    def test_unsafe_candidate_path_fails_closed_before_scope_evaluation(self):
+        packet = build_work_packet(spec())
+        candidate = evidence(packet)
+        candidate["changed_paths"].append("rnd/orchestration/../escape.py")
+        with self.assertRaisesRegex(LifecycleError, "safe repository path"):
+            evaluate_candidate(spec(), packet, candidate)
+
     def test_invalid_safety_declaration_fails_closed(self):
         packet = build_work_packet(spec())
         candidate = evidence(packet)
