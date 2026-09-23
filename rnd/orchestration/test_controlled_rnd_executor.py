@@ -19,6 +19,8 @@ from controlled_rnd_executor import (
     GIT,
     PLAN_VERSION,
     SAFE_ENV,
+    _action_argv,
+    _assert_safe_git_argv,
     _run_process,
     build_execution_plan,
     execute_plan,
@@ -249,6 +251,11 @@ class ControlledExecutorTests(unittest.TestCase):
                     [GIT, "status", "--porcelain=v1", "--untracked-files=all"]
                 )
             run.assert_not_called()
+
+    def test_generated_action_argv_matches_internal_allowlist(self):
+        for action_id in ACTION_IDS:
+            argv = _action_argv(action_id, BASE)
+            _assert_safe_git_argv(argv, git_base=BASE)
 
     def test_non_allowlisted_git_argv_is_rejected_before_subprocess(self):
         with mock.patch("controlled_rnd_executor.subprocess.run") as run:

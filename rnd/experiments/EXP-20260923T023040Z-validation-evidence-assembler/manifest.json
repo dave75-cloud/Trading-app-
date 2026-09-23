@@ -1,0 +1,37 @@
+{
+  "experiment_id": "EXP-20260923T023040Z-validation-evidence-assembler",
+  "task_id": "RND-0022",
+  "title": "Governed validation-evidence assembler",
+  "status": "complete",
+  "created_utc": "2026-09-23T02:30:40Z",
+  "git_base": "69bf9a7b4030ea814a07bb28e3bbd74f5dc017d3",
+  "hypothesis": "RND-0021 machine evidence and externally attested validation evidence can be bound to one exact candidate HEAD and assembled deterministically into the unchanged RND-0020 candidate-evidence contract without granting subprocess, network, Git mutation, merge, promotion or trading authority.",
+  "inputs": [
+    "RND-0020 work packet",
+    "RND-0021 execution-evidence bundle",
+    "External validation attestation records",
+    "Candidate changed-path manifest",
+    "Candidate output-hash manifest"
+  ],
+  "commands": [
+    "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s rnd/orchestration -p 'test_*.py'",
+    "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s rnd/m006f -p 'test_*.py'",
+    "python3 rnd/tools/audit_workspace.py",
+    "git diff --check agent/rnd-foundation-20260916...HEAD"
+  ],
+  "outputs": [
+    "rnd/orchestration/validation_evidence_assembler.py",
+    "rnd/orchestration/test_validation_evidence_assembler.py",
+    "rnd/orchestration/RND_VALIDATION_EVIDENCE_ASSEMBLER.md",
+    "rnd/orchestration/controlled_rnd_executor.py",
+    "rnd/orchestration/test_controlled_rnd_executor.py"
+  ],
+  "result": "PASS on exact independently tested PR head bf1c2e5078e58914b8db350b35ce53e9f8650322: 65 orchestration tests and 106 M006f tests passed; RND_WORKSPACE_AUDIT passed with 22 tasks, 21 experiments, broker writes false, protected paths modified false, and human-only promotion; git diff --check was clean. The user explicitly authorized PR merge after supplying final-head results. This completion commit changes only R&D records and documentation; operational and promotion authority remain unchanged.",
+  "safety": {
+    "broker_writes": false,
+    "protected_paths_modified": false,
+    "strategy_authority_changed": false,
+    "human_promotion_required": true
+  },
+  "completed_utc": "2026-09-23T03:17:57Z"
+}
