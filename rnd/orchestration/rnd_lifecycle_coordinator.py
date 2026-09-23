@@ -255,10 +255,17 @@ def evaluate_candidate(task_spec, work_packet, candidate_evidence):
         "machine_status": machine_status,
         "flags": flags,
         "review_flags": review_flags,
+        "candidate_evidence_sha256": canonical_hash(evidence),
         "evidence_summary": {
             "changed_paths": sorted(evidence["changed_paths"]),
-            "output_paths": sorted(evidence["outputs"]),
-            "validation_labels": sorted(evidence["validations"]),
+            "output_sha256": {
+                path: evidence["outputs"][path]
+                for path in sorted(evidence["outputs"])
+            },
+            "validations": {
+                label: evidence["validations"][label]
+                for label in sorted(evidence["validations"])
+            },
             "missing_required_outputs": missing_outputs,
             "missing_required_validations": missing_validations,
             "failed_required_validations": failed_validations,
@@ -281,6 +288,16 @@ def evaluate_candidate(task_spec, work_packet, candidate_evidence):
         },
     }
     return _hash_payload(payload, "review_dossier_content_sha256")
+
+
+def evaluation_exit_code(machine_status):
+    if machine_status == "PASS":
+        return 0
+    if machine_status == "REVIEW_REQUIRED":
+        return 2
+    if machine_status == "FAIL_CLOSED":
+        return 1
+    raise LifecycleError("unknown machine status")
 
 
 def _load_json(path, role):
@@ -334,12 +351,15 @@ def main():
         _load_json(args.candidate_evidence, "candidate evidence"),
     )
     _write_new_json(args.output, dossier)
-    print("RND_LIFECYCLE_COORDINATOR_EVALUATE: PASS")
+    print(
+        "RND_LIFECYCLE_COORDINATOR_EVALUATE: "
+        + dossier["machine_status"]
+    )
     print(f"machine_status={dossier['machine_status']}")
     print("human_disposition=UNSET")
     print("automatic_merge=FALSE")
     print("automatic_promotion=FALSE")
-    return 0
+    return evaluation_exit_code(dossier["machine_status"])
 
 
 if __name__ == "__main__":
