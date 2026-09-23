@@ -9,7 +9,7 @@
   "inputs": ["RND-0020 task specification", "RND-0021 evidence bundle", "Externally attested validation records", "Changed-path manifest", "Output-hash manifest"],
   "commands": ["PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s rnd/orchestration -p 'test_*.py'", "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s rnd/m006f -p 'test_*.py'", "python3 rnd/tools/audit_workspace.py", "git diff --check agent/rnd-foundation-20260916...HEAD"],
   "outputs": ["rnd/orchestration/offline_evidence_rehearsal.py", "rnd/orchestration/test_offline_evidence_rehearsal.py", "rnd/orchestration/RND_OFFLINE_EVIDENCE_REHEARSAL.md", "rnd/rehearsal/fixture.txt"],
-  "result": "RUNNING. Focused integration tests cover PASS, REVIEW_REQUIRED, FAIL_CLOSED, cross-head mismatch, scope/path mismatch and duplicate-label failure. Independent final-head validation and human review remain pending.",
+  "result": "RUNNING. On exact code head ea2164b8506dbfc55af9310a0ef90a8e08c6db61, 72 orchestration tests, 106 M006f tests and workspace audit (23 tasks / 22 experiments) passed. A separate local smoke used actual RND-0021 read-only Git diff/scope evidence for eight changed rnd/ paths and external log-hash attestations for those suites and audit. RND-0023 emitted PASS with human disposition unset. Focused integration tests cover incomplete, failed and mismatched evidence. Independent final-head validation and human review remain pending.",
   "safety": {
     "broker_writes": false,
     "protected_paths_modified": false,
