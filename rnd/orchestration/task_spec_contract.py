@@ -100,6 +100,8 @@ def validate_task_spec(raw):
         normalize_repo_path(x, "allowed_path_prefix")
         for x in _string_list(raw.get("allowed_path_prefixes"), "allowed_path_prefixes")
     ]
+    if len(allowed) != len(set(allowed)):
+        raise TaskSpecError("allowed_path_prefixes collapse to duplicates")
     for prefix in allowed:
         if not path_within(prefix, "rnd"):
             raise TaskSpecError(
@@ -114,11 +116,15 @@ def validate_task_spec(raw):
             nonempty=False,
         )
     ]
+    if len(prohibited) != len(set(prohibited)):
+        raise TaskSpecError("prohibited_path_prefixes collapse to duplicates")
 
     outputs = [
         normalize_repo_path(x, "required_output")
         for x in _string_list(raw.get("required_outputs"), "required_outputs")
     ]
+    if len(outputs) != len(set(outputs)):
+        raise TaskSpecError("required_outputs collapse to duplicates")
     for path in outputs:
         if not any(path_within(path, prefix) for prefix in allowed):
             raise TaskSpecError("required_output is outside allowed_path_prefixes")
