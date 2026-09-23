@@ -65,6 +65,14 @@ def packet(labels=None):
 
 
 def hashed_action(label, status, digest_seed):
+    observations = {}
+    if label == "scope-check":
+        observations = {
+            "changed_paths": [
+                "rnd/orchestration/validation_evidence_assembler.py",
+            ],
+            "violations": [],
+        }
     row = {
         "action_id": label,
         "validation_label": label,
@@ -85,7 +93,7 @@ def hashed_action(label, status, digest_seed):
             "preview": "",
             "preview_truncated": False,
         },
-        "observations": {},
+        "observations": observations,
     }
     row["action_evidence_sha256"] = canonical_hash(row)
     return row
@@ -206,6 +214,38 @@ class EvidenceAssemblerTests(unittest.TestCase):
             provenance["candidate_evidence_sha256"],
             canonical_hash(candidate),
         )
+
+    def test_tampered_executor_authority_fails_closed(self):
+        wp = packet()
+        execution = execution_evidence(wp)
+        execution["authority"]["automatic_merge"] = True
+        execution["execution_evidence_content_sha256"] = canonical_hash(
+            {k: v for k, v in execution.items() if k != "execution_evidence_content_sha256"}
+        )
+        with self.assertRaisesRegex(AssemblerError, "authority boundary invalid"):
+            assemble_evidence(
+                wp,
+                execution,
+                [],
+                path_manifest(wp),
+                output_manifest(wp),
+            )
+
+    def test_path_manifest_must_match_scope_check_evidence(self):
+        wp = packet()
+        paths = path_manifest(wp)
+        paths["changed_paths"] = ["rnd/orchestration/other.py"]
+        paths["path_manifest_content_sha256"] = canonical_hash(
+            {k: v for k, v in paths.items() if k != "path_manifest_content_sha256"}
+        )
+        with self.assertRaisesRegex(AssemblerError, "does not match RND-0021 scope-check"):
+            assemble_evidence(
+                wp,
+                execution_evidence(wp),
+                [],
+                paths,
+                output_manifest(wp),
+            )
 
     def test_mismatched_candidate_head_fails_closed(self):
         wp = packet()
