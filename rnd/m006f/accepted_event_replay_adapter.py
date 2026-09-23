@@ -231,20 +231,34 @@ def accepted_reconciliation_files(session_root, recon_root, disposition_root):
             if disp.get("accepted") is not True:
                 raise ReplayError(f"{day}: disposition not accepted")
 
-            if int(disp.get("authoritative_events", -1)) != n_events:
-                raise ReplayError(f"{day}: disposition event count mismatch")
-
             reviewed = str(disp.get("reviewed_disposition", ""))
             if not reviewed.startswith("ACCEPTED"):
                 raise ReplayError(f"{day}: disposition not human-accepted")
 
-            di = disp.get("integrity", {})
-            if di.get("freeze_manifest_pass") is not True:
-                raise ReplayError(f"{day}: disposition freeze gate failed")
-            if di.get("m006e2_hash_match") is not True:
-                raise ReplayError(f"{day}: disposition hash gate failed")
-            if int(di.get("trading_order_writes", -1)) != 0:
-                raise ReplayError(f"{day}: disposition write count is nonzero")
+            if "authoritative_events" in disp:
+                if int(disp["authoritative_events"]) != n_events:
+                    raise ReplayError(f"{day}: disposition event count mismatch")
+
+            di = disp.get("integrity")
+            if di is None:
+                # Current operational M006e.9 dispositions bind the human decision
+                # to the day and acceptance status; integrity facts remain sourced
+                # from the already-validated accepted-session/reconciliation record.
+                if disp.get("human_reviewed") is not True:
+                    raise ReplayError(f"{day}: disposition lacks human review")
+                if disp.get("automatic_promotion") is not False:
+                    raise ReplayError(f"{day}: disposition promotion gate failed")
+            else:
+                # Preserve compatibility with the earlier richer R&D disposition
+                # fixture while validating every field it supplies.
+                if not isinstance(di, dict):
+                    raise ReplayError(f"{day}: disposition integrity block invalid")
+                if di.get("freeze_manifest_pass") is not True:
+                    raise ReplayError(f"{day}: disposition freeze gate failed")
+                if di.get("m006e2_hash_match") is not True:
+                    raise ReplayError(f"{day}: disposition hash gate failed")
+                if int(di.get("trading_order_writes", -1)) != 0:
+                    raise ReplayError(f"{day}: disposition write count is nonzero")
 
         accepted.append(rname)
 
