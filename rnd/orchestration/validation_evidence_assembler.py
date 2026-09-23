@@ -8,9 +8,12 @@ import json
 from pathlib import Path
 
 from controlled_rnd_executor import (
+    ACTION_IDS,
     EVIDENCE_VERSION as EXECUTION_EVIDENCE_VERSION,
     EXECUTOR_AUTHORITY,
     EXECUTOR_CAPABILITIES,
+    VERSION as EXECUTOR_VERSION,
+    _action_argv,
     validate_work_packet as validate_executor_work_packet,
 )
 from rnd_lifecycle_coordinator import (
@@ -126,6 +129,11 @@ def _validate_execution_evidence(raw, packet):
             "RND-0021 execution evidence: actions/validations must be lists"
         )
 
+    if raw.get("executor_version") != EXECUTOR_VERSION:
+        raise AssemblerError(
+            "RND-0021 execution evidence: executor version mismatch"
+        )
+
     action_rows = {}
     for row in actions:
         if not isinstance(row, dict):
@@ -138,10 +146,23 @@ def _validate_execution_evidence(raw, packet):
             "RND-0021 action evidence",
         )
         label = str(row.get("validation_label", "")).strip()
+        action_id = str(row.get("action_id", "")).strip()
         status = str(row.get("status", "")).strip().upper()
         if not label or status not in {"PASS", "FAIL"}:
             raise AssemblerError(
                 "RND-0021 action evidence: invalid label/status"
+            )
+        if action_id != label or action_id not in ACTION_IDS:
+            raise AssemblerError(
+                "RND-0021 action evidence: invalid action identity"
+            )
+        if row.get("argv") != _action_argv(action_id, packet["git_base"]):
+            raise AssemblerError(
+                "RND-0021 action evidence: argv does not match executor allowlist"
+            )
+        if row.get("working_directory") != "REPOSITORY_ROOT":
+            raise AssemblerError(
+                "RND-0021 action evidence: working directory mismatch"
             )
         if label in action_rows:
             raise AssemblerError(
@@ -230,6 +251,15 @@ def _validate_execution_evidence(raw, packet):
             if len(scope_changed_paths) != len(set(scope_changed_paths)):
                 raise AssemblerError(
                     "RND-0021 scope-check: duplicate changed path"
+                )
+            violations = observations.get("violations")
+            if not isinstance(violations, list):
+                raise AssemblerError(
+                    "RND-0021 scope-check: violations invalid"
+                )
+            if row.get("status") == "PASS" and violations:
+                raise AssemblerError(
+                    "RND-0021 scope-check: PASS cannot contain violations"
                 )
 
     return {
