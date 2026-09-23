@@ -59,3 +59,18 @@ sessions. The downstream simulator, packager and dossier support that case, so
 an explicit end-to-end regression was added. Validation state is reopened until
 the exact final PR head passes 13 focused orchestrator tests, 6 replay-adapter
 tests, 106 total M006f tests, the workspace audit, and diff checks.
+## Final independent validation
+
+Exact tested head: `a1ec3ab2c44d19e5cca5da612c02fb5e71fff154`
+
+- 13 focused orchestrator tests passed.
+- 6 replay-adapter tests passed.
+- 106 total M006f regression tests passed.
+- `RND_WORKSPACE_AUDIT: PASS` with 19 tasks and 18 experiments.
+- broker writes: false.
+- protected paths modified: false.
+- promotion authority: human-only.
+- `git diff --check agent/rnd-foundation-20260916...HEAD`: clean.
+
+RND-0019 is complete as an R&D candidate only. The PR remains subject to a
+separate human merge decision.
