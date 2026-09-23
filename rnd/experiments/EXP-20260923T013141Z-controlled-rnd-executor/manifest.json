@@ -2,7 +2,7 @@
   "experiment_id": "EXP-20260923T013141Z-controlled-rnd-executor",
   "task_id": "RND-0021",
   "title": "Controlled local R&D work-packet executor",
-  "status": "running",
+  "status": "complete",
   "created_utc": "2026-09-23T01:31:41Z",
   "git_base": "03fc050da15afbbdd46707f5abbee4e3d6ed032e",
   "hypothesis": "A tiny read-only Git subprocess allowlist, bound to a hashed RND-0020 work packet and execution plan, can produce deterministic validation evidence without granting arbitrary command, candidate-code, network, Git mutation, merge, promotion or trading authority.",
@@ -21,11 +21,12 @@
     "rnd/orchestration/test_controlled_rnd_executor.py",
     "rnd/orchestration/RND_CONTROLLED_EXECUTOR.md"
   ],
-  "result": "PENDING final re-validation after security hardening. Final review removed worktree-clean-check because Git 2.17 repository-local core.fsmonitor can cause status/index refresh to invoke an external helper. Executor authority is now restricted to commit-to-commit diff-check and scope-check with external diff/textconv and submodule worktree inspection disabled. Final target remains 41 orchestration tests, 106 M006f tests, workspace audit PASS, clean diff check.",
+  "result": "PASS on exact tested head 42a4a3a0310bb7ccaa1c23a7f98dd1a25f6872f6: 41 focused orchestration tests passed; 106 M006f regression tests passed; RND_WORKSPACE_AUDIT passed with 21 tasks, 20 experiments, broker writes false, protected paths modified false, promotion authority human-only; git diff --check was clean. Executor authority is restricted to commit-to-commit diff-check and scope-check; candidate code, worktree status, network, arbitrary subprocess, merge and promotion authority remain excluded.",
   "safety": {
     "broker_writes": false,
     "protected_paths_modified": false,
     "strategy_authority_changed": false,
     "human_promotion_required": true
-  }
+  },
+  "completed_utc": "2026-09-23T02:13:01Z"
 }
