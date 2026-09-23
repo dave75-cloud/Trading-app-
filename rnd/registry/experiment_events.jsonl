@@ -56,3 +56,6 @@
 {"experiment_id": "EXP-20260923T023040Z-validation-evidence-assembler", "status": "complete", "task_id": "RND-0022", "timestamp_utc": "2026-09-23T02:46:54Z", "title": "Governed validation-evidence assembler"}
 {"experiment_id": "EXP-20260923T023040Z-validation-evidence-assembler", "status": "running", "task_id": "RND-0022", "timestamp_utc": "2026-09-23T03:08:56Z", "title": "Governed validation-evidence assembler"}
 {"experiment_id": "EXP-20260923T023040Z-validation-evidence-assembler", "status": "complete", "task_id": "RND-0022", "timestamp_utc": "2026-09-23T03:17:57Z", "title": "Governed validation-evidence assembler"}
+{"experiment_id": "EXP-20260923T063303Z-offline-evidence-rehearsal", "status": "planned", "task_id": "RND-0023", "timestamp_utc": "2026-09-23T06:33:03Z", "title": "Offline evidence-chain rehearsal"}
+{"experiment_id": "EXP-20260923T063303Z-offline-evidence-rehearsal", "status": "running", "task_id": "RND-0023", "timestamp_utc": "2026-09-23T06:33:04Z", "title": "Offline evidence-chain rehearsal"}
+{"experiment_id": "EXP-20260923T063303Z-offline-evidence-rehearsal", "status": "complete", "task_id": "RND-0023", "timestamp_utc": "2026-09-23T10:30:59Z", "title": "Offline evidence-chain rehearsal"}
