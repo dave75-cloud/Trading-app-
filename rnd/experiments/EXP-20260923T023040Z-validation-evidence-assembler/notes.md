@@ -92,14 +92,16 @@ or automatic promotion authority.
 
 ## Validation state
 
-RUNNING.
+COMPLETE as a non-operational R&D candidate. Human merge and promotion remain
+external.
 
 Final validation target:
-- 64 orchestration tests;
+- 65 orchestration tests;
 - 106 M006f tests;
 - workspace audit PASS;
 - 22 tasks / 21 experiments;
 - clean diff check.
+
 ## Adversarial evidence hardening
 
 Before independent validation, review tested whether a forged JSON object could
@@ -121,3 +123,20 @@ assembler rejects it.
 
 Final independent validation target is now 65 orchestration tests, 106 M006f
 tests, workspace audit PASS, and a clean diff check.
+
+## Final independent validation
+
+Exact tested code head: `be4de484ed38f2e5bb46e11c305de1a86f51ed07`.
+
+- 65 orchestration tests passed.
+- 106 M006f regression tests passed.
+- `RND_WORKSPACE_AUDIT: PASS` with 22 tasks and 21 experiments.
+- Broker writes and protected-path modifications: false.
+- Promotion authority: human-only.
+- `git diff --check agent/rnd-foundation-20260916...HEAD`: clean.
+
+These results complete RND-0022 evidence assembly as an R&D candidate. External
+validation attestations remain assertions about test execution, and the
+assembler cannot independently prove that the external runner ran a test.
+Human review, merge, trading-system promotion, execution and capital authority
+remain external.
