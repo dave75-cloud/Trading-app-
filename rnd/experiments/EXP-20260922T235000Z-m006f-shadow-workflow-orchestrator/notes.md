@@ -36,3 +36,20 @@ Implementation and focused tests have been added to the dedicated RND-0019
 branch. The experiment must not be marked complete until the exact branch head
 passes the focused orchestrator suite, full M006f suite, workspace audit and
 diff checks.
+
+## Integration finding
+
+During pre-validation review, the existing replay adapter was found to expect an
+older richer disposition fixture for non-CLEAN sessions. Current operational
+M006e.9 dispositions instead record the human decision directly with fields
+including `accepted`, `reviewed_disposition`, `human_reviewed` and
+`automatic_promotion`.
+
+The candidate now supports both forms. Session/reconciliation integrity,
+event-count and zero-write facts remain independently validated from the
+accepted evidence. The operational disposition is used only to prove the human
+acceptance decision and the no-automatic-promotion gate.
+
+A focused regression covers the operational disposition shape, and the RND-0019
+end-to-end non-CLEAN test now uses that real schema.
+
