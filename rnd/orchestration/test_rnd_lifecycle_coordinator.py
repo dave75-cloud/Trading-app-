@@ -13,6 +13,7 @@ from rnd_lifecycle_coordinator import (
     LifecycleError,
     build_work_packet,
     evaluate_candidate,
+    evaluation_exit_code,
 )
 from task_spec_contract import VERSION
 
@@ -156,6 +157,39 @@ class LifecycleCoordinatorTests(unittest.TestCase):
         candidate["safety"]["automatic_merge"] = True
         dossier = evaluate_candidate(spec(), packet, candidate)
         self.assertIn("SAFETY_DECLARATION_INVALID", dossier["flags"])
+
+    def test_review_dossier_binds_candidate_evidence_hashes(self):
+        packet = build_work_packet(spec())
+        candidate = evidence(packet)
+        first = evaluate_candidate(spec(), packet, candidate)
+
+        changed = evidence(packet)
+        changed["validations"][0]["evidence_sha256"] = "c" * 64
+        second = evaluate_candidate(spec(), packet, changed)
+
+        self.assertNotEqual(
+            first["candidate_evidence_sha256"],
+            second["candidate_evidence_sha256"],
+        )
+        self.assertEqual(
+            first["evidence_summary"]["output_sha256"][
+                "rnd/orchestration/task_spec_contract.py"
+            ],
+            HASH_A,
+        )
+        self.assertEqual(
+            first["evidence_summary"]["validations"]["focused-tests"][
+                "evidence_sha256"
+            ],
+            HASH_A,
+        )
+
+    def test_evaluation_exit_codes_preserve_machine_status(self):
+        self.assertEqual(evaluation_exit_code("PASS"), 0)
+        self.assertEqual(evaluation_exit_code("REVIEW_REQUIRED"), 2)
+        self.assertEqual(evaluation_exit_code("FAIL_CLOSED"), 1)
+        with self.assertRaises(LifecycleError):
+            evaluation_exit_code("UNKNOWN")
 
     def test_coordinator_declares_no_network_or_subprocess_capability(self):
         packet = build_work_packet(spec())
