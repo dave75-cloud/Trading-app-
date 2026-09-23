@@ -26,7 +26,7 @@
     "rnd/orchestration/controlled_rnd_executor.py",
     "rnd/orchestration/test_controlled_rnd_executor.py"
   ],
-  "result": "PENDING independent validation. Integration review also corrected an inherited RND-0021 argv inconsistency: generated diff actions now include --ignore-submodules=all exactly as required by the internal allowlist, with a regression proving generated argv are self-allowlisted.",
+  "result": "PENDING independent validation after adversarial hardening. RND-0022 now verifies RND-0021 executor version, authority/capability block, action identity, exact allowlisted argv, working-directory marker, action hashes, validation-row equality, overall status, and scope-check changed-path evidence. Integration review also corrected the inherited RND-0021 generated-argv mismatch. Final target: 65 orchestration tests, 106 M006f tests, workspace audit PASS, 22 tasks / 21 experiments, clean diff check.",
   "safety": {
     "broker_writes": false,
     "protected_paths_modified": false,
