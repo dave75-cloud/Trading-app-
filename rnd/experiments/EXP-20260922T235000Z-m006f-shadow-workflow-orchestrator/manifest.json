@@ -19,9 +19,11 @@
   "outputs": [
     "rnd/m006f/prospective_shadow_workflow_orchestrator.py",
     "rnd/m006f/test_prospective_shadow_workflow_orchestrator.py",
-    "rnd/m006f/PROSPECTIVE_SHADOW_WORKFLOW_ORCHESTRATOR.md"
+    "rnd/m006f/PROSPECTIVE_SHADOW_WORKFLOW_ORCHESTRATOR.md",
+    "rnd/m006f/accepted_event_replay_adapter.py",
+    "rnd/m006f/test_accepted_event_replay_adapter.py"
   ],
-  "result": "PENDING independent validation on the exact RND-0019 branch head.",
+  "result": "PENDING independent validation on the exact RND-0019 branch head; includes operational M006e.9 disposition-schema compatibility required for real non-CLEAN accepted sessions.",
   "safety": {
     "broker_writes": false,
     "protected_paths_modified": false,
