@@ -92,8 +92,9 @@ or automatic promotion authority.
 
 ## Validation state
 
-RUNNING pending user-supplied independent validation of the exact final PR head.
-Human merge and promotion remain external.
+COMPLETE as a non-operational R&D candidate after user-supplied independent
+validation of the exact PR head and explicit user authorization for merge.
+Trading-system promotion remains a separate human decision.
 
 Final validation target:
 - 65 orchestration tests;
@@ -148,5 +149,21 @@ The validation above ran against code head
 `0e52598397a66f2c8f30aa98d389780316aef75e` prematurely appended COMPLETE
 records. The append-only registry now records a subsequent RUNNING state; the
 earlier test results remain historical evidence, not final-head validation.
-Await independent validation output from the user on the exact final PR head
-before another completion decision. Human approval is required for merge.
+At that point, independent validation output from the user on the exact final
+PR head and human merge approval were still required.
+
+## Final independent validation and merge authorization
+
+The user supplied terminal output for exact PR head
+`bf1c2e5078e58914b8db350b35ce53e9f8650322`:
+
+- 65 orchestration tests: OK.
+- 106 M006f tests: OK.
+- `RND_WORKSPACE_AUDIT: PASS`, 22 tasks, 21 experiments, broker writes false,
+  protected-path modifications false, promotion authority human-only.
+- `git diff --check agent/rnd-foundation-20260916...HEAD`: no output.
+
+The user then explicitly authorized merge of PR #12. RND-0022 is complete as
+an evidence-only R&D candidate. This bookkeeping update does not alter the
+validated implementation. Promotion, trading execution and capital use remain
+outside RND-0022 authority.

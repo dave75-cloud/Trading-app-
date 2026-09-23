@@ -2,7 +2,7 @@
   "experiment_id": "EXP-20260923T023040Z-validation-evidence-assembler",
   "task_id": "RND-0022",
   "title": "Governed validation-evidence assembler",
-  "status": "running",
+  "status": "complete",
   "created_utc": "2026-09-23T02:30:40Z",
   "git_base": "69bf9a7b4030ea814a07bb28e3bbd74f5dc017d3",
   "hypothesis": "RND-0021 machine evidence and externally attested validation evidence can be bound to one exact candidate HEAD and assembled deterministically into the unchanged RND-0020 candidate-evidence contract without granting subprocess, network, Git mutation, merge, promotion or trading authority.",
@@ -26,11 +26,12 @@
     "rnd/orchestration/controlled_rnd_executor.py",
     "rnd/orchestration/test_controlled_rnd_executor.py"
   ],
-  "result": "RUNNING pending user-supplied independent validation output on the exact final PR head. Earlier 65 orchestration tests, 106 M006f tests, workspace audit and diff check passed on code head be4de484ed38f2e5bb46e11c305de1a86f51ed07, before later completion bookkeeping. An earlier COMPLETE record was premature and is superseded by append-only RUNNING events. Human merge and promotion remain external.",
+  "result": "PASS on exact independently tested PR head bf1c2e5078e58914b8db350b35ce53e9f8650322: 65 orchestration tests and 106 M006f tests passed; RND_WORKSPACE_AUDIT passed with 22 tasks, 21 experiments, broker writes false, protected paths modified false, and human-only promotion; git diff --check was clean. The user explicitly authorized PR merge after supplying final-head results. This completion commit changes only R&D records and documentation; operational and promotion authority remain unchanged.",
   "safety": {
     "broker_writes": false,
     "protected_paths_modified": false,
     "strategy_authority_changed": false,
     "human_promotion_required": true
-  }
+  },
+  "completed_utc": "2026-09-23T03:17:57Z"
 }
