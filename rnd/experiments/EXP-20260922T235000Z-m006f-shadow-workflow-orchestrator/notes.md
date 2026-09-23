@@ -52,4 +52,3 @@ acceptance decision and the no-automatic-promotion gate.
 
 A focused regression covers the operational disposition shape, and the RND-0019
 end-to-end non-CLEAN test now uses that real schema.
-
