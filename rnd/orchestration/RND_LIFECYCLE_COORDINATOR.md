@@ -86,6 +86,9 @@ Candidate evidence records:
 - validation labels with PASS/FAIL and evidence hashes;
 - an exact fail-closed safety declaration.
 
+The review dossier binds the normalized candidate evidence with its own
+SHA-256 and retains the output and validation evidence hashes it evaluated.
+
 ## Review semantics
 
 `PASS`
@@ -104,6 +107,14 @@ validation, or authority/safety expansion was detected.
 
 Every dossier leaves human disposition unset and records merge/promotion
 authority as NONE.
+
+The CLI also preserves machine status in process semantics:
+
+- PASS -> exit 0;
+- REVIEW_REQUIRED -> exit 2;
+- FAIL_CLOSED -> exit 1.
+
+It never prints a generic PASS for a failed or incomplete candidate.
 
 ## Security boundary
 
