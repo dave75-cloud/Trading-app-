@@ -69,3 +69,5 @@
 {"human_gate_required": true, "protected_paths_allowed": false, "status": "queued", "task_id": "RND-0023", "timestamp_utc": "2026-09-23T06:33:03Z", "title": "Build offline evidence-chain rehearsal"}
 {"human_gate_required": true, "protected_paths_allowed": false, "status": "running", "task_id": "RND-0023", "timestamp_utc": "2026-09-23T06:33:04Z", "title": "Build offline evidence-chain rehearsal"}
 {"human_gate_required": true, "protected_paths_allowed": false, "status": "complete", "task_id": "RND-0023", "timestamp_utc": "2026-09-23T10:30:59Z", "title": "Build offline evidence-chain rehearsal"}
+{"human_gate_required": true, "protected_paths_allowed": false, "status": "queued", "task_id": "RND-0024", "timestamp_utc": "2026-09-23T12:01:04Z", "title": "Build scoped agent task governance"}
+{"human_gate_required": true, "protected_paths_allowed": false, "status": "running", "task_id": "RND-0024", "timestamp_utc": "2026-09-23T12:01:05Z", "title": "Build scoped agent task governance"}

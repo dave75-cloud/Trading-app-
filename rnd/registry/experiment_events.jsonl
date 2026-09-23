@@ -59,3 +59,5 @@
 {"experiment_id": "EXP-20260923T063303Z-offline-evidence-rehearsal", "status": "planned", "task_id": "RND-0023", "timestamp_utc": "2026-09-23T06:33:03Z", "title": "Offline evidence-chain rehearsal"}
 {"experiment_id": "EXP-20260923T063303Z-offline-evidence-rehearsal", "status": "running", "task_id": "RND-0023", "timestamp_utc": "2026-09-23T06:33:04Z", "title": "Offline evidence-chain rehearsal"}
 {"experiment_id": "EXP-20260923T063303Z-offline-evidence-rehearsal", "status": "complete", "task_id": "RND-0023", "timestamp_utc": "2026-09-23T10:30:59Z", "title": "Offline evidence-chain rehearsal"}
+{"experiment_id": "EXP-20260923T120104Z-agent-task-governance", "status": "planned", "task_id": "RND-0024", "timestamp_utc": "2026-09-23T12:01:04Z", "title": "Scoped agent task governance"}
+{"experiment_id": "EXP-20260923T120104Z-agent-task-governance", "status": "running", "task_id": "RND-0024", "timestamp_utc": "2026-09-23T12:01:05Z", "title": "Scoped agent task governance"}

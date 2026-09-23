@@ -40,3 +40,7 @@ commands, outputs, observed result, and its safety declarations.
 `tools/audit_workspace.py` performs an offline structural and safety audit.
 
 Neither tool contains broker, credential, account, market-data, or network access.
+
+Scoped agent instructions live in `AGENTS.md`. The RND-0024 intake/handoff
+policy is documented in `governance/RND_AGENT_TASK_POLICY.md`; it checks
+supplied declarations without authenticating people or accepting tasks.
