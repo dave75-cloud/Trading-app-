@@ -6,7 +6,6 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
-import os
 import subprocess
 import tempfile
 from pathlib import Path
@@ -27,7 +26,6 @@ PROCESS_TIMEOUT_SECONDS = 60
 ACTION_IDS = (
     "diff-check",
     "scope-check",
-    "worktree-clean-check",
 )
 
 WORK_PACKET_AUTHORITY = {
@@ -258,7 +256,6 @@ def _assert_safe_git_argv(argv, git_base=None):
 
     approved = [
         [GIT, "rev-parse", "HEAD"],
-        [GIT, "status", "--porcelain=v1", "--untracked-files=all"],
     ]
     if git_base is not None:
         approved.extend([
@@ -268,6 +265,7 @@ def _assert_safe_git_argv(argv, git_base=None):
                 "diff",
                 "--no-ext-diff",
                 "--no-textconv",
+                "--ignore-submodules=all",
                 "--check",
                 f"{git_base}...HEAD",
             ],
@@ -276,6 +274,7 @@ def _assert_safe_git_argv(argv, git_base=None):
                 "diff",
                 "--no-ext-diff",
                 "--no-textconv",
+                "--ignore-submodules=all",
                 "--name-only",
                 "-z",
                 f"{git_base}...HEAD",
@@ -369,13 +368,6 @@ def _action_argv(action_id, git_base):
             "-z",
             f"{git_base}...HEAD",
         ]
-    if action_id == "worktree-clean-check":
-        return [
-            GIT,
-            "status",
-            "--porcelain=v1",
-            "--untracked-files=all",
-        ]
     raise ExecutorError("unknown action ID")
 
 
@@ -422,12 +414,6 @@ def _action_result(action_id, packet, process_result):
             ),
         }
         if violations:
-            status = "FAIL"
-
-    if action_id == "worktree-clean-check" and status == "PASS":
-        dirty = bool(stdout.strip())
-        observations = {"dirty": dirty}
-        if dirty:
             status = "FAIL"
 
     body = {
