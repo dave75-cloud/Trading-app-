@@ -78,10 +78,9 @@ def fake_result(argv, stdout=b"", stderr=b"", exit_code=0):
 
 
 class FakeRunner:
-    def __init__(self, *, failures=None, dirty=False, changed=None):
+    def __init__(self, *, failures=None, changed=None):
         self.calls = []
         self.failures = set(failures or [])
-        self.dirty = dirty
         self.changed = changed or [
             "rnd/orchestration/controlled_rnd_executor.py",
         ]
@@ -99,11 +98,6 @@ class FakeRunner:
         if "--name-only" in argv:
             raw = b"\0".join(x.encode() for x in self.changed) + b"\0"
             code = 1 if "scope-check" in self.failures else 0
-            return fake_result(argv, stdout=raw, exit_code=code)
-
-        if argv[1] == "status":
-            raw = b"?? generated.tmp\n" if self.dirty else b""
-            code = 1 if "worktree-clean-check" in self.failures else 0
             return fake_result(argv, stdout=raw, exit_code=code)
 
         if "--check" in argv:
@@ -165,14 +159,14 @@ class ControlledExecutorTests(unittest.TestCase):
         packet = work_packet()
         plan = build_execution_plan(
             packet,
-            ["diff-check", "scope-check", "worktree-clean-check"],
+            ["diff-check", "scope-check"],
         )
         evidence = execute_plan(packet, plan, runner=FakeRunner())
         self.assertEqual(evidence["overall_status"], "PASS")
         self.assertEqual(evidence["execution_evidence_version"], EVIDENCE_VERSION)
         self.assertEqual(evidence["repository_head_sha"], HEAD)
         self.assertEqual(len(evidence["execution_evidence_content_sha256"]), 64)
-        self.assertEqual(len(evidence["validations"]), 3)
+        self.assertEqual(len(evidence["validations"]), 2)
 
     def test_scope_violation_records_fail(self):
         packet = work_packet()
@@ -194,13 +188,6 @@ class ControlledExecutorTests(unittest.TestCase):
         self.assertEqual(evidence["overall_status"], "FAIL")
         self.assertEqual(evidence["actions"][0]["exit_code"], 1)
         self.assertEqual(execution_exit_code(evidence), 1)
-
-    def test_dirty_worktree_records_fail(self):
-        packet = work_packet()
-        plan = build_execution_plan(packet, ["worktree-clean-check"])
-        evidence = execute_plan(packet, plan, runner=FakeRunner(dirty=True))
-        self.assertEqual(evidence["overall_status"], "FAIL")
-        self.assertTrue(evidence["actions"][0]["observations"]["dirty"])
 
     def test_stdout_stderr_hashes_are_stable_for_identical_bytes(self):
         packet = work_packet()
@@ -238,7 +225,7 @@ class ControlledExecutorTests(unittest.TestCase):
     def test_allowlist_contains_no_mutating_or_network_actions(self):
         self.assertEqual(
             set(ACTION_IDS),
-            {"diff-check", "scope-check", "worktree-clean-check"},
+            {"diff-check", "scope-check"},
         )
 
     def test_subprocess_helper_forces_shell_false_and_sanitized_environment(self):
@@ -254,6 +241,14 @@ class ControlledExecutorTests(unittest.TestCase):
         self.assertEqual(kwargs["cwd"], Path(__file__).resolve().parents[2])
         self.assertEqual(kwargs["env"], SAFE_ENV)
         self.assertIs(kwargs["stdin"], subprocess.DEVNULL)
+
+    def test_worktree_status_is_not_in_subprocess_allowlist(self):
+        with mock.patch("controlled_rnd_executor.subprocess.run") as run:
+            with self.assertRaisesRegex(ExecutorError, "outside the Git allowlist"):
+                _run_process(
+                    [GIT, "status", "--porcelain=v1", "--untracked-files=all"]
+                )
+            run.assert_not_called()
 
     def test_non_allowlisted_git_argv_is_rejected_before_subprocess(self):
         with mock.patch("controlled_rnd_executor.subprocess.run") as run:
