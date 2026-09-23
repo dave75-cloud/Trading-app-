@@ -9,6 +9,8 @@ from pathlib import Path
 
 from controlled_rnd_executor import (
     EVIDENCE_VERSION as EXECUTION_EVIDENCE_VERSION,
+    EXECUTOR_AUTHORITY,
+    EXECUTOR_CAPABILITIES,
 )
 from rnd_lifecycle_coordinator import (
     EVIDENCE_VERSION as CANDIDATE_EVIDENCE_VERSION,
@@ -201,6 +203,19 @@ def _validate_execution_evidence(raw, packet):
             "RND-0021 execution evidence: action/validation evidence mismatch"
         )
 
+    if raw.get("authority") != EXECUTOR_AUTHORITY:
+        raise AssemblerError(
+            "RND-0021 execution evidence: authority boundary invalid"
+        )
+    if raw.get("capabilities") != EXECUTOR_CAPABILITIES:
+        raise AssemblerError(
+            "RND-0021 execution evidence: capability boundary invalid"
+        )
+    _require_sha256(
+        raw.get("execution_plan_content_sha256"),
+        "RND-0021 execution plan",
+    )
+
     expected_overall = (
         "PASS"
         if all(row["status"] == "PASS" for row in validation_rows.values())
@@ -211,9 +226,37 @@ def _validate_execution_evidence(raw, packet):
             "RND-0021 execution evidence: overall_status mismatch"
         )
 
+    scope_changed_paths = None
+    for row in actions:
+        if row.get("validation_label") == "scope-check":
+            observations = row.get("observations")
+            if not isinstance(observations, dict):
+                raise AssemblerError(
+                    "RND-0021 scope-check: observations missing"
+                )
+            changed = observations.get("changed_paths")
+            if not isinstance(changed, list) or not all(
+                isinstance(x, str) for x in changed
+            ):
+                raise AssemblerError(
+                    "RND-0021 scope-check: changed_paths invalid"
+                )
+            try:
+                scope_changed_paths = sorted(
+                    normalize_repo_path(x, "RND-0021 scope changed path")
+                    for x in changed
+                )
+            except TaskSpecError as exc:
+                raise AssemblerError(str(exc)) from exc
+            if len(scope_changed_paths) != len(set(scope_changed_paths)):
+                raise AssemblerError(
+                    "RND-0021 scope-check: duplicate changed path"
+                )
+
     return {
         "repository_head_sha": head,
         "validations": validation_rows,
+        "scope_changed_paths": scope_changed_paths,
         "source_sha256": raw["execution_evidence_content_sha256"],
     }
 
@@ -379,6 +422,14 @@ def assemble_evidence(
     if len(heads) != 1:
         raise AssemblerError("candidate repository HEAD mismatch across evidence")
     candidate_head = next(iter(heads))
+
+    if (
+        execution["scope_changed_paths"] is not None
+        and execution["scope_changed_paths"] != paths["changed_paths"]
+    ):
+        raise AssemblerError(
+            "candidate path manifest does not match RND-0021 scope-check evidence"
+        )
 
     required_labels = set(packet["required_validation_labels"])
     validations = {}
