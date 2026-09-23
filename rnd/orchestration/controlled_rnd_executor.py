@@ -355,6 +355,7 @@ def _action_argv(action_id, git_base):
             "diff",
             "--no-ext-diff",
             "--no-textconv",
+            "--ignore-submodules=all",
             "--check",
             f"{git_base}...HEAD",
         ]
@@ -364,6 +365,7 @@ def _action_argv(action_id, git_base):
             "diff",
             "--no-ext-diff",
             "--no-textconv",
+            "--ignore-submodules=all",
             "--name-only",
             "-z",
             f"{git_base}...HEAD",
