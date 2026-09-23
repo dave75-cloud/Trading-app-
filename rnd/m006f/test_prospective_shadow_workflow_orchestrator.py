@@ -260,6 +260,49 @@ class ProspectiveShadowWorkflowTests(unittest.TestCase):
         self.assertEqual(first, second)
         self.assertEqual([x["day"] for x in first], ["2026-10-01", "2026-10-02"])
 
+    def test_zero_event_session_runs_without_inventing_market_evidence(self):
+        day = "2026-10-03"
+        recon_name = f"recon_{day}.json"
+
+        write_json(self.reconciliation / recon_name, {
+            "day": day,
+            "summary": {"events": 0},
+            "timeline": [],
+        })
+        write_json(self.sessions / f"m006e9a_{day}.json", {
+            "day": day,
+            "events": {"authoritative_events": 0},
+            "integrity": {"m006e2_hash_match": True},
+            "safety": {"zero_unexplained_write_indicators": True},
+            "orchestration": {"verdict": "CLEAN"},
+            "bridge": {"totals": {"order_payloads": 0, "write_requests": 0}},
+            "validation": {"totals": {
+                "oanda_network_calls": 0,
+                "order_payloads": 0,
+                "write_requests": 0,
+            }},
+            "reconciliation": {
+                "available": True,
+                "events": 0,
+                "mode": "READ_ONLY_POST_SESSION_RECONCILIATION",
+                "network_calls": 0,
+                "order_capability": False,
+                "source_file": recon_name,
+                "summary": {"events": 0},
+            },
+        })
+        (self.market / f"market_evidence_{day}.jsonl").write_text("")
+
+        result = run_workflow(**self.kwargs(day))
+        self.assertEqual(result["selected_day"], day)
+
+        dossier = json.loads(
+            (self.outputs / f"shadow_session_{day}/review_dossier.json").read_text()
+        )
+        self.assertEqual(dossier["machine_facts"]["replay_events"], 0)
+        self.assertIn("ZERO_REPLAY_EVENTS", dossier["review"]["flags"])
+        self.assertIsNone(dossier["review"]["human_disposition"])
+
     def test_non_clean_source_with_accepted_disposition_can_run(self):
         self.make_fixture(verdict="ALERT", with_disposition=True)
         result = run_workflow(**self.kwargs())
