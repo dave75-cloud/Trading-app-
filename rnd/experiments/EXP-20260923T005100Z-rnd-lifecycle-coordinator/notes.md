@@ -95,3 +95,17 @@ validation:
 RND-0020 remains RUNNING. Final validation target is 21 focused orchestration
 tests, 106 M006f tests, workspace audit PASS, and a clean diff check on the
 exact final head.
+## Final independent validation
+
+Exact tested head: `85219b8b32bde4326b29f3a54bb934b4ce38d5d9`
+
+- 21 focused RND-0020 orchestration tests passed.
+- 106 M006f regression tests passed.
+- `RND_WORKSPACE_AUDIT: PASS` with 20 tasks and 19 experiments.
+- broker writes: false.
+- protected paths modified: false.
+- promotion authority: human-only.
+- `git diff --check agent/rnd-foundation-20260916...HEAD`: clean.
+
+RND-0020 is complete as a non-operational R&D candidate only. Human merge,
+promotion, execution and capital authority remain external.
