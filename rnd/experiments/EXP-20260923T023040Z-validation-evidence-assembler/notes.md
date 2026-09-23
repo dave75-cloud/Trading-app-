@@ -100,3 +100,24 @@ Final validation target:
 - workspace audit PASS;
 - 22 tasks / 21 experiments;
 - clean diff check.
+## Adversarial evidence hardening
+
+Before independent validation, review tested whether a forged JSON object could
+claim to be RND-0021 evidence while carrying arbitrary argv.
+
+RND-0022 now independently verifies:
+
+- exact RND-0021 executor version;
+- executor authority/capability declarations;
+- action ID equals validation label;
+- action ID is in the RND-0021 allowlist;
+- exact argv equals the executor-generated argv for that action/base;
+- repository-root working-directory marker;
+- action content hashes and validation-row equality;
+- PASS scope-check evidence cannot contain violations.
+
+A focused regression rehashes a forged `git status` action and proves the
+assembler rejects it.
+
+Final independent validation target is now 65 orchestration tests, 106 M006f
+tests, workspace audit PASS, and a clean diff check.
