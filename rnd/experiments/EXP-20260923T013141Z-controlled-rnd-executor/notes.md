@@ -127,3 +127,22 @@ A regression verifies that `git status` is rejected before
 
 Worktree cleanliness remains externally produced evidence. RND-0021 remains
 RUNNING pending final re-validation of this hardened head.
+## Final independent validation
+
+Exact tested head: `42a4a3a0310bb7ccaa1c23a7f98dd1a25f6872f6`
+
+- 41 focused orchestration tests passed.
+- 106 M006f regression tests passed.
+- `RND_WORKSPACE_AUDIT: PASS` with 21 tasks and 20 experiments.
+- broker writes: false.
+- protected paths modified: false.
+- promotion authority: human-only.
+- `git diff --check agent/rnd-foundation-20260916...HEAD`: clean.
+
+Final executor authority is limited to commit-to-commit `diff-check` and
+`scope-check`. Candidate-code execution, worktree-status execution, network
+access, arbitrary subprocess, Git mutation, automatic merge and automatic
+promotion remain excluded.
+
+RND-0021 is complete as a non-operational R&D candidate only. Human merge,
+promotion, execution and capital authority remain external.
