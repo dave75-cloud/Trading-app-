@@ -156,6 +156,35 @@ class AgentTaskPolicyTests(unittest.TestCase):
             "BLOCKED",
         )
 
+    def test_rehashed_pass_cannot_hide_failed_validation_summary(self):
+        task = spec()
+        review = dossier(task, "FAIL_CLOSED")
+        review["machine_status"] = "PASS"
+        review["flags"] = []
+        review.pop("review_dossier_content_sha256")
+        review["review_dossier_content_sha256"] = canonical_hash(review)
+        with self.assertRaisesRegex(AgentPolicyError, "omits derived failure flags"):
+            assess_review_handoff(task, review)
+
+    def test_rehashed_pass_cannot_hide_missing_validation_summary(self):
+        task = spec()
+        review = dossier(task, "REVIEW_REQUIRED")
+        review["machine_status"] = "PASS"
+        review["review_flags"] = []
+        review.pop("review_dossier_content_sha256")
+        review["review_dossier_content_sha256"] = canonical_hash(review)
+        with self.assertRaisesRegex(AgentPolicyError, "review flags mismatch"):
+            assess_review_handoff(task, review)
+
+    def test_rehashed_dossier_with_unexpected_field_is_rejected(self):
+        task = spec()
+        review = dossier(task)
+        review["human_disposition"] = "APPROVED"
+        review.pop("review_dossier_content_sha256")
+        review["review_dossier_content_sha256"] = canonical_hash(review)
+        with self.assertRaisesRegex(AgentPolicyError, "missing or unexpected fields"):
+            assess_review_handoff(task, review)
+
     def test_rehashed_dossier_with_expanded_authority_fails_closed(self):
         task = spec()
         review = dossier(task)
