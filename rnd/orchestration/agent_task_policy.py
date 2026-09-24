@@ -37,6 +37,21 @@ REVIEW_CAPABILITIES = {
     "broker_transport": False,
     "submission": False,
 }
+REVIEW_DOSSIER_FIELDS = {
+    "review_version", "task_id", "git_base", "work_packet_content_sha256",
+    "machine_status", "flags", "review_flags", "candidate_evidence_sha256",
+    "evidence_summary", "authority", "capabilities",
+    "review_dossier_content_sha256",
+}
+EVIDENCE_SUMMARY_FIELDS = {
+    "changed_paths", "output_sha256", "validations",
+    "missing_required_outputs", "missing_required_validations",
+    "failed_required_validations",
+}
+OPAQUE_EVALUATOR_FLAGS = {
+    "TASK_ID_MISMATCH", "GIT_BASE_MISMATCH", "WORK_PACKET_HASH_MISMATCH",
+    "SAFETY_DECLARATION_INVALID",
+}
 
 
 class AgentPolicyError(ValueError):
@@ -148,6 +163,99 @@ def assess_task_intake(task_spec, task_events, approval_record, proposed_paths):
     }
 
 
+def _check_review_summary(spec, dossier):
+    if set(dossier) != REVIEW_DOSSIER_FIELDS:
+        raise AgentPolicyError("review dossier has missing or unexpected fields")
+    candidate_hash = dossier.get("candidate_evidence_sha256")
+    if not isinstance(candidate_hash, str) or not SHA256_RE.fullmatch(candidate_hash):
+        raise AgentPolicyError("review dossier candidate hash invalid")
+
+    summary = dossier.get("evidence_summary")
+    if not isinstance(summary, dict) or set(summary) != EVIDENCE_SUMMARY_FIELDS:
+        raise AgentPolicyError("review dossier evidence summary shape mismatch")
+
+    changed = summary["changed_paths"]
+    outputs = summary["output_sha256"]
+    validations = summary["validations"]
+    if not isinstance(changed, list) or not isinstance(outputs, dict) or not isinstance(validations, dict):
+        raise AgentPolicyError("review dossier evidence summary malformed")
+
+    derived_flags = []
+    seen = set()
+    for path in changed:
+        try:
+            clean = normalize_repo_path(path, "review changed path")
+        except TaskSpecError as exc:
+            raise AgentPolicyError(str(exc)) from exc
+        if clean != path or clean in seen:
+            raise AgentPolicyError("review changed paths must be normalized and unique")
+        seen.add(clean)
+        if any(path_within(clean, prefix) for prefix in KNOWN_PROTECTED_PREFIXES):
+            derived_flags.append("PROTECTED_PATH_CHANGED")
+        if not any(path_within(clean, prefix) for prefix in spec["allowed_path_prefixes"]):
+            derived_flags.append("CHANGED_PATH_OUTSIDE_ALLOWED_SCOPE")
+        if any(path_within(clean, prefix) for prefix in spec["prohibited_path_prefixes"]):
+            derived_flags.append("PROHIBITED_PATH_CHANGED")
+
+    for path, digest in outputs.items():
+        try:
+            clean = normalize_repo_path(path, "review output path")
+        except TaskSpecError as exc:
+            raise AgentPolicyError(str(exc)) from exc
+        if clean != path or not isinstance(digest, str) or not SHA256_RE.fullmatch(digest):
+            raise AgentPolicyError("review output summary invalid")
+        if not any(path_within(clean, prefix) for prefix in spec["allowed_path_prefixes"]):
+            derived_flags.append("OUTPUT_OUTSIDE_ALLOWED_SCOPE")
+        if any(path_within(clean, prefix) for prefix in spec["prohibited_path_prefixes"]):
+            derived_flags.append("PROHIBITED_OUTPUT")
+
+    for label, row in validations.items():
+        if not isinstance(label, str) or not label or not isinstance(row, dict) or set(row) != {"status", "evidence_sha256"}:
+            raise AgentPolicyError("review validation summary invalid")
+        if row["status"] not in {"PASS", "FAIL"} or not isinstance(row["evidence_sha256"], str) or not SHA256_RE.fullmatch(row["evidence_sha256"]):
+            raise AgentPolicyError("review validation summary invalid")
+
+    missing_outputs = [path for path in spec["required_outputs"] if path not in outputs]
+    missing_validations = [label for label in spec["required_validation_labels"] if label not in validations]
+    failed_validations = [
+        label for label in spec["required_validation_labels"]
+        if label in validations and validations[label]["status"] != "PASS"
+    ]
+    if summary["missing_required_outputs"] != missing_outputs:
+        raise AgentPolicyError("review missing-output summary mismatch")
+    if summary["missing_required_validations"] != missing_validations:
+        raise AgentPolicyError("review missing-validation summary mismatch")
+    if summary["failed_required_validations"] != failed_validations:
+        raise AgentPolicyError("review failed-validation summary mismatch")
+
+    derived_review_flags = []
+    if missing_outputs:
+        derived_review_flags.append("MISSING_REQUIRED_OUTPUT")
+    if missing_validations:
+        derived_review_flags.append("MISSING_REQUIRED_VALIDATION")
+    if failed_validations:
+        derived_flags.append("FAILED_REQUIRED_VALIDATION")
+
+    flags = dossier.get("flags")
+    review_flags = dossier.get("review_flags")
+    if not isinstance(flags, list) or not isinstance(review_flags, list):
+        raise AgentPolicyError("review dossier flags missing")
+    if len(flags) != len(set(flags)) or len(review_flags) != len(set(review_flags)):
+        raise AgentPolicyError("review dossier flags must be unique")
+    opaque = set(flags) - set(derived_flags)
+    if not opaque.issubset(OPAQUE_EVALUATOR_FLAGS):
+        raise AgentPolicyError("review dossier contains unknown flags")
+    if set(derived_flags) - set(flags):
+        raise AgentPolicyError("review dossier omits derived failure flags")
+    if sorted(review_flags) != sorted(derived_review_flags):
+        raise AgentPolicyError("review dossier review flags mismatch")
+
+    expected_status = "FAIL_CLOSED" if flags else ("REVIEW_REQUIRED" if review_flags else "PASS")
+    if dossier.get("machine_status") != expected_status:
+        raise AgentPolicyError("review dossier machine status mismatch")
+    return expected_status
+
+
 def assess_review_handoff(task_spec, dossier):
     """A machine PASS only makes evidence structurally ready for human review."""
     spec = validate_task_spec(task_spec)
@@ -161,18 +269,13 @@ def assess_review_handoff(task_spec, dossier):
         raise AgentPolicyError("review dossier work-packet mismatch")
     if dossier.get("authority") != REVIEW_AUTHORITY or dossier.get("capabilities") != REVIEW_CAPABILITIES:
         raise AgentPolicyError("review dossier expands authority or capability")
-    status = dossier.get("machine_status")
-    flags, review_flags = dossier.get("flags"), dossier.get("review_flags")
-    if not isinstance(flags, list) or not isinstance(review_flags, list):
-        raise AgentPolicyError("review dossier flags missing")
-    if status == "PASS" and not flags and not review_flags:
+    status = _check_review_summary(spec, dossier)
+    if status == "PASS":
         handoff = "HUMAN_REVIEW_REQUIRED"
-    elif status == "REVIEW_REQUIRED" and not flags and review_flags:
+    elif status == "REVIEW_REQUIRED":
         handoff = "INCOMPLETE"
-    elif status == "FAIL_CLOSED" and flags:
-        handoff = "BLOCKED"
     else:
-        raise AgentPolicyError("review dossier status/flags mismatch")
+        handoff = "BLOCKED"
     return {
         "handoff_status": handoff,
         "task_id": spec["task_id"],
