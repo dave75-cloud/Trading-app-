@@ -1,0 +1,20 @@
+{
+  "experiment_id": "EXP-20260922T095745Z-m006f-human-disposition-ledger",
+  "task_id": "RND-0016",
+  "title": "M006f human disposition and cumulative session ledger",
+  "status": "complete",
+  "created_utc": "2026-09-22T09:57:45Z",
+  "git_base": "f58dc6f68054620d0eccb3f114114142fdc2e98f",
+  "hypothesis": "An explicit human disposition can be cryptographically bound to an exact M006f review dossier and aggregated into a cumulative reviewed-session ledger without allowing software to infer disposition or promotion.",
+  "inputs": [],
+  "commands": [],
+  "outputs": [],
+  "result": "PASS: explicit human ACCEPTED disposition verified against the exact dossier; cumulative ledger independently verified the pair and contained 1 reviewed session, 1 accepted session and 2 replay events. Automatic disposition and promotion remain false and promotion authority remains NONE.",
+  "safety": {
+    "broker_writes": false,
+    "protected_paths_modified": false,
+    "strategy_authority_changed": false,
+    "human_promotion_required": true
+  },
+  "completed_utc": "2026-09-22T10:36:19Z"
+}

@@ -1,0 +1,38 @@
+{
+  "day": "2026-10-01",
+  "summary": {"events": 2},
+  "timeline": [
+    {
+      "event_id": "synthetic-usdjpy-entry",
+      "bar_ts_utc": "2026-10-01T12:35:00+00:00",
+      "pair": "USDJPY",
+      "event_type": "entry",
+      "old_position": "flat",
+      "new_position": "long",
+      "bridge_actions": [
+        {
+          "leg": "entry",
+          "decision": "ALLOW_DRY_RUN_PROPOSAL",
+          "approx_units": 71174
+        }
+      ],
+      "blocked_entries": []
+    },
+    {
+      "event_id": "synthetic-usdjpy-exit",
+      "bar_ts_utc": "2026-10-01T13:05:00+00:00",
+      "pair": "USDJPY",
+      "event_type": "exit",
+      "old_position": "long",
+      "new_position": "flat",
+      "bridge_actions": [
+        {
+          "leg": "exit",
+          "decision": "ALLOW_RISK_REDUCING_EXIT",
+          "approx_units": null
+        }
+      ],
+      "blocked_entries": []
+    }
+  ]
+}

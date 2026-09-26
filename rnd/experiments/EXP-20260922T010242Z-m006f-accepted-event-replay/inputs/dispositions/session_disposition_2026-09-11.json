@@ -1,0 +1,43 @@
+{
+  "version": "M006e.9-session-disposition-v1.0",
+  "day": "2026-09-11",
+  "reviewed_disposition": "ACCEPTED_WITH_CONTAINED_UPSTREAM_FAILURES",
+  "accepted": true,
+  "contained_upstream_failures": 2,
+  "failure_classes": [
+    "OANDA_INVALID_OR_NON_JSON_RESPONSE",
+    "OANDA_HTTP_401"
+  ],
+  "failure_details": [
+    {
+      "cycle": "cycle_20260911T130817Z.log",
+      "stage": "M006e.1",
+      "classification": "OANDA_INVALID_OR_NON_JSON_RESPONSE",
+      "containment": "FAIL_CLOSED_M006e2_NOT_RUN_M006e3_NOT_RUN"
+    },
+    {
+      "cycle": "cycle_20260911T140657Z.log",
+      "stage": "M006e.1",
+      "classification": "OANDA_HTTP_401",
+      "instrument": "EURUSD",
+      "containment": "FAIL_CLOSED_M006e2_NOT_RUN_M006e3_NOT_RUN"
+    }
+  ],
+  "authoritative_events": 4,
+  "retrospective_twelve_bars_missing": 0,
+  "retrospective_direction_disagreements": 0,
+  "volatility_eligibility_disagreements": 3,
+  "price_divergence_over_10bps": 0,
+  "event_path": {
+    "blocked_entry_legs": 2,
+    "risk_reducing_exit_actions": 2,
+    "retry_pending": 0,
+    "all_actions_suppressed_dry_run": true
+  },
+  "integrity": {
+    "m006e2_hash_match": true,
+    "freeze_manifest_pass": true,
+    "trading_order_writes": 0
+  },
+  "notes": "Two upstream OANDA failures were correctly contained at M006e.1. Four authoritative events were retrospectively available from Twelve. No repair or change to frozen M006e is justified."
+}

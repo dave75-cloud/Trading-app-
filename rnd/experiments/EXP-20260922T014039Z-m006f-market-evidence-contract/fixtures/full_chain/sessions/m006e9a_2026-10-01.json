@@ -1,0 +1,29 @@
+{
+  "day": "2026-10-01",
+  "events": {"authoritative_events": 2},
+  "integrity": {"m006e2_hash_match": true},
+  "safety": {"zero_unexplained_write_indicators": true},
+  "orchestration": {"verdict": "CLEAN"},
+  "bridge": {
+    "totals": {
+      "order_payloads": 0,
+      "write_requests": 0
+    }
+  },
+  "validation": {
+    "totals": {
+      "oanda_network_calls": 0,
+      "order_payloads": 0,
+      "write_requests": 0
+    }
+  },
+  "reconciliation": {
+    "available": true,
+    "events": 2,
+    "mode": "READ_ONLY_POST_SESSION_RECONCILIATION",
+    "network_calls": 0,
+    "order_capability": false,
+    "source_file": "synthetic_reconciliation.json",
+    "summary": {"events": 2}
+  }
+}

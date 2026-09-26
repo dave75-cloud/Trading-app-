@@ -1,0 +1,48 @@
+{
+  "components": {
+    "accepted_session": {
+      "sha256": "43dbd8c2a4cb584b7d5eea7f4bc4dda6b1c278d6e977ec585f13fed2e9b0f274",
+      "size_bytes": 689,
+      "source_label": "m006e9a_2026-10-01.json"
+    },
+    "market_evidence": {
+      "sha256": "567b2ad13b21b36b1fc387be6fb2792d697bad88fbb30180cc49ba7a78a7aebb",
+      "size_bytes": 869,
+      "source_label": "exact_market_evidence.jsonl"
+    },
+    "replay_audit": {
+      "sha256": "c26a48bf349cb992b6f80edc0694dc81bc89bd61a55541f3baed390ec0126854",
+      "size_bytes": 1330,
+      "source_label": "replay_audit.json"
+    },
+    "replay_events": {
+      "sha256": "9ca59b72cec09837110c01274a8a02972f0a45735f4611c15d2bc2efdce625d1",
+      "size_bytes": 378,
+      "source_label": "m006f_replay.jsonl"
+    },
+    "shadow_result": {
+      "sha256": "a78f54eeb0221b872ba1c797464c988ee40058022e0f0c78b486fa7f8b283cb3",
+      "size_bytes": 1239,
+      "source_label": "shadow_result.json"
+    }
+  },
+  "package_content_sha256": "f71e4910be4aedfee9793989bfbdd18ef2b32381d72fef0ab40d2e2509355340",
+  "package_version": "M006f-shadow-session-package-v0.1",
+  "safety": {
+    "automatic_promotion": false,
+    "human_review_required": true,
+    "network_capability": false,
+    "submission_capability": false
+  },
+  "session_date_utc": "2026-10-01",
+  "session_id": "synthetic-shadow-session-2026-10-01",
+  "summary": {
+    "final_equity_aud": 100096.15607399998,
+    "final_positions": {},
+    "market_evidence_records": 2,
+    "realized_pnl_aud": 96.15607399998407,
+    "replay_audit_records": 2,
+    "replay_events": 2,
+    "suppressed_chains": 0
+  }
+}

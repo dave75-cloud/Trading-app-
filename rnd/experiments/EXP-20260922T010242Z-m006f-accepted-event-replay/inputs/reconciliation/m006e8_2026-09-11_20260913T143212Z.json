@@ -1,0 +1,147 @@
+{
+  "day": "2026-09-11",
+  "mode": "READ_ONLY_POST_SESSION_RECONCILIATION",
+  "network_calls": 0,
+  "order_capability": false,
+  "summary": {
+    "blocked_entries": 2,
+    "events": 4,
+    "retry_pending": 0,
+    "with_bridge_action": 2,
+    "with_provider_path": 0,
+    "with_validation": 0
+  },
+  "timeline": [
+    {
+      "bar_ts_utc": "2026-09-11T12:35:00+00:00",
+      "blocked_entries": [
+        {
+          "decision": "BLOCK",
+          "leg": "entry",
+          "reasons": [
+            "DIRECTION_DISAGREEMENT_OANDA_1_TWELVE_0",
+            "VOL_ELIGIBILITY_DISAGREEMENT_OANDA_True_TWELVE_False"
+          ],
+          "status": "SUPPRESSED_DRY_RUN"
+        }
+      ],
+      "bridge_actions": [],
+      "close_divergence_bps": null,
+      "event_id": "20260911T124136Z|oanda|AUDUSD|2026-09-11T12:35:00+00:00|entry|flat|long",
+      "event_type": "entry",
+      "new_position": "long",
+      "oanda_close": 0.71707,
+      "oanda_delayed_signal": "long",
+      "oanda_volatility": 0.000597898382163,
+      "oanda_volatility_ok": true,
+      "old_position": "flat",
+      "pair": "AUDUSD",
+      "provider_path_status": null,
+      "retry_pending": false,
+      "twelve_delayed_signal": null,
+      "twelve_volatility": null,
+      "twelve_volatility_ok": null,
+      "validation_decisions": [],
+      "validation_reasons": [],
+      "validation_rows": 0
+    },
+    {
+      "bar_ts_utc": "2026-09-11T12:35:00+00:00",
+      "blocked_entries": [
+        {
+          "decision": "BLOCK",
+          "leg": "entry",
+          "reasons": [
+            "DIRECTION_DISAGREEMENT_OANDA_-1_TWELVE_0",
+            "VOL_ELIGIBILITY_DISAGREEMENT_OANDA_True_TWELVE_False"
+          ],
+          "status": "SUPPRESSED_DRY_RUN"
+        }
+      ],
+      "bridge_actions": [],
+      "close_divergence_bps": null,
+      "event_id": "20260911T124136Z|oanda|USDJPY|2026-09-11T12:35:00+00:00|entry|flat|short",
+      "event_type": "entry",
+      "new_position": "short",
+      "oanda_close": 154.014,
+      "oanda_delayed_signal": "short",
+      "oanda_volatility": 0.0005867882316093,
+      "oanda_volatility_ok": true,
+      "old_position": "flat",
+      "pair": "USDJPY",
+      "provider_path_status": null,
+      "retry_pending": false,
+      "twelve_delayed_signal": null,
+      "twelve_volatility": null,
+      "twelve_volatility_ok": null,
+      "validation_decisions": [],
+      "validation_reasons": [],
+      "validation_rows": 0
+    },
+    {
+      "bar_ts_utc": "2026-09-11T13:05:00+00:00",
+      "blocked_entries": [],
+      "bridge_actions": [
+        {
+          "allocation_x": null,
+          "approx_units": null,
+          "decision": "ALLOW_RISK_REDUCING_EXIT",
+          "leg": "exit",
+          "reason": null,
+          "status": "SUPPRESSED_DRY_RUN"
+        }
+      ],
+      "close_divergence_bps": null,
+      "event_id": "20260911T131333Z|oanda|USDJPY|2026-09-11T13:05:00+00:00|exit|short|flat",
+      "event_type": "exit",
+      "new_position": "flat",
+      "oanda_close": 153.486,
+      "oanda_delayed_signal": "flat",
+      "oanda_volatility": 0.0008895069892386,
+      "oanda_volatility_ok": true,
+      "old_position": "short",
+      "pair": "USDJPY",
+      "provider_path_status": null,
+      "retry_pending": false,
+      "twelve_delayed_signal": null,
+      "twelve_volatility": null,
+      "twelve_volatility_ok": null,
+      "validation_decisions": [],
+      "validation_reasons": [],
+      "validation_rows": 0
+    },
+    {
+      "bar_ts_utc": "2026-09-11T13:35:00+00:00",
+      "blocked_entries": [],
+      "bridge_actions": [
+        {
+          "allocation_x": null,
+          "approx_units": null,
+          "decision": "ALLOW_RISK_REDUCING_EXIT",
+          "leg": "exit",
+          "reason": null,
+          "status": "SUPPRESSED_DRY_RUN"
+        }
+      ],
+      "close_divergence_bps": null,
+      "event_id": "20260911T134010Z|oanda|AUDUSD|2026-09-11T13:35:00+00:00|exit|long|flat",
+      "event_type": "exit",
+      "new_position": "flat",
+      "oanda_close": 0.71779,
+      "oanda_delayed_signal": "flat",
+      "oanda_volatility": 0.0004699465656551,
+      "oanda_volatility_ok": false,
+      "old_position": "long",
+      "pair": "AUDUSD",
+      "provider_path_status": null,
+      "retry_pending": false,
+      "twelve_delayed_signal": null,
+      "twelve_volatility": null,
+      "twelve_volatility_ok": null,
+      "validation_decisions": [],
+      "validation_reasons": [],
+      "validation_rows": 0
+    }
+  ],
+  "version": "M006e.8"
+}

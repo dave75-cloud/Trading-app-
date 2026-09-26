@@ -1,0 +1,25 @@
+{
+  "authority": {
+    "automatic_disposition": false,
+    "automatic_promotion": false,
+    "promotion_authority": "NONE"
+  },
+  "human_review": {
+    "disposition": "ACCEPTED",
+    "notes": "Synthetic R&D shadow-session proof accepted by human reviewer.",
+    "reviewed_at_utc": "2026-09-22T10:31:41Z",
+    "reviewer_label": "David Kerr"
+  },
+  "record_content_sha256": "eec8290a57abd395efad60dad0834c5e795664fd7fdace57bb6a7e82901ab824",
+  "record_version": "M006f-human-disposition-v0.1",
+  "safety": {
+    "network_capability": false,
+    "submission_capability": false
+  },
+  "session_date_utc": "2026-10-01",
+  "session_id": "synthetic-shadow-session-2026-10-01",
+  "source": {
+    "dossier_content_sha256": "490c41f03b15ee5386bb84aface48b8222ecccf3b58aa506b9bfb2521ed51913",
+    "dossier_file_sha256": "e1226e6bbfbbcfabbc1608b99eda15d5dd692e2be00ddf60c19d0b5673105d4c"
+  }
+}

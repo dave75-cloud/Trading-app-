@@ -1,0 +1,81 @@
+{
+  "analysis_version": "RND-0003-v1.0",
+  "observation_end": "2026-09-17",
+  "sessions": {
+    "total": 9,
+    "accepted": 9
+  },
+  "cycles": {
+    "expected": 387,
+    "observed": 339,
+    "missing": 48,
+    "coverage_pct": 87.5969,
+    "pass": 329,
+    "fail": 10,
+    "skip": 0,
+    "unknown": 0
+  },
+  "failure_taxonomy": {
+    "contained_upstream": 9,
+    "contained_local_concurrency": 1,
+    "unclassified_raw_failures": 0,
+    "failure_sessions": [
+      {
+        "day": "2026-09-08",
+        "fail_cycles": 2,
+        "contained_upstream_failures": 2,
+        "reviewed_disposition": "ACCEPTED_WITH_CONTAINED_UPSTREAM_FAILURES"
+      },
+      {
+        "day": "2026-09-09",
+        "fail_cycles": 3,
+        "contained_upstream_failures": 3,
+        "reviewed_disposition": "ACCEPTED_WITH_CONTAINED_UPSTREAM_FAILURES"
+      },
+      {
+        "day": "2026-09-11",
+        "fail_cycles": 2,
+        "contained_upstream_failures": 2,
+        "reviewed_disposition": "ACCEPTED_WITH_CONTAINED_UPSTREAM_FAILURES"
+      },
+      {
+        "day": "2026-09-16",
+        "fail_cycles": 1,
+        "contained_upstream_failures": 1,
+        "reviewed_disposition": "CLEAN"
+      },
+      {
+        "day": "2026-09-17",
+        "fail_cycles": 2,
+        "contained_upstream_failures": 1,
+        "reviewed_disposition": "ACCEPTED_WITH_CONTAINED_FAILURES"
+      }
+    ]
+  },
+  "coverage_warning_sessions_below_80pct": [
+    {
+      "day": "2026-09-14",
+      "coverage_pct": 74.4,
+      "reviewed_disposition": "ACCEPTED_WITH_COVERAGE_WARNING"
+    }
+  ],
+  "events": {
+    "authoritative": 17,
+    "provider_path": 17,
+    "reconciliation": 17
+  },
+  "integrity": {
+    "safety_violations": 0,
+    "m006e2_hash_failure_sessions": []
+  },
+  "input_sha256": {
+    "M006e_Forward_Observation_Report_through_2026-09-17.md": "90efbb5676e4d97bb1e682b5872e5c71365ee4665e631f1941ed17d4ae62c806",
+    "m006e9b_sessions_through_2026-09-17.csv": "3f52b996a4c1e351597ed2582dea90729966e36e05d2fb80e86b48ba67357dac",
+    "m006e9b_through_2026-09-17.json": "756cfcf2c0e97d4f7f18a6102138ca3f3d76b6723cffd37f43c26f6e9ba4bf9e",
+    "session_disposition_2026-09-11.json": "427d97885a408e000513ff6baea27f4443472011b5f4275d3a4d9407046eec35",
+    "session_disposition_2026-09-14.json": "d53eace5a1f0ad6e435ae35f9ce8471bae8ba954a2b064273a89cbdc94f4d49b",
+    "session_disposition_2026-09-15.json": "b46e92af4c852f676bbaff76ed99e51b0ae195c6fe2d12df485b098c4426dced",
+    "session_disposition_2026-09-16.json": "20b061d60bc8e5dbe007ab55f590c3ccb0dbfb54afdbe71e94bd8327cb0fb2cc",
+    "session_disposition_2026-09-17.json": "1c26be24f20890e63c04073b67655d783d7dd7fa1dff75913ed1af0977da66ed"
+  }
+}

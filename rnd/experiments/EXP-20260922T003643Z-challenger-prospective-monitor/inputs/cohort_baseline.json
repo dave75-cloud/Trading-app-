@@ -1,0 +1,16 @@
+{
+  "cohort_start_utc": "2026-09-22",
+  "provider_candidate": "twelve_data",
+  "reference_provider": "polygon",
+  "historical_ledger_sessions_at_start": 36,
+  "historical_passes_at_start": 27,
+  "historical_failures_at_start": 9,
+  "historical_delayed_signal_disagreements_at_start": 57,
+  "historical_volatility_disagreements_at_start": 62,
+  "prospective_requirement_sessions": 10,
+  "required_delayed_signal_disagreements": 0,
+  "required_volatility_eligibility_disagreements": 0,
+  "price_divergence_is_reported_separately": true,
+  "canonical_m005_modified": false,
+  "automatic_promotion": false
+}

@@ -1,0 +1,25 @@
+{
+  "experiment_id": "EXP-20260921T020602Z-post-observation-remediation",
+  "task_id": "RND-0007",
+  "title": "Post-observation remediation package",
+  "status": "complete",
+  "created_utc": "2026-09-21T02:06:02Z",
+  "git_base": "fa1da8242f47b9469a25ccdea024c74d483b57bf",
+  "hypothesis": "Known diagnostic and concurrency issues can be specified as versioned post-observation candidates without modifying frozen components.",
+  "inputs": [],
+  "commands": [
+    "Document defects and acceptance tests."
+  ],
+  "outputs": [
+    "rnd/post_observation/REMEDIATION_PLAN.md",
+    "rnd/post_observation/acceptance_matrix.json"
+  ],
+  "result": "PASS: three known issues captured with post-observation acceptance criteria and no deployment authority.",
+  "safety": {
+    "broker_writes": false,
+    "protected_paths_modified": false,
+    "strategy_authority_changed": false,
+    "human_promotion_required": true
+  },
+  "completed_utc": "2026-09-21T02:06:02Z"
+}
