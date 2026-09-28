@@ -159,7 +159,6 @@ PROHIBITED_PARTS = [
     "order_" + "send",
     "place_" + "order" + r"\s*\(",
     "api-fx" + "trade" + r"\.oanda\.com",
-    "api-fx" + "practice" + r"\.oanda\.com",
     "OANDA_API_" + "TOKEN",
     "OANDA_ACCOUNT_" + "ID",
 ]
@@ -168,6 +167,14 @@ PROHIBITED = re.compile(
     "|".join(PROHIBITED_PARTS),
     re.IGNORECASE,
 )
+PRACTICE_HOST = re.compile(
+    "api-fx" + "practice" + r"\.oanda\.com",
+    re.IGNORECASE,
+)
+READ_ONLY_PRACTICE_HOST_ALLOWLIST = {
+    "rnd/research/OANDA_HISTORICAL_ACQUISITION_DECLARATION.json",
+    "rnd/orchestration/oanda_historical_acquisition.py",
+}
 
 broker_hits = []
 
@@ -179,6 +186,7 @@ for path in sorted(RND.rglob("*")):
     if path.resolve() == Path(__file__).resolve():
         continue
 
+    rel = str(path.relative_to(ROOT))
     try:
         body = path.read_text(encoding="utf-8")
     except UnicodeDecodeError:
@@ -186,9 +194,9 @@ for path in sorted(RND.rglob("*")):
 
     for n, line in enumerate(body.splitlines(), 1):
         if PROHIBITED.search(line):
-            broker_hits.append(
-                f"{path.relative_to(ROOT)}:{n}"
-            )
+            broker_hits.append(f"{rel}:{n}")
+        if PRACTICE_HOST.search(line) and rel not in READ_ONLY_PRACTICE_HOST_ALLOWLIST:
+            broker_hits.append(f"{rel}:{n}: practice host outside read-only allowlist")
 
 for hit in broker_hits:
     fail(f"prohibited broker/order token: {hit}")
