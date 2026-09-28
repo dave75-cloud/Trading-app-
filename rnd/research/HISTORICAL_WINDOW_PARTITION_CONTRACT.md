@@ -1,7 +1,7 @@
 # Predeclared historical window and sealed chronological partition
 
-Status: R&D CANDIDATE / NO STRATEGY EVALUATION  
-Task: RND-0029  
+Status: R&D CANDIDATE / NO STRATEGY EVALUATION
+Task: RND-0029
 Base: `f342a3b2aa4bca021346df7915f8e9aaed2f5cab`
 
 ## Purpose
