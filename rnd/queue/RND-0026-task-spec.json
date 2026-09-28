@@ -1,0 +1,36 @@
+{
+  "contract_version": "RND-task-spec-v0.1",
+  "task_id": "RND-0026",
+  "title": "Reconstruct and falsify historical trading evidence",
+  "git_base": "2a493bd0b09f4bd357a8696405d88cd8ab3dc28f",
+  "objective": "Apply the RND-0025 research baseline to Champion and M005, reconstructing only supported claims and testing known bias mechanisms without strategy optimization.",
+  "allowed_path_prefixes": ["rnd/"],
+  "prohibited_path_prefixes": ["rnd/private/"],
+  "required_outputs": [
+    "rnd/research/HISTORICAL_EVIDENCE_LEDGER.json",
+    "rnd/research/RND0026_RECONSTRUCTION_REPORT.md",
+    "rnd/research/M005_EVIDENCE_GAPS.json",
+    "rnd/orchestration/historical_evidence_falsification.py",
+    "rnd/orchestration/test_historical_evidence_falsification.py"
+  ],
+  "required_validation_labels": [
+    "diff-check",
+    "scope-check",
+    "orchestration-tests",
+    "m006f-tests",
+    "workspace-audit"
+  ],
+  "success_criteria": [
+    "Historical claims are classified without fabricating missing evidence",
+    "One-sided clipping and temporal/portfolio failure modes are machine-testable",
+    "M005 performance reconstruction fails closed when execution-grade data or untouched test evidence is absent"
+  ],
+  "stop_conditions": [
+    "Any change outside rnd/ or to frozen/operational paths",
+    "Any new strategy search, parameter optimization, ranking or post-hoc tuning",
+    "Any broker/network execution, strategy/risk/sizing, merge, promotion or capital authority"
+  ],
+  "human_gate_required": true,
+  "automatic_merge": false,
+  "automatic_promotion": false
+}
