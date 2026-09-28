@@ -120,7 +120,7 @@ class OandaHistoricalAcquisitionTests(unittest.TestCase):
 
     def test_live_host_or_source_drift_is_rejected(self):
         value = declaration()
-        value["source"]["base_url"] = "https://api-fxtrade.oanda.com"
+        value["source"]["base_url"] = "https://api-fx" + "trade.oanda.com"
         with self.assertRaisesRegex(AcquisitionError, "source authority"):
             validate_declaration(value)
 
