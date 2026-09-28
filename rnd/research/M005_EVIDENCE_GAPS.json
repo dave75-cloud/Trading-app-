@@ -1,0 +1,31 @@
+{
+  "contract_version": "RND-m005-evidence-gap-v0.1",
+  "task_id": "RND-0026",
+  "base_commit": "2a493bd0b09f4bd357a8696405d88cd8ab3dc28f",
+  "fixed_behaviour": {
+    "pairs": ["AUDUSD", "EURUSD", "GBPUSD", "USDJPY"],
+    "timeframe": "M5",
+    "fast_ma": 20,
+    "slow_ma": 50,
+    "vol_window": 12,
+    "vol_ddof": 0,
+    "vol_threshold": 0.0005,
+    "sessions_utc": {
+      "AUDUSD": [11, 14],
+      "EURUSD": [11, 13],
+      "GBPUSD": [11, 13],
+      "USDJPY": [11, 13]
+    },
+    "signal_delay_bars": 1,
+    "minimum_hold_bars": 3
+  },
+  "performance_declaration_status": "BLOCKED_INSUFFICIENT_EVIDENCE",
+  "blocking_gaps": [
+    "No immutable execution-grade historical snapshot with bid and ask is identified for the reconstruction.",
+    "The OANDA authoritative observer explicitly consumes completed M5 midpoint candles, which is sufficient for behavioural observation but not the RND-0025 bid/ask execution baseline.",
+    "No predeclared untouched final chronological test window is bound to the historical M005 selection lineage.",
+    "No complete historical trial ledger establishes how many strategy/session/filter choices preceded the frozen candidate.",
+    "No accepted event-driven mark-to-market historical portfolio reconstruction is bound to immutable source data."
+  ],
+  "next_stage": "Acquire or identify immutable source snapshots without inspecting the reserved final-test period; bind provenance and hashes; reconstruct fixed M005 semantics without tuning; reserve final test until the reconstruction and validation protocol are frozen."
+}

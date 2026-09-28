@@ -1,0 +1,75 @@
+{
+  "contract_version": "RND-historical-evidence-ledger-v0.1",
+  "base_commit": "2a493bd0b09f4bd357a8696405d88cd8ab3dc28f",
+  "claims": [
+    {
+      "claim_id": "CHAMPION-RECIPE",
+      "status": "REPRODUCIBLE",
+      "claim": "The repository preserves the Champion construction recipe: GBPUSD entry hour 11; USDJPY short and entry hour 11; AUDUSD minimum 6 bars and entry hour 11; then sequential portfolio aggregation.",
+      "evidence": [
+        {"path": "cli/build_champion_fx_portfolio.sh", "git_blob": "d4d9bf3dc002588c29845b1b9105c0869c1c8e2b"},
+        {"path": "cli/filter_trade_log.py", "git_blob": "74d86e28e3d5253a4266fc116cf74980d454f424"},
+        {"path": "cli/portfolio_equity.py", "git_blob": "60645eb581b8afb8e2806ecf0c40b2f7b0cd553d"}
+      ]
+    },
+    {
+      "claim_id": "CHAMPION-HEADLINE-PERFORMANCE",
+      "status": "UNREPRODUCIBLE",
+      "claim": "The historical Champion headline equity/trade/drawdown figures cannot be reproduced from the governed repository alone.",
+      "evidence": [],
+      "missing": [
+        "data/backtest_ready/trade_log_gbpusd_sized.csv",
+        "data/backtest_ready/trade_log_usdjpy_sized.csv",
+        "data/backtest_ready/trade_log_audusd_sized.csv",
+        "data/backtest_ready/portfolio_equity_fx_champion.csv"
+      ]
+    },
+    {
+      "claim_id": "LEGACY-SYNTHETIC-CLIPPING",
+      "status": "INVALID_AS_PERFORMANCE_EVIDENCE",
+      "claim": "apply_position_sizing.py scales completed net_return and then clips only the lower tail; this is not an executable stop-loss simulation.",
+      "evidence": [
+        {"path": "cli/apply_position_sizing.py", "git_blob": "b29fae1c0c03068a192b80aa05a124c09ad84b1e"}
+      ]
+    },
+    {
+      "claim_id": "LEGACY-SWEEP-SELECTION",
+      "status": "PARTIALLY_REPRODUCIBLE",
+      "claim": "The surviving exploratory sweep evaluates and ranks parameter combinations on the same supplied history; it does not itself establish independent out-of-sample performance.",
+      "evidence": [
+        {"path": "cli/sweep_simple_backtest.py", "git_blob": "c04a7bac0a167a47a1bbbb6cbb844fb67c6d946e"}
+      ]
+    },
+    {
+      "claim_id": "LEGACY-WALKFORWARD",
+      "status": "PARTIALLY_REPRODUCIBLE",
+      "claim": "monthly_walkforward evaluates later monthly slices but contains no per-fold training/selection step and uses an assumed intrabar path when TP and SL are both touched.",
+      "evidence": [
+        {"path": "backtest/engine.py", "git_blob": "309c34cca689b5ad08eb179baa597e3ac229a5bc"}
+      ]
+    },
+    {
+      "claim_id": "M005-BEHAVIOUR",
+      "status": "REPRODUCIBLE",
+      "claim": "Independent repository code preserves MA20/MA50, vol12 with ddof=0 and threshold 0.0005, pair-specific UTC sessions, one-bar delay, minimum hold 3 bars and state-transition semantics.",
+      "evidence": [
+        {"path": "tools/pre_monday/audit_m005_v1_2j3.py", "git_blob": "365c10470598056099f58b7bb80236af42f3991a"},
+        {"path": "tools/m006e/m006e1_oanda_authoritative_observer.py", "git_blob": "64c2e4fb0608777dbe19e4a83a74797bbf41fd69"}
+      ]
+    },
+    {
+      "claim_id": "M005-HISTORICAL-EDGE",
+      "status": "UNREPRODUCIBLE",
+      "claim": "Behavioural reproducibility does not establish historical or out-of-sample expected value under the RND-0025 execution-grade research contract.",
+      "evidence": [
+        {"path": "README.md", "git_blob": "344b8e3e856bfbd693dcd4aa028dc30aa05107d8"}
+      ],
+      "missing": [
+        "immutable execution-grade bid/ask historical snapshot",
+        "predeclared chronological development/validation/final-test partition",
+        "complete declared historical trial ledger",
+        "event-driven mark-to-market reconstruction evidence"
+      ]
+    }
+  ]
+}

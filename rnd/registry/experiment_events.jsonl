@@ -65,3 +65,6 @@
 {"experiment_id":"EXP-20260928T115103Z-quant-research-baseline","status":"planned","task_id":"RND-0025","timestamp_utc":"2026-09-28T11:51:03Z","title":"Quantitative research baseline and reproducibility standard"}
 {"experiment_id":"EXP-20260928T115103Z-quant-research-baseline","status":"running","task_id":"RND-0025","timestamp_utc":"2026-09-28T11:51:04Z","title":"Quantitative research baseline and reproducibility standard"}
 {"experiment_id":"EXP-20260928T115103Z-quant-research-baseline","status":"complete","task_id":"RND-0025","timestamp_utc":"2026-09-28T11:58:38Z","title":"Quantitative research baseline and reproducibility standard"}
+{"experiment_id":"EXP-20260928T121924Z-historical-evidence-falsification","status":"planned","task_id":"RND-0026","timestamp_utc":"2026-09-28T12:19:23Z","title":"Controlled reconstruction and falsification of historical trading evidence"}
+{"experiment_id":"EXP-20260928T121924Z-historical-evidence-falsification","status":"running","task_id":"RND-0026","timestamp_utc":"2026-09-28T12:19:24Z","title":"Controlled reconstruction and falsification of historical trading evidence"}
+{"experiment_id":"EXP-20260928T121924Z-historical-evidence-falsification","status":"complete","task_id":"RND-0026","timestamp_utc":"2026-09-28T12:31:47Z","title":"Controlled reconstruction and falsification of historical trading evidence"}
