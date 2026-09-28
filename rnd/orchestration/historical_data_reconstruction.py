@@ -8,6 +8,7 @@ access, promotion authority or capital authority.
 from __future__ import annotations
 
 import hashlib
+import json
 import math
 import re
 from datetime import datetime
@@ -102,6 +103,7 @@ SNAPSHOT_FIELDS = {
     "contract_version",
     "snapshot_id",
     "sha256",
+    "canonical_rows_sha256",
     "provider",
     "source_instrument",
     "symbol",
@@ -164,6 +166,10 @@ def validate_snapshot_manifest(value):
         _text(value[field], "snapshot." + field)
     if not SHA256_RE.fullmatch(_text(value["sha256"], "snapshot.sha256")):
         raise HistoricalDataError("snapshot.sha256: invalid")
+    if not SHA256_RE.fullmatch(
+        _text(value["canonical_rows_sha256"], "snapshot.canonical_rows_sha256")
+    ):
+        raise HistoricalDataError("snapshot.canonical_rows_sha256: invalid")
     if value["timeframe"] != "M5":
         raise HistoricalDataError("snapshot.timeframe: M5 required")
     components = value["price_components"]
@@ -252,10 +258,25 @@ def validate_candle_rows(rows, expected_timestamps=None):
     return True
 
 
+def canonical_rows_sha256(rows):
+    if not isinstance(rows, list):
+        raise HistoricalDataError("rows: list required for canonical hash")
+    payload = json.dumps(
+        rows, sort_keys=True, separators=(",", ":"), ensure_ascii=True
+    ).encode("utf-8")
+    return hashlib.sha256(payload).hexdigest()
+
+
 def validate_snapshot_evidence(manifest, raw_bytes, rows, expected_timestamps=None):
     validate_snapshot_manifest(manifest)
     verify_snapshot_bytes(manifest, raw_bytes)
+    if expected_timestamps is None:
+        raise HistoricalDataError(
+            "snapshot: expected market-calendar timestamp schedule required"
+        )
     validate_candle_rows(rows, expected_timestamps)
+    if manifest["canonical_rows_sha256"] != canonical_rows_sha256(rows):
+        raise HistoricalDataError("snapshot: canonical parsed-row hash mismatch")
     if manifest["row_count"] != len(rows):
         raise HistoricalDataError("snapshot: row_count does not match validated rows")
     row_start = _utc(rows[0]["timestamp_utc"], "first row")
