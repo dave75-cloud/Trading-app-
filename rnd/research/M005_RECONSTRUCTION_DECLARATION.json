@@ -40,9 +40,9 @@
   "search_space": {},
   "declared_trial_count": 1,
   "reserved_test": {
-    "state": "SEALED_BOUNDARY_UNBOUND",
-    "start_utc": null,
-    "end_utc": null,
+    "state": "SEALED_BOUNDARY_BOUND",
+    "start_utc": "2023-01-01T09:40:00Z",
+    "end_utc": "2025-01-01T00:00:00Z",
     "strategy_metrics_allowed": false,
     "signal_generation_allowed": false,
     "trade_simulation_allowed": false,
