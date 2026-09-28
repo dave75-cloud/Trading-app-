@@ -22,6 +22,7 @@ from oanda_historical_acquisition import (
     validate_candle_url,
     validate_declaration,
     validate_output_target,
+    validate_page_window,
 )
 
 
@@ -237,6 +238,12 @@ class OandaHistoricalAcquisitionTests(unittest.TestCase):
             aggregate_raw_bundle_sha256([a, b]),
             aggregate_raw_bundle_sha256([b, a]),
         )
+
+    def test_candle_outside_requested_chunk_is_rejected(self):
+        rows = parse_page(raw_page([candle("2020-01-01T00:00:00.000000000Z")]), "AUD_USD")
+        chunk = {"start_utc": "2020-01-01T00:05:00Z", "end_utc": "2020-01-01T00:10:00Z", "slots": 1}
+        with self.assertRaisesRegex(AcquisitionError, "outside requested"):
+            validate_page_window(rows, chunk)
 
     def test_page_overlap_is_rejected(self):
         page = parse_page(raw_page(), "AUD_USD")
