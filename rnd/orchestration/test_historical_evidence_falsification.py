@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 
+import json
 import unittest
+from pathlib import Path
 
 from historical_evidence_falsification import (
+    EXPECTED_M005_BEHAVIOUR,
     HistoricalEvidenceError,
     classify_ambiguous_bar,
     clipping_counterfactual,
@@ -134,12 +137,27 @@ class HistoricalEvidenceTests(unittest.TestCase):
             "AMBIGUOUS",
         )
 
+    def test_repository_ledger_is_structurally_valid(self):
+        root = Path(__file__).resolve().parents[1]
+        value = json.loads(
+            (root / "research" / "HISTORICAL_EVIDENCE_LEDGER.json").read_text()
+        )
+        self.assertTrue(validate_evidence_ledger(value))
+
+    def test_repository_m005_gap_report_is_blocked(self):
+        root = Path(__file__).resolve().parents[1]
+        value = json.loads(
+            (root / "research" / "M005_EVIDENCE_GAPS.json").read_text()
+        )
+        result = m005_performance_gate(value)
+        self.assertFalse(result["performance_declaration_allowed"])
+
     def test_m005_gap_report_cannot_grant_performance_authority(self):
         report = {
             "contract_version": "RND-m005-evidence-gap-v0.1",
             "task_id": "RND-0026",
             "base_commit": "a" * 40,
-            "fixed_behaviour": {},
+            "fixed_behaviour": EXPECTED_M005_BEHAVIOUR,
             "performance_declaration_status": "BLOCKED_INSUFFICIENT_EVIDENCE",
             "blocking_gaps": ["missing bid/ask snapshot"],
             "next_stage": "Acquire evidence without opening final test.",
@@ -148,6 +166,20 @@ class HistoricalEvidenceTests(unittest.TestCase):
         self.assertFalse(result["performance_declaration_allowed"])
         self.assertFalse(result["strategy_selection_authority"])
         self.assertFalse(result["promotion_authority"])
+
+    def test_m005_behaviour_drift_is_rejected(self):
+        report = {
+            "contract_version": "RND-m005-evidence-gap-v0.1",
+            "task_id": "RND-0026",
+            "base_commit": "a" * 40,
+            "fixed_behaviour": dict(EXPECTED_M005_BEHAVIOUR),
+            "performance_declaration_status": "BLOCKED_INSUFFICIENT_EVIDENCE",
+            "blocking_gaps": ["missing evidence"],
+            "next_stage": "Acquire evidence.",
+        }
+        report["fixed_behaviour"]["fast_ma"] = 21
+        with self.assertRaisesRegex(HistoricalEvidenceError, "behaviour mismatch"):
+            m005_performance_gate(report)
 
 
 if __name__ == "__main__":
