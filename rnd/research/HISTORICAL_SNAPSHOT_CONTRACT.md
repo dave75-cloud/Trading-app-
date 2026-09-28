@@ -20,7 +20,7 @@ An AVAILABLE snapshot must bind all of the following before strategy evaluation:
 - provider and provider dataset/instrument identity;
 - pair and M5 timeframe;
 - UTC start and end;
-- bid and ask OHLC components, with midpoint optional;
+- bid, ask and midpoint OHLC components;
 - complete-candle-only status;
 - expected five-minute cadence;
 - row count;
