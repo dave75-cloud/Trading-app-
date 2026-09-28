@@ -1,7 +1,7 @@
 # Controlled OANDA historical acquisition and immutable sealing
 
-Status: R&D CANDIDATE / NON-OPERATIONAL  
-Task: RND-0028  
+Status: R&D CANDIDATE / NON-OPERATIONAL
+Task: RND-0028
 Base: `fb4686421cf93158c7dac813aa03e3fdd06ca701`
 
 ## Purpose
