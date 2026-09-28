@@ -332,16 +332,20 @@ def raw_page_evidence(raw_bytes, request_url, request_id=None):
     }
 
 
-def aggregate_raw_bundle_sha256(raw_pages):
+def aggregate_raw_bundle_bytes(raw_pages):
     if not isinstance(raw_pages, list) or not raw_pages:
         raise AcquisitionError("bundle: non-empty page list required")
-    h = hashlib.sha256()
+    parts = []
     for page in raw_pages:
         if not isinstance(page, bytes):
             raise AcquisitionError("bundle: bytes pages required")
-        h.update(len(page).to_bytes(8, "big"))
-        h.update(page)
-    return h.hexdigest()
+        parts.append(len(page).to_bytes(8, "big"))
+        parts.append(page)
+    return b"".join(parts)
+
+
+def aggregate_raw_bundle_sha256(raw_pages):
+    return hashlib.sha256(aggregate_raw_bundle_bytes(raw_pages)).hexdigest()
 
 
 def merge_canonical_pages(pages):
