@@ -1,0 +1,48 @@
+{
+  "contract_version": "RND-task-spec-v0.1",
+  "task_id": "RND-0030",
+  "title": "Calendar-aware OANDA historical acquisition quarantine",
+  "git_base": "baa62608d734f0562470d6b4b1bc4eeeda4aa909",
+  "objective": "Generate an outcome-blind OANDA standard-session M5 calendar and acquire the predeclared 2015-2025 four-pair history into year-sharded external quarantine evidence that cannot be sealed while structural discrepancies remain unresolved.",
+  "allowed_path_prefixes": [
+    "rnd/"
+  ],
+  "prohibited_path_prefixes": [
+    "rnd/private/"
+  ],
+  "required_outputs": [
+    "rnd/research/OANDA_CALENDAR_QUARANTINE_DECLARATION.json",
+    "rnd/research/OANDA_CALENDAR_QUARANTINE_CONTRACT.md",
+    "rnd/orchestration/oanda_market_calendar.py",
+    "rnd/orchestration/test_oanda_market_calendar.py",
+    "rnd/tools/oanda_historical_quarantine.py"
+  ],
+  "required_validation_labels": [
+    "diff-check",
+    "scope-check",
+    "orchestration-tests",
+    "m006f-tests",
+    "workspace-audit"
+  ],
+  "success_criteria": [
+    "Standard-session M5 schedule is deterministic in America/New_York and DST-aware",
+    "Ten-year acquisition is year-sharded and external to repository",
+    "Returned candles cannot define expected schedule or authorize exceptions",
+    "Unresolved missing/unexpected timestamps block sealing",
+    "Exception evidence must be independent official OANDA trading-hours evidence",
+    "Reserved final test remains outcome-sealed",
+    "No broker-write or capital authority"
+  ],
+  "stop_conditions": [
+    "Any strategy outcome used in calendar/exception logic",
+    "Any final-test strategy access",
+    "Any live host/write endpoint/order/trade/position authority",
+    "Any credential committed or written to evidence",
+    "Any overwrite of quarantine evidence",
+    "Any change outside rnd/",
+    "Any automatic merge/promotion"
+  ],
+  "human_gate_required": true,
+  "automatic_merge": false,
+  "automatic_promotion": false
+}
