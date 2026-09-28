@@ -77,6 +77,25 @@ def _source_declaration_sha256(value):
     return _sha256_bytes(_json_bytes(value))
 
 
+def _validate_source_binding(acquisition, calendar):
+    _validate_source_binding(acquisition, calendar)
+    horizon = calendar["horizon"]
+    if acquisition["state"] != "ACQUISITION_READY" or acquisition["acquisition_window"] != {
+        "start_utc": horizon["start_utc"],
+        "end_utc": horizon["end_utc"],
+        "human_approved": True,
+    }:
+        raise SystemExit("FAIL_CLOSED: acquisition declaration is not bound to RND-0030 horizon")
+    reserved = calendar["reserved_final_test"]
+    if (
+        acquisition["reserved_test"].get("start_utc") != reserved["start_utc"]
+        or acquisition["reserved_test"].get("end_utc") != reserved["end_utc"]
+        or acquisition["reserved_test"].get("state") != "SEALED_BOUNDARY_BOUND"
+    ):
+        raise SystemExit("FAIL_CLOSED: acquisition/final-test boundary mismatch")
+    return True
+
+
 def _shard_declaration(acquisition, shard):
     value = copy.deepcopy(acquisition)
     value["state"] = "ACQUISITION_READY"
@@ -97,7 +116,7 @@ def _validate_selection(symbols, years):
 
 
 def acquire_shard(acquisition, calendar, symbol, shard, token, account_id, stage, delay):
-    validate_calendar_declaration(calendar)
+    _validate_source_binding(acquisition, calendar)
     value = _shard_declaration(acquisition, shard)
     expected = standard_session_schedule(shard["start_utc"], shard["end_utc"])
     chunks = plan_chunks(value)
@@ -190,7 +209,7 @@ def acquire_shard(acquisition, calendar, symbol, shard, token, account_id, stage
     return manifest
 
 
-def verify_existing_shard(path, symbol, shard):
+def verify_existing_shard(path, symbol, shard, acquisition, calendar):
     path = Path(path)
     manifest_path = path / "quarantine_manifest.json"
     if not manifest_path.is_file():
@@ -217,6 +236,10 @@ def verify_existing_shard(path, symbol, shard):
         "credentials_recorded": False,
     }
     if any(manifest.get(k) != v for k, v in expected_identity.items()):
+        return False
+    if manifest.get("source_acquisition_declaration_sha256") != _source_declaration_sha256(acquisition):
+        return False
+    if manifest.get("source_calendar_declaration_sha256") != _source_declaration_sha256(calendar):
         return False
     files = {
         "raw_bundle_file_sha256": "raw_bundle.bin",
@@ -312,7 +335,7 @@ def main():
             shard = shard_by_year[year]
             final = output / symbol / str(year)
             if final.exists():
-                if args.resume and verify_existing_shard(final, symbol, shard):
+                if args.resume and verify_existing_shard(final, symbol, shard, acquisition, calendar):
                     skipped.append(f"{symbol}:{year}")
                     continue
                 raise SystemExit(
