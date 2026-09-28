@@ -39,3 +39,21 @@ Acquisition and structural auditing are allowed; strategy evaluation is not.
 ## Current state
 
 No historical network acquisition has yet been executed under RND-0030.
+
+## Independent exact-head validation
+
+Implementation HEAD `1382309a66892c4b808ac703e047fd365138df35` was independently validated in a clean
+detached worktree.
+
+- orchestration: 249 tests, OK;
+- M006f: 106 tests, OK;
+- workspace audit: PASS;
+- tasks: 30;
+- experiments: 29;
+- broker writes: FALSE;
+- protected paths modified: FALSE;
+- promotion authority: HUMAN_ONLY;
+- diff check against `baa62608d734f0562470d6b4b1bc4eeeda4aa909`: clean.
+
+This validation completed the RND-0030 mechanism only. No OANDA historical
+network acquisition was executed and no strategy outcome was calculated.
