@@ -20,6 +20,23 @@ ALLOWED_STATUSES = {
     "INVALID_AS_PERFORMANCE_EVIDENCE",
 }
 GIT_BLOB_RE = re.compile(r"^[0-9a-f]{40}$")
+EXPECTED_M005_BEHAVIOUR = {
+    "pairs": ["AUDUSD", "EURUSD", "GBPUSD", "USDJPY"],
+    "timeframe": "M5",
+    "fast_ma": 20,
+    "slow_ma": 50,
+    "vol_window": 12,
+    "vol_ddof": 0,
+    "vol_threshold": 0.0005,
+    "sessions_utc": {
+        "AUDUSD": [11, 14],
+        "EURUSD": [11, 13],
+        "GBPUSD": [11, 13],
+        "USDJPY": [11, 13],
+    },
+    "signal_delay_bars": 1,
+    "minimum_hold_bars": 3,
+}
 
 
 class HistoricalEvidenceError(ValueError):
@@ -227,6 +244,8 @@ def m005_performance_gate(gap_report):
     }
     if set(gap_report) != required:
         raise HistoricalEvidenceError("gap report: field mismatch")
+    if gap_report["fixed_behaviour"] != EXPECTED_M005_BEHAVIOUR:
+        raise HistoricalEvidenceError("gap report: frozen M005 behaviour mismatch")
     if gap_report["performance_declaration_status"] != "BLOCKED_INSUFFICIENT_EVIDENCE":
         raise HistoricalEvidenceError("gap report: must fail closed in RND-0026")
     gaps = gap_report["blocking_gaps"]
