@@ -316,8 +316,16 @@ def raw_page_evidence(raw_bytes, request_url, request_id=None):
     validate_candle_url(request_url)
     if not isinstance(raw_bytes, bytes) or not raw_bytes:
         raise AcquisitionError("page evidence: bytes required")
+    parsed = urlparse(request_url)
+    match = re.fullmatch(
+        r"/v3/accounts/([A-Za-z0-9_-]{3,128})/instruments/([A-Z]{3}_[A-Z]{3})/candles",
+        parsed.path,
+    )
+    query = parse_qs(parsed.query)
     return {
-        "request_url": request_url,
+        "instrument": match.group(2),
+        "from_utc": query["from"][0],
+        "to_utc": query["to"][0],
         "request_id": request_id,
         "raw_sha256": hashlib.sha256(raw_bytes).hexdigest(),
         "byte_count": len(raw_bytes),
