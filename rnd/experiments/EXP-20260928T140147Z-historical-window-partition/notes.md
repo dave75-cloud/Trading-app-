@@ -32,3 +32,33 @@ parameter selection and ranking remain prohibited.
 No OANDA historical request has been made by this experiment. Binding an
 acquisition declaration is not execution authority and does not itself fetch
 data.
+
+## Independent validation
+
+Exact implementation HEAD: `4ee1561de1ea8bb87ae8740ed7549abf56d5b4b9`
+
+The first independent run on `0ac6d702cd81181cb5fb99b23ad29bcd715ecf2f`
+passed all tests and the workspace audit but correctly exposed two trailing-space
+defects in this contract through `git diff --check`. The correction changed
+only those two Markdown whitespace instances.
+
+The corrected exact implementation HEAD was then independently revalidated in
+a clean detached worktree:
+
+- orchestration: 201 tests, OK;
+- M006f: 106 tests, OK;
+- workspace audit: PASS;
+- tasks=29, experiments=28;
+- broker_writes=FALSE;
+- protected_paths_modified=FALSE;
+- promotion_authority=HUMAN_ONLY;
+- `git diff --check f342a3b2aa4bca021346df7915f8e9aaed2f5cab...HEAD`: clean.
+
+GitHub safeguards on that same exact implementation HEAD also completed
+successfully: Autonomous R&D Guard run 351 and Current System Validation run
+350.
+
+No historical data were fetched and no M005 strategy outcome was calculated
+during this experiment. The reserved final-test boundary is bound but remains
+sealed.
+
