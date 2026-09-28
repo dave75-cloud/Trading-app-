@@ -48,7 +48,9 @@ EXPECTED_AUTHORITY = {
     "human_review_required": True,
 }
 EXPECTED_RESERVED = {
-    "state": "SEALED_BOUNDARY_UNBOUND",
+    "state": "SEALED_BOUNDARY_BOUND",
+    "start_utc": "2023-01-01T09:40:00Z",
+    "end_utc": "2025-01-01T00:00:00Z",
     "strategy_metrics_allowed": False,
     "signal_generation_allowed": False,
     "trade_simulation_allowed": False,
