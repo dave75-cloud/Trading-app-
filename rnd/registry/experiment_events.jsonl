@@ -77,3 +77,5 @@
 {"experiment_id":"EXP-20260928T140147Z-historical-window-partition","status":"planned","task_id":"RND-0029","timestamp_utc":"2026-09-28T14:01:46Z","title":"Predeclared historical window and sealed chronological partition"}
 {"experiment_id":"EXP-20260928T140147Z-historical-window-partition","status":"running","task_id":"RND-0029","timestamp_utc":"2026-09-28T14:01:47Z","title":"Predeclared historical window and sealed chronological partition"}
 {"experiment_id":"EXP-20260928T140147Z-historical-window-partition","status":"complete","task_id":"RND-0029","timestamp_utc":"2026-09-28T14:08:00Z","title":"Predeclared historical window and sealed chronological partition"}
+{"experiment_id":"EXP-20260928T141705Z-calendar-aware-acquisition","status":"planned","task_id":"RND-0030","timestamp_utc":"2026-09-28T14:17:04Z","title":"Calendar-aware OANDA historical acquisition quarantine"}
+{"experiment_id":"EXP-20260928T141705Z-calendar-aware-acquisition","status":"running","task_id":"RND-0030","timestamp_utc":"2026-09-28T14:17:05Z","title":"Calendar-aware OANDA historical acquisition quarantine"}
