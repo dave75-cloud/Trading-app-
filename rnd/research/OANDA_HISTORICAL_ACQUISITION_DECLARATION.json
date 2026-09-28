@@ -2,7 +2,7 @@
   "contract_version": "RND-oanda-historical-acquisition-v0.1",
   "task_id": "RND-0028",
   "base_commit": "fb4686421cf93158c7dac813aa03e3fdd06ca701",
-  "state": "UNBOUND_WINDOW",
+  "state": "ACQUISITION_READY",
   "source": {
     "provider": "OANDA",
     "environment": "PRACTICE",
@@ -22,9 +22,9 @@
     "USDJPY": "USD_JPY"
   },
   "acquisition_window": {
-    "start_utc": null,
-    "end_utc": null,
-    "human_approved": false
+    "start_utc": "2015-01-01T00:00:00Z",
+    "end_utc": "2025-01-01T00:00:00Z",
+    "human_approved": true
   },
   "evidence": {
     "raw_page_sha256": true,
@@ -44,7 +44,9 @@
     "credentials_logged": false
   },
   "reserved_test": {
-    "state": "SEALED_BOUNDARY_UNBOUND",
+    "state": "SEALED_BOUNDARY_BOUND",
+    "start_utc": "2023-01-01T09:40:00Z",
+    "end_utc": "2025-01-01T00:00:00Z",
     "strategy_metrics_allowed": false,
     "signal_generation_allowed": false,
     "trade_simulation_allowed": false,
