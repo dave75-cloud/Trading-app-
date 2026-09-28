@@ -98,6 +98,11 @@ class CaptureOpener:
         return self.response
 
 
+class LeakyOpener:
+    def __call__(self, request, timeout=None):
+        raise RuntimeError(request.full_url)
+
+
 class OandaHistoricalAcquisitionTests(unittest.TestCase):
     def test_repository_declaration_is_valid_and_unbound(self):
         value = declaration()
@@ -187,6 +192,12 @@ class OandaHistoricalAcquisitionTests(unittest.TestCase):
             fetch_page(url(), "never-echo-this", opener=opener)
         self.assertNotIn("never-echo-this", str(ctx.exception))
 
+    def test_transport_exception_does_not_echo_account_url(self):
+        with self.assertRaisesRegex(AcquisitionError, "request failed") as ctx:
+            fetch_page(url(account="secret-account"), "secret-token", opener=LeakyOpener())
+        self.assertNotIn("secret-account", str(ctx.exception))
+        self.assertNotIn("secret-token", str(ctx.exception))
+
     def test_valid_page_preserves_bid_ask_mid_provider_strings(self):
         rows = parse_page(raw_page(), "AUD_USD")
         self.assertEqual(1, len(rows))
@@ -245,10 +256,35 @@ class OandaHistoricalAcquisitionTests(unittest.TestCase):
         with self.assertRaisesRegex(AcquisitionError, "outside requested"):
             validate_page_window(rows, chunk)
 
+    def test_response_cannot_exceed_requested_slot_count(self):
+        rows = parse_page(
+            raw_page([
+                candle("2020-01-01T00:00:00.000000000Z"),
+                candle("2020-01-01T00:05:00.000000000Z"),
+            ]),
+            "AUD_USD",
+        )
+        chunk = {"start_utc": "2020-01-01T00:00:00Z", "end_utc": "2020-01-01T00:05:00Z", "slots": 1}
+        with self.assertRaisesRegex(AcquisitionError, "exceeds requested"):
+            validate_page_window(rows, chunk)
+
     def test_page_overlap_is_rejected(self):
         page = parse_page(raw_page(), "AUD_USD")
         with self.assertRaisesRegex(AcquisitionError, "overlap"):
             merge_canonical_pages([page, copy.deepcopy(page)])
+
+    def test_gap_ledger_rejects_duplicate_expected_schedule(self):
+        rows = parse_page(raw_page(), "AUD_USD")
+        with self.assertRaisesRegex(AcquisitionError, "unique and ordered"):
+            build_gap_ledger(
+                rows,
+                ["2020-01-01T00:00:00Z", "2020-01-01T00:00:00.000000000Z"],
+            )
+
+    def test_gap_ledger_normalizes_equivalent_timestamp_precision(self):
+        rows = parse_page(raw_page(), "AUD_USD")
+        ledger = build_gap_ledger(rows, ["2020-01-01T00:00:00Z"])
+        self.assertTrue(ledger["complete"])
 
     def test_gap_ledger_blocks_seal_when_unresolved(self):
         rows = parse_page(raw_page(), "AUD_USD")
