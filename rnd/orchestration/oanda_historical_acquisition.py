@@ -249,7 +249,10 @@ def fetch_page(url, token, opener=urlopen, timeout=30):
         },
         method="GET",
     )
-    response = opener(request, timeout=timeout)
+    try:
+        response = opener(request, timeout=timeout)
+    except Exception:
+        raise AcquisitionError("transport: request failed") from None
     status = getattr(response, "status", 200)
     if status != 200:
         raise AcquisitionError(f"transport: HTTP {status}")
@@ -354,6 +357,11 @@ def validate_page_window(rows, chunk):
         raise AcquisitionError("page window: invalid chunk")
     start = _utc(chunk["start_utc"], "chunk.start_utc")
     end = _utc(chunk["end_utc"], "chunk.end_utc")
+    slots = int((end - start).total_seconds() // M5_SECONDS)
+    if chunk["slots"] != slots or slots < 1 or slots > MAX_CANDLES:
+        raise AcquisitionError("page window: invalid bounded chunk")
+    if len(rows) > slots:
+        raise AcquisitionError("page window: response exceeds requested M5 slots")
     for row in rows:
         ts = _utc(row["timestamp_utc"], "row.timestamp_utc")
         if ts < start or ts >= end:
@@ -378,18 +386,27 @@ def merge_canonical_pages(pages):
 
 def build_gap_ledger(rows, expected_timestamps):
     validate_candle_rows(rows)
-    if not isinstance(expected_timestamps, list):
-        raise AcquisitionError("gap ledger: expected timestamps list required")
-    expected = list(expected_timestamps)
-    actual = [r["timestamp_utc"] for r in rows]
-    missing = [x for x in expected if x not in set(actual)]
-    unexpected = [x for x in actual if x not in set(expected)]
+    if not isinstance(expected_timestamps, list) or not expected_timestamps:
+        raise AcquisitionError("gap ledger: non-empty expected timestamps required")
+    expected_dt = [_utc(x, "gap ledger expected timestamp") for x in expected_timestamps]
+    if len(set(expected_dt)) != len(expected_dt) or expected_dt != sorted(expected_dt):
+        raise AcquisitionError("gap ledger: expected timestamps must be unique and ordered")
+    actual_text = [r["timestamp_utc"] for r in rows]
+    actual_dt = [_utc(x, "gap ledger actual timestamp") for x in actual_text]
+    actual_set = set(actual_dt)
+    expected_set = set(expected_dt)
+    missing = [
+        text for text, dt in zip(expected_timestamps, expected_dt) if dt not in actual_set
+    ]
+    unexpected = [
+        text for text, dt in zip(actual_text, actual_dt) if dt not in expected_set
+    ]
     return {
-        "expected_count": len(expected),
-        "actual_count": len(actual),
+        "expected_count": len(expected_dt),
+        "actual_count": len(actual_dt),
         "missing_timestamps": missing,
         "unexpected_timestamps": unexpected,
-        "complete": not missing and not unexpected,
+        "complete": actual_dt == expected_dt,
     }
 
 
