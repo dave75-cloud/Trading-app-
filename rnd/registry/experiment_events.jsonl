@@ -76,3 +76,4 @@
 {"experiment_id":"EXP-20260928T125505Z-oanda-historical-acquisition","status":"complete","task_id":"RND-0028","timestamp_utc":"2026-09-28T13:11:59Z","title":"Controlled OANDA historical acquisition and immutable sealing"}
 {"experiment_id":"EXP-20260928T140147Z-historical-window-partition","status":"planned","task_id":"RND-0029","timestamp_utc":"2026-09-28T14:01:46Z","title":"Predeclared historical window and sealed chronological partition"}
 {"experiment_id":"EXP-20260928T140147Z-historical-window-partition","status":"running","task_id":"RND-0029","timestamp_utc":"2026-09-28T14:01:47Z","title":"Predeclared historical window and sealed chronological partition"}
+{"experiment_id":"EXP-20260928T140147Z-historical-window-partition","status":"complete","task_id":"RND-0029","timestamp_utc":"2026-09-28T14:08:00Z","title":"Predeclared historical window and sealed chronological partition"}
