@@ -1,0 +1,14 @@
+{
+  "contract_version": "RND-calendar-exception-evidence-v0.1",
+  "task_id": "RND-0030",
+  "horizon": {
+    "start_utc": "2015-01-01T00:00:00Z",
+    "end_utc": "2025-01-01T00:00:00Z"
+  },
+  "exceptions": [],
+  "authority": {
+    "strategy_outcomes_allowed": false,
+    "returned_candles_can_authorize_exception": false,
+    "human_review_required": true
+  }
+}

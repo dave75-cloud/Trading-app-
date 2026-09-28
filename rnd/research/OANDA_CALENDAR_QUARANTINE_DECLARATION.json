@@ -1,0 +1,92 @@
+{
+  "contract_version": "RND-calendar-aware-acquisition-v0.1",
+  "task_id": "RND-0030",
+  "base_commit": "baa62608d734f0562470d6b4b1bc4eeeda4aa909",
+  "status": "QUARANTINE_READY",
+  "horizon": {
+    "start_utc": "2015-01-01T00:00:00Z",
+    "end_utc": "2025-01-01T00:00:00Z"
+  },
+  "symbols": [
+    "AUDUSD",
+    "EURUSD",
+    "GBPUSD",
+    "USDJPY"
+  ],
+  "standard_session": {
+    "timezone": "America/New_York",
+    "weekly_open_local": "Sunday 17:05",
+    "weekly_close_local": "Friday 16:59",
+    "daily_break_local": "16:59-17:05",
+    "candle_granularity": "M5",
+    "expected_start_minutes": [
+      0,
+      5,
+      10,
+      15,
+      20,
+      25,
+      30,
+      35,
+      40,
+      45,
+      50,
+      55
+    ],
+    "public_holiday_exceptions_in_baseline": false
+  },
+  "sharding": {
+    "basis": "UTC_CALENDAR_YEAR",
+    "years": [
+      2015,
+      2016,
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "overwrite_allowed": false,
+    "resume_policy": "SKIP_VERIFIED_EXISTING_SHARDS_ONLY"
+  },
+  "quarantine": {
+    "raw_pages_required": true,
+    "canonical_rows_required": true,
+    "raw_page_hashes_required": true,
+    "aggregate_raw_bundle_hash_required": true,
+    "standard_schedule_digest_required": true,
+    "discrepancy_ledger_required": true,
+    "sealing_allowed_with_unresolved_discrepancies": false,
+    "output_must_be_outside_repository": true
+  },
+  "exception_evidence": {
+    "source_must_be_independent_of_returned_candles": true,
+    "allowed_source_kinds": [
+      "OFFICIAL_OANDA_TRADING_HOURS_NOTICE"
+    ],
+    "strategy_outcomes_allowed": false,
+    "automatic_exception_inference": false
+  },
+  "reserved_final_test": {
+    "state": "SEALED_BOUNDARY_BOUND",
+    "start_utc": "2023-01-01T09:40:00Z",
+    "end_utc": "2025-01-01T00:00:00Z",
+    "structural_acquisition_allowed": true,
+    "strategy_metrics_allowed": false,
+    "signal_generation_allowed": false,
+    "trade_simulation_allowed": false,
+    "parameter_selection_allowed": false,
+    "human_open_gate_required": true
+  },
+  "authority": {
+    "strategy_selection": false,
+    "broker_writes": false,
+    "automatic_merge": false,
+    "automatic_promotion": false,
+    "capital_authority": false,
+    "human_review_required": true
+  }
+}

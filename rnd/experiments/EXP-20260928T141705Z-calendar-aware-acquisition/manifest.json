@@ -1,0 +1,63 @@
+{
+  "experiment_id": "EXP-20260928T141705Z-calendar-aware-acquisition",
+  "task_id": "RND-0030",
+  "title": "Calendar-aware OANDA historical acquisition quarantine",
+  "status": "complete",
+  "created_utc": "2026-09-28T14:17:05Z",
+  "git_base": "baa62608d734f0562470d6b4b1bc4eeeda4aa909",
+  "hypothesis": "A DST-aware ordinary OANDA FX session calendar plus year-sharded quarantine acquisition can obtain real historical bytes without allowing returned candles or strategy outcomes to define completeness, and without sealing unresolved calendar discrepancies.",
+  "inputs": [
+    "RND-0028 GET-only Practice historical acquisition primitives",
+    "RND-0029 predeclared 2015-2025 horizon and sealed final-test boundary",
+    "Official OANDA candle/session/connection-limit documentation reviewed before implementation"
+  ],
+  "commands": [
+    "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s rnd/orchestration -p 'test_*.py'",
+    "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s rnd/m006f -p 'test_*.py'",
+    "python3 rnd/tools/audit_workspace.py",
+    "git diff --check baa62608d734f0562470d6b4b1bc4eeeda4aa909...HEAD"
+  ],
+  "outputs": [
+    "rnd/research/OANDA_CALENDAR_QUARANTINE_DECLARATION.json",
+    "rnd/research/OANDA_CALENDAR_QUARANTINE_CONTRACT.md",
+    "rnd/research/OANDA_CALENDAR_EXCEPTION_EVIDENCE.json",
+    "rnd/orchestration/oanda_market_calendar.py",
+    "rnd/orchestration/test_oanda_market_calendar.py",
+    "rnd/tools/oanda_historical_quarantine.py",
+    "rnd/orchestration/test_oanda_historical_quarantine.py"
+  ],
+  "result": "COMPLETE. Exact implementation HEAD 1382309a66892c4b808ac703e047fd365138df35 independently validated in a clean detached worktree: 249 orchestration tests OK; 106 M006f tests OK; workspace audit PASS (tasks=30, experiments=29, broker_writes=FALSE, protected_paths_modified=FALSE, promotion_authority=HUMAN_ONLY); git diff --check against baa62608d734f0562470d6b4b1bc4eeeda4aa909 clean. No OANDA historical network acquisition was executed; no M005 outcome calculation or final-test strategy access.",
+  "safety": {
+    "broker_writes": false,
+    "protected_paths_modified": false,
+    "strategy_authority_changed": false,
+    "human_promotion_required": true
+  },
+  "validation": {
+    "implementation_head": "1382309a66892c4b808ac703e047fd365138df35",
+    "independent_validation": true,
+    "workspace_clean": true,
+    "orchestration_tests": {
+      "count": 249,
+      "result": "OK"
+    },
+    "m006f_tests": {
+      "count": 106,
+      "result": "OK"
+    },
+    "workspace_audit": {
+      "result": "PASS",
+      "tasks": 30,
+      "experiments": 29,
+      "broker_writes": false,
+      "protected_paths_modified": false,
+      "promotion_authority": "HUMAN_ONLY"
+    },
+    "diff_check": {
+      "base": "baa62608d734f0562470d6b4b1bc4eeeda4aa909",
+      "result": "CLEAN"
+    },
+    "validated_utc": "2026-09-28T14:21:13Z"
+  },
+  "completed_utc": "2026-09-28T14:21:13Z"
+}
