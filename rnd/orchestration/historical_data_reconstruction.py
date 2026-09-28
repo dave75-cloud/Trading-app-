@@ -12,6 +12,7 @@ import json
 import math
 import re
 from datetime import datetime
+from decimal import Decimal, InvalidOperation
 
 
 SNAPSHOT_VERSION = "RND-historical-snapshot-v0.1"
