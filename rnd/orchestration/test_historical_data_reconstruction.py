@@ -8,6 +8,7 @@ from pathlib import Path
 from historical_data_reconstruction import (
     EXPECTED_M005_BEHAVIOUR,
     HistoricalDataError,
+    canonical_rows_sha256,
     validate_acquisition_plan,
     validate_candle_rows,
     validate_m005_reconstruction,
@@ -19,10 +20,12 @@ from historical_data_reconstruction import (
 
 
 def manifest(raw=b"immutable snapshot"):
+    fixture_rows = [row("2020-01-01T00:00:00Z"), row("2020-01-01T00:05:00Z")]
     return {
         "contract_version": "RND-historical-snapshot-v0.1",
         "snapshot_id": "OANDA-AUDUSD-M5-example",
         "sha256": hashlib.sha256(raw).hexdigest(),
+        "canonical_rows_sha256": canonical_rows_sha256(fixture_rows),
         "provider": "OANDA",
         "source_instrument": "AUD_USD",
         "symbol": "AUDUSD",
@@ -130,16 +133,33 @@ class HistoricalDataReconstructionTests(unittest.TestCase):
         value = manifest(raw)
         value["row_count"] = 3
         rows = [row("2020-01-01T00:00:00Z"), row("2020-01-01T00:05:00Z")]
+        expected = ["2020-01-01T00:00:00Z", "2020-01-01T00:05:00Z"]
         with self.assertRaisesRegex(HistoricalDataError, "row_count"):
-            validate_snapshot_evidence(value, raw, rows)
+            validate_snapshot_evidence(value, raw, rows, expected)
 
     def test_snapshot_rows_must_stay_inside_declared_coverage(self):
         raw = b"original"
         value = manifest(raw)
         value["start_utc"] = "2020-01-01T00:05:00Z"
         rows = [row("2020-01-01T00:00:00Z"), row("2020-01-01T00:05:00Z")]
+        expected = ["2020-01-01T00:00:00Z", "2020-01-01T00:05:00Z"]
         with self.assertRaisesRegex(HistoricalDataError, "outside declared coverage"):
-            validate_snapshot_evidence(value, raw, rows)
+            validate_snapshot_evidence(value, raw, rows, expected)
+
+    def test_snapshot_evidence_requires_expected_market_schedule(self):
+        raw = b"original"
+        rows = [row("2020-01-01T00:00:00Z"), row("2020-01-01T00:05:00Z")]
+        with self.assertRaisesRegex(HistoricalDataError, "market-calendar"):
+            validate_snapshot_evidence(manifest(raw), raw, rows)
+
+    def test_parsed_row_hash_mismatch_is_rejected(self):
+        raw = b"original"
+        value = manifest(raw)
+        rows = [row("2020-01-01T00:00:00Z"), row("2020-01-01T00:05:00Z")]
+        rows[1]["ask_close"] = 1.0008
+        expected = ["2020-01-01T00:00:00Z", "2020-01-01T00:05:00Z"]
+        with self.assertRaisesRegex(HistoricalDataError, "parsed-row hash"):
+            validate_snapshot_evidence(value, raw, rows, expected)
 
     def test_reserved_integrity_operation_is_allowed(self):
         self.assertTrue(validate_reserved_test_operation("VERIFY_SHA256"))
