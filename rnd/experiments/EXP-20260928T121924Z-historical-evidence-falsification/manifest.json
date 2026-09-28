@@ -1,0 +1,37 @@
+{
+  "experiment_id": "EXP-20260928T121924Z-historical-evidence-falsification",
+  "task_id": "RND-0026",
+  "title": "Controlled reconstruction and falsification of historical trading evidence",
+  "status": "running",
+  "created_utc": "2026-09-28T12:19:24Z",
+  "git_base": "2a493bd0b09f4bd357a8696405d88cd8ab3dc28f",
+  "hypothesis": "The surviving repository can separate reproducible behavioural claims from unsupported performance claims and can machine-test known bias mechanisms without optimizing a strategy or fabricating missing evidence.",
+  "inputs": [
+    "RND-0025 quantitative research baseline",
+    "Champion construction/filter/portfolio source",
+    "legacy position-sizing and backtest source",
+    "independent M005 behavioural audit source",
+    "M006e.1 OANDA-authoritative observer source"
+  ],
+  "commands": [
+    "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s rnd/orchestration -p 'test_*.py'",
+    "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s rnd/m006f -p 'test_*.py'",
+    "python3 rnd/tools/audit_workspace.py",
+    "git diff --check 2a493bd0b09f4bd357a8696405d88cd8ab3dc28f...HEAD"
+  ],
+  "outputs": [
+    "rnd/research/HISTORICAL_EVIDENCE_LEDGER.json",
+    "rnd/research/RND0026_RECONSTRUCTION_REPORT.md",
+    "rnd/research/M005_EVIDENCE_GAPS.json",
+    "rnd/orchestration/historical_evidence_falsification.py",
+    "rnd/orchestration/test_historical_evidence_falsification.py",
+    "rnd/queue/RND-0026-task-spec.json"
+  ],
+  "result": "RUNNING. Reconstruction and falsification only; no strategy search, ranking, tuning, promotion or trading authority.",
+  "safety": {
+    "broker_writes": false,
+    "protected_paths_modified": false,
+    "strategy_authority_changed": false,
+    "human_promotion_required": true
+  }
+}
