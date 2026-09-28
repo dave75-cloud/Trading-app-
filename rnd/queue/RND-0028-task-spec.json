@@ -14,7 +14,8 @@
     "rnd/research/OANDA_HISTORICAL_ACQUISITION_CONTRACT.md",
     "rnd/research/OANDA_HISTORICAL_ACQUISITION_DECLARATION.json",
     "rnd/orchestration/oanda_historical_acquisition.py",
-    "rnd/orchestration/test_oanda_historical_acquisition.py"
+    "rnd/orchestration/test_oanda_historical_acquisition.py",
+    "rnd/tools/oanda_historical_acquire.py"
   ],
   "required_validation_labels": [
     "diff-check",
