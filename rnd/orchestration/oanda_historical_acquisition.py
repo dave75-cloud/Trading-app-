@@ -348,6 +348,19 @@ def aggregate_raw_bundle_sha256(raw_pages):
     return hashlib.sha256(aggregate_raw_bundle_bytes(raw_pages)).hexdigest()
 
 
+def validate_page_window(rows, chunk):
+    validate_candle_rows(rows)
+    if not isinstance(chunk, dict) or set(chunk) != {"start_utc", "end_utc", "slots"}:
+        raise AcquisitionError("page window: invalid chunk")
+    start = _utc(chunk["start_utc"], "chunk.start_utc")
+    end = _utc(chunk["end_utc"], "chunk.end_utc")
+    for row in rows:
+        ts = _utc(row["timestamp_utc"], "row.timestamp_utc")
+        if ts < start or ts >= end:
+            raise AcquisitionError("page window: candle outside requested range")
+    return True
+
+
 def merge_canonical_pages(pages):
     if not isinstance(pages, list) or not pages:
         raise AcquisitionError("merge: non-empty page list required")
