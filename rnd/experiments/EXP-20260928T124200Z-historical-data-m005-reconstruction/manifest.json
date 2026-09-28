@@ -2,7 +2,7 @@
   "experiment_id": "EXP-20260928T124200Z-historical-data-m005-reconstruction",
   "task_id": "RND-0027",
   "title": "Immutable historical data and controlled M005 reconstruction",
-  "status": "running",
+  "status": "complete",
   "created_utc": "2026-09-28T12:42:00Z",
   "git_base": "09f839920a0bf7bede40d8e346ca6c7fcba02cc8",
   "hypothesis": "A governed historical-data layer can fail closed on absent or mutated execution-grade evidence, preserve a genuinely sealed/unbound final-test state, and pin fixed M005 semantics without granting optimization or trading authority.",
@@ -25,7 +25,7 @@
     "rnd/orchestration/test_historical_data_reconstruction.py",
     "rnd/queue/RND-0027-task-spec.json"
   ],
-  "result": "RUNNING. Historical snapshots remain explicitly MISSING; reserved final-test boundary remains SEALED_BOUNDARY_UNBOUND; no M005 performance evaluation or strategy search has occurred.",
+  "result": "COMPLETE. Exact implementation HEAD 10aa418306e53ffef7a630936079f2fb347e5af0 independently validated: clean detached workspace; 138 orchestration tests OK; 106 M006f tests OK; RND workspace audit PASS with tasks=27, experiments=26, broker_writes=FALSE, protected_paths_modified=FALSE, promotion_authority=HUMAN_ONLY; git diff --check against 09f839920a0bf7bede40d8e346ca6c7fcba02cc8 clean. Historical snapshots remain MISSING; reserved final-test boundary remains SEALED_BOUNDARY_UNBOUND; no M005 performance evaluation or strategy search occurred.",
   "safety": {
     "broker_writes": false,
     "protected_paths_modified": false,
