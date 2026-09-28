@@ -229,9 +229,37 @@ def verify_existing_shard(path, symbol, shard):
         file_path = path / name
         if not file_path.is_file() or manifest.get(key) != _sha256_file(file_path):
             return False
-    raw_dir = path / "raw"
-    if not raw_dir.is_dir() or len(list(raw_dir.glob("page-*.json"))) != manifest.get("raw_page_count"):
+
+    try:
+        canonical_rows = _json(path / "canonical_rows.json")
+        schedule = _json(path / "standard_schedule.json")
+        discrepancy = _json(path / "discrepancy_ledger.json")
+        page_evidence = _json(path / "page_evidence.json")
+    except Exception:
         return False
+
+    if canonical_rows_sha256(canonical_rows) != manifest.get("canonical_rows_sha256"):
+        return False
+    if schedule_sha256(schedule) != manifest.get("standard_schedule_sha256"):
+        return False
+    rebuilt = build_discrepancy_ledger(
+        [row["timestamp_utc"] for row in canonical_rows], schedule
+    )
+    if rebuilt != discrepancy:
+        return False
+
+    raw_dir = path / "raw"
+    raw_paths = sorted(raw_dir.glob("page-*.json")) if raw_dir.is_dir() else []
+    if len(raw_paths) != manifest.get("raw_page_count") or len(page_evidence) != len(raw_paths):
+        return False
+    raw_pages = [item.read_bytes() for item in raw_paths]
+    if aggregate_raw_bundle_sha256(raw_pages) != manifest.get("aggregate_raw_bundle_sha256"):
+        return False
+    if aggregate_raw_bundle_bytes(raw_pages) != (path / "raw_bundle.bin").read_bytes():
+        return False
+    for raw, record in zip(raw_pages, page_evidence):
+        if hashlib.sha256(raw).hexdigest() != record.get("raw_sha256"):
+            return False
     return True
 
 
