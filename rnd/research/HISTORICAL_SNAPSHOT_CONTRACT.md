@@ -16,7 +16,7 @@ reserved final-test interval.
 An AVAILABLE snapshot must bind all of the following before strategy evaluation:
 
 - immutable snapshot ID;
-- SHA-256 of the exact serialized source snapshot;
+- SHA-256 of the exact serialized source snapshot;\n- SHA-256 of the canonical parsed candle rows;
 - provider and provider dataset/instrument identity;
 - pair and M5 timeframe;
 - UTC start and end;
@@ -24,7 +24,7 @@ An AVAILABLE snapshot must bind all of the following before strategy evaluation:
 - complete-candle-only status;
 - expected five-minute cadence;
 - row count;
-- duplicate/out-of-order/missing-bar checks;
+- duplicate/out-of-order checks plus exact comparison to a declared expected market-calendar timestamp schedule;
 - non-empty acquisition provenance;
 - acquisition timestamp; and
 - immutable/read-only status.
