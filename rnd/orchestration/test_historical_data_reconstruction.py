@@ -110,6 +110,13 @@ class HistoricalDataReconstructionTests(unittest.TestCase):
         rows = [row("2020-01-01T00:00:00Z"), row("2020-01-01T00:05:00Z")]
         self.assertTrue(validate_candle_rows(rows))
 
+    def test_provider_decimal_strings_are_valid_candle_prices(self):
+        value = row("2020-01-01T00:00:00Z")
+        for key in tuple(value):
+            if key.endswith(("_open", "_high", "_low", "_close")):
+                value[key] = format(value[key], ".5f")
+        self.assertTrue(validate_candle_rows([value]))
+
     def test_duplicate_timestamps_are_rejected(self):
         rows = [row("2020-01-01T00:00:00Z"), row("2020-01-01T00:00:00Z")]
         with self.assertRaisesRegex(HistoricalDataError, "duplicate"):
