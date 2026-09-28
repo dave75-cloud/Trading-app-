@@ -104,14 +104,20 @@ class LeakyOpener:
 
 
 class OandaHistoricalAcquisitionTests(unittest.TestCase):
-    def test_repository_declaration_is_valid_and_unbound(self):
+    def test_repository_declaration_is_valid_and_predeclared_ready(self):
         value = declaration()
         self.assertTrue(validate_declaration(value))
-        self.assertEqual("UNBOUND_WINDOW", value["state"])
+        self.assertEqual("ACQUISITION_READY", value["state"])
         self.assertEqual(
-            {"start_utc": None, "end_utc": None, "human_approved": False},
+            {
+                "start_utc": "2015-01-01T00:00:00Z",
+                "end_utc": "2025-01-01T00:00:00Z",
+                "human_approved": True,
+            },
             value["acquisition_window"],
         )
+        self.assertEqual("SEALED_BOUNDARY_BOUND", value["reserved_test"]["state"])
+        self.assertFalse(value["reserved_test"]["signal_generation_allowed"])
 
     def test_declaration_base_commit_drift_is_rejected(self):
         value = declaration()
@@ -120,8 +126,16 @@ class OandaHistoricalAcquisitionTests(unittest.TestCase):
             validate_declaration(value)
 
     def test_unbound_window_cannot_plan_requests(self):
+        value = declaration()
+        value["state"] = "UNBOUND_WINDOW"
+        value["acquisition_window"] = {
+            "start_utc": None,
+            "end_utc": None,
+            "human_approved": False,
+        }
+        self.assertTrue(validate_declaration(value))
         with self.assertRaisesRegex(AcquisitionError, "not human-approved"):
-            plan_chunks(declaration())
+            plan_chunks(value)
 
     def test_ready_window_requires_human_approval(self):
         value = ready()
