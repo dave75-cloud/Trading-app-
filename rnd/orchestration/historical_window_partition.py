@@ -17,6 +17,7 @@ FRACTIONS = (Decimal("0.60"), Decimal("0.20"), Decimal("0.20"))
 STRUCTURAL_FIELDS = {
     "timestamp_utc", "complete", "provider", "instrument", "granularity",
     "raw_sha256", "canonical_rows_sha256", "row_count", "gap_ledger",
+    "start_utc", "end_utc",
 }
 OUTCOME_FIELDS = {
     "signal", "position", "trade", "return", "pnl", "equity", "drawdown",
@@ -217,11 +218,15 @@ def validate_partition_rows(partition_name, timestamps):
     return True
 
 
-def validate_warmup(partition_name, warmup_timestamps, evaluation_timestamps):
+def validate_warmup(partition_name, warmup_timestamps, evaluation_timestamps, preceding_partition_tail):
     if partition_name not in {"validation", "reserved_final_test"}:
         raise PartitionError("warm-up: only later partitions may use prior rows")
     if not isinstance(warmup_timestamps, list) or len(warmup_timestamps) > 50:
         raise PartitionError("warm-up: maximum 50 prior bars")
+    if not isinstance(preceding_partition_tail, list) or len(preceding_partition_tail) < len(warmup_timestamps):
+        raise PartitionError("warm-up: preceding partition tail required")
+    if warmup_timestamps != preceding_partition_tail[-len(warmup_timestamps):] if warmup_timestamps else False:
+        raise PartitionError("warm-up: must be exact trailing bars of preceding partition")
     validate_partition_rows(partition_name, evaluation_timestamps)
     boundary = _utc(calculate_partitions()[partition_name]["start_utc"], "partition boundary")
     parsed = [_utc(x, "warm-up row") for x in warmup_timestamps]
