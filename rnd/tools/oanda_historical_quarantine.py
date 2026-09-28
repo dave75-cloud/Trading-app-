@@ -78,7 +78,8 @@ def _source_declaration_sha256(value):
 
 
 def _validate_source_binding(acquisition, calendar):
-    _validate_source_binding(acquisition, calendar)
+    validate_acquisition_declaration(acquisition)
+    validate_calendar_declaration(calendar)
     horizon = calendar["horizon"]
     if acquisition["state"] != "ACQUISITION_READY" or acquisition["acquisition_window"] != {
         "start_utc": horizon["start_utc"],
