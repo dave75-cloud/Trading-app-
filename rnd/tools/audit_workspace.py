@@ -174,6 +174,7 @@ PRACTICE_HOST = re.compile(
 READ_ONLY_PRACTICE_HOST_ALLOWLIST = {
     "rnd/research/OANDA_HISTORICAL_ACQUISITION_DECLARATION.json",
     "rnd/orchestration/oanda_historical_acquisition.py",
+    "rnd/orchestration/test_oanda_historical_acquisition.py",
 }
 
 broker_hits = []
