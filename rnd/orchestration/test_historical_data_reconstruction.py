@@ -12,6 +12,7 @@ from historical_data_reconstruction import (
     validate_candle_rows,
     validate_m005_reconstruction,
     validate_reserved_test_operation,
+    validate_snapshot_evidence,
     validate_snapshot_manifest,
     verify_snapshot_bytes,
 )
@@ -124,6 +125,22 @@ class HistoricalDataReconstructionTests(unittest.TestCase):
         with self.assertRaisesRegex(HistoricalDataError, "missing or unexpected"):
             validate_candle_rows(rows, expected)
 
+    def test_snapshot_row_count_is_bound_to_rows(self):
+        raw = b"original"
+        value = manifest(raw)
+        value["row_count"] = 3
+        rows = [row("2020-01-01T00:00:00Z"), row("2020-01-01T00:05:00Z")]
+        with self.assertRaisesRegex(HistoricalDataError, "row_count"):
+            validate_snapshot_evidence(value, raw, rows)
+
+    def test_snapshot_rows_must_stay_inside_declared_coverage(self):
+        raw = b"original"
+        value = manifest(raw)
+        value["start_utc"] = "2020-01-01T00:05:00Z"
+        rows = [row("2020-01-01T00:00:00Z"), row("2020-01-01T00:05:00Z")]
+        with self.assertRaisesRegex(HistoricalDataError, "outside declared coverage"):
+            validate_snapshot_evidence(value, raw, rows)
+
     def test_reserved_integrity_operation_is_allowed(self):
         self.assertTrue(validate_reserved_test_operation("VERIFY_SHA256"))
 
@@ -137,6 +154,18 @@ class HistoricalDataReconstructionTests(unittest.TestCase):
 
     def test_repository_m005_declaration_is_valid(self):
         self.assertTrue(validate_m005_reconstruction(declaration()))
+
+    def test_reserved_boundary_cannot_be_silently_bound(self):
+        value = declaration()
+        value["reserved_test"]["start_utc"] = "2024-01-01T00:00:00Z"
+        with self.assertRaisesRegex(HistoricalDataError, "seal mismatch"):
+            validate_m005_reconstruction(value)
+
+    def test_m005_output_contract_cannot_be_weakened(self):
+        value = declaration()
+        value["output_contract"]["mark_to_market_equity"] = False
+        with self.assertRaisesRegex(HistoricalDataError, "output contract"):
+            validate_m005_reconstruction(value)
 
     def test_m005_behaviour_drift_is_rejected(self):
         value = declaration()
