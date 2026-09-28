@@ -1,0 +1,35 @@
+{
+  "experiment_id": "EXP-20260928T125505Z-oanda-historical-acquisition",
+  "task_id": "RND-0028",
+  "title": "Controlled OANDA historical acquisition and immutable sealing",
+  "status": "running",
+  "created_utc": "2026-09-28T12:55:05Z",
+  "git_base": "fb4686421cf93158c7dac813aa03e3fdd06ca701",
+  "hypothesis": "A narrowly scoped OANDA Practice GET-only candle adapter can acquire and cryptographically seal execution-grade M5 bid/ask/mid evidence without granting broker write authority, leaking runtime credentials, inventing an unapproved research window, or opening the reserved final test.",
+  "inputs": [
+    "RND-0027 historical snapshot and reserved-test contract",
+    "RND-0027 fixed M005 reconstruction declaration",
+    "Official OANDA v20 candle endpoint semantics pinned in the RND-0028 contract"
+  ],
+  "commands": [
+    "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s rnd/orchestration -p 'test_*.py'",
+    "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s rnd/m006f -p 'test_*.py'",
+    "python3 rnd/tools/audit_workspace.py",
+    "git diff --check fb4686421cf93158c7dac813aa03e3fdd06ca701...HEAD"
+  ],
+  "outputs": [
+    "rnd/research/OANDA_HISTORICAL_ACQUISITION_CONTRACT.md",
+    "rnd/research/OANDA_HISTORICAL_ACQUISITION_DECLARATION.json",
+    "rnd/orchestration/oanda_historical_acquisition.py",
+    "rnd/orchestration/test_oanda_historical_acquisition.py",
+    "rnd/tools/oanda_historical_acquire.py",
+    "rnd/queue/RND-0028-task-spec.json"
+  ],
+  "result": "RUNNING. Acquisition mechanism under adversarial review. Committed window remains UNBOUND_WINDOW; no historical network acquisition, M005 performance evaluation or reserved-test opening has occurred.",
+  "safety": {
+    "broker_writes": false,
+    "protected_paths_modified": false,
+    "strategy_authority_changed": false,
+    "human_promotion_required": true
+  }
+}
