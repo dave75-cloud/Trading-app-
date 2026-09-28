@@ -225,7 +225,7 @@ def validate_warmup(partition_name, warmup_timestamps, evaluation_timestamps, pr
         raise PartitionError("warm-up: maximum 50 prior bars")
     if not isinstance(preceding_partition_tail, list) or len(preceding_partition_tail) < len(warmup_timestamps):
         raise PartitionError("warm-up: preceding partition tail required")
-    if warmup_timestamps != preceding_partition_tail[-len(warmup_timestamps):] if warmup_timestamps else False:
+    if warmup_timestamps and warmup_timestamps != preceding_partition_tail[-len(warmup_timestamps):]:
         raise PartitionError("warm-up: must be exact trailing bars of preceding partition")
     validate_partition_rows(partition_name, evaluation_timestamps)
     boundary = _utc(calculate_partitions()[partition_name]["start_utc"], "partition boundary")
