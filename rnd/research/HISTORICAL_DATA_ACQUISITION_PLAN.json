@@ -1,0 +1,31 @@
+{
+  "contract_version": "RND-historical-acquisition-plan-v0.1",
+  "task_id": "RND-0027",
+  "base_commit": "09f839920a0bf7bede40d8e346ca6c7fcba02cc8",
+  "status": "BLOCKED_DATA_NOT_BOUND",
+  "preferred_source": {
+    "provider": "OANDA",
+    "mode": "READ_ONLY_HISTORICAL_CANDLES",
+    "timeframe": "M5",
+    "required_price_components": ["bid", "ask", "mid"],
+    "complete_candles_only": true,
+    "broker_order_endpoints_allowed": false,
+    "credentials_committed_to_repository": false
+  },
+  "required_snapshots": [
+    {"symbol": "AUDUSD", "status": "MISSING"},
+    {"symbol": "EURUSD", "status": "MISSING"},
+    {"symbol": "GBPUSD", "status": "MISSING"},
+    {"symbol": "USDJPY", "status": "MISSING"}
+  ],
+  "acquisition_rules": [
+    "Acquire raw historical candles read-only; never place or modify an order.",
+    "Persist exact raw snapshot bytes outside the governed source tree before deriving research artifacts.",
+    "Compute SHA-256 and immutable snapshot identity before strategy evaluation.",
+    "Verify bid and ask are present; midpoint-only data cannot satisfy execution-grade reconstruction.",
+    "Verify complete M5 candles, strict UTC ordering, uniqueness and expected cadence.",
+    "Partition development, validation and reserved final test before strategy metrics are produced.",
+    "Do not compute M005 signals or performance metrics on the reserved final-test interval before a separate human authorization."
+  ],
+  "next_gate": "All four required snapshots must be AVAILABLE and individually validated before fixed-M005 reconstruction can move from BLOCKED_DATA_NOT_BOUND."
+}

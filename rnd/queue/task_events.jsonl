@@ -78,3 +78,6 @@
 {"human_gate_required":true,"protected_paths_allowed":false,"status":"queued","task_id":"RND-0026","timestamp_utc":"2026-09-28T12:19:23Z","title":"Reconstruct and falsify historical trading evidence"}
 {"human_gate_required":true,"protected_paths_allowed":false,"status":"running","task_id":"RND-0026","timestamp_utc":"2026-09-28T12:19:24Z","title":"Reconstruct and falsify historical trading evidence"}
 {"human_gate_required":true,"protected_paths_allowed":false,"status":"complete","task_id":"RND-0026","timestamp_utc":"2026-09-28T12:31:47Z","title":"Reconstruct and falsify historical trading evidence"}
+{"human_gate_required":true,"protected_paths_allowed":false,"status":"queued","task_id":"RND-0027","timestamp_utc":"2026-09-28T12:41:59Z","title":"Immutable historical data and controlled M005 reconstruction"}
+{"human_gate_required":true,"protected_paths_allowed":false,"status":"running","task_id":"RND-0027","timestamp_utc":"2026-09-28T12:42:00Z","title":"Immutable historical data and controlled M005 reconstruction"}
+{"human_gate_required":true,"protected_paths_allowed":false,"status":"complete","task_id":"RND-0027","timestamp_utc":"2026-09-28T12:46:44Z","title":"Immutable historical data and controlled M005 reconstruction"}
