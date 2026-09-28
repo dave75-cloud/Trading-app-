@@ -59,6 +59,13 @@ class OandaMarketCalendarTests(unittest.TestCase):
     def test_repository_declaration_is_valid(self):
         self.assertTrue(validate_declaration(declaration()))
 
+    def test_repository_exception_ledger_is_valid_and_empty(self):
+        value = json.loads(
+            (ROOT / "research" / "OANDA_CALENDAR_EXCEPTION_EVIDENCE.json").read_text()
+        )
+        self.assertTrue(validate_exception_evidence(value))
+        self.assertEqual([], value["exceptions"])
+
     def test_saturday_is_closed(self):
         self.assertFalse(is_standard_session_start("2024-06-01T12:00:00Z"))
 
