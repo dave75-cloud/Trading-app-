@@ -2,7 +2,7 @@
   "experiment_id": "EXP-20260928T115103Z-quant-research-baseline",
   "task_id": "RND-0025",
   "title": "Quantitative research baseline and reproducibility standard",
-  "status": "running",
+  "status": "complete",
   "created_utc": "2026-09-28T11:51:03Z",
   "git_base": "1c6fd4641f275b70519b167a2493d7908ad1c1bc",
   "hypothesis": "A pre-result quantitative research contract can make data provenance, chronological separation, trial accounting, simulator semantics and validation duties explicit enough to fail closed on common backtest-contamination patterns without selecting or promoting a strategy.",
@@ -25,11 +25,12 @@
     "rnd/orchestration/test_quant_research_contract.py",
     "rnd/queue/RND-0025-task-spec.json"
   ],
-  "result": "RUNNING. No strategy search, ranking, selection, promotion or trading authority is part of RND-0025.",
+  "result": "PASS on exact independently tested implementation head 30d3ff7ab7826abf94fc8bcd4f94252c537925cc: clean detached-worktree status; 97 orchestration tests and 106 M006f tests passed; workspace audit passed with 25 tasks, 24 experiments, broker writes false, protected paths modified false and human-only promotion; git diff --check against 1c6fd4641f275b70519b167a2493d7908ad1c1bc was clean; GitHub Autonomous R&D Guard and Current System Validation both succeeded on the tested head. Completion changes only R&D documentation and append-only records. No strategy search, ranking or selection occurred. Human merge/promotion authorization remains external and unset.",
   "safety": {
     "broker_writes": false,
     "protected_paths_modified": false,
     "strategy_authority_changed": false,
     "human_promotion_required": true
-  }
+  },
+  "completed_utc": "2026-09-28T11:58:38Z"
 }
