@@ -113,6 +113,12 @@ class OandaHistoricalAcquisitionTests(unittest.TestCase):
             value["acquisition_window"],
         )
 
+    def test_declaration_base_commit_drift_is_rejected(self):
+        value = declaration()
+        value["base_commit"] = "0" * 40
+        with self.assertRaisesRegex(AcquisitionError, "identity mismatch"):
+            validate_declaration(value)
+
     def test_unbound_window_cannot_plan_requests(self):
         with self.assertRaisesRegex(AcquisitionError, "not human-approved"):
             plan_chunks(declaration())
