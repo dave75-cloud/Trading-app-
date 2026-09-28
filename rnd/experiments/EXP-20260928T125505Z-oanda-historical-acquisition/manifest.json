@@ -2,7 +2,7 @@
   "experiment_id": "EXP-20260928T125505Z-oanda-historical-acquisition",
   "task_id": "RND-0028",
   "title": "Controlled OANDA historical acquisition and immutable sealing",
-  "status": "running",
+  "status": "complete",
   "created_utc": "2026-09-28T12:55:05Z",
   "git_base": "fb4686421cf93158c7dac813aa03e3fdd06ca701",
   "hypothesis": "A narrowly scoped OANDA Practice GET-only candle adapter can acquire and cryptographically seal execution-grade M5 bid/ask/mid evidence without granting broker write authority, leaking runtime credentials, inventing an unapproved research window, or opening the reserved final test.",
@@ -25,7 +25,7 @@
     "rnd/tools/oanda_historical_acquire.py",
     "rnd/queue/RND-0028-task-spec.json"
   ],
-  "result": "RUNNING. Acquisition mechanism under adversarial review. Committed window remains UNBOUND_WINDOW; no historical network acquisition, M005 performance evaluation or reserved-test opening has occurred.",
+  "result": "COMPLETE. Exact implementation HEAD 35ccb3affaa685a1bebe3c490bf6853420f0e0ca independently validated after correction: clean detached workspace; 175 orchestration tests OK; 106 M006f tests OK; RND workspace audit PASS with tasks=28, experiments=27, broker_writes=FALSE, protected_paths_modified=FALSE, promotion_authority=HUMAN_ONLY; git diff --check against fb4686421cf93158c7dac813aa03e3fdd06ca701 clean. Committed acquisition state remains UNBOUND_WINDOW and reserved final-test boundary remains SEALED_BOUNDARY_UNBOUND; no historical network acquisition, M005 signal/performance evaluation, strategy search, broker write, capital authority, automatic promotion or automatic merge occurred.",
   "safety": {
     "broker_writes": false,
     "protected_paths_modified": false,
