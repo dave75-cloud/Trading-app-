@@ -25,6 +25,7 @@ from historical_data_reconstruction import (
 )
 
 VERSION = "RND-oanda-historical-acquisition-v0.1"
+BASE_COMMIT = "fb4686421cf93158c7dac813aa03e3fdd06ca701"
 PRACTICE_BASE = "https://api-fxpractice.oanda.com"
 M5_SECONDS = 300
 MAX_CANDLES = 5000
@@ -84,7 +85,11 @@ def validate_declaration(value):
     }
     if not isinstance(value, dict) or set(value) != required:
         raise AcquisitionError("declaration: exact fields required")
-    if value["contract_version"] != VERSION or value["task_id"] != "RND-0028":
+    if (
+        value["contract_version"] != VERSION
+        or value["task_id"] != "RND-0028"
+        or value["base_commit"] != BASE_COMMIT
+    ):
         raise AcquisitionError("declaration: identity mismatch")
     if value["instruments"] != INSTRUMENTS:
         raise AcquisitionError("declaration: instrument mapping drift")
