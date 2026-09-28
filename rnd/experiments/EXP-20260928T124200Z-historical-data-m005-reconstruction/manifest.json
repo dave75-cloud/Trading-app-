@@ -30,7 +30,6 @@
     "broker_writes": false,
     "protected_paths_modified": false,
     "strategy_authority_changed": false,
-    "reserved_test_opened": false,
     "human_promotion_required": true
   }
 }
