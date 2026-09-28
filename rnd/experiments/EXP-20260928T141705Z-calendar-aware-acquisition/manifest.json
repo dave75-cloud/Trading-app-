@@ -1,0 +1,36 @@
+{
+  "experiment_id": "EXP-20260928T141705Z-calendar-aware-acquisition",
+  "task_id": "RND-0030",
+  "title": "Calendar-aware OANDA historical acquisition quarantine",
+  "status": "running",
+  "created_utc": "2026-09-28T14:17:05Z",
+  "git_base": "baa62608d734f0562470d6b4b1bc4eeeda4aa909",
+  "hypothesis": "A DST-aware ordinary OANDA FX session calendar plus year-sharded quarantine acquisition can obtain real historical bytes without allowing returned candles or strategy outcomes to define completeness, and without sealing unresolved calendar discrepancies.",
+  "inputs": [
+    "RND-0028 GET-only Practice historical acquisition primitives",
+    "RND-0029 predeclared 2015-2025 horizon and sealed final-test boundary",
+    "Official OANDA candle/session/connection-limit documentation reviewed before implementation"
+  ],
+  "commands": [
+    "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s rnd/orchestration -p 'test_*.py'",
+    "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s rnd/m006f -p 'test_*.py'",
+    "python3 rnd/tools/audit_workspace.py",
+    "git diff --check baa62608d734f0562470d6b4b1bc4eeeda4aa909...HEAD"
+  ],
+  "outputs": [
+    "rnd/research/OANDA_CALENDAR_QUARANTINE_DECLARATION.json",
+    "rnd/research/OANDA_CALENDAR_QUARANTINE_CONTRACT.md",
+    "rnd/research/OANDA_CALENDAR_EXCEPTION_EVIDENCE.json",
+    "rnd/orchestration/oanda_market_calendar.py",
+    "rnd/orchestration/test_oanda_market_calendar.py",
+    "rnd/tools/oanda_historical_quarantine.py",
+    "rnd/orchestration/test_oanda_historical_quarantine.py"
+  ],
+  "result": "RUNNING. Calendar and quarantine mechanism implemented; no OANDA historical network acquisition has been executed by this experiment yet. No M005 outcome calculation or final-test strategy access.",
+  "safety": {
+    "broker_writes": false,
+    "protected_paths_modified": false,
+    "strategy_authority_changed": false,
+    "human_promotion_required": true
+  }
+}
