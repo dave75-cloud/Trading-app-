@@ -71,3 +71,6 @@
 {"experiment_id":"EXP-20260928T124200Z-historical-data-m005-reconstruction","status":"planned","task_id":"RND-0027","timestamp_utc":"2026-09-28T12:41:59Z","title":"Immutable historical data and controlled M005 reconstruction"}
 {"experiment_id":"EXP-20260928T124200Z-historical-data-m005-reconstruction","status":"running","task_id":"RND-0027","timestamp_utc":"2026-09-28T12:42:00Z","title":"Immutable historical data and controlled M005 reconstruction"}
 {"experiment_id":"EXP-20260928T124200Z-historical-data-m005-reconstruction","status":"complete","task_id":"RND-0027","timestamp_utc":"2026-09-28T12:46:44Z","title":"Immutable historical data and controlled M005 reconstruction"}
+{"experiment_id":"EXP-20260928T125505Z-oanda-historical-acquisition","status":"planned","task_id":"RND-0028","timestamp_utc":"2026-09-28T12:55:04Z","title":"Controlled OANDA historical acquisition and immutable sealing"}
+{"experiment_id":"EXP-20260928T125505Z-oanda-historical-acquisition","status":"running","task_id":"RND-0028","timestamp_utc":"2026-09-28T12:55:05Z","title":"Controlled OANDA historical acquisition and immutable sealing"}
+{"experiment_id":"EXP-20260928T125505Z-oanda-historical-acquisition","status":"complete","task_id":"RND-0028","timestamp_utc":"2026-09-28T13:11:59Z","title":"Controlled OANDA historical acquisition and immutable sealing"}

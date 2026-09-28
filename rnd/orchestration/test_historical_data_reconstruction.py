@@ -55,6 +55,10 @@ def row(ts, complete=True):
         "ask_high": 1.0012,
         "ask_low": 0.9992,
         "ask_close": 1.0007,
+        "mid_open": 1.0001,
+        "mid_high": 1.0011,
+        "mid_low": 0.9991,
+        "mid_close": 1.0006,
     }
 
 
@@ -84,6 +88,12 @@ class HistoricalDataReconstructionTests(unittest.TestCase):
         with self.assertRaisesRegex(HistoricalDataError, "bid/ask"):
             validate_snapshot_manifest(value)
 
+    def test_bid_ask_without_mid_snapshot_is_rejected(self):
+        value = manifest()
+        value["price_components"] = ["bid", "ask"]
+        with self.assertRaisesRegex(HistoricalDataError, "bid/ask/mid"):
+            validate_snapshot_manifest(value)
+
     def test_incomplete_snapshot_is_rejected(self):
         value = manifest()
         value["complete"] = False
@@ -99,6 +109,13 @@ class HistoricalDataReconstructionTests(unittest.TestCase):
     def test_valid_candle_rows(self):
         rows = [row("2020-01-01T00:00:00Z"), row("2020-01-01T00:05:00Z")]
         self.assertTrue(validate_candle_rows(rows))
+
+    def test_provider_decimal_strings_are_valid_candle_prices(self):
+        value = row("2020-01-01T00:00:00Z")
+        for key in tuple(value):
+            if key.endswith(("_open", "_high", "_low", "_close")):
+                value[key] = format(value[key], ".5f")
+        self.assertTrue(validate_candle_rows([value]))
 
     def test_duplicate_timestamps_are_rejected(self):
         rows = [row("2020-01-01T00:00:00Z"), row("2020-01-01T00:00:00Z")]

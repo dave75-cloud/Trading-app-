@@ -1,0 +1,46 @@
+{
+  "contract_version": "RND-task-spec-v0.1",
+  "task_id": "RND-0028",
+  "title": "Controlled OANDA historical acquisition and immutable sealing",
+  "git_base": "fb4686421cf93158c7dac813aa03e3fdd06ca701",
+  "objective": "Build a practice-only GET historical-candle acquisition and sealing mechanism without binding an undeclared research window, opening the reserved final test, evaluating M005 performance, or granting trading authority.",
+  "allowed_path_prefixes": [
+    "rnd/"
+  ],
+  "prohibited_path_prefixes": [
+    "rnd/private/"
+  ],
+  "required_outputs": [
+    "rnd/research/OANDA_HISTORICAL_ACQUISITION_CONTRACT.md",
+    "rnd/research/OANDA_HISTORICAL_ACQUISITION_DECLARATION.json",
+    "rnd/orchestration/oanda_historical_acquisition.py",
+    "rnd/orchestration/test_oanda_historical_acquisition.py",
+    "rnd/tools/oanda_historical_acquire.py"
+  ],
+  "required_validation_labels": [
+    "diff-check",
+    "scope-check",
+    "orchestration-tests",
+    "m006f-tests",
+    "workspace-audit"
+  ],
+  "success_criteria": [
+    "Acquisition window remains explicitly UNBOUND until a human-approved declaration binds it",
+    "Only the OANDA practice account instrument-candles endpoint can be constructed or fetched",
+    "Canonical rows bind bid ask and midpoint OHLC plus raw-page hashes",
+    "Partial malformed overlapping or mutated evidence fails closed",
+    "Credentials are runtime-only and excluded from evidence outputs",
+    "Existing sealed output cannot be overwritten",
+    "Reserved final-test strategy access remains prohibited"
+  ],
+  "stop_conditions": [
+    "Any change outside rnd/ or to frozen operational paths",
+    "Any live-host or broker write endpoint capability",
+    "Any committed credential or credential-bearing evidence",
+    "Any M005 performance evaluation parameter optimization strategy ranking or reserved-test opening",
+    "Any capital authority automatic promotion or automatic merge"
+  ],
+  "human_gate_required": true,
+  "automatic_merge": false,
+  "automatic_promotion": false
+}
