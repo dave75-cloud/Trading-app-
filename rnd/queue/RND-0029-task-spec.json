@@ -1,0 +1,44 @@
+{
+  "contract_version": "RND-task-spec-v0.1",
+  "task_id": "RND-0029",
+  "title": "Predeclared historical window and sealed chronological partition",
+  "git_base": "f342a3b2aa4bca021346df7915f8e9aaed2f5cab",
+  "objective": "Bind the historical acquisition horizon and deterministic chronological partition before any M005 signal, trade or performance calculation.",
+  "allowed_path_prefixes": [
+    "rnd/"
+  ],
+  "prohibited_path_prefixes": [
+    "rnd/private/"
+  ],
+  "required_outputs": [
+    "rnd/research/HISTORICAL_WINDOW_PARTITION_DECLARATION.json",
+    "rnd/research/HISTORICAL_WINDOW_PARTITION_CONTRACT.md",
+    "rnd/orchestration/historical_window_partition.py",
+    "rnd/orchestration/test_historical_window_partition.py"
+  ],
+  "required_validation_labels": [
+    "diff-check",
+    "scope-check",
+    "orchestration-tests",
+    "m006f-tests",
+    "workspace-audit"
+  ],
+  "success_criteria": [
+    "2015-01-01 through 2025-01-01 horizon is bound before strategy evaluation",
+    "60/20/20 elapsed-time boundaries are deterministic and M5-snapped",
+    "All four symbols require full structural horizon or fail closed",
+    "Reserved final test boundary is bound but strategy/performance access remains sealed",
+    "Warm-up state cannot contribute trades or returns",
+    "OANDA acquisition declaration is ready only for the exact predeclared horizon"
+  ],
+  "stop_conditions": [
+    "Any outcome-dependent boundary or fallback",
+    "Any final-test signal/trade/performance access",
+    "Any strategy optimization/ranking",
+    "Any change outside rnd/ or frozen operational paths",
+    "Any broker write/capital/promotion/merge authority"
+  ],
+  "human_gate_required": true,
+  "automatic_merge": false,
+  "automatic_promotion": false
+}

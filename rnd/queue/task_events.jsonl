@@ -84,3 +84,6 @@
 {"human_gate_required":true,"protected_paths_allowed":false,"status":"queued","task_id":"RND-0028","timestamp_utc":"2026-09-28T12:55:04Z","title":"Controlled OANDA historical acquisition and immutable sealing"}
 {"human_gate_required":true,"protected_paths_allowed":false,"status":"running","task_id":"RND-0028","timestamp_utc":"2026-09-28T12:55:05Z","title":"Controlled OANDA historical acquisition and immutable sealing"}
 {"human_gate_required":true,"protected_paths_allowed":false,"status":"complete","task_id":"RND-0028","timestamp_utc":"2026-09-28T13:11:59Z","title":"Controlled OANDA historical acquisition and immutable sealing"}
+{"human_gate_required":true,"protected_paths_allowed":false,"status":"queued","task_id":"RND-0029","timestamp_utc":"2026-09-28T14:01:46Z","title":"Predeclared historical window and sealed chronological partition"}
+{"human_gate_required":true,"protected_paths_allowed":false,"status":"running","task_id":"RND-0029","timestamp_utc":"2026-09-28T14:01:47Z","title":"Predeclared historical window and sealed chronological partition"}
+{"human_gate_required":true,"protected_paths_allowed":false,"status":"complete","task_id":"RND-0029","timestamp_utc":"2026-09-28T14:08:00Z","title":"Predeclared historical window and sealed chronological partition"}

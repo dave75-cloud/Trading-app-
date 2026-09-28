@@ -192,9 +192,13 @@ class HistoricalDataReconstructionTests(unittest.TestCase):
     def test_repository_m005_declaration_is_valid(self):
         self.assertTrue(validate_m005_reconstruction(declaration()))
 
-    def test_reserved_boundary_cannot_be_silently_bound(self):
+    def test_reserved_boundary_cannot_be_silently_moved_or_opened(self):
         value = declaration()
         value["reserved_test"]["start_utc"] = "2024-01-01T00:00:00Z"
+        with self.assertRaisesRegex(HistoricalDataError, "seal mismatch"):
+            validate_m005_reconstruction(value)
+        value = declaration()
+        value["reserved_test"]["signal_generation_allowed"] = True
         with self.assertRaisesRegex(HistoricalDataError, "seal mismatch"):
             validate_m005_reconstruction(value)
 
