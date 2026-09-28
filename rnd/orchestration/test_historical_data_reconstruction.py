@@ -55,6 +55,10 @@ def row(ts, complete=True):
         "ask_high": 1.0012,
         "ask_low": 0.9992,
         "ask_close": 1.0007,
+        "mid_open": 1.0001,
+        "mid_high": 1.0011,
+        "mid_low": 0.9991,
+        "mid_close": 1.0006,
     }
 
 
@@ -82,6 +86,12 @@ class HistoricalDataReconstructionTests(unittest.TestCase):
         value = manifest()
         value["price_components"] = ["mid"]
         with self.assertRaisesRegex(HistoricalDataError, "bid/ask"):
+            validate_snapshot_manifest(value)
+
+    def test_bid_ask_without_mid_snapshot_is_rejected(self):
+        value = manifest()
+        value["price_components"] = ["bid", "ask"]
+        with self.assertRaisesRegex(HistoricalDataError, "bid/ask/mid"):
             validate_snapshot_manifest(value)
 
     def test_incomplete_snapshot_is_rejected(self):
