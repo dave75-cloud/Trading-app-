@@ -120,6 +120,7 @@ def _snapshot(value, index):
     end = _utc(value["end_utc"], role + ".end_utc")
     if start >= end:
         raise QuantResearchContractError(f"{role}: start must precede end")
+    return start, end
 
 
 def validate_research_declaration(value):
@@ -134,8 +135,9 @@ def validate_research_declaration(value):
     snapshots = value["data_snapshots"]
     if not isinstance(snapshots, list) or not snapshots:
         raise QuantResearchContractError("data_snapshots: expected non-empty list")
+    snapshot_ranges = []
     for index, snapshot in enumerate(snapshots):
-        _snapshot(snapshot, index)
+        snapshot_ranges.append(_snapshot(snapshot, index))
     ids = [x["snapshot_id"] for x in snapshots]
     if len(set(ids)) != len(ids):
         raise QuantResearchContractError("data_snapshots: duplicate snapshot_id")
@@ -154,6 +156,11 @@ def validate_research_declaration(value):
         raise QuantResearchContractError(
             "windows: chronological partitions overlap or are out of order"
         )
+    for index, (start, end) in enumerate(snapshot_ranges):
+        if start > dev[0] or end < test[1]:
+            raise QuantResearchContractError(
+                f"data_snapshots[{index}]: snapshot does not cover declared windows"
+            )
 
     search = value["search_space"]
     if not isinstance(search, dict):
@@ -164,6 +171,19 @@ def validate_research_declaration(value):
         if not isinstance(choices, list) or not choices:
             raise QuantResearchContractError(
                 f"search_space.{name}: expected non-empty choice list"
+            )
+        try:
+            canonical_choices = [
+                json.dumps(choice, sort_keys=True, separators=(",", ":"))
+                for choice in choices
+            ]
+        except (TypeError, ValueError) as exc:
+            raise QuantResearchContractError(
+                f"search_space.{name}: choices must be JSON values"
+            ) from exc
+        if len(set(canonical_choices)) != len(canonical_choices):
+            raise QuantResearchContractError(
+                f"search_space.{name}: duplicate choices are not distinct trials"
             )
         sizes.append(len(choices))
     expected_trials = prod(sizes) if sizes else 1
