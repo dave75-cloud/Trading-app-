@@ -91,6 +91,19 @@ class QuantResearchContractTests(unittest.TestCase):
         with self.assertRaisesRegex(QuantResearchContractError, "trial_count"):
             validate_research_declaration(value)
 
+    def test_snapshot_must_cover_all_declared_windows(self):
+        value = declaration()
+        value["data_snapshots"][0]["start_utc"] = "2021-01-01T00:00:00Z"
+        with self.assertRaisesRegex(QuantResearchContractError, "cover declared windows"):
+            validate_research_declaration(value)
+
+    def test_duplicate_parameter_choices_are_rejected(self):
+        value = declaration()
+        value["search_space"]["fast_ma"] = [10, 10]
+        value["declared_trial_count"] = 6
+        with self.assertRaisesRegex(QuantResearchContractError, "duplicate choices"):
+            validate_research_declaration(value)
+
     def test_incomplete_snapshot_is_rejected(self):
         value = declaration()
         value["data_snapshots"][0]["complete"] = False
