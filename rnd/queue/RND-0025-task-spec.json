@@ -1,0 +1,35 @@
+{
+  "contract_version": "RND-task-spec-v0.1",
+  "task_id": "RND-0025",
+  "title": "Quantitative research baseline and reproducibility standard",
+  "git_base": "1c6fd4641f275b70519b167a2493d7908ad1c1bc",
+  "objective": "Establish a governed quantitative-research baseline and audit the legacy research path without searching for or selecting a better strategy.",
+  "allowed_path_prefixes": ["rnd/"],
+  "prohibited_path_prefixes": ["rnd/private/"],
+  "required_outputs": [
+    "rnd/research/QUANT_RESEARCH_BASELINE.md",
+    "rnd/research/LEGACY_RESEARCH_AUDIT.md",
+    "rnd/orchestration/quant_research_contract.py",
+    "rnd/orchestration/test_quant_research_contract.py"
+  ],
+  "required_validation_labels": [
+    "diff-check",
+    "scope-check",
+    "orchestration-tests",
+    "m006f-tests",
+    "workspace-audit"
+  ],
+  "success_criteria": [
+    "Research claims require immutable data provenance and chronological development/validation/test separation",
+    "The baseline contract rejects look-ahead, synthetic one-sided loss clipping, train/test contamination and undeclared parameter trials",
+    "Legacy Champion and M005 evidence limitations are recorded without changing or optimizing either strategy"
+  ],
+  "stop_conditions": [
+    "Any change outside rnd/ or to frozen/operational paths",
+    "Any optimization, ranking or selection of a new trading strategy",
+    "Any broker, execution, strategy/risk/sizing, merge, promotion or capital authority"
+  ],
+  "human_gate_required": true,
+  "automatic_merge": false,
+  "automatic_promotion": false
+}
