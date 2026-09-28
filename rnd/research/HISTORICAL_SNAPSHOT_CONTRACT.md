@@ -38,7 +38,7 @@ and cannot satisfy the reconstruction gate.
 
 ## Reserved final test
 
-The final test is a sealed research partition, not merely another date filter.
+The final test is governed as a sealed research partition, not merely another date filter. In RND-0027 its actual date boundary remains explicitly UNBOUND until immutable source coverage is acquired and a later human-gated task binds the partition.
 
 Before a later human-authorized opening, permitted operations are limited to
 identity/provenance checks, cryptographic verification, structural completeness
