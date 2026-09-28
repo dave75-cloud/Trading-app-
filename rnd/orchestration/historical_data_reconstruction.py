@@ -36,12 +36,26 @@ EXPECTED_M005_BEHAVIOUR = {
     "minimum_hold_bars": 3,
 }
 EXPECTED_RESERVED_TEST = {
-    "state": "SEALED",
+    "state": "SEALED_BOUNDARY_UNBOUND",
+    "start_utc": None,
+    "end_utc": None,
     "strategy_metrics_allowed": False,
     "signal_generation_allowed": False,
     "trade_simulation_allowed": False,
     "parameter_selection_allowed": False,
     "human_open_gate_required": True,
+}
+EXPECTED_OUTPUT = {
+    "signal_time": True,
+    "decision_time": True,
+    "execution_time": True,
+    "state_transition": True,
+    "bid_ask_execution_price": True,
+    "transaction_cost": True,
+    "open_position_state": True,
+    "mark_to_market_equity": True,
+    "pair_exposure": True,
+    "currency_leg_exposure": True,
 }
 EXPECTED_EXECUTION = {
     "bid_ask_required": True,
@@ -238,6 +252,21 @@ def validate_candle_rows(rows, expected_timestamps=None):
     return True
 
 
+def validate_snapshot_evidence(manifest, raw_bytes, rows, expected_timestamps=None):
+    validate_snapshot_manifest(manifest)
+    verify_snapshot_bytes(manifest, raw_bytes)
+    validate_candle_rows(rows, expected_timestamps)
+    if manifest["row_count"] != len(rows):
+        raise HistoricalDataError("snapshot: row_count does not match validated rows")
+    row_start = _utc(rows[0]["timestamp_utc"], "first row")
+    row_end = _utc(rows[-1]["timestamp_utc"], "last row")
+    manifest_start = _utc(manifest["start_utc"], "snapshot.start_utc")
+    manifest_end = _utc(manifest["end_utc"], "snapshot.end_utc")
+    if row_start < manifest_start or row_end >= manifest_end:
+        raise HistoricalDataError("snapshot: rows outside declared coverage")
+    return True
+
+
 def validate_reserved_test_operation(operation):
     operation = _text(operation, "reserved operation")
     if operation in PROHIBITED_SEALED_OPERATIONS:
@@ -251,7 +280,7 @@ def validate_m005_reconstruction(value):
     required = {
         "contract_version", "task_id", "base_commit", "status",
         "fixed_behaviour", "search_space", "declared_trial_count",
-        "reserved_test", "execution_contract", "authority",
+        "reserved_test", "execution_contract", "output_contract", "authority",
     }
     _exact(value, required, "M005 reconstruction")
     if value["contract_version"] != M005_VERSION or value["task_id"] != "RND-0027":
@@ -266,6 +295,8 @@ def validate_m005_reconstruction(value):
         raise HistoricalDataError("M005 reconstruction: reserved-test seal mismatch")
     if value["execution_contract"] != EXPECTED_EXECUTION:
         raise HistoricalDataError("M005 reconstruction: execution contract mismatch")
+    if value["output_contract"] != EXPECTED_OUTPUT:
+        raise HistoricalDataError("M005 reconstruction: output contract mismatch")
     if value["authority"] != EXPECTED_AUTHORITY:
         raise HistoricalDataError("M005 reconstruction: authority escalation")
     return True
@@ -288,10 +319,12 @@ def validate_acquisition_plan(value):
         "credentials_committed_to_repository",
     }
     _exact(source, source_fields, "preferred_source")
+    if source["provider"] != "OANDA":
+        raise HistoricalDataError("preferred_source: OANDA plan drift")
     if source["mode"] != "READ_ONLY_HISTORICAL_CANDLES" or source["timeframe"] != "M5":
         raise HistoricalDataError("preferred_source: read-only M5 required")
-    if not {"bid", "ask"}.issubset(set(source["required_price_components"])):
-        raise HistoricalDataError("preferred_source: bid/ask required")
+    if source["required_price_components"] != ["bid", "ask", "mid"]:
+        raise HistoricalDataError("preferred_source: exact bid/ask/mid plan required")
     if source["complete_candles_only"] is not True:
         raise HistoricalDataError("preferred_source: complete candles required")
     if source["broker_order_endpoints_allowed"] is not False:
