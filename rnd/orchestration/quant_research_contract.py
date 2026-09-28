@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import copy
+import json
 import re
 from datetime import datetime
 from math import prod
