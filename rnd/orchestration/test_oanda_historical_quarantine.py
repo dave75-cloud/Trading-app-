@@ -79,6 +79,12 @@ def acquire_into(target, expected=None):
 
 
 class OandaHistoricalQuarantineTests(unittest.TestCase):
+    def test_source_binding_rejects_acquisition_window_drift(self):
+        acquisition = acquisition_declaration()
+        acquisition["acquisition_window"]["start_utc"] = "2016-01-01T00:00:00Z"
+        with self.assertRaisesRegex(SystemExit, "not bound"):
+            q._validate_source_binding(acquisition, calendar_declaration())
+
     def test_shard_declaration_does_not_mutate_source_window(self):
         source = acquisition_declaration()
         original = dict(source["acquisition_window"])
@@ -116,14 +122,32 @@ class OandaHistoricalQuarantineTests(unittest.TestCase):
     def test_verified_existing_shard_can_be_resumed(self):
         with tempfile.TemporaryDirectory() as tmp:
             acquire_into(tmp)
-            self.assertTrue(q.verify_existing_shard(Path(tmp), "AUDUSD", shard()))
+            self.assertTrue(q.verify_existing_shard(
+                Path(tmp), "AUDUSD", shard(),
+                acquisition_declaration(), calendar_declaration()
+            ))
+
+    def test_declaration_drift_breaks_resume_verification(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            acquire_into(tmp)
+            calendar = calendar_declaration()
+            calendar["status"] = "DRIFTED"
+            self.assertFalse(
+                q.verify_existing_shard(
+                    Path(tmp), "AUDUSD", shard(),
+                    acquisition_declaration(), calendar
+                )
+            )
 
     def test_raw_page_tamper_breaks_resume_verification(self):
         with tempfile.TemporaryDirectory() as tmp:
             acquire_into(tmp)
             raw = Path(tmp) / "raw" / "page-0001.json"
             raw.write_bytes(raw.read_bytes() + b" ")
-            self.assertFalse(q.verify_existing_shard(Path(tmp), "AUDUSD", shard()))
+            self.assertFalse(q.verify_existing_shard(
+                Path(tmp), "AUDUSD", shard(),
+                acquisition_declaration(), calendar_declaration()
+            ))
 
     def test_canonical_row_tamper_breaks_resume_verification(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -132,7 +156,10 @@ class OandaHistoricalQuarantineTests(unittest.TestCase):
             rows = json.loads(path.read_text())
             rows[0]["mid_close"] = "1.10061"
             path.write_text(json.dumps(rows, sort_keys=True, indent=2) + "\n")
-            self.assertFalse(q.verify_existing_shard(Path(tmp), "AUDUSD", shard()))
+            self.assertFalse(q.verify_existing_shard(
+                Path(tmp), "AUDUSD", shard(),
+                acquisition_declaration(), calendar_declaration()
+            ))
 
     def test_discrepancy_ledger_tamper_breaks_resume_verification(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -141,7 +168,10 @@ class OandaHistoricalQuarantineTests(unittest.TestCase):
             value = json.loads(path.read_text())
             value["resolved"] = False
             path.write_text(json.dumps(value, sort_keys=True, indent=2) + "\n")
-            self.assertFalse(q.verify_existing_shard(Path(tmp), "AUDUSD", shard()))
+            self.assertFalse(q.verify_existing_shard(
+                Path(tmp), "AUDUSD", shard(),
+                acquisition_declaration(), calendar_declaration()
+            ))
 
     def test_selection_rejects_year_outside_predeclared_horizon(self):
         with self.assertRaisesRegex(SystemExit, "year outside"):
