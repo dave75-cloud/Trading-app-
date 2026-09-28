@@ -25,3 +25,23 @@ promotion or capital authority. Canonical M005 and frozen M006e remain
 unchanged.
 
 Independent exact-head validation is required before completion.
+
+## Final independent validation
+
+The user independently checked out exact implementation head
+`30d3ff7ab7826abf94fc8bcd4f94252c537925cc` in a clean detached worktree and supplied terminal output:
+
+- worktree status: clean;
+- 97 orchestration tests: OK;
+- 106 M006f tests: OK;
+- `RND_WORKSPACE_AUDIT: PASS`, 25 tasks, 24 experiments, broker writes false,
+  protected-path modifications false, promotion authority human-only;
+- `git diff --check 1c6fd4641f275b70519b167a2493d7908ad1c1bc...HEAD`:
+  no output.
+
+Both GitHub guard workflows also succeeded on that exact tested head.
+
+RND-0025 is complete as a non-operational R&D research-baseline candidate.
+It performed no strategy search, ranking or selection. Human merge and
+promotion authority remain external and unset; no trading execution or capital
+authority is granted.
