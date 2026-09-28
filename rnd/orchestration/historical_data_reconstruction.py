@@ -130,6 +130,10 @@ CANDLE_FIELDS = {
     "ask_high",
     "ask_low",
     "ask_close",
+    "mid_open",
+    "mid_high",
+    "mid_low",
+    "mid_close",
 }
 
 
@@ -176,10 +180,9 @@ def validate_snapshot_manifest(value):
     if (
         not isinstance(components, list)
         or len(set(components)) != len(components)
-        or not {"bid", "ask"}.issubset(set(components))
-        or not all(x in {"bid", "ask", "mid"} for x in components)
+        or components != ["bid", "ask", "mid"]
     ):
-        raise HistoricalDataError("snapshot: execution-grade bid/ask required")
+        raise HistoricalDataError("snapshot: exact bid/ask/mid components required")
     start = _utc(value["start_utc"], "snapshot.start_utc")
     end = _utc(value["end_utc"], "snapshot.end_utc")
     if start >= end:
@@ -207,9 +210,15 @@ def verify_snapshot_bytes(manifest, raw_bytes):
 
 
 def _price(value, role):
-    if not isinstance(value, (int, float)) or isinstance(value, bool) or not math.isfinite(value) or value <= 0:
+    if isinstance(value, bool) or not isinstance(value, (str, int, float)):
         raise HistoricalDataError(f"{role}: positive finite price required")
-    return float(value)
+    try:
+        parsed = Decimal(str(value))
+    except InvalidOperation as exc:
+        raise HistoricalDataError(f"{role}: positive finite price required") from exc
+    if not parsed.is_finite() or parsed <= 0:
+        raise HistoricalDataError(f"{role}: positive finite price required")
+    return parsed
 
 
 def validate_candle_rows(rows, expected_timestamps=None):
@@ -224,7 +233,7 @@ def validate_candle_rows(rows, expected_timestamps=None):
         if row["complete"] is not True:
             raise HistoricalDataError(f"rows[{i}]: incomplete candle")
         prices = {}
-        for component in ("bid", "ask"):
+        for component in ("bid", "ask", "mid"):
             for field in ("open", "high", "low", "close"):
                 key = f"{component}_{field}"
                 prices[key] = _price(row[key], f"rows[{i}].{key}")
