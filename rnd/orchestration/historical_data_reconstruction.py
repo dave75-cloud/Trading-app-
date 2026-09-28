@@ -38,9 +38,9 @@ EXPECTED_M005_BEHAVIOUR = {
     "minimum_hold_bars": 3,
 }
 EXPECTED_RESERVED_TEST = {
-    "state": "SEALED_BOUNDARY_UNBOUND",
-    "start_utc": None,
-    "end_utc": None,
+    "state": "SEALED_BOUNDARY_BOUND",
+    "start_utc": "2023-01-01T09:40:00Z",
+    "end_utc": "2025-01-01T00:00:00Z",
     "strategy_metrics_allowed": False,
     "signal_generation_allowed": False,
     "trade_simulation_allowed": False,
