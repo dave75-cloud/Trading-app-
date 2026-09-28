@@ -27,7 +27,9 @@
       "raw_sha256",
       "canonical_rows_sha256",
       "row_count",
-      "gap_ledger"
+      "gap_ledger",
+      "start_utc",
+      "end_utc"
     ],
     "outcome_fields_prohibited": [
       "signal",
