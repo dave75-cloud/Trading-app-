@@ -9,6 +9,7 @@
   "required_outputs": [
     "rnd/research/RND0031_PILOT_EVIDENCE_RECORD.json",
     "rnd/research/RND0031_HISTORICAL_CALENDAR_EVIDENCE_CONTRACT.md",
+    "rnd/research/RND0031_DOCUMENTARY_SOURCE_REGISTER.json",
     "rnd/orchestration/historical_calendar_evidence.py",
     "rnd/orchestration/test_historical_calendar_evidence.py"
   ],
