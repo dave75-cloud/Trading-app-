@@ -1,0 +1,35 @@
+{
+  "experiment_id": "EXP-20260929T133500Z-development-history-expansion",
+  "task_id": "RND-0033",
+  "title": "Development-period historical expansion and calendar-regime evidence",
+  "status": "running",
+  "created_utc": "2026-09-29T13:35:00Z",
+  "git_base": "4b160506e3c5c5529ceffaa8a5a6dad79c9b840e",
+  "hypothesis": "The 2015 cross-pair structural findings can be tested across 2016-2019 development-only history to identify persistence or change in empirical calendar structure without strategy outcomes or calendar promotion.",
+  "inputs": [
+    "Merged RND-0030 quarantine acquisition/verifier",
+    "Merged RND-0031 historical-calendar evidence rules",
+    "Merged RND-0032 four-pair 2015 structural evidence"
+  ],
+  "commands": [
+    "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s rnd/orchestration -p 'test_*.py'",
+    "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s rnd/m006f -p 'test_*.py'",
+    "python3 rnd/tools/audit_workspace.py",
+    "git diff --check 4b160506e3c5c5529ceffaa8a5a6dad79c9b840e...HEAD"
+  ],
+  "result": "RUNNING. Implementation validation and real 2016-2019 acquisition pending.",
+  "safety": {
+    "broker_writes": false,
+    "protected_paths_modified": false,
+    "strategy_authority_changed": false,
+    "human_promotion_required": true
+  },
+  "outputs": [
+    "rnd/research/RND0033_DEVELOPMENT_HISTORY_CONTRACT.md",
+    "rnd/orchestration/development_history_evidence.py",
+    "rnd/orchestration/test_development_history_evidence.py",
+    "rnd/orchestration/test_rnd0033_bounded_launcher.py",
+    "rnd/tools/rnd0033_acquire_development_history.py",
+    "rnd/tools/rnd0033_development_history_verify.py"
+  ]
+}
