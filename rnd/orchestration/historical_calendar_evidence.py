@@ -251,6 +251,60 @@ def validate_pilot_record(value):
     return True
 
 
+
+def validate_documentary_source_register(value):
+    _reject_outcome_keys(value)
+    required = {
+        "contract_version", "task_id", "reviewed_utc_date", "sources",
+        "search_result", "authority",
+    }
+    if not isinstance(value, dict) or set(value) != required:
+        raise HistoricalCalendarError("documentary register: exact fields required")
+    if (
+        value["contract_version"] != "RND-0031-documentary-source-register-v0.1"
+        or value["task_id"] != TASK_ID
+        or value["reviewed_utc_date"] != "2026-09-29"
+    ):
+        raise HistoricalCalendarError("documentary register: identity drift")
+    sources = value["sources"]
+    if not isinstance(sources, list) or len(sources) != 3:
+        raise HistoricalCalendarError("documentary register: three reviewed sources required")
+    expected_ids = {
+        "OANDA-CURRENT-AU-HOURS",
+        "OANDA-CURRENT-US-LEGAL",
+        "OANDA-CURRENT-US-HOLIDAY",
+    }
+    if {x.get("source_id") for x in sources if isinstance(x, dict)} != expected_ids:
+        raise HistoricalCalendarError("documentary register: source identity drift")
+    for item in sources:
+        if not isinstance(item, dict) or set(item) != {
+            "source_id", "publisher", "locator", "supports", "historical_2015_authority"
+        }:
+            raise HistoricalCalendarError("documentary register: exact source fields required")
+        if item["publisher"] != "OANDA":
+            raise HistoricalCalendarError("documentary register: OANDA publisher required")
+        if not item["locator"].startswith("https://www.oanda.com/"):
+            raise HistoricalCalendarError("documentary register: official OANDA locator required")
+        if item["historical_2015_authority"] is not False:
+            raise HistoricalCalendarError("documentary register: current source cannot claim 2015 authority")
+        if not isinstance(item["supports"], str) or not item["supports"].strip():
+            raise HistoricalCalendarError("documentary register: support statement required")
+    if value["search_result"] != {
+        "exact_2015_daily_break_rule_located": False,
+        "exact_2015_holiday_schedule_located": False,
+        "current_rules_may_be_projected_backward": False,
+        "returned_candles_may_substitute_for_documentary_authority": False,
+    }:
+        raise HistoricalCalendarError("documentary register: search conclusion drift")
+    if value["authority"] != {
+        "calendar_promotion": False,
+        "exception_promotion": False,
+        "strategy_evaluation": False,
+        "human_review_required": True,
+    }:
+        raise HistoricalCalendarError("documentary register: authority escalation")
+    return True
+
 def record_sha256(value):
     import json
     validate_pilot_record(value)
