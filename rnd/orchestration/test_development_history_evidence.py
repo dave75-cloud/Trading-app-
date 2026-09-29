@@ -109,5 +109,59 @@ class DevelopmentHistoryEvidenceTests(unittest.TestCase):
         self.assertFalse(result["regime_promotion_authority"])
 
 
+class DevelopmentHistoryEvidenceRecordTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        record_path = (
+            Path(__file__).resolve().parents[1]
+            / "research"
+            / "RND0033_DEVELOPMENT_HISTORY_EVIDENCE_RECORD.json"
+        )
+        cls.record = json.loads(record_path.read_text(encoding="utf-8"))
+
+    def test_bound_report_identity_and_scope(self):
+        record = self.record
+        self.assertEqual(
+            "148f3809c34df0311349819ef49080a4c0343978f2da3b53bc3498f0c9e6283b",
+            record["verification"]["report_sha256"],
+        )
+        self.assertEqual(16, record["verification"]["integrity_shards"])
+        self.assertEqual([2016, 2017, 2018, 2019], record["evidence_scope"]["years"])
+        self.assertEqual(16, record["evidence_scope"]["shard_count"])
+
+    def test_cross_year_candidate_signature_is_bound(self):
+        per_year = self.record["per_year"]
+        self.assertEqual(
+            {"2016": 0, "2017": 2, "2018": 0, "2019": 0},
+            {year: value["shared_candidate_unexpected_count"]
+             for year, value in per_year.items()},
+        )
+        self.assertEqual(
+            ["2017-10-06T21:05:00Z", "2017-10-20T21:10:00Z"],
+            per_year["2017"]["shared_candidate_unexpected_timestamps"],
+        )
+
+    def test_pair_specific_residuals_remain_explicit(self):
+        y2019 = self.record["per_year"]["2019"]["per_symbol"]
+        self.assertEqual(
+            {"AUDUSD": 0, "EURUSD": 1, "GBPUSD": 5, "USDJPY": 16},
+            {symbol: value["candidate_unexpected_count"]
+             for symbol, value in y2019.items()},
+        )
+        self.assertEqual(1429, y2019["AUDUSD"]["residual_short_gap_bars"])
+        self.assertEqual(196, y2019["AUDUSD"]["unclassified_gap_bars"])
+
+    def test_bound_evidence_preserves_authority_boundary(self):
+        authority = self.record["authority"]
+        self.assertEqual("NONE", authority["candidate_authority"])
+        self.assertFalse(authority["calendar_modified"])
+        self.assertFalse(authority["documentary_calendar_authority"])
+        self.assertFalse(authority["strategy_evaluation"])
+        self.assertFalse(authority["regime_promotion_authority"])
+        self.assertFalse(authority["seal_authority"])
+        self.assertFalse(authority["expansion_authority"])
+        self.assertTrue(authority["human_review_required"])
+
+
 if __name__ == "__main__":
     unittest.main()
