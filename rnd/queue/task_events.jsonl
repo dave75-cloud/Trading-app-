@@ -90,3 +90,5 @@
 {"human_gate_required":true,"protected_paths_allowed":false,"status":"queued","task_id":"RND-0030","timestamp_utc":"2026-09-28T14:17:04Z","title":"Calendar-aware OANDA historical acquisition quarantine"}
 {"human_gate_required":true,"protected_paths_allowed":false,"status":"running","task_id":"RND-0030","timestamp_utc":"2026-09-28T14:17:05Z","title":"Calendar-aware OANDA historical acquisition quarantine"}
 {"human_gate_required":true,"protected_paths_allowed":false,"status":"complete","task_id":"RND-0030","timestamp_utc":"2026-09-28T14:21:13Z","title":"Calendar-aware OANDA historical acquisition quarantine"}
+{"human_gate_required":true,"protected_paths_allowed":false,"status":"queued","task_id":"RND-0031","timestamp_utc":"2026-09-29T11:45:52Z","title":"AUDUSD 2015 pilot calendar-evidence hardening"}
+{"human_gate_required":true,"protected_paths_allowed":false,"status":"running","task_id":"RND-0031","timestamp_utc":"2026-09-29T11:45:53Z","title":"AUDUSD 2015 pilot calendar-evidence hardening"}
