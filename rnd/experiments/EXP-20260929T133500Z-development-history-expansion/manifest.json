@@ -2,7 +2,7 @@
   "experiment_id": "EXP-20260929T133500Z-development-history-expansion",
   "task_id": "RND-0033",
   "title": "Development-period historical expansion and calendar-regime evidence",
-  "status": "running",
+  "status": "complete",
   "created_utc": "2026-09-29T13:35:00Z",
   "git_base": "4b160506e3c5c5529ceffaa8a5a6dad79c9b840e",
   "hypothesis": "The 2015 cross-pair structural findings can be tested across 2016-2019 development-only history to identify persistence or change in empirical calendar structure without strategy outcomes or calendar promotion.",
@@ -17,7 +17,7 @@
     "python3 rnd/tools/audit_workspace.py",
     "git diff --check 4b160506e3c5c5529ceffaa8a5a6dad79c9b840e...HEAD"
   ],
-  "result": "RUNNING. Implementation validation and real 2016-2019 acquisition pending.",
+  "result": "COMPLETE. Sixteen 2016-2019 development-only OANDA shards passed cryptographic/content verification; structural report SHA-256 148f3809c34df0311349819ef49080a4c0343978f2da3b53bc3498f0c9e6283b is bound in the repository. Independent validation passed: 300 orchestration tests, 106 M006f tests, workspace audit PASS, diff-check clean. Candidate/calendar/strategy/regime/seal/expansion authority remains false or NONE; human review remains required.",
   "safety": {
     "broker_writes": false,
     "protected_paths_modified": false,
@@ -30,6 +30,8 @@
     "rnd/orchestration/test_development_history_evidence.py",
     "rnd/orchestration/test_rnd0033_bounded_launcher.py",
     "rnd/tools/rnd0033_acquire_development_history.py",
-    "rnd/tools/rnd0033_development_history_verify.py"
-  ]
+    "rnd/tools/rnd0033_development_history_verify.py",
+    "rnd/research/RND0033_DEVELOPMENT_HISTORY_EVIDENCE_RECORD.json"
+  ],
+  "completed_utc": "2026-09-29T14:36:36Z"
 }
