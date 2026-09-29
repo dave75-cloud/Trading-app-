@@ -119,6 +119,71 @@ class OandaHistoricalQuarantineTests(unittest.TestCase):
                 manifest["seal_block_reason"],
             )
 
+
+    def test_valid_empty_provider_page_is_explicit_quarantine_evidence(self):
+        raw = json.dumps(
+            {"instrument": "AUD_USD", "granularity": "M5", "candles": []},
+            separators=(",", ":"),
+        ).encode()
+        self.assertEqual([], q._parse_quarantine_page(raw, "AUD_USD"))
+
+    def test_empty_provider_page_still_requires_exact_envelope(self):
+        wrong = json.dumps(
+            {"instrument": "EUR_USD", "granularity": "M5", "candles": []},
+            separators=(",", ":"),
+        ).encode()
+        with self.assertRaisesRegex(ValueError, "mismatch"):
+            q._parse_quarantine_page(wrong, "AUD_USD")
+
+    def test_acquisition_preserves_empty_page_and_counts_it(self):
+        first = {
+            "start_utc": "2024-01-02T22:05:00Z",
+            "end_utc": "2024-01-02T22:10:00Z",
+            "slots": 1,
+        }
+        second = {
+            "start_utc": "2024-01-02T22:10:00Z",
+            "end_utc": "2024-01-02T22:15:00Z",
+            "slots": 1,
+        }
+        empty = json.dumps(
+            {"instrument": "AUD_USD", "granularity": "M5", "candles": []},
+            separators=(",", ":"),
+        ).encode()
+        with tempfile.TemporaryDirectory() as tmp:
+            with (
+                patch.object(q, "standard_session_schedule", return_value=["2024-01-02T22:05:00Z"]),
+                patch.object(q, "plan_chunks", return_value=[first, second]),
+                patch.object(
+                    q,
+                    "fetch_page",
+                    side_effect=[
+                        {"raw_bytes": raw_page(), "request_id": "RID-1"},
+                        {"raw_bytes": empty, "request_id": "RID-2"},
+                    ],
+                ),
+                patch.object(q.time, "sleep", return_value=None),
+            ):
+                manifest = q.acquire_shard(
+                    acquisition_declaration(),
+                    calendar_declaration(),
+                    "AUDUSD",
+                    shard(),
+                    "runtime-secret-token",
+                    "practice-account",
+                    Path(tmp),
+                    0.5,
+                )
+            self.assertEqual(2, manifest["raw_page_count"])
+            self.assertEqual(1, manifest["empty_raw_page_count"])
+            self.assertEqual(1, manifest["row_count"])
+            page_evidence = json.loads((Path(tmp) / "page_evidence.json").read_text())
+            self.assertEqual([1, 0], [x["candle_count"] for x in page_evidence])
+            self.assertTrue(q.verify_existing_shard(
+                Path(tmp), "AUDUSD", shard(),
+                acquisition_declaration(), calendar_declaration()
+            ))
+
     def test_verified_existing_shard_can_be_resumed(self):
         with tempfile.TemporaryDirectory() as tmp:
             acquire_into(tmp)

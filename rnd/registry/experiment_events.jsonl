@@ -86,3 +86,6 @@
 {"experiment_id":"EXP-20260929T122100Z-cross-pair-2015-evidence","status":"planned","task_id":"RND-0032","timestamp_utc":"2026-09-29T12:20:59Z","title":"Controlled 2015 cross-pair historical evidence acquisition"}
 {"experiment_id":"EXP-20260929T122100Z-cross-pair-2015-evidence","status":"running","task_id":"RND-0032","timestamp_utc":"2026-09-29T12:21:00Z","title":"Controlled 2015 cross-pair historical evidence acquisition"}
 {"experiment_id":"EXP-20260929T122100Z-cross-pair-2015-evidence","status":"complete","task_id":"RND-0032","timestamp_utc":"2026-09-29T12:59:00Z","title":"Controlled 2015 cross-pair historical evidence acquisition"}
+{"experiment_id":"EXP-20260929T133500Z-development-history-expansion","status":"planned","task_id":"RND-0033","timestamp_utc":"2026-09-29T13:34:59Z","title":"Development-period historical expansion and calendar-regime evidence"}
+{"experiment_id":"EXP-20260929T133500Z-development-history-expansion","status":"running","task_id":"RND-0033","timestamp_utc":"2026-09-29T13:35:00Z","title":"Development-period historical expansion and calendar-regime evidence"}
+{"experiment_id":"EXP-20260929T133500Z-development-history-expansion","status":"complete","task_id":"RND-0033","timestamp_utc":"2026-09-29T14:36:36Z","title":"Development-period historical expansion and calendar-regime evidence"}

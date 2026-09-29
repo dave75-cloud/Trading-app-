@@ -225,6 +225,10 @@ class OandaHistoricalAcquisitionTests(unittest.TestCase):
         self.assertEqual("1.10070", rows[0]["ask_close"])
         self.assertEqual("1.10060", rows[0]["mid_close"])
 
+    def test_shared_parser_remains_strict_on_empty_candle_page(self):
+        with self.assertRaisesRegex(AcquisitionError, "non-empty candles"):
+            parse_page(raw_page([]), "AUD_USD")
+
     def test_missing_mid_is_rejected(self):
         item = candle()
         del item["mid"]

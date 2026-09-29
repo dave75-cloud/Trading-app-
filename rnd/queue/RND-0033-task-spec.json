@@ -1,0 +1,68 @@
+{
+  "contract_version": "RND-task-spec-v0.1",
+  "task_id": "RND-0033",
+  "title": "Development-period historical expansion and calendar-regime evidence",
+  "git_base": "4b160506e3c5c5529ceffaa8a5a6dad79c9b840e",
+  "objective": "Acquire and structurally analyse all four M005 pairs for UTC years 2016-2019, using 2015 as reference evidence, to test historical calendar-pattern persistence and regime change wholly inside the development period.",
+  "allowed_path_prefixes": [
+    "rnd/"
+  ],
+  "prohibited_path_prefixes": [
+    "rnd/private/"
+  ],
+  "authorized_acquisition": {
+    "symbols": [
+      "AUDUSD",
+      "EURUSD",
+      "GBPUSD",
+      "USDJPY"
+    ],
+    "years": [
+      2016,
+      2017,
+      2018,
+      2019
+    ],
+    "reference_only": [
+      "2015 four-pair RND-0032 evidence"
+    ]
+  },
+  "required_outputs": [
+    "rnd/research/RND0033_DEVELOPMENT_HISTORY_CONTRACT.md",
+    "rnd/orchestration/development_history_evidence.py",
+    "rnd/orchestration/test_development_history_evidence.py",
+    "rnd/orchestration/test_rnd0033_bounded_launcher.py",
+    "rnd/tools/rnd0033_acquire_development_history.py",
+    "rnd/tools/rnd0033_development_history_verify.py",
+    "rnd/research/RND0033_DEVELOPMENT_HISTORY_EVIDENCE_RECORD.json"
+  ],
+  "required_validation_labels": [
+    "diff-check",
+    "scope-check",
+    "orchestration-tests",
+    "m006f-tests",
+    "workspace-audit"
+  ],
+  "success_criteria": [
+    "New acquisition is exactly four M005 pairs for UTC years 2016-2019",
+    "Every shard passes the existing RND-0030 cryptographic/content verifier",
+    "2015 evidence remains reference-only and 2020-2024 are not acquired",
+    "Analysis uses timestamp/gap/hash structure only and emits no price or strategy outcome",
+    "The non-authoritative 17:00 New York hypothesis is tested independently by symbol and year",
+    "Cross-pair shared missing/unexpected structure is explicit for each year",
+    "Cross-year structural signatures identify candidate regime persistence/change without calendar promotion",
+    "No synthetic/interpolated candle and no automatic expansion beyond the authorized years"
+  ],
+  "stop_conditions": [
+    "Any acquisition outside AUDUSD/EURUSD/GBPUSD/USDJPY years 2016-2019",
+    "Any M005 signal, trade or performance calculation",
+    "Any validation or reserved-final-test outcome access",
+    "Any synthetic or interpolated candle",
+    "Any credential or account identity committed",
+    "Any returned candle promoted into documentary calendar authority",
+    "Any broker-write, capital, strategy-selection, automatic promotion or automatic merge authority"
+  ],
+  "human_gate_required": true,
+  "automatic_merge": false,
+  "automatic_promotion": false
+}

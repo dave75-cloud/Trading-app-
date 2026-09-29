@@ -1,0 +1,57 @@
+#!/usr/bin/env python3
+"""Bounded RND-0033 launcher: four M005 pairs, UTC years 2016-2019 only."""
+
+from __future__ import annotations
+
+import argparse
+import subprocess
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[2]
+RUNNER = ROOT / "rnd" / "tools" / "oanda_historical_quarantine.py"
+SYMBOLS = ("AUDUSD", "EURUSD", "GBPUSD", "USDJPY")
+YEARS = (2016, 2017, 2018, 2019)
+
+
+def build_command(output, delay, resume=False):
+    command = [
+        sys.executable, str(RUNNER), "--output", str(output),
+        "--request-delay-seconds", str(delay),
+    ]
+    for symbol in SYMBOLS:
+        command.extend(["--symbol", symbol])
+    for year in YEARS:
+        command.extend(["--year", str(year)])
+    if resume:
+        command.append("--resume")
+    return command
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--output", required=True)
+    parser.add_argument("--request-delay-seconds", type=float, default=0.6)
+    parser.add_argument("--resume", action="store_true")
+    args = parser.parse_args()
+    if args.request_delay_seconds < 0.5 or args.request_delay_seconds > 5.0:
+        raise SystemExit("FAIL_CLOSED: request delay must be between 0.5 and 5.0 seconds")
+    output = Path(args.output).expanduser().resolve()
+    if output == ROOT or ROOT in output.parents:
+        raise SystemExit("FAIL_CLOSED: RND-0033 evidence must remain outside repository")
+    result = subprocess.run(
+        build_command(output, args.request_delay_seconds, args.resume),
+        cwd=str(ROOT), check=False,
+    )
+    if result.returncode:
+        raise SystemExit(result.returncode)
+    print("RND0033_ACQUISITION: COMPLETE")
+    print("symbols=AUDUSD,EURUSD,GBPUSD,USDJPY")
+    print("years=2016,2017,2018,2019")
+    print("strategy_evaluation=FALSE")
+    print("calendar_promotion=FALSE")
+    print("expansion_beyond_2019=FALSE")
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,313 @@
+{
+  "contract_version": "RND0033-development-history-evidence-v1",
+  "task_id": "RND-0033",
+  "experiment_id": "EXP-20260929T133500Z-development-history-expansion",
+  "evidence_scope": {
+    "years": [
+      2016,
+      2017,
+      2018,
+      2019
+    ],
+    "symbols": [
+      "AUDUSD",
+      "EURUSD",
+      "GBPUSD",
+      "USDJPY"
+    ],
+    "shard_count": 16,
+    "acquisition_result": {
+      "completed_shards": 15,
+      "verified_skipped_shards": 1
+    },
+    "strategy_outcomes_permitted": false
+  },
+  "verification": {
+    "development_history_verification": "PASS",
+    "integrity_shards": 16,
+    "report_sha256": "148f3809c34df0311349819ef49080a4c0343978f2da3b53bc3498f0c9e6283b"
+  },
+  "per_year": {
+    "2016": {
+      "shared_baseline_missing_count": 566,
+      "shared_baseline_unexpected_count": 234,
+      "shared_candidate_unexpected_count": 0,
+      "shared_candidate_unexpected_timestamps": [],
+      "per_symbol": {
+        "AUDUSD": {
+          "row_count": 74174,
+          "raw_page_count": 22,
+          "raw_bundle_sha256": "c6ff1e857cf3205462dd7799621eb9d8390b6e4c0f6ce11259b539037c1c9d32",
+          "canonical_rows_sha256": "d06e61249ef2cd755640c67f0c27419405947ea05f1a2419af853bf24522d093",
+          "standard_schedule_sha256": "70a2fa75ffb99ab1cff31d64a7ba79d3b8c70e7ada902e29f62758372722a915",
+          "residual_short_gap_bars": 385,
+          "closure_shaped_candidate_bars": 564,
+          "unclassified_gap_bars": 21,
+          "candidate_unexpected_count": 0,
+          "remaining_unexpected_timestamps": []
+        },
+        "EURUSD": {
+          "row_count": 74437,
+          "raw_page_count": 22,
+          "raw_bundle_sha256": "8b0971b0745b21eb8e27d973410374828ac562221db42e6f548ff7ad42c8153b",
+          "canonical_rows_sha256": "ca7c18201c02fc6227d4ec106f033cffb35c0750677513fcc44ca56d9cd56385",
+          "standard_schedule_sha256": "70a2fa75ffb99ab1cff31d64a7ba79d3b8c70e7ada902e29f62758372722a915",
+          "residual_short_gap_bars": 143,
+          "closure_shaped_candidate_bars": 564,
+          "unclassified_gap_bars": 0,
+          "candidate_unexpected_count": 0,
+          "remaining_unexpected_timestamps": []
+        },
+        "GBPUSD": {
+          "row_count": 74354,
+          "raw_page_count": 22,
+          "raw_bundle_sha256": "f7bff55487bb77e5078d1bf66cebbf76c97ac6fd2ca3cfb63e8813624f0be670",
+          "canonical_rows_sha256": "e3be2062501cc22dc187c49b5433d90a057f357f0293b7d5943992adbb21bd5a",
+          "standard_schedule_sha256": "70a2fa75ffb99ab1cff31d64a7ba79d3b8c70e7ada902e29f62758372722a915",
+          "residual_short_gap_bars": 210,
+          "closure_shaped_candidate_bars": 564,
+          "unclassified_gap_bars": 16,
+          "candidate_unexpected_count": 0,
+          "remaining_unexpected_timestamps": []
+        },
+        "USDJPY": {
+          "row_count": 74531,
+          "raw_page_count": 22,
+          "raw_bundle_sha256": "c42ac2ce6aa37a40dc559f6cadb1575d7303bc42bf7c83255861ec138977531c",
+          "canonical_rows_sha256": "a0742ab2dddae8de84115f329a92264430181788e8cd9308bc972edf8042219d",
+          "standard_schedule_sha256": "70a2fa75ffb99ab1cff31d64a7ba79d3b8c70e7ada902e29f62758372722a915",
+          "residual_short_gap_bars": 42,
+          "closure_shaped_candidate_bars": 564,
+          "unclassified_gap_bars": 7,
+          "candidate_unexpected_count": 0,
+          "remaining_unexpected_timestamps": []
+        }
+      }
+    },
+    "2017": {
+      "shared_baseline_missing_count": 625,
+      "shared_baseline_unexpected_count": 240,
+      "shared_candidate_unexpected_count": 2,
+      "shared_candidate_unexpected_timestamps": [
+        "2017-10-06T21:05:00Z",
+        "2017-10-20T21:10:00Z"
+      ],
+      "per_symbol": {
+        "AUDUSD": {
+          "row_count": 73517,
+          "raw_page_count": 22,
+          "raw_bundle_sha256": "46314820e00e36af3c2f86ebe75199821e7dfc02a3a169a1131ecd546b869e1b",
+          "canonical_rows_sha256": "1e02fd8eb6eb682acdd5c8b7504c1a9236e7a3a11391db3de50a57b0608a4f1f",
+          "standard_schedule_sha256": "025cbbce3744b16cf55990c62fe5419a8ed12b9fb8b3ae7117d954a868cc48c2",
+          "residual_short_gap_bars": 708,
+          "closure_shaped_candidate_bars": 612,
+          "unclassified_gap_bars": 69,
+          "candidate_unexpected_count": 2,
+          "remaining_unexpected_timestamps": [
+            "2017-10-06T21:05:00Z",
+            "2017-10-20T21:10:00Z"
+          ]
+        },
+        "EURUSD": {
+          "row_count": 74192,
+          "raw_page_count": 22,
+          "raw_bundle_sha256": "3d55caba4780e9473cf521bbb68829d3090e26218c86824e707231dafa828730",
+          "canonical_rows_sha256": "625064a847b47d6180c63ed84c586ad53751cb29dca580ce9c687c32736db101",
+          "standard_schedule_sha256": "025cbbce3744b16cf55990c62fe5419a8ed12b9fb8b3ae7117d954a868cc48c2",
+          "residual_short_gap_bars": 86,
+          "closure_shaped_candidate_bars": 612,
+          "unclassified_gap_bars": 16,
+          "candidate_unexpected_count": 2,
+          "remaining_unexpected_timestamps": [
+            "2017-10-06T21:05:00Z",
+            "2017-10-20T21:10:00Z"
+          ]
+        },
+        "GBPUSD": {
+          "row_count": 74111,
+          "raw_page_count": 22,
+          "raw_bundle_sha256": "26fea07f0902729c258d1189d9a3286b79952d4bfb08f32243063b4bac1f5b59",
+          "canonical_rows_sha256": "dbda7daf4521d3034f9ee559656ee5fa046e9705a1f810ca89bce94054a55c80",
+          "standard_schedule_sha256": "025cbbce3744b16cf55990c62fe5419a8ed12b9fb8b3ae7117d954a868cc48c2",
+          "residual_short_gap_bars": 167,
+          "closure_shaped_candidate_bars": 612,
+          "unclassified_gap_bars": 16,
+          "candidate_unexpected_count": 2,
+          "remaining_unexpected_timestamps": [
+            "2017-10-06T21:05:00Z",
+            "2017-10-20T21:10:00Z"
+          ]
+        },
+        "USDJPY": {
+          "row_count": 74223,
+          "raw_page_count": 22,
+          "raw_bundle_sha256": "5c34c2050bea9fc7dcafbfb447df6d41c2aa5b4a2bb6d1a9f0b92404f5c5530e",
+          "canonical_rows_sha256": "708d624f096db914a54483de9bf3ee1fe6c0f72fd5e67d161df9c2a99cee8465",
+          "standard_schedule_sha256": "025cbbce3744b16cf55990c62fe5419a8ed12b9fb8b3ae7117d954a868cc48c2",
+          "residual_short_gap_bars": 55,
+          "closure_shaped_candidate_bars": 612,
+          "unclassified_gap_bars": 16,
+          "candidate_unexpected_count": 2,
+          "remaining_unexpected_timestamps": [
+            "2017-10-06T21:05:00Z",
+            "2017-10-20T21:10:00Z"
+          ]
+        }
+      }
+    },
+    "2018": {
+      "shared_baseline_missing_count": 577,
+      "shared_baseline_unexpected_count": 259,
+      "shared_candidate_unexpected_count": 0,
+      "shared_candidate_unexpected_timestamps": [],
+      "per_symbol": {
+        "AUDUSD": {
+          "row_count": 74045,
+          "raw_page_count": 22,
+          "raw_bundle_sha256": "398261646b663d92af4922a73b055c07b95c9e74a5d2caec56335b4831262901",
+          "canonical_rows_sha256": "e27f20fb5f83fe016e19e048b57ef21098653ad2c82ab699f74f5884f199cedb",
+          "standard_schedule_sha256": "e6cea94935409ddc088233b36d881d173ca122843bedc58cd817901ebd20200a",
+          "residual_short_gap_bars": 529,
+          "closure_shaped_candidate_bars": 576,
+          "unclassified_gap_bars": 18,
+          "candidate_unexpected_count": 0,
+          "remaining_unexpected_timestamps": []
+        },
+        "EURUSD": {
+          "row_count": 74499,
+          "raw_page_count": 22,
+          "raw_bundle_sha256": "a91aad7fb9fe929646457b67ec6801122235a99b30874cf92b7d6f477706d419",
+          "canonical_rows_sha256": "70652aa4b4d772e6311c2b845d4bedd9981fa381a456fea392e8f5c13dc94593",
+          "standard_schedule_sha256": "e6cea94935409ddc088233b36d881d173ca122843bedc58cd817901ebd20200a",
+          "residual_short_gap_bars": 93,
+          "closure_shaped_candidate_bars": 576,
+          "unclassified_gap_bars": 0,
+          "candidate_unexpected_count": 0,
+          "remaining_unexpected_timestamps": []
+        },
+        "GBPUSD": {
+          "row_count": 74499,
+          "raw_page_count": 22,
+          "raw_bundle_sha256": "b758adae833170b504e8acc02b68a04c229424c00db3ecf9d333698c3e3b3003",
+          "canonical_rows_sha256": "24dc654effb7eb1c0cb85667d7ebd6fb251242281a10d5e4e7da39e0a001c33a",
+          "standard_schedule_sha256": "e6cea94935409ddc088233b36d881d173ca122843bedc58cd817901ebd20200a",
+          "residual_short_gap_bars": 93,
+          "closure_shaped_candidate_bars": 576,
+          "unclassified_gap_bars": 0,
+          "candidate_unexpected_count": 0,
+          "remaining_unexpected_timestamps": []
+        },
+        "USDJPY": {
+          "row_count": 74470,
+          "raw_page_count": 22,
+          "raw_bundle_sha256": "4b441c2917a90ce8bcc23478a12e013bc5b300c148fffbd8de2def083879ba0e",
+          "canonical_rows_sha256": "72d6245a24ccf1c328ccc0a76fc0416cd067d07d4d5ba5bdc3f93619d46d91d7",
+          "standard_schedule_sha256": "e6cea94935409ddc088233b36d881d173ca122843bedc58cd817901ebd20200a",
+          "residual_short_gap_bars": 118,
+          "closure_shaped_candidate_bars": 577,
+          "unclassified_gap_bars": 4,
+          "candidate_unexpected_count": 1,
+          "remaining_unexpected_timestamps": [
+            "2018-12-07T22:00:00Z"
+          ]
+        }
+      }
+    },
+    "2019": {
+      "shared_baseline_missing_count": 652,
+      "shared_baseline_unexpected_count": 233,
+      "shared_candidate_unexpected_count": 0,
+      "shared_candidate_unexpected_timestamps": [],
+      "per_symbol": {
+        "AUDUSD": {
+          "row_count": 72912,
+          "raw_page_count": 22,
+          "raw_bundle_sha256": "447ecbb56629257c18aac990e2b5adfc119870a7c668e4fbda77aae02fa5335f",
+          "canonical_rows_sha256": "3b02eb5bf67b96616856bd709aa8f85b52c2db25ab4eff7c458456a37b4b71df",
+          "standard_schedule_sha256": "0468425260217156731d17f429ac3757c8a112573d0eae3171f13d016e7a5a72",
+          "residual_short_gap_bars": 1429,
+          "closure_shaped_candidate_bars": 631,
+          "unclassified_gap_bars": 196,
+          "candidate_unexpected_count": 0,
+          "remaining_unexpected_timestamps": []
+        },
+        "EURUSD": {
+          "row_count": 73983,
+          "raw_page_count": 22,
+          "raw_bundle_sha256": "6333ad5f5b92760d4adcecdeb875775db69bc102310d5c3710e310673da359bd",
+          "canonical_rows_sha256": "a0d2b0b082ad7c13031d9ab304823c839c00a3bb54b214398c300e61b3273a5a",
+          "standard_schedule_sha256": "0468425260217156731d17f429ac3757c8a112573d0eae3171f13d016e7a5a72",
+          "residual_short_gap_bars": 508,
+          "closure_shaped_candidate_bars": 631,
+          "unclassified_gap_bars": 47,
+          "candidate_unexpected_count": 1,
+          "remaining_unexpected_timestamps": [
+            "2019-09-27T21:00:00Z"
+          ]
+        },
+        "GBPUSD": {
+          "row_count": 73852,
+          "raw_page_count": 22,
+          "raw_bundle_sha256": "82abe0a740fb4244b6517cbe2cdb84c86acaac19c32a2cc961a51f4bfacf1066",
+          "canonical_rows_sha256": "0c1479e3a72ee4817f680794ded1b2dd10d2149fe034ebbba374769a80dc5bee",
+          "standard_schedule_sha256": "0468425260217156731d17f429ac3757c8a112573d0eae3171f13d016e7a5a72",
+          "residual_short_gap_bars": 662,
+          "closure_shaped_candidate_bars": 631,
+          "unclassified_gap_bars": 28,
+          "candidate_unexpected_count": 5,
+          "remaining_unexpected_timestamps": [
+            "2019-04-19T21:00:00Z",
+            "2019-06-21T21:00:00Z",
+            "2019-07-19T21:00:00Z",
+            "2019-08-02T21:00:00Z",
+            "2019-10-18T21:00:00Z"
+          ]
+        },
+        "USDJPY": {
+          "row_count": 74273,
+          "raw_page_count": 22,
+          "raw_bundle_sha256": "df7dedc1a61d3aa30b37a8ae566f34eb85b7c95adcb65466f9fc3d0932a2841a",
+          "canonical_rows_sha256": "df219fa24ed8e41908f8cb14aa102d4ffef4e0bb50ea66a1424ef62a71b99ede",
+          "standard_schedule_sha256": "0468425260217156731d17f429ac3757c8a112573d0eae3171f13d016e7a5a72",
+          "residual_short_gap_bars": 256,
+          "closure_shaped_candidate_bars": 631,
+          "unclassified_gap_bars": 24,
+          "candidate_unexpected_count": 16,
+          "remaining_unexpected_timestamps": [
+            "2019-03-15T21:00:00Z",
+            "2019-03-22T21:00:00Z",
+            "2019-04-26T21:00:00Z",
+            "2019-05-17T21:00:00Z",
+            "2019-06-07T21:00:00Z",
+            "2019-06-28T21:00:00Z",
+            "2019-07-05T21:00:00Z",
+            "2019-07-12T21:00:00Z",
+            "2019-08-02T21:00:00Z",
+            "2019-08-09T21:00:00Z",
+            "2019-08-16T21:00:00Z",
+            "2019-08-23T21:00:00Z",
+            "2019-08-30T21:00:00Z",
+            "2019-09-13T21:00:00Z",
+            "2019-09-20T21:00:00Z",
+            "2019-10-11T21:00:00Z"
+          ]
+        }
+      }
+    }
+  },
+  "interpretation": {
+    "empirical_session_structure": "Across 2016-2019 the non-authoritative 17:00 New York candidate explains the dominant shared baseline-unexpected structure. Shared candidate-unexpected counts are 0, 2, 0 and 0 by year.",
+    "residual_structure": "Residual missing and unexpected evidence remains heterogeneous by pair and year, including material short-gap and unclassified components. These observations must remain explicit and gap-aware; they are not authorization to synthesize or interpolate candles.",
+    "regime_conclusion": "The evidence supports persistence of a historical structural mismatch with the present-day baseline schedule, but does not establish documentary historical-calendar authority or authorize a calendar regime promotion."
+  },
+  "authority": {
+    "candidate_authority": "NONE",
+    "calendar_modified": false,
+    "documentary_calendar_authority": false,
+    "strategy_evaluation": false,
+    "regime_promotion_authority": false,
+    "seal_authority": false,
+    "expansion_authority": false,
+    "human_review_required": true
+  }
+}
