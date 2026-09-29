@@ -82,3 +82,4 @@
 {"experiment_id":"EXP-20260928T141705Z-calendar-aware-acquisition","status":"complete","task_id":"RND-0030","timestamp_utc":"2026-09-28T14:21:13Z","title":"Calendar-aware OANDA historical acquisition quarantine"}
 {"experiment_id":"EXP-20260929T114553Z-audusd-2015-pilot-calendar-hardening","status":"planned","task_id":"RND-0031","timestamp_utc":"2026-09-29T11:45:52Z","title":"AUDUSD 2015 pilot calendar-evidence hardening"}
 {"experiment_id":"EXP-20260929T114553Z-audusd-2015-pilot-calendar-hardening","status":"running","task_id":"RND-0031","timestamp_utc":"2026-09-29T11:45:53Z","title":"AUDUSD 2015 pilot calendar-evidence hardening"}
+{"experiment_id":"EXP-20260929T114553Z-audusd-2015-pilot-calendar-hardening","status":"complete","task_id":"RND-0031","timestamp_utc":"2026-09-29T11:54:00Z","title":"AUDUSD 2015 pilot calendar-evidence hardening"}
