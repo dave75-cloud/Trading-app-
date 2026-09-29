@@ -67,3 +67,22 @@ No synthetic candle is permitted.
 RND-0032 does not authorize 2016-2024 acquisition. A later human-reviewed task
 must decide whether the 2015 cross-pair evidence is sufficient to define the
 next historical acquisition/calendaring step.
+
+## Observed 2015 evidence
+
+The bounded acquisition completed for EURUSD, GBPUSD and USDJPY, and all four
+pairs including the immutable AUDUSD reference passed the RND-0032 structural
+verification.
+
+The non-authoritative 17:00 New York candidate explained all but one of the
+baseline-unexpected timestamps in every pair: 254/255 for AUDUSD, 259/260 for
+EURUSD, 258/259 for GBPUSD and 257/258 for USDJPY. The sole remaining
+candidate-unexpected timestamp, `2015-08-28T21:05:00Z`, occurs in all four
+pairs. A 648-bar closure-shaped candidate component also recurs in all four.
+
+These observations are bound in
+`rnd/research/RND0032_CROSS_PAIR_2015_EVIDENCE_RECORD.json`, including the
+external structural-report SHA-256 and per-pair raw/canonical evidence hashes.
+They are empirical structural corroboration only. They do not promote the
+17:00 candidate, establish a documentary 2015 OANDA calendar, authorize
+sealing, authorize 2016-2024 acquisition, or authorize strategy evaluation.
