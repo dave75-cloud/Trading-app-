@@ -1,0 +1,102 @@
+{
+  "contract_version": "RND0032-cross-pair-2015-evidence-v1",
+  "task_id": "RND-0032",
+  "experiment_id": "EXP-20260929T122100Z-cross-pair-2015-evidence",
+  "evidence_scope": {
+    "year": 2015,
+    "symbols": ["AUDUSD", "EURUSD", "GBPUSD", "USDJPY"],
+    "newly_acquired": ["EURUSD", "GBPUSD", "USDJPY"],
+    "reference_only": ["AUDUSD"],
+    "strategy_outcomes_permitted": false
+  },
+  "verification": {
+    "cross_pair_verification": "PASS",
+    "integrity": {
+      "AUDUSD": "PASS",
+      "EURUSD": "PASS",
+      "GBPUSD": "PASS",
+      "USDJPY": "PASS"
+    },
+    "report_sha256": "8d594b9c0bbbdcd771acfa2be7fc032b827c8e246265459a5448a3f24cc436fe"
+  },
+  "per_symbol": {
+    "AUDUSD": {
+      "row_count": 74313,
+      "baseline_missing": 849,
+      "baseline_unexpected": 255,
+      "candidate_missing": 856,
+      "candidate_unexpected": 1,
+      "explained_original_unexpected": 254,
+      "raw_bundle_sha256": "3ff819e045c019f020a76f8a9c144c6463b8abc0d3de16a9e931d4aea0aec878",
+      "canonical_rows_sha256": "24cced1b7d4d9d94135d1666e7d4366c6991640116d8f785bcd911f4c055bcdd",
+      "standard_schedule_sha256": "8d08c33cfc235a0958a3943ac93d50a06b03299183828c916a6ace2cc6bf0cb8",
+      "residual_short_gap_bars": 208,
+      "closure_shaped_candidate_bars": 648,
+      "unclassified_gap_bars": 0
+    },
+    "EURUSD": {
+      "row_count": 74393,
+      "baseline_missing": 774,
+      "baseline_unexpected": 260,
+      "candidate_missing": 776,
+      "candidate_unexpected": 1,
+      "explained_original_unexpected": 259,
+      "raw_bundle_sha256": "87d325a8310a24dbda5f3422f5493c0452807ed8b8f28c0ab2992f89e59a9591",
+      "canonical_rows_sha256": "6c8b1fdc501feaa1e7859d010a656af656f1441ec959084e184d8e25dc47e50c",
+      "standard_schedule_sha256": "8d08c33cfc235a0958a3943ac93d50a06b03299183828c916a6ace2cc6bf0cb8",
+      "residual_short_gap_bars": 128,
+      "closure_shaped_candidate_bars": 648,
+      "unclassified_gap_bars": 0
+    },
+    "GBPUSD": {
+      "row_count": 74210,
+      "baseline_missing": 956,
+      "baseline_unexpected": 259,
+      "candidate_missing": 959,
+      "candidate_unexpected": 1,
+      "explained_original_unexpected": 258,
+      "raw_bundle_sha256": "242571476bff81e01b2f555aa5160a8f4fb8e9ad92c173b4e389f0e59e9038c6",
+      "canonical_rows_sha256": "36bfc732ca25028e19cd447c1a5cf475111b201fe22bbcf9086138836601f212",
+      "standard_schedule_sha256": "8d08c33cfc235a0958a3943ac93d50a06b03299183828c916a6ace2cc6bf0cb8",
+      "residual_short_gap_bars": 311,
+      "closure_shaped_candidate_bars": 648,
+      "unclassified_gap_bars": 0
+    },
+    "USDJPY": {
+      "row_count": 74442,
+      "baseline_missing": 723,
+      "baseline_unexpected": 258,
+      "candidate_missing": 727,
+      "candidate_unexpected": 1,
+      "explained_original_unexpected": 257,
+      "raw_bundle_sha256": "a9d942ecf75c89f130145e2d63050c771a888bc04f79afe8e8f2772a574c19c9",
+      "canonical_rows_sha256": "3d3b92d3c918470e23d6716f5862c44d2f06d4b9054ffdf20e290342827dc928",
+      "standard_schedule_sha256": "8d08c33cfc235a0958a3943ac93d50a06b03299183828c916a6ace2cc6bf0cb8",
+      "residual_short_gap_bars": 70,
+      "closure_shaped_candidate_bars": 648,
+      "unclassified_gap_bars": 9
+    }
+  },
+  "cross_pair": {
+    "shared_baseline_missing_count": 646,
+    "shared_baseline_unexpected_count": 252,
+    "shared_candidate_unexpected_count": 1,
+    "shared_candidate_unexpected_timestamps": ["2015-08-28T21:05:00Z"],
+    "audusd_2015_08_28_1705_recurrence": {
+      "AUDUSD": true,
+      "EURUSD": true,
+      "GBPUSD": true,
+      "USDJPY": true
+    },
+    "interpretation": "The non-authoritative 17:00 New York candidate explains all but one baseline-unexpected timestamp in each pair. The sole remaining candidate-unexpected timestamp is shared by all four pairs. The common 648-bar closure-shaped component recurs in all four pairs. These are structural corroboration findings only and do not constitute documentary historical-calendar authority."
+  },
+  "authority": {
+    "candidate_authority": "NONE",
+    "calendar_modified": false,
+    "documentary_calendar_authority": false,
+    "strategy_evaluation": false,
+    "seal_authority": false,
+    "expansion_authority": false,
+    "human_review_required": true
+  }
+}
