@@ -44,6 +44,20 @@ The purpose is to obtain enough development-period evidence to make the next
 step materially closer to controlled M005 reconstruction rather than repeating
 single-year pilots indefinitely.
 
+## Zero-candle raw-page handling
+
+The 2017 AUDUSD acquisition exposed a valid OANDA response envelope for
+`2017-12-31T14:00:00Z` through `2018-01-01T00:00:00Z` with an empty
+`candles` array. RND-0033 does not synthesize candles for such a page and does
+not relax the shared acquisition parser. The quarantine runner may preserve a
+structurally valid zero-candle page as immutable raw evidence, records its
+candle count as zero, binds it into the raw bundle, and contributes no
+canonical rows. The independently generated schedule and discrepancy ledger
+remain responsible for representing the absent timestamps.
+
+A malformed response, wrong instrument/granularity, non-list candle field, or
+a shard with no candles across the entire year remains fail-closed.
+
 ## Authority boundary
 
 Returned candles cannot establish documentary historical trading hours.
