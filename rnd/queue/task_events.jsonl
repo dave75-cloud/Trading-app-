@@ -93,3 +93,5 @@
 {"human_gate_required":true,"protected_paths_allowed":false,"status":"queued","task_id":"RND-0031","timestamp_utc":"2026-09-29T11:45:52Z","title":"AUDUSD 2015 pilot calendar-evidence hardening"}
 {"human_gate_required":true,"protected_paths_allowed":false,"status":"running","task_id":"RND-0031","timestamp_utc":"2026-09-29T11:45:53Z","title":"AUDUSD 2015 pilot calendar-evidence hardening"}
 {"human_gate_required":true,"protected_paths_allowed":false,"status":"complete","task_id":"RND-0031","timestamp_utc":"2026-09-29T11:54:00Z","title":"AUDUSD 2015 pilot calendar-evidence hardening"}
+{"human_gate_required":true,"protected_paths_allowed":false,"status":"queued","task_id":"RND-0032","timestamp_utc":"2026-09-29T12:20:59Z","title":"Controlled 2015 cross-pair historical evidence acquisition"}
+{"human_gate_required":true,"protected_paths_allowed":false,"status":"running","task_id":"RND-0032","timestamp_utc":"2026-09-29T12:21:00Z","title":"Controlled 2015 cross-pair historical evidence acquisition"}
