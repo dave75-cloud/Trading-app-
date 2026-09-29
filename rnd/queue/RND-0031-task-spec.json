@@ -1,0 +1,45 @@
+{
+  "contract_version": "RND-task-spec-v0.1",
+  "task_id": "RND-0031",
+  "title": "AUDUSD 2015 pilot calendar-evidence hardening",
+  "git_base": "d9a93899a1c0fba531f67639685ce9545b2b473c",
+  "objective": "Preserve and classify the first real AUDUSD/2015 OANDA quarantine evidence, falsify the present-day calendar assumption without promoting a replacement rule, and define a gap-tolerant but evidence-explicit historical acceptance policy before any wider acquisition.",
+  "allowed_path_prefixes": ["rnd/"],
+  "prohibited_path_prefixes": ["rnd/private/"],
+  "required_outputs": [
+    "rnd/research/RND0031_PILOT_EVIDENCE_RECORD.json",
+    "rnd/research/RND0031_HISTORICAL_CALENDAR_EVIDENCE_CONTRACT.md",
+    "rnd/research/RND0031_DOCUMENTARY_SOURCE_REGISTER.json",
+    "rnd/orchestration/historical_calendar_evidence.py",
+    "rnd/orchestration/test_historical_calendar_evidence.py"
+  ],
+  "required_validation_labels": [
+    "diff-check",
+    "scope-check",
+    "orchestration-tests",
+    "m006f-tests",
+    "workspace-audit"
+  ],
+  "success_criteria": [
+    "AUDUSD/2015 external evidence identity and hashes are recorded without price values or credentials",
+    "The 17:00 New York candidate is explicitly non-authoritative and cannot modify the RND-0030 calendar",
+    "Closure-shaped candidates, residual short gaps and remaining unexpected timestamps remain distinct",
+    "No missing candle is synthesized or silently reclassified",
+    "Future historical acceptance can retain explicit genuine gaps without requiring fabricated calendar exceptions",
+    "Cross-pair corroboration is required before wider historical-calendar adoption",
+    "Reserved final test remains outcome-sealed",
+    "No broker-write, strategy, capital, promotion or merge authority"
+  ],
+  "stop_conditions": [
+    "Any M005 signal, trade or performance calculation",
+    "Any validation/final-test strategy access",
+    "Any returned candle promoted into calendar authority by itself",
+    "Any synthetic/interpolated historical candle",
+    "Any credential or account identity committed",
+    "Any change outside rnd/",
+    "Any automatic merge/promotion"
+  ],
+  "human_gate_required": true,
+  "automatic_merge": false,
+  "automatic_promotion": false
+}

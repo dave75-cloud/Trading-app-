@@ -1,0 +1,40 @@
+{
+  "contract_version": "RND-0031-documentary-source-register-v0.1",
+  "task_id": "RND-0031",
+  "reviewed_utc_date": "2026-09-29",
+  "sources": [
+    {
+      "source_id": "OANDA-CURRENT-AU-HOURS",
+      "publisher": "OANDA",
+      "locator": "https://www.oanda.com/au-en/trading/hours-of-operation/",
+      "supports": "Current ordinary FX session is documented as 17:05-16:59 New York with a six-minute daily break.",
+      "historical_2015_authority": false
+    },
+    {
+      "source_id": "OANDA-CURRENT-US-LEGAL",
+      "publisher": "OANDA",
+      "locator": "https://www.oanda.com/us-en/legal/",
+      "supports": "OANDA legal material describes trading availability approximately as Sunday 5 p.m. to Friday 5 p.m. New York.",
+      "historical_2015_authority": false
+    },
+    {
+      "source_id": "OANDA-CURRENT-US-HOLIDAY",
+      "publisher": "OANDA",
+      "locator": "https://www.oanda.com/us-en/trading/holiday-trading-hours/",
+      "supports": "Official holiday schedules demonstrate that public holidays can alter ordinary FX hours.",
+      "historical_2015_authority": false
+    }
+  ],
+  "search_result": {
+    "exact_2015_daily_break_rule_located": false,
+    "exact_2015_holiday_schedule_located": false,
+    "current_rules_may_be_projected_backward": false,
+    "returned_candles_may_substitute_for_documentary_authority": false
+  },
+  "authority": {
+    "calendar_promotion": false,
+    "exception_promotion": false,
+    "strategy_evaluation": false,
+    "human_review_required": true
+  }
+}

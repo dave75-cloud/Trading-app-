@@ -1,0 +1,71 @@
+{
+  "contract_version": "RND-0031-pilot-evidence-v0.1",
+  "task_id": "RND-0031",
+  "base_commit": "d9a93899a1c0fba531f67639685ce9545b2b473c",
+  "pilot": {
+    "symbol": "AUDUSD",
+    "year": 2015,
+    "timeframe": "M5",
+    "evidence_target_label": "rnd0031-audusd-2015-attempt3",
+    "development_partition_only": true
+  },
+  "integrity": {
+    "verification": "PASS",
+    "credential_leak_scan": "PASS",
+    "raw_bundle_sha256": "3ff819e045c019f020a76f8a9c144c6463b8abc0d3de16a9e931d4aea0aec878",
+    "canonical_rows_sha256": "24cced1b7d4d9d94135d1666e7d4366c6991640116d8f785bcd911f4c055bcdd",
+    "standard_schedule_sha256": "8d08c33cfc235a0958a3943ac93d50a06b03299183828c916a6ace2cc6bf0cb8"
+  },
+  "authoritative_calendar_comparison": {
+    "status": "QUARANTINED_UNRESOLVED_DISCREPANCIES",
+    "row_count": 74313,
+    "expected_standard_session_count": 74907,
+    "raw_page_count": 22,
+    "missing_count": 849,
+    "unexpected_count": 255,
+    "ledger_resolved": false,
+    "ledger_seal_allowed": false,
+    "rnd0030_seal_allowed": false,
+    "seal_block_reason": "UNRESOLVED_CALENDAR_DISCREPANCIES"
+  },
+  "candidate_1700_falsification": {
+    "candidate_authority": "NONE",
+    "authoritative_schedule_count": 74907,
+    "candidate_schedule_count": 75168,
+    "actual_count": 74313,
+    "candidate_missing_count": 856,
+    "candidate_unexpected_count": 1,
+    "explained_original_unexpected_count": 254,
+    "explained_original_unexpected_fraction": 0.996078431372549,
+    "remaining_unexpected_timestamp_utc": "2015-08-28T21:05:00Z",
+    "remaining_unexpected_ny": "2015-08-28T17:05:00-04:00",
+    "residual_short_gap_bars": 208,
+    "closure_shaped_candidate_bars": 648
+  },
+  "documentary_evidence": {
+    "exact_2015_oanda_hours_found": false,
+    "current_oanda_rule": "Current official OANDA material documents ordinary FX 17:05-16:59 New York with a six-minute daily break.",
+    "general_oanda_legal_description": "Current OANDA legal material also describes trading availability approximately as Sunday 5 p.m. to Friday 5 p.m. New York.",
+    "holiday_rule": "Official OANDA material confirms public holidays can alter ordinary FX hours; current holiday notices cannot be projected backward as exact 2015 authority.",
+    "historical_conclusion": "The AUDUSD/2015 timestamps strongly falsify unchanged application of the present-day 17:05 baseline, but exact 2015 documentary authority remains unresolved.",
+    "returned_candles_can_authorize_calendar_change": false
+  },
+  "future_acceptance_policy": {
+    "zero_unexplained_gap_required": false,
+    "documented_session_calendar_required": true,
+    "explicit_gap_ledger_required": true,
+    "synthetic_candles_allowed": false,
+    "gap_aware_simulator_required": true,
+    "cross_pair_consistency_check_required": true,
+    "human_review_required": true
+  },
+  "authority": {
+    "broker_writes": false,
+    "strategy_evaluation": false,
+    "calendar_promotion": false,
+    "automatic_merge": false,
+    "automatic_promotion": false,
+    "capital_authority": false,
+    "human_review_required": true
+  }
+}
