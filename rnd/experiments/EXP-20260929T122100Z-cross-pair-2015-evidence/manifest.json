@@ -1,0 +1,27 @@
+{
+  "experiment_id": "EXP-20260929T122100Z-cross-pair-2015-evidence",
+  "task_id": "RND-0032",
+  "title": "Controlled 2015 cross-pair historical evidence acquisition",
+  "status": "running",
+  "created_utc": "2026-09-29T12:21:00Z",
+  "git_base": "8a633aa22cce48aa42f192ce8eae36fe06a0862d",
+  "hypothesis": "The AUDUSD/2015 structural calendar findings can be tested for independent cross-pair recurrence using EURUSD, GBPUSD and USDJPY 2015 quarantine evidence without using strategy outcomes or granting calendar authority.",
+  "inputs": [
+    "Merged RND-0030 quarantine acquisition/verifier",
+    "Merged RND-0031 AUDUSD/2015 pilot evidence and calendar-evidence rules"
+  ],
+  "commands": [
+    "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s rnd/orchestration -p 'test_*.py'",
+    "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s rnd/m006f -p 'test_*.py'",
+    "python3 rnd/tools/audit_workspace.py",
+    "git diff --check 8a633aa22cce48aa42f192ce8eae36fe06a0862d...HEAD"
+  ],
+  "result": "RUNNING. Implementation and acquisition evidence pending.",
+  "safety": {
+    "broker_writes": false,
+    "protected_paths_modified": false,
+    "strategy_authority_changed": false,
+    "calendar_promotion_authority": false,
+    "human_promotion_required": true
+  }
+}
