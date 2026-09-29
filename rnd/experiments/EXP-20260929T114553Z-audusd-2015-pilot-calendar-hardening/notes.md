@@ -46,3 +46,27 @@ validation and human merge review, the next controlled expansion should test
 the other three M005 pairs for UTC year 2015 before ten-year acquisition.
 
 No M005 signals, trades or performance outcomes are permitted in RND-0031.
+
+## Independent validation
+
+Corrected implementation HEAD `b1cb901fcea3022d00749300d8bf69dc33664bf7` was independently validated in a clean detached worktree.
+
+- orchestration: 270 tests, OK
+- M006f: 106 tests, OK
+- workspace audit: PASS
+- tasks: 31
+- experiments: 30
+- broker writes: FALSE
+- protected paths modified: FALSE
+- promotion authority: HUMAN_ONLY
+- diff check from RND-0030 foundation: CLEAN
+
+An earlier validation run on `f32f0e5ba6b62c9c79254b688f7e18508f2a47e8`
+passed both test suites and the workspace audit but failed `git diff --check`
+on two trailing spaces in this task's Markdown contract. That defect was corrected
+without changing code, evidence, authority or lifecycle state, and the corrected
+HEAD above was revalidated successfully.
+
+RND-0031 completion records do not authorize merge, calendar promotion, strategy
+evaluation, capital authority, broker writes, or acquisition of the remaining
+39 shards.
