@@ -1,7 +1,7 @@
 # RND-0033 development-period historical expansion
 
-Status: R&D CANDIDATE / STRUCTURAL EVIDENCE ONLY  
-Task: RND-0033  
+Status: R&D CANDIDATE / STRUCTURAL EVIDENCE ONLY
+Task: RND-0033
 Base: `4b160506e3c5c5529ceffaa8a5a6dad79c9b840e`
 
 ## Objective
