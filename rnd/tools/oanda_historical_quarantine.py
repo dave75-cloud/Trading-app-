@@ -116,6 +116,24 @@ def _validate_selection(symbols, years):
         raise SystemExit("FAIL_CLOSED: year outside predeclared horizon")
 
 
+def _parse_quarantine_page(raw, expected_instrument):
+    """Preserve valid zero-candle provider pages as explicit quarantine evidence."""
+    try:
+        payload = json.loads(raw.decode("utf-8"))
+    except (AttributeError, UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise ValueError("quarantine response: invalid JSON") from exc
+    if not isinstance(payload, dict):
+        raise ValueError("quarantine response: object required")
+    if payload.get("instrument") != expected_instrument or payload.get("granularity") != "M5":
+        raise ValueError("quarantine response: instrument/granularity mismatch")
+    candles = payload.get("candles")
+    if not isinstance(candles, list):
+        raise ValueError("quarantine response: candles list required")
+    if not candles:
+        return []
+    return parse_page(raw, expected_instrument)
+
+
 def acquire_shard(acquisition, calendar, symbol, shard, token, account_id, stage, delay):
     _validate_source_binding(acquisition, calendar)
     value = _shard_declaration(acquisition, shard)
@@ -130,17 +148,21 @@ def acquire_shard(acquisition, calendar, symbol, shard, token, account_id, stage
         request_url = build_candle_url(value, account_id, symbol, chunk)
         fetched = fetch_page(request_url, token)
         raw = fetched["raw_bytes"]
-        rows = parse_page(raw, INSTRUMENTS[symbol])
-        validate_page_window(rows, chunk)
+        rows = _parse_quarantine_page(raw, INSTRUMENTS[symbol])
+        if rows:
+            validate_page_window(rows, chunk)
         raw_pages.append(raw)
         parsed_pages.append(rows)
-        page_records.append(
-            raw_page_evidence(raw, request_url, fetched.get("request_id"))
-        )
+        record = raw_page_evidence(raw, request_url, fetched.get("request_id"))
+        record["candle_count"] = len(rows)
+        page_records.append(record)
         if index + 1 < len(chunks):
             time.sleep(delay)
 
-    rows = merge_canonical_pages(parsed_pages)
+    non_empty_pages = [page for page in parsed_pages if page]
+    if not non_empty_pages:
+        raise ValueError("quarantine shard: at least one candle required across year")
+    rows = merge_canonical_pages(non_empty_pages)
     actual_timestamps = [row["timestamp_utc"] for row in rows]
     discrepancy = build_discrepancy_ledger(actual_timestamps, expected)
     bundle = aggregate_raw_bundle_bytes(raw_pages)
@@ -184,6 +206,7 @@ def acquire_shard(acquisition, calendar, symbol, shard, token, account_id, stage
         "row_count": len(rows),
         "expected_standard_session_count": len(expected),
         "raw_page_count": len(raw_pages),
+        "empty_raw_page_count": sum(1 for page in parsed_pages if not page),
         "aggregate_raw_bundle_sha256": aggregate_raw_bundle_sha256(raw_pages),
         "canonical_rows_sha256": canonical_rows_sha256(rows),
         "standard_schedule_sha256": schedule_sha256(expected),
