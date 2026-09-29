@@ -39,6 +39,6 @@ present-day-derived standard calendar, but returned candles remain empirical
 evidence rather than documentary authority for a 2015 session rule or holiday
 exception.
 
-The experiment remains running pending final independent validation.
-Calendar promotion, sealing, longitudinal expansion and strategy evaluation
-remain unauthorized.
+Final independent validation passed on evidence-binding HEAD `984714159fa3f5f90f2780f407d6dcd4f7b98f6e`: 282 orchestration tests, 106 M006f tests, workspace audit PASS and clean `git diff --check` against the RND-0032 base.
+
+The experiment is complete. Calendar promotion, sealing, longitudinal expansion and strategy evaluation remain unauthorized. Merge and any subsequent research task remain human decisions.
