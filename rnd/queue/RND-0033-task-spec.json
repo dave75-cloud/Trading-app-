@@ -33,7 +33,8 @@
     "rnd/orchestration/test_development_history_evidence.py",
     "rnd/orchestration/test_rnd0033_bounded_launcher.py",
     "rnd/tools/rnd0033_acquire_development_history.py",
-    "rnd/tools/rnd0033_development_history_verify.py"
+    "rnd/tools/rnd0033_development_history_verify.py",
+    "rnd/research/RND0033_DEVELOPMENT_HISTORY_EVIDENCE_RECORD.json"
   ],
   "required_validation_labels": [
     "diff-check",
