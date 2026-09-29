@@ -21,7 +21,14 @@
     "broker_writes": false,
     "protected_paths_modified": false,
     "strategy_authority_changed": false,
-    "calendar_promotion_authority": false,
     "human_promotion_required": true
-  }
+  },
+  "outputs": [
+    "rnd/research/RND0032_CROSS_PAIR_2015_CONTRACT.md",
+    "rnd/orchestration/cross_pair_2015_evidence.py",
+    "rnd/orchestration/test_cross_pair_2015_evidence.py",
+    "rnd/orchestration/test_rnd0032_bounded_launcher.py",
+    "rnd/tools/rnd0032_acquire_2015.py",
+    "rnd/tools/rnd0032_cross_pair_verify.py"
+  ]
 }
