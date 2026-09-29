@@ -1,7 +1,7 @@
 # RND-0031 historical-calendar evidence hardening
 
-Status: R&D CANDIDATE / STRUCTURAL EVIDENCE ONLY  
-Task: RND-0031  
+Status: R&D CANDIDATE / STRUCTURAL EVIDENCE ONLY
+Task: RND-0031
 Base: `d9a93899a1c0fba531f67639685ce9545b2b473c`
 
 ## Purpose
