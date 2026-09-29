@@ -16,7 +16,7 @@
     "python3 rnd/tools/audit_workspace.py",
     "git diff --check 8a633aa22cce48aa42f192ce8eae36fe06a0862d...HEAD"
   ],
-  "result": "RUNNING. Implementation and acquisition evidence pending.",
+  "result": "EVIDENCE_CAPTURED_PENDING_FINAL_VALIDATION. Bounded 2015 acquisition completed for EURUSD, GBPUSD and USDJPY; four-pair structural verifier PASS; no calendar, sealing, expansion or strategy authority granted.",
   "safety": {
     "broker_writes": false,
     "protected_paths_modified": false,
@@ -25,6 +25,7 @@
   },
   "outputs": [
     "rnd/research/RND0032_CROSS_PAIR_2015_CONTRACT.md",
+    "rnd/research/RND0032_CROSS_PAIR_2015_EVIDENCE_RECORD.json",
     "rnd/orchestration/cross_pair_2015_evidence.py",
     "rnd/orchestration/test_cross_pair_2015_evidence.py",
     "rnd/orchestration/test_rnd0032_bounded_launcher.py",
