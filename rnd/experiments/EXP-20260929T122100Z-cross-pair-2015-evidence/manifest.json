@@ -2,7 +2,7 @@
   "experiment_id": "EXP-20260929T122100Z-cross-pair-2015-evidence",
   "task_id": "RND-0032",
   "title": "Controlled 2015 cross-pair historical evidence acquisition",
-  "status": "running",
+  "status": "complete",
   "created_utc": "2026-09-29T12:21:00Z",
   "git_base": "8a633aa22cce48aa42f192ce8eae36fe06a0862d",
   "hypothesis": "The AUDUSD/2015 structural calendar findings can be tested for independent cross-pair recurrence using EURUSD, GBPUSD and USDJPY 2015 quarantine evidence without using strategy outcomes or granting calendar authority.",
@@ -16,7 +16,7 @@
     "python3 rnd/tools/audit_workspace.py",
     "git diff --check 8a633aa22cce48aa42f192ce8eae36fe06a0862d...HEAD"
   ],
-  "result": "EVIDENCE_CAPTURED_PENDING_FINAL_VALIDATION. Bounded 2015 acquisition completed for EURUSD, GBPUSD and USDJPY; four-pair structural verifier PASS; no calendar, sealing, expansion or strategy authority granted.",
+  "result": "COMPLETE. Bounded OANDA Practice acquisition completed exactly for EURUSD/2015, GBPUSD/2015 and USDJPY/2015; immutable AUDUSD/2015 remained reference-only. Four-pair integrity verification PASS. The non-authoritative 17:00 New York candidate left one shared unexpected timestamp (2015-08-28T21:05:00Z) in all four pairs and a shared 648-bar closure-shaped component. Final independent validation passed: 282 orchestration tests, 106 M006f tests, workspace audit PASS, diff-check clean. Calendar promotion, sealing, longitudinal expansion and strategy evaluation remain unauthorized.",
   "safety": {
     "broker_writes": false,
     "protected_paths_modified": false,
@@ -31,5 +31,6 @@
     "rnd/orchestration/test_rnd0032_bounded_launcher.py",
     "rnd/tools/rnd0032_acquire_2015.py",
     "rnd/tools/rnd0032_cross_pair_verify.py"
-  ]
+  ],
+  "completed_utc": "2026-09-29T12:59:00Z"
 }
