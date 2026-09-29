@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+import json
+from pathlib import Path
 import unittest
 
 from cross_pair_2015_evidence import (
@@ -105,6 +107,47 @@ class CrossPair2015EvidenceTests(unittest.TestCase):
         self.assertEqual(2, p["residual_short_gap_bars"])
         self.assertEqual(20, p["closure_shaped_candidate_bars"])
         self.assertEqual(5, p["unclassified_gap_bars"])
+
+
+class CrossPair2015EvidenceRecordTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        record_path = (
+            Path(__file__).resolve().parents[1]
+            / "research"
+            / "RND0032_CROSS_PAIR_2015_EVIDENCE_RECORD.json"
+        )
+        cls.record = json.loads(record_path.read_text(encoding="utf-8"))
+
+    def test_bound_evidence_record_preserves_authority_boundary(self):
+        record = self.record
+        self.assertEqual(
+            "8d594b9c0bbbdcd771acfa2be7fc032b827c8e246265459a5448a3f24cc436fe",
+            record["verification"]["report_sha256"],
+        )
+        self.assertEqual(
+            ["2015-08-28T21:05:00Z"],
+            record["cross_pair"]["shared_candidate_unexpected_timestamps"],
+        )
+        self.assertEqual(
+            {"AUDUSD": True, "EURUSD": True, "GBPUSD": True, "USDJPY": True},
+            record["cross_pair"]["audusd_2015_08_28_1705_recurrence"],
+        )
+        self.assertEqual(
+            {648},
+            {
+                values["closure_shaped_candidate_bars"]
+                for values in record["per_symbol"].values()
+            },
+        )
+        authority = record["authority"]
+        self.assertEqual("NONE", authority["candidate_authority"])
+        self.assertFalse(authority["calendar_modified"])
+        self.assertFalse(authority["documentary_calendar_authority"])
+        self.assertFalse(authority["strategy_evaluation"])
+        self.assertFalse(authority["seal_authority"])
+        self.assertFalse(authority["expansion_authority"])
+        self.assertTrue(authority["human_review_required"])
 
 
 if __name__ == "__main__":
