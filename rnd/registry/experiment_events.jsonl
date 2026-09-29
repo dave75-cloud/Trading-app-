@@ -83,3 +83,5 @@
 {"experiment_id":"EXP-20260929T114553Z-audusd-2015-pilot-calendar-hardening","status":"planned","task_id":"RND-0031","timestamp_utc":"2026-09-29T11:45:52Z","title":"AUDUSD 2015 pilot calendar-evidence hardening"}
 {"experiment_id":"EXP-20260929T114553Z-audusd-2015-pilot-calendar-hardening","status":"running","task_id":"RND-0031","timestamp_utc":"2026-09-29T11:45:53Z","title":"AUDUSD 2015 pilot calendar-evidence hardening"}
 {"experiment_id":"EXP-20260929T114553Z-audusd-2015-pilot-calendar-hardening","status":"complete","task_id":"RND-0031","timestamp_utc":"2026-09-29T11:54:00Z","title":"AUDUSD 2015 pilot calendar-evidence hardening"}
+{"experiment_id":"EXP-20260929T122100Z-cross-pair-2015-evidence","status":"planned","task_id":"RND-0032","timestamp_utc":"2026-09-29T12:20:59Z","title":"Controlled 2015 cross-pair historical evidence acquisition"}
+{"experiment_id":"EXP-20260929T122100Z-cross-pair-2015-evidence","status":"running","task_id":"RND-0032","timestamp_utc":"2026-09-29T12:21:00Z","title":"Controlled 2015 cross-pair historical evidence acquisition"}
