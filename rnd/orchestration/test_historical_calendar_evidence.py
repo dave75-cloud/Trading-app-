@@ -12,6 +12,7 @@ from historical_calendar_evidence import (
     evaluate_1700_hypothesis,
     historical_1700_candidate_schedule,
     record_sha256,
+    validate_documentary_source_register,
     validate_pilot_record,
 )
 
@@ -23,6 +24,26 @@ def record():
 
 
 class HistoricalCalendarEvidenceTests(unittest.TestCase):
+    def documentary_register(self):
+        return json.loads(
+            (ROOT / "research" / "RND0031_DOCUMENTARY_SOURCE_REGISTER.json").read_text()
+        )
+
+    def test_repository_documentary_register_is_valid(self):
+        self.assertTrue(validate_documentary_source_register(self.documentary_register()))
+
+    def test_documentary_register_rejects_current_source_as_2015_authority(self):
+        value = self.documentary_register()
+        value["sources"][0]["historical_2015_authority"] = True
+        with self.assertRaisesRegex(HistoricalCalendarError, "cannot claim 2015 authority"):
+            validate_documentary_source_register(value)
+
+    def test_documentary_register_rejects_non_oanda_locator(self):
+        value = self.documentary_register()
+        value["sources"][0]["locator"] = "https://example.com/hours"
+        with self.assertRaisesRegex(HistoricalCalendarError, "official OANDA locator"):
+            validate_documentary_source_register(value)
+
     def test_repository_pilot_record_is_valid(self):
         self.assertTrue(validate_pilot_record(record()))
 
