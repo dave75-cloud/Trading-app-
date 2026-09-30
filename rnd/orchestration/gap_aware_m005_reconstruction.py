@@ -150,16 +150,13 @@ def reconstruct_pair(symbol, rows):
     bars_held = 0
     entry = None
 
-    def reset_state():
-        nonlocal closes, returns, previous_mid, previous_raw
-        nonlocal position, bars_held, entry, episode
+    def reset_strategy_state():
+        """Reset observation-dependent strategy state, never economic exposure."""
+        nonlocal closes, returns, previous_mid, previous_raw, episode
         closes = []
         returns = []
         previous_mid = None
         previous_raw = 0
-        position = 0
-        bars_held = 0
-        entry = None
         episode += 1
 
     def open_trade(side, dt, bid, ask, mid):
@@ -171,6 +168,8 @@ def reconstruct_pair(symbol, rows):
             "entry_execution_price": ask if side == 1 else bid,
             "entry_mid_price": mid,
             "episode": episode,
+            "gap_exposure_count": 0,
+            "gap_elapsed_seconds": 0,
         }
 
     def complete_trade(current, dt, bid, ask, mid, held):
@@ -196,12 +195,16 @@ def reconstruct_pair(symbol, rows):
             "net_return": net,
             "execution_cost_drag": gross - net,
             "holding_bars": held,
+            "elapsed_seconds": int((dt - datetime.fromisoformat(current["entry_timestamp"][:-1] + "+00:00")).total_seconds()),
+            "gap_exposure_count": current.get("gap_exposure_count", 0),
+            "gap_elapsed_seconds": current.get("gap_elapsed_seconds", 0),
+            "gap_exposed": current.get("gap_exposure_count", 0) > 0,
             "exit_year": dt.year,
             "episode": current["episode"],
             "status": "COMPLETE",
         }
 
-    reset_state()
+    reset_strategy_state()
 
     for dt, bid, ask, mid in parsed:
         if previous_dt is not None:
@@ -215,16 +218,9 @@ def reconstruct_pair(symbol, rows):
                     "position_was_open": position != 0,
                 })
                 if position != 0 and entry is not None:
-                    censored.append({
-                        "symbol": symbol,
-                        "side": entry["side"],
-                        "entry_timestamp": entry["entry_timestamp"],
-                        "last_observed_timestamp": previous_dt.strftime("%Y-%m-%dT%H:%M:%SZ"),
-                        "next_observed_timestamp": dt.strftime("%Y-%m-%dT%H:%M:%SZ"),
-                        "status": "GAP_CENSORED_INDETERMINATE",
-                        "episode": entry["episode"],
-                    })
-                reset_state()
+                    entry["gap_exposure_count"] = entry.get("gap_exposure_count", 0) + 1
+                    entry["gap_elapsed_seconds"] = entry.get("gap_elapsed_seconds", 0) + delta
+                reset_strategy_state()
 
         if previous_mid is not None:
             returns.append(mid / previous_mid - 1.0)
@@ -234,6 +230,8 @@ def reconstruct_pair(symbol, rows):
         desired = previous_raw
         previous_raw = raw
 
+        # Missing nominal bars never count. A surviving position accrues one
+        # holding bar only for each genuine observed candle.
         if position != 0:
             bars_held += 1
 
