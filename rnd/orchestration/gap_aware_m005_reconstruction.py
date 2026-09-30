@@ -93,13 +93,13 @@ def population_std(values):
     return math.sqrt(sum((x - mean) ** 2 for x in values) / len(values))
 
 
-def _signal(closes, returns, dt):
+def _signal(symbol, closes, returns, dt):
     if len(closes) < SLOW or len(returns) < VOL_WINDOW:
         return 0
     fast = sum(closes[-FAST:]) / FAST
     slow = sum(closes[-SLOW:]) / SLOW
     vol = population_std(returns[-VOL_WINDOW:])
-    start, end = SESSIONS[_signal.symbol]
+    start, end = SESSIONS[symbol]
     in_session = dt.weekday() < 5 and start <= dt.hour < end
     if not in_session or vol < VOL_THRESHOLD:
         return 0
@@ -135,10 +135,6 @@ def reconstruct_pair(symbol, rows):
     if symbol not in SYMBOLS:
         raise GapAwareM005Error("unsupported symbol")
     parsed = validate_rows(rows)
-
-    # Bind symbol for the pure signal helper without introducing a second
-    # configurable strategy surface.
-    _signal.symbol = symbol
 
     closes = []
     returns = []
@@ -234,7 +230,7 @@ def reconstruct_pair(symbol, rows):
             returns.append(mid / previous_mid - 1.0)
         closes.append(mid)
 
-        raw = _signal(closes, returns, dt)
+        raw = _signal(symbol, closes, returns, dt)
         desired = previous_raw
         previous_raw = raw
 
