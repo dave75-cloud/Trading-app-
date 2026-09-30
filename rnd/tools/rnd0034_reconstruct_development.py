@@ -16,7 +16,8 @@ from gap_aware_m005_reconstruction import SYMBOLS, reconstruct_pair  # noqa: E40
 from oanda_historical_quarantine import _json, verify_existing_shard  # noqa: E402
 from oanda_market_calendar import year_shards  # noqa: E402
 
-YEARS = (2015, 2016, 2017, 2018, 2019)
+PILOT_YEARS = (2015,)
+DEVELOPMENT_YEARS = (2015, 2016, 2017, 2018, 2019)
 
 
 def _write_new(path, value):
@@ -58,9 +59,22 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--audusd-2015-shard", required=True)
     parser.add_argument("--cross-pair-2015-root", required=True)
-    parser.add_argument("--development-root", required=True)
+    parser.add_argument(
+        "--mode",
+        choices=("pilot-2015", "development-2015-2019"),
+        required=True,
+    )
+    parser.add_argument("--development-root")
     parser.add_argument("--report", required=True)
     args = parser.parse_args()
+
+    years = PILOT_YEARS if args.mode == "pilot-2015" else DEVELOPMENT_YEARS
+    if args.mode == "development-2015-2019" and not args.development_root:
+        parser.error("--development-root is required for development-2015-2019")
+    if args.mode == "pilot-2015" and args.development_root:
+        raise SystemExit(
+            "FAIL_CLOSED: --development-root is prohibited in pilot-2015 mode"
+        )
 
     acquisition = _json(
         ROOT / "rnd" / "research" / "OANDA_HISTORICAL_ACQUISITION_DECLARATION.json"
@@ -77,7 +91,7 @@ def main():
     for symbol in SYMBOLS:
         combined_rows = []
         identities[symbol] = {}
-        for year in YEARS:
+        for year in years:
             path = _path_for(symbol, year, args)
             if not verify_existing_shard(
                 path, symbol, shard_by_year[year], acquisition, calendar
@@ -105,9 +119,15 @@ def main():
         results[symbol] = reconstruct_pair(symbol, combined_rows)
 
     report = {
-        "contract_version": "RND-0034-development-reconstruction-report-v0.1",
+        "contract_version": "RND-0034-development-reconstruction-report-v0.2",
         "task_id": "RND-0034",
-        "years": list(YEARS),
+        "run_mode": args.mode,
+        "evidence_class": (
+            "TECHNICAL_INTEGRATION_PILOT"
+            if args.mode == "pilot-2015"
+            else "DEVELOPMENT_RECONSTRUCTION"
+        ),
+        "years": list(years),
         "symbols": list(SYMBOLS),
         "trial_count": 1,
         "portfolio_sizing": False,
@@ -127,7 +147,11 @@ def main():
     }
     output = _write_new(args.report, report)
 
-    print("RND0034_DEVELOPMENT_RECONSTRUCTION: COMPLETE")
+    print(
+        "RND0034_2015_TECHNICAL_PILOT: COMPLETE"
+        if args.mode == "pilot-2015"
+        else "RND0034_DEVELOPMENT_RECONSTRUCTION: COMPLETE"
+    )
     for symbol in SYMBOLS:
         value = results[symbol]
         hit = value["net_hit_rate"]
