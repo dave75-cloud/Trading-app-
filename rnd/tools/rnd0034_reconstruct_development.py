@@ -12,7 +12,11 @@ ROOT = Path(__file__).resolve().parents[2]
 ORCH = ROOT / "rnd" / "orchestration"
 sys.path.insert(0, str(ORCH))
 
-from gap_aware_m005_reconstruction import SYMBOLS, reconstruct_pair  # noqa: E402
+from gap_aware_m005_reconstruction import (  # noqa: E402
+    SYMBOLS,
+    concurrent_unit_normalized_marks,
+    reconstruct_pair,
+)
 from oanda_historical_quarantine import _json, verify_existing_shard  # noqa: E402
 from oanda_market_calendar import year_shards  # noqa: E402
 
@@ -133,6 +137,7 @@ def main():
         "portfolio_sizing": False,
         "evidence_identity": identities,
         "per_symbol": results,
+        "concurrent_accounting": concurrent_unit_normalized_marks(results),
         "authority": {
             "strategy_selection": False,
             "validation_open": False,
