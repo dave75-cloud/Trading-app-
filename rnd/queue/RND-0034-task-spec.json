@@ -31,7 +31,8 @@
     "rnd/research/RND0034_GAP_AWARE_M005_RECONSTRUCTION_CONTRACT.md",
     "rnd/orchestration/gap_aware_m005_reconstruction.py",
     "rnd/orchestration/test_gap_aware_m005_reconstruction.py",
-    "rnd/tools/rnd0034_reconstruct_development.py"
+    "rnd/tools/rnd0034_reconstruct_development.py",
+    "rnd/orchestration/test_rnd0034_bounded_runner.py"
   ],
   "required_validation_labels": [
     "diff-check",
