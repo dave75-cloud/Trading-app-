@@ -131,6 +131,57 @@ def _max_drawdown(returns):
     return equity, max_dd
 
 
+
+def concurrent_unit_normalized_marks(per_symbol):
+    """Time-align per-pair percentage marks without capital sizing.
+
+    Each active pair contributes its own executable return since entry with
+    fixed unit weight 1.0. The aggregate is the arithmetic sum, an accounting
+    diagnostic only; it is not account-currency P&L or an allocation rule.
+    """
+    if set(per_symbol) != set(SYMBOLS):
+        raise GapAwareM005Error("concurrent marks require exactly the four M005 symbols")
+    by_ts = {}
+    for symbol in SYMBOLS:
+        value = per_symbol[symbol]
+        for mark in value.get("marks", []):
+            ts = mark["timestamp"]
+            slot = by_ts.setdefault(ts, {})
+            if symbol in slot:
+                raise GapAwareM005Error("duplicate symbol mark at timestamp")
+            slot[symbol] = mark
+
+    out = []
+    latest = {symbol: None for symbol in SYMBOLS}
+    for ts in sorted(by_ts):
+        for symbol, mark in by_ts[ts].items():
+            latest[symbol] = mark
+        active = {}
+        aggregate = 0.0
+        for symbol in SYMBOLS:
+            mark = latest[symbol]
+            if mark is None or mark["position"] == 0 or mark["mark_return"] is None:
+                continue
+            active[symbol] = {
+                "position": mark["position"],
+                "mark_return": mark["mark_return"],
+                "source_timestamp": mark["timestamp"],
+            }
+            aggregate += mark["mark_return"]
+        out.append({
+            "timestamp": ts,
+            "active_pair_count": len(active),
+            "active_pairs": active,
+            "unit_normalized_return_sum": aggregate,
+        })
+    return {
+        "normalization": "FIXED_ONE_UNIT_RETURN_PER_ACTIVE_PAIR",
+        "account_currency_pnl": False,
+        "capital_allocation": False,
+        "portfolio_sizing": False,
+        "marks": out,
+    }
+
 def reconstruct_pair(symbol, rows):
     if symbol not in SYMBOLS:
         raise GapAwareM005Error("unsupported symbol")
