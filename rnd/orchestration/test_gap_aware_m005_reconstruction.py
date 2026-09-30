@@ -94,6 +94,31 @@ class GapAwareM005Tests(unittest.TestCase):
         self.assertNotEqual(0, post_gap_mark["position"])
         self.assertFalse(post_gap_mark["strategy_signal_available"])
 
+    def test_signal_events_are_observational_and_reconcile_delay(self):
+        result = reconstruct_pair("AUDUSD", rows(90))
+        raw = [x for x in result["events"] if x["event_type"] == "RAW_SIGNAL"]
+        delayed = [x for x in result["events"] if x["event_type"] == "DELAYED_SIGNAL"]
+        self.assertGreater(len(raw), 0)
+        self.assertEqual(len(raw) - 1, len(delayed))
+        for previous, current in zip(raw, delayed):
+            self.assertEqual(previous["signal"], current["signal"])
+
+    def test_gap_explicitly_cancels_pending_delayed_signal(self):
+        result = reconstruct_pair("AUDUSD", rows(70, gap_after=56))
+        cancelled = [
+            x for x in result["events"]
+            if x["event_type"] == "PENDING_SIGNAL_CANCELLED"
+        ]
+        self.assertEqual(1, len(cancelled))
+        self.assertEqual("OBSERVATION_DISCONTINUITY", cancelled[0]["reason"])
+        gap = next(x for x in result["events"] if x["event_type"] == "GAP")
+        post_gap = [
+            x for x in result["events"]
+            if x["event_type"] == "DELAYED_SIGNAL"
+            and x["timestamp"] == gap["next_timestamp"]
+        ]
+        self.assertEqual([], post_gap)
+
     def test_marks_are_deterministic(self):
         value = rows(90)
         a = reconstruct_pair("AUDUSD", value)
