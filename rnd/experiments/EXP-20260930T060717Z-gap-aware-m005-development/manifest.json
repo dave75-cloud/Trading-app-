@@ -2,10 +2,10 @@
   "experiment_id": "EXP-20260930T060717Z-gap-aware-m005-development",
   "task_id": "RND-0034",
   "title": "Gap-aware fixed-M005 development reconstruction — 2015 pilot then 2015-2019",
-  "status": "running",
+  "status": "completed",
   "created_utc": "2026-09-30T06:07:17Z",
   "git_base": "f67575408ca47ace4196a966f51acfa2b613def1",
-  "hypothesis": "The frozen M005 candidate can be reconstructed on verified 2015-2019 OANDA bid/ask evidence without synthetic continuity, while explicitly measuring how historical gaps censor otherwise usable strategy evidence.",
+  "hypothesis": "The frozen M005 candidate can be reconstructed deterministically on verified 2015-2019 OANDA bid/ask development evidence without synthetic continuity: observation gaps reset indicator and delayed-signal state while preserving any economic position, with explicit executable-price costs and no strategy search.",
   "inputs": [
     "RND-0032 bound 2015 evidence",
     "RND-0033 bound 2016-2019 evidence",
@@ -17,7 +17,7 @@
     "python3 rnd/tools/audit_workspace.py",
     "git diff --check f67575408ca47ace4196a966f51acfa2b613def1...HEAD"
   ],
-  "result": "RUNNING. Offline semantic validation in progress; no real 2015 or 2015-2019 strategy reconstruction has been run.",
+  "result": "COMPLETED. Stage A semantic/conformance validation passed; Stage B four-pair 2015 technical pilot passed and reproduced byte-for-byte after evidence-layer extension; Stage C unchanged 2015-2019 reconstruction completed across 20 PASS/MATCH evidence shards. 2,274 completed trades and 6,495 gap/reset events reconciled exactly. Economic result is descriptive/falsification evidence only: AUDUSD adverse gross/net; EURUSD net-positive overall but concentrated in 2015; GBPUSD gross-positive overall and in every year but net-negative overall after bid/ask costs; USDJPY near-flat gross and net-negative. No validation/final data, strategy search, sizing, promotion, execution or capital authority.",
   "safety": {
     "broker_writes": false,
     "protected_paths_modified": false,
@@ -29,6 +29,9 @@
     "rnd/orchestration/gap_aware_m005_reconstruction.py",
     "rnd/orchestration/test_gap_aware_m005_reconstruction.py",
     "rnd/orchestration/test_rnd0034_bounded_runner.py",
-    "rnd/tools/rnd0034_reconstruct_development.py"
+    "rnd/tools/rnd0034_reconstruct_development.py",
+    "external evidence: rnd0034-2015-technical-pilot.json sha256 6e2575322088a2aea89451a83f1e91b77a4f84e826cf165b3382c33ecc403c2b",
+    "external evidence: rnd0034-2015-evidence-layer-repro.json sha256 db7d1b3ce94634bed5ff7e3289fdec13d570594964d7ae2b5e04c8221d0e5484",
+    "external evidence: rnd0034-development-2015-2019.json sha256 a7bc32951a5342ad02757dcb567558a40c334be32a7088c39e05850506243ce9"
   ]
 }
