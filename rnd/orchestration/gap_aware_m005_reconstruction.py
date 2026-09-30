@@ -262,6 +262,8 @@ def reconstruct_pair(symbol, rows):
             "next_observed_timestamp": None,
             "status": "RIGHT_CENSORED_END_OF_SAMPLE",
             "episode": entry["episode"],
+            "gap_exposure_count": entry.get("gap_exposure_count", 0),
+            "gap_elapsed_seconds": entry.get("gap_elapsed_seconds", 0),
         })
 
     net_returns = [x["net_return"] for x in trades]
