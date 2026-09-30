@@ -99,3 +99,5 @@
 {"human_gate_required":true,"protected_paths_allowed":false,"status":"queued","task_id":"RND-0033","timestamp_utc":"2026-09-29T13:34:59Z","title":"Development-period historical expansion and calendar-regime evidence"}
 {"human_gate_required":true,"protected_paths_allowed":false,"status":"running","task_id":"RND-0033","timestamp_utc":"2026-09-29T13:35:00Z","title":"Development-period historical expansion and calendar-regime evidence"}
 {"human_gate_required":true,"protected_paths_allowed":false,"status":"complete","task_id":"RND-0033","timestamp_utc":"2026-09-29T14:36:36Z","title":"Development-period historical expansion and calendar-regime evidence"}
+{"human_gate_required":true,"protected_paths_allowed":false,"status":"queued","task_id":"RND-0034","timestamp_utc":"2026-09-30T06:07:16Z","title":"Gap-aware fixed-M005 development reconstruction — 2015-2019 pilot"}
+{"human_gate_required":true,"protected_paths_allowed":false,"status":"running","task_id":"RND-0034","timestamp_utc":"2026-09-30T06:07:17Z","title":"Gap-aware fixed-M005 development reconstruction — 2015-2019 pilot"}
