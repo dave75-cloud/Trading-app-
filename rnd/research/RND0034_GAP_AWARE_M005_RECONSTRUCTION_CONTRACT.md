@@ -10,7 +10,7 @@ RND-0034 is the first quantitative reconstruction step after the governed
 historical-data acquisition work. It evaluates one already-frozen M005
 configuration on real OANDA bid/ask/mid M5 evidence from 2015-2019 only.
 
-This is a development-period pilot. It is not a completed evaluation of the
+The four-pair 2015 run is the controlled integration pilot. Only after its technical gates pass may the identical frozen engine proceed to the full 2015-2019 reconstruction. This It is not a completed evaluation of the
 full predeclared development partition because the 2020 development slice is
 not authorized here. It is not validation, final-test evidence, promotion
 evidence or trading authority.
@@ -56,13 +56,15 @@ apart. Any larger discontinuity:
 1. terminates the current contiguous indicator episode;
 2. clears MA, return-volatility and delayed-signal history;
 3. requires a fresh real-observation warm-up before a new signal can exist;
-4. resets simulated position state to flat only after recording whether a
-   position was open.
+4. does **not** erase an existing economic position.
 
-If a position was open at the discontinuity, that trade is
-`GAP_CENSORED_INDETERMINATE`. It receives no invented exit and contributes
-nothing to completed-trade return, hit-rate or drawdown calculations. Its
-entry, last observed timestamp and next observed timestamp remain explicit.
+Market state, strategy state and portfolio state are distinct. If a position
+is open at a discontinuity, the position survives economically. There is no
+invented mark or exit inside the missing interval. The first genuine post-gap
+bid/ask observation may revalue the surviving position, while strategy
+indicators and delayed-signal state remain unavailable until freshly warmed
+from contiguous real observations. The gap exposure and elapsed wall time are
+recorded explicitly. Missing nominal bars never count toward minimum hold.
 
 An open trade at the authorized sample end is similarly
 `RIGHT_CENSORED_END_OF_SAMPLE` and is not force-closed.
@@ -86,7 +88,9 @@ net. No synthetic spread and no lower-tail clipping are allowed.
 
 Permitted 2015-2019 development-only outputs include per pair:
 
-- completed and censored trade counts;
+- completed and end-censored trade counts;
+- explicit chronological gap/state/signal/trade/mark events;
+- gap-exposed versus non-gap-exposed trades;
 - entry/exit timestamps and sides;
 - gross and net unit-normalized returns;
 - execution-cost drag;
@@ -96,9 +100,11 @@ Permitted 2015-2019 development-only outputs include per pair:
 - year attribution;
 - contiguous-episode/gap counts and censoring rate.
 
-These are descriptive research observations. RND-0034 does not introduce
-cross-pair notional sizing, capital allocation, account-currency conversion or
-portfolio ranking.
+These are descriptive research observations. RND-0034 also requires
+concurrent unit-normalized portfolio/mark-to-market evidence sufficient to
+reconcile simultaneous positions; this is accounting evidence, not optimized
+sizing or capital allocation. RND-0034 does not introduce cross-pair capital
+allocation, account-currency optimization or portfolio ranking.
 
 ## Sealed boundary
 
