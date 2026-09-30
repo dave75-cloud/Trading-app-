@@ -1,7 +1,7 @@
 # RND-0034 — gap-aware fixed-M005 development reconstruction
 
-Status: R&D CANDIDATE / NON-OPERATIONAL  
-Task: RND-0034  
+Status: R&D CANDIDATE / NON-OPERATIONAL
+Task: RND-0034
 Base: `f67575408ca47ace4196a966f51acfa2b613def1`
 
 ## Purpose
