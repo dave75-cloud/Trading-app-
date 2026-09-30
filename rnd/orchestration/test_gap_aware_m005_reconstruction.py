@@ -73,6 +73,33 @@ class GapAwareM005Tests(unittest.TestCase):
             result["censored_trades"][0]["status"],
         )
 
+    def test_event_ledger_reconciles_trades_and_gaps(self):
+        result = reconstruct_pair("AUDUSD", rows(90))
+        rec = result["event_reconciliation"]
+        self.assertEqual(result["completed_trade_count"], rec["exit_events"])
+        self.assertEqual(result["gap_count"], rec["gap_events"])
+        self.assertEqual(result["gap_count"], rec["strategy_reset_events"])
+        self.assertEqual(result["row_count"], len(result["marks"]))
+        self.assertGreaterEqual(rec["entry_events"], rec["exit_events"])
+
+    def test_gap_event_preserves_portfolio_state_but_resets_signal_availability(self):
+        result = reconstruct_pair("AUDUSD", rows(70, gap_after=56))
+        gap = next(x for x in result["events"] if x["event_type"] == "GAP")
+        reset = next(x for x in result["events"] if x["event_type"] == "STRATEGY_RESET")
+        self.assertTrue(gap["position_was_open"])
+        self.assertNotEqual(0, reset["portfolio_position"])
+        post_gap_ts = gap["next_timestamp"]
+        post_gap_mark = next(x for x in result["marks"] if x["timestamp"] == post_gap_ts)
+        self.assertNotEqual(0, post_gap_mark["position"])
+        self.assertFalse(post_gap_mark["strategy_signal_available"])
+
+    def test_marks_are_deterministic(self):
+        value = rows(90)
+        a = reconstruct_pair("AUDUSD", value)
+        b = reconstruct_pair("AUDUSD", value)
+        self.assertEqual(a["events"], b["events"])
+        self.assertEqual(a["marks"], b["marks"])
+
     def test_no_portfolio_or_promotion_authority(self):
         result = reconstruct_pair("AUDUSD", rows(90))
         authority = result["authority"]
