@@ -53,14 +53,16 @@ class GapAwareM005Tests(unittest.TestCase):
         self.assertEqual(0, result["completed_trade_count"])
         self.assertEqual(0, result["censored_trade_count"])
 
-    def test_open_position_at_gap_is_censored_not_closed(self):
+    def test_open_position_survives_gap_without_synthetic_exit(self):
         result = reconstruct_pair("AUDUSD", rows(70, gap_after=56))
         self.assertEqual(1, result["gap_count"])
         self.assertEqual(0, result["completed_trade_count"])
         self.assertEqual(1, result["censored_trade_count"])
+        # The only censoring is the genuine end-of-sample boundary: the gap
+        # itself must not manufacture an exit or erase portfolio exposure.
         censored = result["censored_trades"][0]
-        self.assertEqual("GAP_CENSORED_INDETERMINATE", censored["status"])
-        self.assertIsNotNone(censored["next_observed_timestamp"])
+        self.assertEqual("RIGHT_CENSORED_END_OF_SAMPLE", censored["status"])
+        self.assertEqual(1, censored.get("gap_exposure_count", 0))
 
     def test_open_position_at_sample_end_is_right_censored(self):
         result = reconstruct_pair("AUDUSD", rows(56))
