@@ -13,9 +13,14 @@ spec.loader.exec_module(runner)
 
 
 class RND0034BoundedRunnerTests(unittest.TestCase):
-    def test_scope_is_exact_development_pilot(self):
-        self.assertEqual((2015, 2016, 2017, 2018, 2019), runner.YEARS)
-        self.assertNotIn(2020, runner.YEARS)
+    def test_scope_separates_2015_pilot_from_development_run(self):
+        self.assertEqual((2015,), runner.PILOT_YEARS)
+        self.assertEqual(
+            (2015, 2016, 2017, 2018, 2019),
+            runner.DEVELOPMENT_YEARS,
+        )
+        self.assertNotIn(2016, runner.PILOT_YEARS)
+        self.assertNotIn(2020, runner.DEVELOPMENT_YEARS)
 
     def test_2015_paths_are_explicit_and_2016_plus_share_development_root(self):
         args = SimpleNamespace(
@@ -35,6 +40,16 @@ class RND0034BoundedRunnerTests(unittest.TestCase):
             Path("/e/dev/USDJPY/2019"),
             runner._path_for("USDJPY", 2019, args),
         )
+
+    def test_pilot_path_resolution_never_requires_development_root(self):
+        args = SimpleNamespace(
+            audusd_2015_shard="/e/aud",
+            cross_pair_2015_root="/e/cross",
+            development_root=None,
+        )
+        for symbol in runner.SYMBOLS:
+            path = runner._path_for(symbol, 2015, args)
+            self.assertNotIn("/e/dev", str(path))
 
     def test_bound_identity_requires_all_hashes_and_row_count(self):
         manifest = {
