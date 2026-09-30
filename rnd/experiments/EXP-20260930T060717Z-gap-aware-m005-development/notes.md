@@ -18,13 +18,11 @@ reserved-final-test outcomes.
 - Signal state uses midpoint closes; execution uses actual OANDA bid/ask.
 - Every observed timestamp discontinuity resets indicator and delayed-signal
   continuity.
-- A live trade encountering a gap is censored as indeterminate, never assigned
-  a synthetic exit.
+- A live trade encountering a gap survives economically. Indicator and delayed-signal state reset; the first genuine post-gap bid/ask observation may revalue the position, and no synthetic exit or mark is invented inside the missing interval.
 - Pair-level unit-normalized research is permitted; cross-pair portfolio sizing
   is deliberately deferred because RND-0034 has no authority to invent a new
   allocation convention.
 - Every external shard must pass existing integrity verification and match the
   repository-bound RND-0032/RND-0033 identity before strategy evaluation.
 
-Implementation validation and the real local-evidence reconstruction are
-pending.
+Stage A semantic/conformance validation passed. Stage B completed the four-pair 2015 technical pilot and reproduced byte-for-byte after the evidence-layer extension. Stage C completed the unchanged 2015-2019 governed reconstruction across 20 PASS/MATCH evidence shards. Results remain descriptive/falsification evidence only; no validation/final outcomes, strategy search, sizing, promotion, execution or capital authority were opened.
