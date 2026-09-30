@@ -1,9 +1,9 @@
 {
   "contract_version": "RND-task-spec-v0.1",
   "task_id": "RND-0034",
-  "title": "Gap-aware fixed-M005 development reconstruction — 2015-2019 pilot",
+  "title": "Gap-aware fixed-M005 development reconstruction — 2015 pilot then 2015-2019",
   "git_base": "f67575408ca47ace4196a966f51acfa2b613def1",
-  "objective": "Perform the first governed quantitative reconstruction of frozen M005 on verified OANDA 2015-2019 development-only evidence, preserving gaps as explicit censoring rather than synthetic continuity.",
+  "objective": "Perform the first governed quantitative reconstruction of frozen M005 on verified OANDA development evidence, freezing three-state gap semantics before outcomes: 2015 four-pair integration pilot first, then unchanged 2015-2019 reconstruction.",
   "allowed_path_prefixes": [
     "rnd/"
   ],
@@ -43,21 +43,24 @@
   ],
   "success_criteria": [
     "Bound RND-0032/RND-0033 evidence identities gate every evaluated shard",
-    "Frozen M005 uses MA20/MA50, vol12 ddof=0, threshold 0.0005, fixed sessions, one-bar delay and three-bar minimum hold",
+    "Frozen M005 uses MA20/MA50, vol12 ddof=0, threshold 0.0005, fixed sessions, one-bar delay and three-observed-bar minimum hold",
     "Signals use midpoint observations while execution uses real bid/ask closes",
-    "Any observed M5 discontinuity resets indicator and delayed-signal continuity",
-    "Any non-flat state encountering a gap is explicitly censored and contributes no completed-trade performance",
+    "Any observed M5 discontinuity resets indicator and delayed-signal state but never silently erases an existing economic position",
+    "Post-gap signal state remains unavailable until freshly warmed from contiguous genuine observations; pending pre-gap signal is cancelled",
+    "Missing nominal bars never count toward minimum hold; gap exposure and elapsed wall time are explicit",
+    "Four-pair 2015 technical pilot must pass before the unchanged engine may evaluate 2016-2019",
     "Only 2015-2019 development evidence can produce strategy outcomes",
-    "Pair-level results expose completed trades, censored trades, costs, year attribution and evidence coverage",
-    "No portfolio sizing or cross-pair capital aggregation is introduced"
+    "Outputs expose event/trade/gap evidence and concurrent unit-normalized portfolio accounting without capital allocation or optimized sizing",
+    "No portfolio ranking, strategy search, promotion or execution authority is introduced"
   ],
   "stop_conditions": [
     "Any strategy search, tuning, ranking, Champion-filter evaluation or discovery",
     "Any strategy outcome access for 2020 or later",
     "Any validation or reserved-final-test signal/performance access",
     "Any synthetic/interpolated/forward-filled candle or synthetic spread",
-    "Any silent indicator, delayed-signal or position continuation across a data gap",
-    "Any broker write, capital authority, automatic promotion or automatic merge"
+    "Any broker write, capital authority, automatic promotion or automatic merge",
+    "Any silent indicator/delayed-signal continuation across a data gap or any silent erasure of an open economic position",
+    "Any full 2015-2019 performance run before the 2015 technical pilot gate passes"
   ],
   "human_gate_required": true,
   "automatic_merge": false,
