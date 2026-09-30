@@ -1,0 +1,64 @@
+{
+  "contract_version": "RND-task-spec-v0.1",
+  "task_id": "RND-0034",
+  "title": "Gap-aware fixed-M005 development reconstruction — 2015-2019 pilot",
+  "git_base": "f67575408ca47ace4196a966f51acfa2b613def1",
+  "objective": "Perform the first governed quantitative reconstruction of frozen M005 on verified OANDA 2015-2019 development-only evidence, preserving gaps as explicit censoring rather than synthetic continuity.",
+  "allowed_path_prefixes": [
+    "rnd/"
+  ],
+  "prohibited_path_prefixes": [
+    "rnd/private/"
+  ],
+  "authorized_evaluation": {
+    "symbols": [
+      "AUDUSD",
+      "EURUSD",
+      "GBPUSD",
+      "USDJPY"
+    ],
+    "years": [
+      2015,
+      2016,
+      2017,
+      2018,
+      2019
+    ],
+    "strategy": "FIXED_M005_SINGLE_TRIAL",
+    "portfolio_sizing": false
+  },
+  "required_outputs": [
+    "rnd/research/RND0034_GAP_AWARE_M005_RECONSTRUCTION_CONTRACT.md",
+    "rnd/orchestration/gap_aware_m005_reconstruction.py",
+    "rnd/orchestration/test_gap_aware_m005_reconstruction.py",
+    "rnd/tools/rnd0034_reconstruct_development.py"
+  ],
+  "required_validation_labels": [
+    "diff-check",
+    "scope-check",
+    "orchestration-tests",
+    "m006f-tests",
+    "workspace-audit"
+  ],
+  "success_criteria": [
+    "Bound RND-0032/RND-0033 evidence identities gate every evaluated shard",
+    "Frozen M005 uses MA20/MA50, vol12 ddof=0, threshold 0.0005, fixed sessions, one-bar delay and three-bar minimum hold",
+    "Signals use midpoint observations while execution uses real bid/ask closes",
+    "Any observed M5 discontinuity resets indicator and delayed-signal continuity",
+    "Any non-flat state encountering a gap is explicitly censored and contributes no completed-trade performance",
+    "Only 2015-2019 development evidence can produce strategy outcomes",
+    "Pair-level results expose completed trades, censored trades, costs, year attribution and evidence coverage",
+    "No portfolio sizing or cross-pair capital aggregation is introduced"
+  ],
+  "stop_conditions": [
+    "Any strategy search, tuning, ranking, Champion-filter evaluation or discovery",
+    "Any strategy outcome access for 2020 or later",
+    "Any validation or reserved-final-test signal/performance access",
+    "Any synthetic/interpolated/forward-filled candle or synthetic spread",
+    "Any silent indicator, delayed-signal or position continuation across a data gap",
+    "Any broker write, capital authority, automatic promotion or automatic merge"
+  ],
+  "human_gate_required": true,
+  "automatic_merge": false,
+  "automatic_promotion": false
+}
