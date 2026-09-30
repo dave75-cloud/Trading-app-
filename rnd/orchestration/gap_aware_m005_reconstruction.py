@@ -95,7 +95,7 @@ def population_std(values):
 
 def _signal(symbol, closes, returns, dt):
     if len(closes) < SLOW or len(returns) < VOL_WINDOW:
-        return 0
+        return None
     fast = sum(closes[-FAST:]) / FAST
     slow = sum(closes[-SLOW:]) / SLOW
     vol = population_std(returns[-VOL_WINDOW:])
@@ -140,7 +140,7 @@ def reconstruct_pair(symbol, rows):
     returns = []
     previous_dt = None
     previous_mid = None
-    previous_raw = 0
+    previous_raw = None
     episode = 0
     gaps = []
     trades = []
@@ -156,7 +156,7 @@ def reconstruct_pair(symbol, rows):
         closes = []
         returns = []
         previous_mid = None
-        previous_raw = 0
+        previous_raw = None
         episode += 1
 
     def open_trade(side, dt, bid, ask, mid):
@@ -235,16 +235,16 @@ def reconstruct_pair(symbol, rows):
         if position != 0:
             bars_held += 1
 
-        if position == 0 and desired != 0:
+        if position == 0 and desired is not None and desired != 0:
             position = desired
             bars_held = 0
             entry = open_trade(position, dt, bid, ask, mid)
-        elif position != 0 and desired == 0 and bars_held >= MIN_HOLD_BARS:
+        elif position != 0 and desired is not None and desired == 0 and bars_held >= MIN_HOLD_BARS:
             trades.append(complete_trade(entry, dt, bid, ask, mid, bars_held))
             position = 0
             bars_held = 0
             entry = None
-        elif position != 0 and desired == -position and bars_held >= MIN_HOLD_BARS:
+        elif position != 0 and desired is not None and desired == -position and bars_held >= MIN_HOLD_BARS:
             trades.append(complete_trade(entry, dt, bid, ask, mid, bars_held))
             position = desired
             bars_held = 0
