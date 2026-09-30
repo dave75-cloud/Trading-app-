@@ -272,6 +272,14 @@ def reconstruct_pair(symbol, rows):
                 }
                 gaps.append(gap_event)
                 events.append({"event_type": "GAP", **gap_event})
+                if previous_raw is not None:
+                    events.append({
+                        "event_type": "PENDING_SIGNAL_CANCELLED",
+                        "symbol": symbol,
+                        "timestamp": dt.strftime("%Y-%m-%dT%H:%M:%SZ"),
+                        "pending_signal": previous_raw,
+                        "reason": "OBSERVATION_DISCONTINUITY",
+                    })
                 if position != 0 and entry is not None:
                     entry["gap_exposure_count"] = entry.get("gap_exposure_count", 0) + 1
                     entry["gap_elapsed_seconds"] = entry.get("gap_elapsed_seconds", 0) + delta
@@ -291,6 +299,21 @@ def reconstruct_pair(symbol, rows):
         raw = _signal(symbol, closes, returns, dt)
         desired = previous_raw
         previous_raw = raw
+
+        if raw is not None:
+            events.append({
+                "event_type": "RAW_SIGNAL",
+                "symbol": symbol,
+                "timestamp": dt.strftime("%Y-%m-%dT%H:%M:%SZ"),
+                "signal": raw,
+            })
+        if desired is not None:
+            events.append({
+                "event_type": "DELAYED_SIGNAL",
+                "symbol": symbol,
+                "timestamp": dt.strftime("%Y-%m-%dT%H:%M:%SZ"),
+                "signal": desired,
+            })
 
         # Missing nominal bars never count. A surviving position accrues one
         # holding bar only for each genuine observed candle.
@@ -418,6 +441,11 @@ def reconstruct_pair(symbol, rows):
             "exit_events": sum(1 for x in events if x["event_type"] == "EXIT"),
             "gap_events": sum(1 for x in events if x["event_type"] == "GAP"),
             "strategy_reset_events": sum(1 for x in events if x["event_type"] == "STRATEGY_RESET"),
+            "raw_signal_events": sum(1 for x in events if x["event_type"] == "RAW_SIGNAL"),
+            "delayed_signal_events": sum(1 for x in events if x["event_type"] == "DELAYED_SIGNAL"),
+            "pending_signal_cancel_events": sum(
+                1 for x in events if x["event_type"] == "PENDING_SIGNAL_CANCELLED"
+            ),
         },
         "by_exit_year": by_year,
         "authority": {
