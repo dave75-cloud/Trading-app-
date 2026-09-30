@@ -1,0 +1,36 @@
+{
+  "experiment_id": "EXP-20260923T120104Z-agent-task-governance",
+  "task_id": "RND-0024",
+  "title": "Scoped agent task governance",
+  "status": "complete",
+  "created_utc": "2026-09-23T12:01:04Z",
+  "git_base": "28a8cf2fa474e2692db66fe7cdf104565ee1eb76",
+  "hypothesis": "A scoped instruction file plus pure intake/handoff checks can catch mismatched task declarations, out-of-scope paths and review-authority escalation while leaving human authentication, task acceptance and merge authority external.",
+  "inputs": [
+    "RND-0020 task-spec contract",
+    "Append-only task events",
+    "Externally supplied approval declaration",
+    "RND-0020 review dossier"
+  ],
+  "commands": [
+    "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s rnd/orchestration -p 'test_*.py'",
+    "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s rnd/m006f -p 'test_*.py'",
+    "python3 rnd/tools/audit_workspace.py",
+    "git diff --check agent/rnd-foundation-20260916...HEAD"
+  ],
+  "outputs": [
+    "rnd/AGENTS.md",
+    "rnd/governance/RND_AGENT_TASK_POLICY.md",
+    "rnd/orchestration/agent_task_policy.py",
+    "rnd/orchestration/test_agent_task_policy.py",
+    "rnd/queue/RND-0024-task-spec.json"
+  ],
+  "result": "PASS on exact independently tested code head f756779d063a48d6bdbb00b861a329a2c092953e: clean detached-worktree status; 85 orchestration tests and 106 M006f tests passed; workspace audit passed with 24 tasks, 23 experiments, broker writes false, protected paths modified false and human-only promotion; git diff --check against 28a8cf2fa474e2692db66fe7cdf104565ee1eb76 was clean; GitHub Autonomous R&D Guard and Current System Validation both succeeded on the tested head. Completion changes only R&D documentation and append-only records. Human merge/promotion authorization remains external and unset.",
+  "safety": {
+    "broker_writes": false,
+    "protected_paths_modified": false,
+    "strategy_authority_changed": false,
+    "human_promotion_required": true
+  },
+  "completed_utc": "2026-09-26T09:14:05Z"
+}

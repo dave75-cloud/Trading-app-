@@ -1,0 +1,35 @@
+{
+  "experiment_id": "EXP-20260928T125505Z-oanda-historical-acquisition",
+  "task_id": "RND-0028",
+  "title": "Controlled OANDA historical acquisition and immutable sealing",
+  "status": "complete",
+  "created_utc": "2026-09-28T12:55:05Z",
+  "git_base": "fb4686421cf93158c7dac813aa03e3fdd06ca701",
+  "hypothesis": "A narrowly scoped OANDA Practice GET-only candle adapter can acquire and cryptographically seal execution-grade M5 bid/ask/mid evidence without granting broker write authority, leaking runtime credentials, inventing an unapproved research window, or opening the reserved final test.",
+  "inputs": [
+    "RND-0027 historical snapshot and reserved-test contract",
+    "RND-0027 fixed M005 reconstruction declaration",
+    "Official OANDA v20 candle endpoint semantics pinned in the RND-0028 contract"
+  ],
+  "commands": [
+    "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s rnd/orchestration -p 'test_*.py'",
+    "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s rnd/m006f -p 'test_*.py'",
+    "python3 rnd/tools/audit_workspace.py",
+    "git diff --check fb4686421cf93158c7dac813aa03e3fdd06ca701...HEAD"
+  ],
+  "outputs": [
+    "rnd/research/OANDA_HISTORICAL_ACQUISITION_CONTRACT.md",
+    "rnd/research/OANDA_HISTORICAL_ACQUISITION_DECLARATION.json",
+    "rnd/orchestration/oanda_historical_acquisition.py",
+    "rnd/orchestration/test_oanda_historical_acquisition.py",
+    "rnd/tools/oanda_historical_acquire.py",
+    "rnd/queue/RND-0028-task-spec.json"
+  ],
+  "result": "COMPLETE. Exact implementation HEAD 35ccb3affaa685a1bebe3c490bf6853420f0e0ca independently validated after correction: clean detached workspace; 175 orchestration tests OK; 106 M006f tests OK; RND workspace audit PASS with tasks=28, experiments=27, broker_writes=FALSE, protected_paths_modified=FALSE, promotion_authority=HUMAN_ONLY; git diff --check against fb4686421cf93158c7dac813aa03e3fdd06ca701 clean. Committed acquisition state remains UNBOUND_WINDOW and reserved final-test boundary remains SEALED_BOUNDARY_UNBOUND; no historical network acquisition, M005 signal/performance evaluation, strategy search, broker write, capital authority, automatic promotion or automatic merge occurred.",
+  "safety": {
+    "broker_writes": false,
+    "protected_paths_modified": false,
+    "strategy_authority_changed": false,
+    "human_promotion_required": true
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "analysis_version": "RND-0004-v1.0",
+  "incident": {
+    "day": "2026-09-17",
+    "classification": "contained local concurrency/state-race failure",
+    "fail_closed": true,
+    "trading_order_writes": 0,
+    "safety_violation": false
+  },
+  "mechanism": {
+    "m006e3_reads_m006c_hash_before": true,
+    "m006e3_reads_m006c_hash_after": true,
+    "hash_change_causes_fail_closed": true,
+    "concurrent_m006c_writer_present": true
+  },
+  "candidates": [
+    {
+      "name": "scheduler_serialization",
+      "prevents_overlap_by_construction": true,
+      "requires_bridge_logic_change": false,
+      "requires_shared_lock_protocol": false,
+      "runtime_drift_sensitive": false,
+      "assessment": "preferred post-observation design candidate"
+    },
+    {
+      "name": "shared_lock",
+      "prevents_overlap_by_construction": true,
+      "requires_bridge_logic_change": true,
+      "requires_shared_lock_protocol": true,
+      "runtime_drift_sensitive": false,
+      "assessment": "strong fallback if centralized sequencing unavailable"
+    },
+    {
+      "name": "schedule_deconfliction",
+      "prevents_overlap_by_construction": false,
+      "requires_bridge_logic_change": false,
+      "requires_shared_lock_protocol": false,
+      "runtime_drift_sensitive": true,
+      "assessment": "not sufficient as primary long-term control"
+    },
+    {
+      "name": "weaken_hash_integrity_check",
+      "prevents_overlap_by_construction": false,
+      "requires_bridge_logic_change": true,
+      "requires_shared_lock_protocol": false,
+      "runtime_drift_sensitive": false,
+      "assessment": "reject"
+    }
+  ],
+  "preferred_design": "scheduler_serialization",
+  "hash_integrity_check": "PRESERVE",
+  "implementation_status": "DESIGN_ONLY_NOT_AUTHORISED",
+  "input_sha256": {
+    "m006e3_concurrency_excerpt.txt": "73a62a196ecb023f718dcfde3b9a9bcbc1c1f64f614b043bb32f47305a9cc2eb",
+    "source_provenance.json": "e94d01107fbae09bf4cac0b2a38a0bcbcde53c0580fed77516ea8e98af837a34",
+    "session_disposition_2026-09-17.json": "1c26be24f20890e63c04073b67655d783d7dd7fa1dff75913ed1af0977da66ed",
+    "bridge_cycle_20260917T121459Z.json": "0c3e06c96a956ab18b0988d74494ad26cfc66ec04fc32a5531a36f406fa0250a",
+    "cycle_20260917T121429Z.log": "8743d20decaefc260739f7bbe58023c43b967e43ee442da2e66fcb17e121be66"
+  }
+}

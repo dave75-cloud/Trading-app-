@@ -1,0 +1,203 @@
+{
+  "classifications": [
+    {
+      "detail": null,
+      "event_id": "20260910T124010Z|oanda|AUDUSD|2026-09-10T12:35:00+00:00|entry|flat|short",
+      "event_type": "entry",
+      "leg": "entry",
+      "pair": "AUDUSD",
+      "status": "BLOCKED_ENTRY",
+      "timestamp_utc": "2026-09-10T12:35:00+00:00"
+    },
+    {
+      "detail": null,
+      "event_id": "20260910T124010Z|oanda|EURUSD|2026-09-10T12:35:00+00:00|entry|flat|short",
+      "event_type": "entry",
+      "leg": "entry",
+      "pair": "EURUSD",
+      "status": "BLOCKED_ENTRY",
+      "timestamp_utc": "2026-09-10T12:35:00+00:00"
+    },
+    {
+      "detail": null,
+      "event_id": "20260910T124010Z|oanda|USDJPY|2026-09-10T12:35:00+00:00|entry|flat|long",
+      "event_type": "entry",
+      "leg": "entry",
+      "pair": "USDJPY",
+      "status": "BLOCKED_ENTRY",
+      "timestamp_utc": "2026-09-10T12:35:00+00:00"
+    },
+    {
+      "detail": null,
+      "event_id": "20260910T125616Z|oanda|GBPUSD|2026-09-10T12:50:00+00:00|entry|flat|short",
+      "event_type": "entry",
+      "leg": "entry",
+      "pair": "GBPUSD",
+      "status": "BLOCKED_ENTRY",
+      "timestamp_utc": "2026-09-10T12:50:00+00:00"
+    },
+    {
+      "detail": null,
+      "event_id": "20260910T131212Z|oanda|EURUSD|2026-09-10T13:05:00+00:00|exit|short|flat",
+      "event_type": "exit",
+      "leg": "exit",
+      "pair": "EURUSD",
+      "status": "EXIT_WITHOUT_APPROVED_ENTRY",
+      "timestamp_utc": "2026-09-10T13:05:00+00:00"
+    },
+    {
+      "detail": null,
+      "event_id": "20260910T131212Z|oanda|GBPUSD|2026-09-10T13:05:00+00:00|exit|short|flat",
+      "event_type": "exit",
+      "leg": "exit",
+      "pair": "GBPUSD",
+      "status": "EXIT_WITHOUT_APPROVED_ENTRY",
+      "timestamp_utc": "2026-09-10T13:05:00+00:00"
+    },
+    {
+      "detail": null,
+      "event_id": "20260910T131212Z|oanda|USDJPY|2026-09-10T13:05:00+00:00|exit|long|flat",
+      "event_type": "exit",
+      "leg": "exit",
+      "pair": "USDJPY",
+      "status": "EXIT_WITHOUT_APPROVED_ENTRY",
+      "timestamp_utc": "2026-09-10T13:05:00+00:00"
+    },
+    {
+      "detail": null,
+      "event_id": "20260910T135451Z|oanda|AUDUSD|2026-09-10T13:45:00+00:00|exit|short|flat",
+      "event_type": "exit",
+      "leg": "exit",
+      "pair": "AUDUSD",
+      "status": "EXIT_WITHOUT_APPROVED_ENTRY",
+      "timestamp_utc": "2026-09-10T13:45:00+00:00"
+    },
+    {
+      "detail": null,
+      "event_id": "20260911T124136Z|oanda|AUDUSD|2026-09-11T12:35:00+00:00|entry|flat|long",
+      "event_type": "entry",
+      "leg": "entry",
+      "pair": "AUDUSD",
+      "status": "BLOCKED_ENTRY",
+      "timestamp_utc": "2026-09-11T12:35:00+00:00"
+    },
+    {
+      "detail": null,
+      "event_id": "20260911T124136Z|oanda|USDJPY|2026-09-11T12:35:00+00:00|entry|flat|short",
+      "event_type": "entry",
+      "leg": "entry",
+      "pair": "USDJPY",
+      "status": "BLOCKED_ENTRY",
+      "timestamp_utc": "2026-09-11T12:35:00+00:00"
+    },
+    {
+      "detail": null,
+      "event_id": "20260911T131333Z|oanda|USDJPY|2026-09-11T13:05:00+00:00|exit|short|flat",
+      "event_type": "exit",
+      "leg": "exit",
+      "pair": "USDJPY",
+      "status": "EXIT_WITHOUT_APPROVED_ENTRY",
+      "timestamp_utc": "2026-09-11T13:05:00+00:00"
+    },
+    {
+      "detail": null,
+      "event_id": "20260911T134010Z|oanda|AUDUSD|2026-09-11T13:35:00+00:00|exit|long|flat",
+      "event_type": "exit",
+      "leg": "exit",
+      "pair": "AUDUSD",
+      "status": "EXIT_WITHOUT_APPROVED_ENTRY",
+      "timestamp_utc": "2026-09-11T13:35:00+00:00"
+    },
+    {
+      "detail": null,
+      "event_id": "20260917T111003Z|oanda|GBPUSD|2026-09-17T11:05:00+00:00|entry|flat|long",
+      "event_type": "entry",
+      "leg": "entry",
+      "pair": "GBPUSD",
+      "status": "BLOCKED_ENTRY",
+      "timestamp_utc": "2026-09-17T11:05:00+00:00"
+    },
+    {
+      "detail": null,
+      "event_id": "20260917T113708Z|oanda|GBPUSD|2026-09-17T11:30:00+00:00|reversal|long|short",
+      "event_type": "reversal",
+      "leg": "reversal_exit",
+      "pair": "GBPUSD",
+      "status": "EXIT_WITHOUT_APPROVED_ENTRY",
+      "timestamp_utc": "2026-09-17T11:30:00+00:00"
+    },
+    {
+      "detail": null,
+      "event_id": "20260917T113708Z|oanda|GBPUSD|2026-09-17T11:30:00+00:00|reversal|long|short",
+      "event_type": "reversal",
+      "leg": "reversal_entry",
+      "pair": "GBPUSD",
+      "status": "BLOCKED_ENTRY",
+      "timestamp_utc": "2026-09-17T11:30:00+00:00"
+    },
+    {
+      "detail": null,
+      "event_id": "20260917T121434Z|oanda|GBPUSD|2026-09-17T12:05:00+00:00|exit|short|flat",
+      "event_type": "exit",
+      "leg": "exit",
+      "pair": "GBPUSD",
+      "status": "EXIT_WITHOUT_APPROVED_ENTRY",
+      "timestamp_utc": "2026-09-17T12:05:00+00:00"
+    },
+    {
+      "detail": null,
+      "event_id": "20260917T124242Z|oanda|USDJPY|2026-09-17T12:35:00+00:00|entry|flat|long",
+      "event_type": "entry",
+      "leg": "entry",
+      "pair": "USDJPY",
+      "status": "APPROVED_ENTRY",
+      "timestamp_utc": "2026-09-17T12:35:00+00:00"
+    },
+    {
+      "detail": null,
+      "event_id": "20260917T131218Z|oanda|USDJPY|2026-09-17T13:05:00+00:00|exit|long|flat",
+      "event_type": "exit",
+      "leg": "exit",
+      "pair": "USDJPY",
+      "status": "APPROVED_EXIT",
+      "timestamp_utc": "2026-09-17T13:05:00+00:00"
+    },
+    {
+      "detail": [
+        "20260917T124242Z|oanda|USDJPY|2026-09-17T12:35:00+00:00|entry|flat|long:entry",
+        "20260917T131218Z|oanda|USDJPY|2026-09-17T13:05:00+00:00|exit|long|flat:exit"
+      ],
+      "event_id": "20260917T124242Z|oanda|USDJPY|2026-09-17T12:35:00+00:00|entry|flat|long",
+      "event_type": "entry",
+      "leg": "entry",
+      "pair": "USDJPY",
+      "status": "CHAIN_SUPPRESSED_MISSING_MARKET_EVIDENCE",
+      "timestamp_utc": "2026-09-17T12:35:00+00:00"
+    },
+    {
+      "detail": [
+        "20260917T124242Z|oanda|USDJPY|2026-09-17T12:35:00+00:00|entry|flat|long:entry",
+        "20260917T131218Z|oanda|USDJPY|2026-09-17T13:05:00+00:00|exit|long|flat:exit"
+      ],
+      "event_id": "20260917T131218Z|oanda|USDJPY|2026-09-17T13:05:00+00:00|exit|long|flat",
+      "event_type": "exit",
+      "leg": "exit",
+      "pair": "USDJPY",
+      "status": "CHAIN_SUPPRESSED_MISSING_MARKET_EVIDENCE",
+      "timestamp_utc": "2026-09-17T13:05:00+00:00"
+    }
+  ],
+  "replay_events": [],
+  "summary": {
+    "acceptance_gate_pass": true,
+    "accepted_sessions": 3,
+    "audit_records": 20,
+    "automatic_promotion": false,
+    "human_review_required": true,
+    "network_capability": false,
+    "replay_events": 0,
+    "source_events": 17,
+    "source_legs": 18,
+    "suppressed_chains": 1
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "actual_account": {
+    "NAV": "100000.0000",
+    "currency": "AUD",
+    "openPositionCount": 0,
+    "openTradeCount": 0,
+    "pendingOrderCount": 0
+  },
+  "canonical_m005_modified": false,
+  "environment": "practice",
+  "events_scanned": 49,
+  "events_suppressed": 0,
+  "mode": "DRY_RUN_SUPPRESSED",
+  "new_events_seen": 1,
+  "oanda_write_requests_performed": 0,
+  "order_endpoints_invoked": false,
+  "proposals": [
+    {
+      "actions": [
+        {
+          "endpoint_if_enabled_later": "/v3/accounts/{accountID}/positions/GBP_USD/close",
+          "http_method_if_enabled_later": "PUT",
+          "payload": {
+            "longUnits": "NONE",
+            "shortClientExtensions": {
+              "comment": "SUPPRESSED event 270bd86ca6e6",
+              "tag": "KQTRL_M006c1_DRYRUN"
+            },
+            "shortUnits": "ALL"
+          },
+          "suppressed": true
+        }
+      ],
+      "bar_ts_utc": "2026-09-17T12:05:00+00:00",
+      "cycle_id": "20260917T121232Z",
+      "event_age_minutes": 9.999104816666666,
+      "event_id": "270bd86ca6e6dc2670309667be32051ab9afe32533924b28c0093da51ca7d394",
+      "event_type": "exit",
+      "instrument": "GBP_USD",
+      "new_position": "flat",
+      "old_position": "short",
+      "pair": "GBPUSD",
+      "pricing": {
+        "ask": 1.33844,
+        "bid": 1.33829,
+        "instrument": "GBP_USD",
+        "mid": 1.338365,
+        "spread": 0.0001500000000000945,
+        "status": "tradeable",
+        "time": "2026-09-17T12:15:00.046189991Z",
+        "tradeable": true
+      },
+      "pricing_age_minutes": -0.001665016666666667,
+      "submission_status": "SUPPRESSED_DRY_RUN",
+      "test_units_non_production": 1000,
+      "virtual_position_after": "flat",
+      "virtual_position_before": "short"
+    }
+  ],
+  "proposals_created": 1,
+  "run_id": "20260917T121459Z",
+  "suppressions": [],
+  "virtual_positions_after": {
+    "AUDUSD": "flat",
+    "EURUSD": "flat",
+    "GBPUSD": "flat",
+    "USDJPY": "flat"
+  }
+}

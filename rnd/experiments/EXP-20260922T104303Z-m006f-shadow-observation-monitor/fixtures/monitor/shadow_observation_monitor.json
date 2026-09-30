@@ -1,0 +1,48 @@
+{
+  "accepted_evidence": {
+    "market_evidence_records": 2,
+    "replay_events": 2,
+    "review_flag_counts": {},
+    "sessions_with_open_positions": 0,
+    "suppressed_chains": 0
+  },
+  "authority": {
+    "automatic_disposition": false,
+    "automatic_promotion": false,
+    "human_promotion_decision_required": true,
+    "promotion_authority": "NONE"
+  },
+  "evidence_quality": {
+    "accepted_review_flag_counts": {},
+    "accepted_sessions_with_open_positions": 0,
+    "accepted_suppressed_chains": 0,
+    "all_accepted_sessions_end_flat": true,
+    "zero_accepted_suppressed_chains": true
+  },
+  "monitor_content_sha256": "cf32457bdfc5a1d78b607c6985d3403f97ab5e1414fbdc863e84db7914ec4398",
+  "monitor_version": "M006f-shadow-observation-monitor-v0.1",
+  "observation_phase": "ACCUMULATING_EVIDENCE",
+  "reviewed_cohort": {
+    "accepted_sessions": 1,
+    "rejected_sessions": 0,
+    "reviewed_sessions": 1
+  },
+  "safety": {
+    "network_capability": false,
+    "submission_capability": false
+  },
+  "source": {
+    "ledger_content_sha256": "0519dba6abd21494bba43d6c7bdc492e7001d182164137e3ac84e2affb6ec1c1",
+    "ledger_file_sha256": "192fa5afb23b6aee7e924a0af86015d90a15907a44a3895b6ddcfb70ddde20ee",
+    "ledger_version": "M006f-shadow-session-ledger-v0.1"
+  },
+  "threshold_evidence": {
+    "accepted_replay_event_threshold_met": false,
+    "accepted_session_threshold_met": false,
+    "both_numerical_thresholds_met": false,
+    "observed_accepted_replay_events": 2,
+    "observed_accepted_sessions": 1,
+    "required_accepted_replay_events": 100,
+    "required_accepted_sessions": 25
+  }
+}

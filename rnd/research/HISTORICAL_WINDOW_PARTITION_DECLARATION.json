@@ -1,0 +1,100 @@
+{
+  "contract_version": "RND-historical-window-partition-v0.1",
+  "task_id": "RND-0029",
+  "base_commit": "f342a3b2aa4bca021346df7915f8e9aaed2f5cab",
+  "status": "PREDECLARED",
+  "symbols": [
+    "AUDUSD",
+    "EURUSD",
+    "GBPUSD",
+    "USDJPY"
+  ],
+  "timeframe": "M5",
+  "requested_horizon": {
+    "start_utc": "2015-01-01T00:00:00Z",
+    "end_utc": "2025-01-01T00:00:00Z"
+  },
+  "coverage_policy": {
+    "require_full_horizon_all_symbols": true,
+    "common_coverage_rule": "EXACT_REQUESTED_HORIZON_OR_FAIL",
+    "outcome_dependent_fallback_allowed": false,
+    "structural_fields_allowed": [
+      "timestamp_utc",
+      "complete",
+      "provider",
+      "instrument",
+      "granularity",
+      "raw_sha256",
+      "canonical_rows_sha256",
+      "row_count",
+      "gap_ledger",
+      "start_utc",
+      "end_utc"
+    ],
+    "outcome_fields_prohibited": [
+      "signal",
+      "position",
+      "trade",
+      "return",
+      "pnl",
+      "equity",
+      "drawdown",
+      "sharpe",
+      "win_rate",
+      "strategy_score"
+    ]
+  },
+  "partition_rule": {
+    "basis": "ELAPSED_UTC_TIME",
+    "development_fraction": "0.60",
+    "validation_fraction": "0.20",
+    "reserved_final_test_fraction": "0.20",
+    "boundary_snap": "FORWARD_TO_NEXT_M5_GRID",
+    "candle_count_partitioning": false,
+    "outcome_dependent_partitioning": false
+  },
+  "partitions": {
+    "development": {
+      "start_utc": "2015-01-01T00:00:00Z",
+      "end_utc": "2020-12-31T19:15:00Z",
+      "strategy_access": "ALLOWED_LATER_NOT_IN_RND_0029"
+    },
+    "validation": {
+      "start_utc": "2020-12-31T19:15:00Z",
+      "end_utc": "2023-01-01T09:40:00Z",
+      "strategy_access": "ALLOWED_LATER_NOT_IN_RND_0029"
+    },
+    "reserved_final_test": {
+      "start_utc": "2023-01-01T09:40:00Z",
+      "end_utc": "2025-01-01T00:00:00Z",
+      "state": "SEALED_BOUNDARY_BOUND",
+      "strategy_metrics_allowed": false,
+      "signal_generation_allowed": false,
+      "trade_simulation_allowed": false,
+      "parameter_selection_allowed": false,
+      "human_open_gate_required": true
+    }
+  },
+  "warmup_contract": {
+    "maximum_prior_bars": 50,
+    "source_partition_only": true,
+    "warmup_rows_may_initialize_state": true,
+    "warmup_rows_may_generate_trades": false,
+    "warmup_rows_may_contribute_returns": false,
+    "final_test_rows_may_not_be_used_as_warmup_for_earlier_partitions": true
+  },
+  "acquisition_binding": {
+    "source_declaration": "rnd/research/OANDA_HISTORICAL_ACQUISITION_DECLARATION.json",
+    "required_state": "ACQUISITION_READY",
+    "start_utc": "2015-01-01T00:00:00Z",
+    "end_utc": "2025-01-01T00:00:00Z"
+  },
+  "authority": {
+    "strategy_selection": false,
+    "broker_writes": false,
+    "automatic_merge": false,
+    "automatic_promotion": false,
+    "capital_authority": false,
+    "human_review_required": true
+  }
+}

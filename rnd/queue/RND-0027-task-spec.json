@@ -1,0 +1,39 @@
+{
+  "contract_version": "RND-task-spec-v0.1",
+  "task_id": "RND-0027",
+  "title": "Immutable historical data and controlled M005 reconstruction",
+  "git_base": "09f839920a0bf7bede40d8e346ca6c7fcba02cc8",
+  "objective": "Build the governed historical-data and fixed-M005 reconstruction layer without opening the reserved final test, tuning parameters, or claiming profitability.",
+  "allowed_path_prefixes": ["rnd/"],
+  "prohibited_path_prefixes": ["rnd/private/"],
+  "required_outputs": [
+    "rnd/research/HISTORICAL_SNAPSHOT_CONTRACT.md",
+    "rnd/research/HISTORICAL_DATA_ACQUISITION_PLAN.json",
+    "rnd/research/M005_RECONSTRUCTION_DECLARATION.json",
+    "rnd/orchestration/historical_data_reconstruction.py",
+    "rnd/orchestration/test_historical_data_reconstruction.py"
+  ],
+  "required_validation_labels": [
+    "diff-check",
+    "scope-check",
+    "orchestration-tests",
+    "m006f-tests",
+    "workspace-audit"
+  ],
+  "success_criteria": [
+    "Missing historical data remains an explicit blocking state rather than being fabricated",
+    "Execution-grade snapshots require immutable SHA-256 identity plus bid and ask",
+    "Fixed M005 behaviour cannot drift or acquire search authority",
+    "Reserved final-test contents cannot be scored or used for selection before a separate human gate",
+    "M5 candle-index defects fail closed"
+  ],
+  "stop_conditions": [
+    "Any change outside rnd/ or to frozen/operational paths",
+    "Any inspection or scoring of reserved final-test strategy results",
+    "Any parameter optimization, strategy ranking or discovery",
+    "Any broker order capability, capital authority, automatic promotion or automatic merge"
+  ],
+  "human_gate_required": true,
+  "automatic_merge": false,
+  "automatic_promotion": false
+}

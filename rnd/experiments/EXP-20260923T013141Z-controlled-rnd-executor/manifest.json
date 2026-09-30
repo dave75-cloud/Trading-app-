@@ -1,0 +1,32 @@
+{
+  "experiment_id": "EXP-20260923T013141Z-controlled-rnd-executor",
+  "task_id": "RND-0021",
+  "title": "Controlled local R&D work-packet executor",
+  "status": "complete",
+  "created_utc": "2026-09-23T01:31:41Z",
+  "git_base": "03fc050da15afbbdd46707f5abbee4e3d6ed032e",
+  "hypothesis": "A tiny read-only Git subprocess allowlist, bound to a hashed RND-0020 work packet and execution plan, can produce deterministic validation evidence without granting arbitrary command, candidate-code, network, Git mutation, merge, promotion or trading authority.",
+  "inputs": [
+    "RND-0020 work packet with human-only authority and explicit validation labels",
+    "Locally derived hashed execution plan using only internally defined action IDs"
+  ],
+  "commands": [
+    "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s rnd/orchestration -p 'test_*.py'",
+    "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s rnd/m006f -p 'test_*.py'",
+    "python3 rnd/tools/audit_workspace.py",
+    "git diff --check agent/rnd-foundation-20260916...HEAD"
+  ],
+  "outputs": [
+    "rnd/orchestration/controlled_rnd_executor.py",
+    "rnd/orchestration/test_controlled_rnd_executor.py",
+    "rnd/orchestration/RND_CONTROLLED_EXECUTOR.md"
+  ],
+  "result": "PASS on exact tested head 42a4a3a0310bb7ccaa1c23a7f98dd1a25f6872f6: 41 focused orchestration tests passed; 106 M006f regression tests passed; RND_WORKSPACE_AUDIT passed with 21 tasks, 20 experiments, broker writes false, protected paths modified false, promotion authority human-only; git diff --check was clean. Executor authority is restricted to commit-to-commit diff-check and scope-check; candidate code, worktree status, network, arbitrary subprocess, merge and promotion authority remain excluded.",
+  "safety": {
+    "broker_writes": false,
+    "protected_paths_modified": false,
+    "strategy_authority_changed": false,
+    "human_promotion_required": true
+  },
+  "completed_utc": "2026-09-23T02:13:01Z"
+}

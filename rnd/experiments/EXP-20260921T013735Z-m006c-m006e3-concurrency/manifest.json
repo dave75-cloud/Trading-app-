@@ -1,0 +1,32 @@
+{
+  "experiment_id": "EXP-20260921T013735Z-m006c-m006e3-concurrency",
+  "task_id": "RND-0004",
+  "title": "M006c/M006e.3 concurrency-race design analysis",
+  "status": "complete",
+  "created_utc": "2026-09-21T01:37:35Z",
+  "git_base": "8b8d30d5f28ebaa0c7ba315f8dc45917eac16ef7",
+  "hypothesis": "The 2026-09-17 M006e.3 failure was caused by concurrent M006c state mutation and can be addressed post-observation without weakening the existing fail-closed hash-integrity check.",
+  "inputs": [
+    "inputs/audit_m006e3_zero_write_bridge.py",
+    "inputs/bridge_cycle_20260917T121459Z.json",
+    "inputs/cycle_20260917T121429Z.log",
+    "inputs/m006e3_concurrency_excerpt.txt",
+    "inputs/session_disposition_2026-09-17.json",
+    "inputs/source_provenance.json"
+  ],
+  "commands": [
+    "python3 analyze_concurrency.py"
+  ],
+  "outputs": [
+    "analysis.json",
+    "analysis.md"
+  ],
+  "result": "PASS: incident classified as contained local concurrency/state-race; M006e.3 failed closed with zero trading writes and no safety violation. Preferred post-observation remedy is scheduler serialization while preserving the existing before/after hash-integrity check.",
+  "safety": {
+    "broker_writes": false,
+    "protected_paths_modified": false,
+    "strategy_authority_changed": false,
+    "human_promotion_required": true
+  },
+  "completed_utc": "2026-09-21T01:56:53Z"
+}

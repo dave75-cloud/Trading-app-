@@ -1,0 +1,49 @@
+{
+  "experiment_id": "EXP-20260929T114553Z-audusd-2015-pilot-calendar-hardening",
+  "task_id": "RND-0031",
+  "title": "AUDUSD 2015 pilot calendar-evidence hardening",
+  "status": "complete",
+  "created_utc": "2026-09-29T11:45:53Z",
+  "git_base": "d9a93899a1c0fba531f67639685ce9545b2b473c",
+  "hypothesis": "The first real AUDUSD/2015 shard can falsify an unchanged present-day session-calendar assumption while preserving returned data as non-authoritative structural evidence and retaining genuine source gaps explicitly.",
+  "inputs": [
+    "Externally quarantined AUDUSD/2015 attempt-3 evidence verified by the merged RND-0030 verifier",
+    "User-run discrepancy characterization and non-authoritative 17:00 New York falsification test",
+    "Current official OANDA hours/legal/holiday material reviewed for documentary limits"
+  ],
+  "commands": [
+    "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s rnd/orchestration -p 'test_*.py'",
+    "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s rnd/m006f -p 'test_*.py'",
+    "python3 rnd/tools/audit_workspace.py",
+    "git diff --check d9a93899a1c0fba531f67639685ce9545b2b473c...HEAD"
+  ],
+  "outputs": [
+    "rnd/research/RND0031_PILOT_EVIDENCE_RECORD.json",
+    "rnd/research/RND0031_HISTORICAL_CALENDAR_EVIDENCE_CONTRACT.md",
+    "rnd/research/RND0031_DOCUMENTARY_SOURCE_REGISTER.json",
+    "rnd/orchestration/historical_calendar_evidence.py",
+    "rnd/orchestration/test_historical_calendar_evidence.py"
+  ],
+  "result": "COMPLETE. AUDUSD/2015 pilot acquisition and structural verification succeeded. The historical-calendar discrepancy was falsified structurally without modifying the authoritative RND-0030 calendar: 254/255 original unexpected timestamps are explained by the non-authoritative 17:00 New York candidate, while remaining missing observations stay explicit and unresolved unless independently supported. No strategy outcome was calculated.",
+  "safety": {
+    "broker_writes": false,
+    "protected_paths_modified": false,
+    "strategy_authority_changed": false,
+    "human_promotion_required": true
+  },
+  "validation": {
+    "exact_head": "b1cb901fcea3022d00749300d8bf69dc33664bf7",
+    "orchestration_tests": 270,
+    "orchestration_status": "OK",
+    "m006f_tests": 106,
+    "m006f_status": "OK",
+    "workspace_audit": "PASS",
+    "workspace_tasks": 31,
+    "workspace_experiments": 30,
+    "broker_writes": false,
+    "protected_paths_modified": false,
+    "promotion_authority": "HUMAN_ONLY",
+    "diff_check": "CLEAN",
+    "independently_run_by_human": true
+  }
+}

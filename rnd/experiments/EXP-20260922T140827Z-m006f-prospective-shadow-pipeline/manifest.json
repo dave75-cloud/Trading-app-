@@ -1,0 +1,30 @@
+{
+  "experiment_id": "EXP-20260922T140827Z-m006f-prospective-shadow-pipeline",
+  "task_id": "RND-0018",
+  "title": "M006f offline prospective shadow-session pipeline",
+  "status": "complete",
+  "created_utc": "2026-09-22T14:08:27Z",
+  "git_base": "e11e1e391fcf64bb5f67e19864d55325f702a05f",
+  "hypothesis": "Existing M006f components can be composed into a deterministic fail-closed prospective pipeline without network, submission, disposition, promotion, or capital authority.",
+  "inputs": [
+    "Synthetic USDJPY accepted-session, reconciliation, and exact market-evidence fixtures created ephemerally by the focused test suite"
+  ],
+  "commands": [
+    "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest rnd/m006f/test_prospective_shadow_session_pipeline.py",
+    "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s rnd/m006f -p 'test_*.py'",
+    "python3 rnd/tools/audit_workspace.py"
+  ],
+  "outputs": [
+    "rnd/m006f/prospective_shadow_session_pipeline.py",
+    "rnd/m006f/test_prospective_shadow_session_pipeline.py",
+    "rnd/m006f/PROSPECTIVE_SHADOW_SESSION_PIPELINE.md"
+  ],
+  "result": "PASS: 9 focused pipeline tests and all 90 M006f tests passed. The audit passed with broker writes false, protected-path modifications false, and promotion authority human-only. The deterministic USDJPY round trip ended flat with AUD 1.0 realized shadow P&L; human disposition remained unset and promotion authority remained NONE.",
+  "safety": {
+    "broker_writes": false,
+    "protected_paths_modified": false,
+    "strategy_authority_changed": false,
+    "human_promotion_required": true
+  },
+  "completed_utc": "2026-09-22T14:09:39Z"
+}

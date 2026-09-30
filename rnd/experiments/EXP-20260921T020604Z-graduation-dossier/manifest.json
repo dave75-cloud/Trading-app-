@@ -1,0 +1,25 @@
+{
+  "experiment_id": "EXP-20260921T020604Z-graduation-dossier",
+  "task_id": "RND-0009",
+  "title": "Forward-observation graduation dossier generator",
+  "status": "complete",
+  "created_utc": "2026-09-21T02:06:04Z",
+  "git_base": "fa1da8242f47b9469a25ccdea024c74d483b57bf",
+  "hypothesis": "A local dossier generator can summarize thresholds, safety, integrity and known reliability findings without selecting a promotion outcome.",
+  "inputs": [],
+  "commands": [
+    "python3 test_graduation_dossier.py"
+  ],
+  "outputs": [
+    "rnd/graduation/graduation_dossier.py",
+    "rnd/graduation/test_graduation_dossier.py"
+  ],
+  "result": "PASS: 2 offline unit tests passed; below-threshold and threshold-met cases both leave selected outcome unset and require human decision.",
+  "safety": {
+    "broker_writes": false,
+    "protected_paths_modified": false,
+    "strategy_authority_changed": false,
+    "human_promotion_required": true
+  },
+  "completed_utc": "2026-09-21T02:06:04Z"
+}

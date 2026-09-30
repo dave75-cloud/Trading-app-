@@ -1,0 +1,25 @@
+{
+  "experiment_id": "EXP-20260921T020601Z-m006f-offline-simulator",
+  "task_id": "RND-0006",
+  "title": "M006f offline shadow simulator",
+  "status": "complete",
+  "created_utc": "2026-09-21T02:06:01Z",
+  "git_base": "fa1da8242f47b9469a25ccdea024c74d483b57bf",
+  "hypothesis": "A deterministic local simulator can model already-approved actions, adverse spread/slippage, AUD-valued realized P&L, exposure and drawdown without recalculating strategy sizing.",
+  "inputs": [],
+  "commands": [
+    "python3 test_shadow_simulator.py"
+  ],
+  "outputs": [
+    "rnd/m006f/shadow_simulator.py",
+    "rnd/m006f/test_shadow_simulator.py"
+  ],
+  "result": "PASS: 7 offline unit tests passed; duplicate events, invalid exits and opaque reversals fail closed; network and submission capability remain absent.",
+  "safety": {
+    "broker_writes": false,
+    "protected_paths_modified": false,
+    "strategy_authority_changed": false,
+    "human_promotion_required": true
+  },
+  "completed_utc": "2026-09-21T02:06:01Z"
+}

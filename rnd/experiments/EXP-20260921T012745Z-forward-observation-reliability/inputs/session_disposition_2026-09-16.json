@@ -1,0 +1,30 @@
+{
+  "version": "M006e.9-session-disposition-v1.0",
+  "day": "2026-09-16",
+  "reviewed_disposition": "CLEAN",
+  "accepted": true,
+  "contained_upstream_failures": 1,
+  "coverage": {
+    "expected_cycles": 43,
+    "observed_cycles": 39,
+    "pass": 38,
+    "fail": 1,
+    "skip": 0,
+    "unknown": 0,
+    "coverage_percent": 90.7,
+    "raw_verdict": "ALERT"
+  },
+  "coverage_warning": null,
+  "authoritative_events": 0,
+  "event_path": {
+    "blocked_entry_legs": 0,
+    "risk_reducing_exit_actions": 0,
+    "retry_pending": 0
+  },
+  "integrity": {
+    "m006e2_hash_match": true,
+    "freeze_manifest_pass": true,
+    "trading_order_writes": 0
+  },
+  "notes": "Session accepted CLEAN after human review. One active-window cycle at 2026-09-16T12:55:52Z failed closed because OANDA returned invalid JSON. This is classified as one contained upstream/provider failure, not an M006e logic or safety defect. The remaining 38 observed cycles passed; coverage was 90.7%, with four missing cycles treated as an availability gap. There were no unknown cycles, authoritative events, safety violations, order payloads, broker writes, or order endpoint invocations. The repaired frozen M006e.2 hash matched exactly. No repair or change to frozen M006e is authorised."
+}

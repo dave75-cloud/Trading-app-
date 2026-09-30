@@ -1,0 +1,131 @@
+{
+  "contract_version": "RND0034-gap-aware-m005-evidence-v1",
+  "task_id": "RND-0034",
+  "experiment_id": "EXP-20260930T060717Z-gap-aware-m005-development",
+  "evidence_scope": {
+    "years": [
+      2015,
+      2016,
+      2017,
+      2018,
+      2019
+    ],
+    "symbols": [
+      "AUDUSD",
+      "EURUSD",
+      "GBPUSD",
+      "USDJPY"
+    ],
+    "shard_count": 20,
+    "trial_count": 1,
+    "strategy": "FIXED_M005_SINGLE_TRIAL",
+    "validation_open": false,
+    "final_test_open": false
+  },
+  "verification": {
+    "technical_result": "PASS",
+    "evidence_identity_pass_match": "20/20",
+    "orchestration_tests": "318 PASS",
+    "m006f_tests": "106 PASS",
+    "workspace_audit": "PASS",
+    "diff_check": "PASS",
+    "pilot_reproducibility": "BYTE_FOR_BYTE_PASS",
+    "pilot_evidence_layer_sha256": "db7d1b3ce94634bed5ff7e3289fdec13d570594964d7ae2b5e04c8221d0e5484",
+    "development_report_sha256": "a7bc32951a5342ad02757dcb567558a40c334be32a7088c39e05850506243ce9"
+  },
+  "reconciliation": {
+    "pair_marks": 1483430,
+    "concurrent_timestamps": 372496,
+    "completed_trades": 2274,
+    "gap_events": 6495,
+    "strategy_reset_events": 6495,
+    "open_position_gap_events": 0,
+    "synthetic_candles": 0
+  },
+  "per_symbol": {
+    "AUDUSD": {
+      "trades": 885,
+      "hit_rate": 0.40452,
+      "gross_equity_index": 0.91706599,
+      "net_equity_index": 0.80379677,
+      "net_max_drawdown": -0.19718167,
+      "total_execution_cost_drag": 0.13181018,
+      "yearly_net_return_sums": {
+        "2015": -0.13100107,
+        "2016": -0.02806893,
+        "2017": -0.01660274,
+        "2018": -0.03294786,
+        "2019": -0.00846408
+      }
+    },
+    "EURUSD": {
+      "trades": 430,
+      "hit_rate": 0.465116,
+      "gross_equity_index": 1.05278068,
+      "net_equity_index": 1.01777557,
+      "net_max_drawdown": -0.04650698,
+      "total_execution_cost_drag": 0.03381882,
+      "yearly_net_return_sums": {
+        "2015": 0.05127045,
+        "2016": -0.00570924,
+        "2017": -0.02018091,
+        "2018": -0.00115152,
+        "2019": -0.00595729
+      }
+    },
+    "GBPUSD": {
+      "trades": 677,
+      "hit_rate": 0.440177,
+      "gross_equity_index": 1.07309996,
+      "net_equity_index": 0.98658356,
+      "net_max_drawdown": -0.04729549,
+      "total_execution_cost_drag": 0.08406728,
+      "yearly_net_return_sums": {
+        "2015": 0.01511515,
+        "2016": -0.02516714,
+        "2017": 0.00635046,
+        "2018": -0.00439154,
+        "2019": -0.00474176
+      },
+      "gross_equity_by_year": {
+        "2015": 1.028973,
+        "2016": 1.005827,
+        "2017": 1.019459,
+        "2018": 1.008152,
+        "2019": 1.008828
+      }
+    },
+    "USDJPY": {
+      "trades": 282,
+      "hit_rate": 0.453901,
+      "gross_equity_index": 0.9944528,
+      "net_equity_index": 0.96903723,
+      "net_max_drawdown": -0.03288059,
+      "total_execution_cost_drag": 0.02588916,
+      "yearly_net_return_sums": {
+        "2015": -0.00792025,
+        "2016": -0.00377758,
+        "2017": -0.01127778,
+        "2018": 0.00047172,
+        "2019": -0.00862467
+      }
+    }
+  },
+  "interpretation": {
+    "technical_conclusion": "Frozen M005 was reconstructed deterministically and economically measured on the authorized 2015-2019 governed development evidence.",
+    "economic_conclusion": "The reconstruction does not show a broad stable net-positive four-pair edge. AUDUSD is adverse even gross overall; EURUSD net positivity is concentrated in 2015; GBPUSD shows persistent positive gross yearly effects that are insufficient to overcome observed bid/ask costs overall; USDJPY is near-flat gross and negative net.",
+    "historical_champion_relation": "This does not by itself reproduce or disprove the differently filtered historical Champion result. It establishes that frozen M005 in this governed form does not reproduce a broad stable economically positive four-pair effect.",
+    "next_research_boundary": "RND-0035 may perform predeclared adversarial development-period falsification with explicit trial accounting; RND-0034 does not tune or rescue M005."
+  },
+  "authority": {
+    "strategy_search": false,
+    "portfolio_sizing": false,
+    "broker_writes": false,
+    "capital_authority": false,
+    "validation_open": false,
+    "final_test_open": false,
+    "automatic_promotion": false,
+    "automatic_merge": false,
+    "human_review_required": true
+  }
+}

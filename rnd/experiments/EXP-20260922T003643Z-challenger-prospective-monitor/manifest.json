@@ -1,0 +1,31 @@
+{
+  "experiment_id": "EXP-20260922T003643Z-challenger-prospective-monitor",
+  "task_id": "RND-0010",
+  "title": "Prospective challenger cohort monitor",
+  "status": "complete",
+  "created_utc": "2026-09-22T00:36:43Z",
+  "git_base": "fabe40050b3258fb685b9f98ebbf8b1c25cc2462",
+  "hypothesis": "A read-only prospective monitor can evaluate a fresh Twelve Data versus Polygon challenger cohort without modifying canonical M005 or granting automatic promotion authority.",
+  "inputs": [
+    "inputs/cohort_baseline.json",
+    "inputs/provider_acceptance_ledger.csv",
+    "inputs/provider_acceptance_pair_ledger.csv"
+  ],
+  "commands": [
+    "python3 rnd/challenger/prospective_cohort_monitor.py --baseline <baseline> --ledger <ledger> --pair-ledger <pair-ledger>",
+    "python3 rnd/challenger/test_prospective_cohort_monitor.py",
+    "python3 rnd/tools/audit_workspace.py"
+  ],
+  "outputs": [
+    "rnd/challenger/prospective_cohort_monitor.py",
+    "rnd/challenger/test_prospective_cohort_monitor.py"
+  ],
+  "result": "PASS: fresh cohort correctly reports 0/10 sessions; 4 offline tests passed covering empty cohort, ten clean sessions, one disagreement, and incomplete pair evidence; R&D workspace audit passed.",
+  "safety": {
+    "broker_writes": false,
+    "protected_paths_modified": false,
+    "strategy_authority_changed": false,
+    "human_promotion_required": true
+  },
+  "completed_utc": "2026-09-22T00:43:57Z"
+}

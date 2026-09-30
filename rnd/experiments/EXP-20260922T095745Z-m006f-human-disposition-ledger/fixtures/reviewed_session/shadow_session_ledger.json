@@ -1,0 +1,50 @@
+{
+  "integrity": {
+    "all_sessions_have_verified_human_disposition": true,
+    "duplicate_session_ids": false
+  },
+  "ledger_content_sha256": "0519dba6abd21494bba43d6c7bdc492e7001d182164137e3ac84e2affb6ec1c1",
+  "ledger_version": "M006f-shadow-session-ledger-v0.1",
+  "reviewed_cohort_only": true,
+  "safety": {
+    "automatic_disposition": false,
+    "automatic_promotion": false,
+    "network_capability": false,
+    "promotion_authority": "NONE",
+    "submission_capability": false
+  },
+  "sessions": [
+    {
+      "disposition": "ACCEPTED",
+      "disposition_content_sha256": "eec8290a57abd395efad60dad0834c5e795664fd7fdace57bb6a7e82901ab824",
+      "dossier_content_sha256": "490c41f03b15ee5386bb84aface48b8222ecccf3b58aa506b9bfb2521ed51913",
+      "final_equity_aud": 100096.15607399998,
+      "final_positions": {},
+      "machine_status": "CLEAN",
+      "market_evidence_records": 2,
+      "realized_pnl_aud": 96.15607399998407,
+      "replay_events": 2,
+      "review_flags": [],
+      "reviewed_at_utc": "2026-09-22T10:31:41Z",
+      "reviewer_label": "David Kerr",
+      "session_date_utc": "2026-10-01",
+      "session_id": "synthetic-shadow-session-2026-10-01",
+      "suppressed_chains": 0
+    }
+  ],
+  "summary": {
+    "accepted_sessions": 1,
+    "accepted_with_review_sessions": 0,
+    "final_equity_observations_aud": [
+      100096.15607399998
+    ],
+    "market_evidence_records": 2,
+    "rejected_sessions": 0,
+    "replay_events": 2,
+    "review_flag_counts": {},
+    "reviewed_sessions": 1,
+    "sessions_with_open_positions": 0,
+    "suppressed_chains": 0,
+    "total_realized_pnl_aud": 96.15607399998407
+  }
+}

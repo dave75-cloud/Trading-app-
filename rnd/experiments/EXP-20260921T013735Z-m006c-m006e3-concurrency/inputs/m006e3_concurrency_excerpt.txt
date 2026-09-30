@@ -1,0 +1,45 @@
+1004: 
+1005:     m006c_path = Path(
+1006:         "./data/research_runs/"
+1007:         "M006_PRACTICE_EXECUTION/"
+1008:         "signal_order_bridge/"
+1009:         "state/bridge_state.json"
+1010:     )
+1011: 
+1012:     m006c_before_hash = (
+1013:         sha256(
+1014:             m006c_path
+1015:         )
+1016:     )
+1017: 
+1018:     state = json.loads(
+1019:         state_path.read_text()
+1020:     )
+1673:     )
+1674: 
+1675:     m006c_after_hash = sha256(
+1676:         m006c_path
+1677:     )
+1678: 
+1679:     if (
+1680:         state_before_hash
+1681:         != observer_after_hash
+1682:     ):
+1683:         raise RuntimeError(
+1687:         )
+1688: 
+1689:     if (
+1690:         m006c_before_hash
+1691:         != m006c_after_hash
+1692:     ):
+1693:         raise RuntimeError(
+1694:             "FAIL_CLOSED: "
+1695:             "M006c state changed "
+1696:             "during bridge run"
+1697:         )
+1698: 
+1699:     atomic_json(
+1700:         state_path,
+1701:         state,
+1702:     )
+1703: 

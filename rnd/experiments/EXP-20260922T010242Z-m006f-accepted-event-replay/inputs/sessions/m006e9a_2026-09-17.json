@@ -1,0 +1,198 @@
+{
+  "bridge": {
+    "authorities": {
+      "OANDA": 35
+    },
+    "modes": {
+      "ZERO_WRITE_DRY_RUN": 35
+    },
+    "reports": 35,
+    "safety_violations": [],
+    "totals": {
+      "actions": 4,
+      "blocked_entries": 2,
+      "new_authoritative_events": 5,
+      "order_payloads": 0,
+      "processed_event_ids": 5,
+      "retry_pending_event_ids": 0,
+      "write_requests": 0
+    }
+  },
+  "day": "2026-09-17",
+  "events": {
+    "authoritative_events": 5,
+    "by_event_type": {
+      "entry": 2,
+      "exit": 2,
+      "reversal": 1
+    },
+    "by_pair": {
+      "GBPUSD": 3,
+      "USDJPY": 2
+    },
+    "event_files": 36,
+    "observation_only_values": {
+      "True": 5
+    }
+  },
+  "integrity": {
+    "accepted_m006e2_sha256": "d9c5b46b26d1cae4f000d5c584b9afa5e3a06805cb204559dae05013c6d2906d",
+    "active_m006e2_file": "tools/m006e/m006e2_twelve_validator.py",
+    "active_m006e2_sha256": "d9c5b46b26d1cae4f000d5c584b9afa5e3a06805cb204559dae05013c6d2906d",
+    "m006e2_hash_match": true
+  },
+  "mode": "READ_ONLY_FORWARD_OBSERVATION_EXTRACTION",
+  "orchestration": {
+    "coverage_pct": 86.0,
+    "coverage_ratio": 0.8604651162790697,
+    "expected_cycles": 43,
+    "fail_cycles": 2,
+    "failures": [
+      {
+        "evidence": [
+          "Traceback (most recent call last):",
+          "raise RuntimeError(",
+          "RuntimeError: FAIL_CLOSED: M006c state changed during bridge run",
+          "FAIL_CLOSED: M006e.3 failed rc=1"
+        ],
+        "file": "data/research_runs/M006E_OANDA_AUTHORITATIVE/orchestration/logs/cycle_20260917T121429Z.log",
+        "timestamp_utc": "2026-09-17T12:14:29+00:00"
+      },
+      {
+        "evidence": [
+          "Traceback (most recent call last):",
+          "Traceback (most recent call last):",
+          "raise RuntimeError(f\"OANDA invalid JSON: {exc}\") from exc",
+          "RuntimeError: OANDA invalid JSON: Expecting value: line 1 column 1 (char 0)",
+          "FAIL_CLOSED: M006e.1 failed rc=1"
+        ],
+        "file": "data/research_runs/M006E_OANDA_AUTHORITATIVE/orchestration/logs/cycle_20260917T141815Z.log",
+        "timestamp_utc": "2026-09-17T14:18:15+00:00"
+      }
+    ],
+    "issues": [
+      {
+        "reason": "2 active-window orchestration failure(s)",
+        "severity": "ALERT"
+      }
+    ],
+    "missing_cycles": 6,
+    "observed_cycles": 37,
+    "pass_cycles": 35,
+    "skip_cycles": 0,
+    "skip_ratio": 0.0,
+    "unknown_cycles": 0,
+    "unknown_logs": [],
+    "verdict": "ALERT"
+  },
+  "provider_path": {
+    "available": true,
+    "direction_disagreements": 0,
+    "divergence_over_10bps": 0,
+    "events": 5,
+    "max_abs_close_divergence_bps": 5.761920440598978,
+    "missing_twelve_bars": 0,
+    "mode": "READ_ONLY_PROVIDER_PATH_DIAGNOSTIC",
+    "network_calls": 0,
+    "order_capability": false,
+    "source_file": "data/research_runs/M006E_OANDA_AUTHORITATIVE/provider_path_diagnostics/m006e7_2026-09-17_20260920T230642Z.json",
+    "summary": {
+      "aggregate": {
+        "direction_disagreements": 0,
+        "events": 5,
+        "missing_twelve": 0,
+        "price_divergence_5_to_10bps": 1,
+        "price_divergence_gt_10bps": 0,
+        "volatility_eligibility_disagreements": 0
+      },
+      "by_pair": {
+        "AUDUSD": {
+          "direction_disagreements": 0,
+          "events": 0,
+          "max_abs_close_divergence_bps": null,
+          "missing_twelve": 0,
+          "status_counts": {},
+          "volatility_eligibility_disagreements": 0
+        },
+        "EURUSD": {
+          "direction_disagreements": 0,
+          "events": 0,
+          "max_abs_close_divergence_bps": null,
+          "missing_twelve": 0,
+          "status_counts": {},
+          "volatility_eligibility_disagreements": 0
+        },
+        "GBPUSD": {
+          "direction_disagreements": 0,
+          "events": 3,
+          "max_abs_close_divergence_bps": 5.761920440598978,
+          "missing_twelve": 0,
+          "status_counts": {
+            "AGREEMENT": 2,
+            "PRICE_DIVERGENCE_5_TO_10BPS": 1
+          },
+          "volatility_eligibility_disagreements": 0
+        },
+        "USDJPY": {
+          "direction_disagreements": 0,
+          "events": 2,
+          "max_abs_close_divergence_bps": 2.0752511368593574,
+          "missing_twelve": 0,
+          "status_counts": {
+            "AGREEMENT": 2
+          },
+          "volatility_eligibility_disagreements": 0
+        }
+      }
+    },
+    "volatility_eligibility_disagreements": 0
+  },
+  "reconciliation": {
+    "available": true,
+    "events": 5,
+    "mode": "READ_ONLY_POST_SESSION_RECONCILIATION",
+    "network_calls": 0,
+    "order_capability": false,
+    "source_file": "data/research_runs/M006E_OANDA_AUTHORITATIVE/reconciliation/m006e8_2026-09-17_20260920T230726Z.json",
+    "summary": {
+      "blocked_entries": 2,
+      "events": 5,
+      "retry_pending": 0,
+      "with_bridge_action": 4,
+      "with_provider_path": 0,
+      "with_validation": 0
+    }
+  },
+  "safety": {
+    "bridge_and_validation_violation_count": 0,
+    "zero_unexplained_write_indicators": true
+  },
+  "session_window_utc": {
+    "cycle_minutes": 5,
+    "downstream_grace_seconds": 120,
+    "end": "14:20:00",
+    "start": "10:50:00"
+  },
+  "source_root": "data/research_runs/M006E_OANDA_AUTHORITATIVE",
+  "validation": {
+    "authorities": {
+      "OANDA": 36
+    },
+    "modes": {
+      "READ_ONLY_ZERO_WRITE": 36
+    },
+    "reports": 36,
+    "safety_violations": [],
+    "totals": {
+      "authoritative_events": 5,
+      "oanda_network_calls": 0,
+      "order_payloads": 0,
+      "validation_rows": 6,
+      "write_requests": 0
+    },
+    "validators": {
+      "Twelve Data": 36
+    }
+  },
+  "version": "M006e.9a-v1.1"
+}

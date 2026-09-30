@@ -1,0 +1,62 @@
+{
+  "contract_version": "RND-task-spec-v0.1",
+  "task_id": "RND-0032",
+  "title": "Controlled 2015 cross-pair historical evidence acquisition",
+  "git_base": "8a633aa22cce48aa42f192ce8eae36fe06a0862d",
+  "objective": "Acquire and structurally compare EURUSD, GBPUSD and USDJPY for UTC year 2015 against the immutable AUDUSD/2015 RND-0031 reference without strategy evaluation or historical-calendar promotion.",
+  "allowed_path_prefixes": [
+    "rnd/"
+  ],
+  "prohibited_path_prefixes": [
+    "rnd/private/"
+  ],
+  "authorized_acquisition": {
+    "symbols": [
+      "EURUSD",
+      "GBPUSD",
+      "USDJPY"
+    ],
+    "years": [
+      2015
+    ],
+    "reference_only": [
+      "AUDUSD:2015"
+    ]
+  },
+  "required_outputs": [
+    "rnd/research/RND0032_CROSS_PAIR_2015_CONTRACT.md",
+    "rnd/research/RND0032_CROSS_PAIR_2015_EVIDENCE_RECORD.json",
+    "rnd/orchestration/cross_pair_2015_evidence.py",
+    "rnd/orchestration/test_cross_pair_2015_evidence.py",
+    "rnd/tools/rnd0032_acquire_2015.py",
+    "rnd/tools/rnd0032_cross_pair_verify.py"
+  ],
+  "required_validation_labels": [
+    "diff-check",
+    "scope-check",
+    "orchestration-tests",
+    "m006f-tests",
+    "workspace-audit"
+  ],
+  "success_criteria": [
+    "Only EURUSD, GBPUSD and USDJPY UTC year 2015 are newly acquired",
+    "Every new shard passes the existing RND-0030 cryptographic/content verifier",
+    "AUDUSD/2015 remains an immutable reference and is not reacquired",
+    "Cross-pair comparison uses timestamp/gap structure only and emits no price or strategy outcome",
+    "The non-authoritative 17:00 New York hypothesis is tested independently for each pair",
+    "Shared versus pair-specific missing and unexpected timestamps are explicit",
+    "Returned candles cannot promote a calendar or holiday exception",
+    "No expansion beyond 2015 without a later human-reviewed task"
+  ],
+  "stop_conditions": [
+    "Any acquisition outside EURUSD/GBPUSD/USDJPY year 2015",
+    "Any M005 signal, trade or performance calculation",
+    "Any synthetic or interpolated candle",
+    "Any credential or account identity committed",
+    "Any returned candle used as documentary calendar authority",
+    "Any broker-write, capital, strategy-selection, automatic promotion or automatic merge authority"
+  ],
+  "human_gate_required": true,
+  "automatic_merge": false,
+  "automatic_promotion": false
+}

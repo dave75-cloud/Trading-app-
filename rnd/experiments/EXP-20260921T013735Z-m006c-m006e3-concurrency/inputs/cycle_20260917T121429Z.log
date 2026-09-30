@@ -1,0 +1,63 @@
+==============================================================================
+KQTRL M006e.5 — PROSPECTIVE ZERO-WRITE ORCHESTRATION
+==============================================================================
+Run UTC: 2026-09-17T12:14:29Z
+Project: /Users/davidkerr/Projects/Trading-app-
+
+LOCK: acquired
+
+=== STAGE 1/3 — M006e.1 OANDA AUTHORITATIVE OBSERVER ===
+KQTRL M006e.1 — OANDA AUTHORITATIVE OBSERVER
+==============================================================================
+Environment: OANDA practice
+Authority: OANDA completed M5 midpoint candles
+Mode: OBSERVATION ONLY / ZERO WRITE
+Cycle: 20260917T121434Z
+Events: 1
+Positions: AUDUSD=flat, EURUSD=flat, GBPUSD=flat, USDJPY=flat
+AUDUSD: latest_completed=2026-09-17T12:05:00+00:00 watermark=2026-09-17T12:05:00+00:00
+EURUSD: latest_completed=2026-09-17T12:05:00+00:00 watermark=2026-09-17T12:05:00+00:00
+GBPUSD: latest_completed=2026-09-17T12:05:00+00:00 watermark=2026-09-17T12:05:00+00:00
+USDJPY: latest_completed=2026-09-17T12:05:00+00:00 watermark=2026-09-17T12:05:00+00:00
+Order payloads constructed: 0
+OANDA write requests performed: 0
+Order endpoints invoked: FALSE
+Canonical M005 modified: FALSE
+M006c state modified: FALSE
+
+PASS: M006e.1
+
+=== STAGE 2/3 — M006e.2 TWELVE VALIDATOR ===
+KQTRL M006e.2 — EVENT-DRIVEN TWELVE VALIDATOR
+==============================================================================
+Authority: OANDA
+Validator: Twelve Data
+Mode: READ ONLY / ZERO WRITE
+Source event file: data/research_runs/M006E_OANDA_AUTHORITATIVE/events/cycle_20260917T121434Z.csv
+Authoritative events: 1
+Validation rows: 1
+
+GBPUSD leg= exit decision= ALLOW_RISK_REDUCING_EXIT reasons= [] warnings= []
+
+Report: data/research_runs/M006E_OANDA_AUTHORITATIVE/validation/m006e2_event_validation_20260917T121450Z.json
+OANDA network calls: 0
+Order payloads constructed: 0
+OANDA write requests performed: 0
+Order endpoints invoked: FALSE
+Canonical M005 modified: FALSE
+M006c state modified: FALSE
+
+PASS: M006e.2
+
+=== STAGE 3/3 — M006e.3 ZERO-WRITE BRIDGE ===
+Traceback (most recent call last):
+  File "/Users/davidkerr/Projects/Trading-app-/tools/m006e/m006e3_zero_write_bridge.py", line 1853, in <module>
+    main()
+    ~~~~^^
+  File "/Users/davidkerr/Projects/Trading-app-/tools/m006e/m006e3_zero_write_bridge.py", line 1693, in main
+    raise RuntimeError(
+    ...<3 lines>...
+    )
+RuntimeError: FAIL_CLOSED: M006c state changed during bridge run
+
+FAIL_CLOSED: M006e.3 failed rc=1

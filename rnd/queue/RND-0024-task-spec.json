@@ -1,0 +1,35 @@
+{
+  "contract_version": "RND-task-spec-v0.1",
+  "task_id": "RND-0024",
+  "title": "Scoped agent task governance",
+  "git_base": "28a8cf2fa474e2692db66fe7cdf104565ee1eb76",
+  "objective": "Add scoped R&D agent instructions and pure task-intake/handoff checks without granting task acceptance or operational authority.",
+  "allowed_path_prefixes": ["rnd/"],
+  "prohibited_path_prefixes": ["rnd/private/"],
+  "required_outputs": [
+    "rnd/AGENTS.md",
+    "rnd/governance/RND_AGENT_TASK_POLICY.md",
+    "rnd/orchestration/agent_task_policy.py",
+    "rnd/orchestration/test_agent_task_policy.py"
+  ],
+  "required_validation_labels": [
+    "diff-check",
+    "scope-check",
+    "orchestration-tests",
+    "m006f-tests",
+    "workspace-audit"
+  ],
+  "success_criteria": [
+    "Agents receive scoped R&D instructions and explicit human handoffs",
+    "New-task intake rejects mismatched approval declarations and unsafe paths",
+    "Machine PASS cannot create acceptance, merge or promotion authority"
+  ],
+  "stop_conditions": [
+    "Any change to frozen or operational paths",
+    "Any claim that an unsigned approval record authenticates a human",
+    "Any automatic task acceptance, merge, promotion or trading authority"
+  ],
+  "human_gate_required": true,
+  "automatic_merge": false,
+  "automatic_promotion": false
+}

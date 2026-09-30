@@ -1,0 +1,64 @@
+{
+  "contract_version": "RND-oanda-historical-acquisition-v0.1",
+  "task_id": "RND-0028",
+  "base_commit": "fb4686421cf93158c7dac813aa03e3fdd06ca701",
+  "state": "ACQUISITION_READY",
+  "source": {
+    "provider": "OANDA",
+    "environment": "PRACTICE",
+    "base_url": "https://api-fxpractice.oanda.com",
+    "method": "GET",
+    "endpoint_template": "/v3/accounts/{accountID}/instruments/{instrument}/candles",
+    "granularity": "M5",
+    "price": "MBA",
+    "smooth": false,
+    "include_first": true,
+    "max_candles_per_request": 5000
+  },
+  "instruments": {
+    "AUDUSD": "AUD_USD",
+    "EURUSD": "EUR_USD",
+    "GBPUSD": "GBP_USD",
+    "USDJPY": "USD_JPY"
+  },
+  "acquisition_window": {
+    "start_utc": "2015-01-01T00:00:00Z",
+    "end_utc": "2025-01-01T00:00:00Z",
+    "human_approved": true
+  },
+  "evidence": {
+    "raw_page_sha256": true,
+    "aggregate_raw_bundle_sha256": true,
+    "canonical_rows_sha256": true,
+    "require_bid_ask_mid_ohlc": true,
+    "complete_candles_only": true,
+    "explicit_gap_ledger": true,
+    "immutable_snapshot": true,
+    "overwrite_allowed": false
+  },
+  "credential_contract": {
+    "token_source": "OANDA_PRACTICE_TOKEN_ENV",
+    "account_id_source": "OANDA_PRACTICE_ACCOUNT_ID_ENV",
+    "credentials_committed": false,
+    "credentials_written_to_evidence": false,
+    "credentials_logged": false
+  },
+  "reserved_test": {
+    "state": "SEALED_BOUNDARY_BOUND",
+    "start_utc": "2023-01-01T09:40:00Z",
+    "end_utc": "2025-01-01T00:00:00Z",
+    "strategy_metrics_allowed": false,
+    "signal_generation_allowed": false,
+    "trade_simulation_allowed": false,
+    "parameter_selection_allowed": false,
+    "human_open_gate_required": true
+  },
+  "authority": {
+    "strategy_selection": false,
+    "broker_writes": false,
+    "automatic_merge": false,
+    "automatic_promotion": false,
+    "capital_authority": false,
+    "human_review_required": true
+  }
+}

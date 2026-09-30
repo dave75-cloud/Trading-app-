@@ -1,0 +1,20 @@
+{
+  "experiment_id": "EXP-20260922T023249Z-m006f-shadow-session-package",
+  "task_id": "RND-0014",
+  "title": "M006f immutable shadow session package",
+  "status": "complete",
+  "created_utc": "2026-09-22T02:32:49Z",
+  "git_base": "20d46f2c5b3edc387f34ec3f37d5290eca3fb434",
+  "hypothesis": "Accepted-event evidence, exact market evidence, replay output and shadow simulation results can be bound into one deterministic immutable session package without adding network, submission, promotion or capital authority.",
+  "inputs": [],
+  "commands": [],
+  "outputs": [],
+  "result": "PASS: all five component SHA-256 digests and the independently recomputed aggregate package-content hash matched. The packaged synthetic session contained 2 replay events, 0 suppressed chains, ended flat, and preserved network/submission/automatic-promotion capability as false.",
+  "safety": {
+    "broker_writes": false,
+    "protected_paths_modified": false,
+    "strategy_authority_changed": false,
+    "human_promotion_required": true
+  },
+  "completed_utc": "2026-09-22T02:44:01Z"
+}

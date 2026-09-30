@@ -1,0 +1,2 @@
+RND-0023 offline evidence-chain fixture.
+No trading data, credentials, execution instructions or operational configuration.

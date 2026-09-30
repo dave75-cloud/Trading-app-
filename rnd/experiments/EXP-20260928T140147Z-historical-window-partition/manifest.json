@@ -1,0 +1,35 @@
+{
+  "experiment_id": "EXP-20260928T140147Z-historical-window-partition",
+  "task_id": "RND-0029",
+  "title": "Predeclared historical window and sealed chronological partition",
+  "status": "complete",
+  "created_utc": "2026-09-28T14:01:47Z",
+  "git_base": "f342a3b2aa4bca021346df7915f8e9aaed2f5cab",
+  "hypothesis": "A fixed 2015-2025 historical horizon and deterministic elapsed-time 60/20/20 partition can be bound before strategy evaluation, while preserving a structurally verifiable but outcome-sealed final test.",
+  "inputs": [
+    "RND-0028 controlled acquisition mechanism",
+    "RND-0027 historical snapshot and M005 reconstruction contracts",
+    "Predeclared calendar-only horizon and partition rule"
+  ],
+  "commands": [
+    "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s rnd/orchestration -p 'test_*.py'",
+    "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s rnd/m006f -p 'test_*.py'",
+    "python3 rnd/tools/audit_workspace.py",
+    "git diff --check f342a3b2aa4bca021346df7915f8e9aaed2f5cab...HEAD"
+  ],
+  "outputs": [
+    "rnd/research/HISTORICAL_WINDOW_PARTITION_DECLARATION.json",
+    "rnd/research/HISTORICAL_WINDOW_PARTITION_CONTRACT.md",
+    "rnd/orchestration/historical_window_partition.py",
+    "rnd/orchestration/test_historical_window_partition.py",
+    "rnd/research/OANDA_HISTORICAL_ACQUISITION_DECLARATION.json",
+    "rnd/research/M005_RECONSTRUCTION_DECLARATION.json"
+  ],
+  "result": "COMPLETE. Exact implementation HEAD 4ee1561de1ea8bb87ae8740ed7549abf56d5b4b9 independently validated after the trailing-whitespace correction: clean detached workspace; 201 orchestration tests OK; 106 M006f tests OK; RND workspace audit PASS with tasks=29, experiments=28, broker_writes=FALSE, protected_paths_modified=FALSE, promotion_authority=HUMAN_ONLY; git diff --check against f342a3b2aa4bca021346df7915f8e9aaed2f5cab clean. GitHub Autonomous R&D Guard run 351 and Current System Validation run 350 both completed successfully on the exact implementation HEAD. The 2015-2025 horizon and deterministic elapsed-time 60/20/20 partition are bound before historical acquisition or M005 outcome calculation; reserved final test remains SEALED_BOUNDARY_BOUND with strategy evaluation prohibited. No historical network acquisition, M005 signal/trade/performance evaluation, parameter search/ranking, final-test opening, broker write, capital authority, automatic promotion or automatic merge occurred.",
+  "safety": {
+    "broker_writes": false,
+    "protected_paths_modified": false,
+    "strategy_authority_changed": false,
+    "human_promotion_required": true
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "experiment_id": "EXP-20260928T121924Z-historical-evidence-falsification",
+  "task_id": "RND-0026",
+  "title": "Controlled reconstruction and falsification of historical trading evidence",
+  "status": "complete",
+  "created_utc": "2026-09-28T12:19:24Z",
+  "git_base": "2a493bd0b09f4bd357a8696405d88cd8ab3dc28f",
+  "hypothesis": "The surviving repository can separate reproducible behavioural claims from unsupported performance claims and can machine-test known bias mechanisms without optimizing a strategy or fabricating missing evidence.",
+  "inputs": [
+    "RND-0025 quantitative research baseline",
+    "Champion construction/filter/portfolio source",
+    "legacy position-sizing and backtest source",
+    "independent M005 behavioural audit source",
+    "M006e.1 OANDA-authoritative observer source"
+  ],
+  "commands": [
+    "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s rnd/orchestration -p 'test_*.py'",
+    "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s rnd/m006f -p 'test_*.py'",
+    "python3 rnd/tools/audit_workspace.py",
+    "git diff --check 2a493bd0b09f4bd357a8696405d88cd8ab3dc28f...HEAD"
+  ],
+  "outputs": [
+    "rnd/research/HISTORICAL_EVIDENCE_LEDGER.json",
+    "rnd/research/RND0026_RECONSTRUCTION_REPORT.md",
+    "rnd/research/M005_EVIDENCE_GAPS.json",
+    "rnd/orchestration/historical_evidence_falsification.py",
+    "rnd/orchestration/test_historical_evidence_falsification.py",
+    "rnd/queue/RND-0026-task-spec.json"
+  ],
+  "result": "COMPLETE. Historical evidence reconstruction/falsification package validated. Champion recipe is reproducible but headline performance is not reproducible from governed Git alone; M005 behaviour is reproducible while an RND-0025 performance declaration remains blocked pending execution-grade historical evidence and untouched-test provenance. No strategy search, ranking, tuning, promotion or trading authority.",
+  "safety": {
+    "broker_writes": false,
+    "protected_paths_modified": false,
+    "strategy_authority_changed": false,
+    "human_promotion_required": true
+  },
+  "completed_utc": "2026-09-28T12:31:47Z",
+  "validated_candidate_head": "b9c21feb892457475f5bcf71a6307fe32e641bf4",
+  "validation": {
+    "independent_clean_worktree": true,
+    "orchestration_tests": {
+      "ran": 112,
+      "status": "PASS"
+    },
+    "m006f_tests": {
+      "ran": 106,
+      "status": "PASS"
+    },
+    "workspace_audit": {
+      "status": "PASS",
+      "tasks": 26,
+      "experiments": 25,
+      "broker_writes": false,
+      "protected_paths_modified": false,
+      "promotion_authority": "HUMAN_ONLY"
+    },
+    "diff_check": "PASS",
+    "github_current_system_validation": "PASS",
+    "github_autonomous_rnd_guard": "PASS"
+  }
+}

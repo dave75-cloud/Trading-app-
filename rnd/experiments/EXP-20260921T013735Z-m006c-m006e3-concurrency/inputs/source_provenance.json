@@ -1,0 +1,12 @@
+{
+  "source_path": "tools/m006e/m006e3_zero_write_bridge.py",
+  "source_sha256": "568e30e90e95df8c7e30519947f13699fe72305e22ad9a669d8fe3b04f9b43b5",
+  "operational_checkout_git_head": "e1d346f406aa16bf56ccf985b9c45593cec49b8a",
+  "extraction_type": "read-only concurrency-relevant excerpt",
+  "anchors": [
+    "m006c_path = Path(",
+    "m006c_before_hash = (",
+    "m006c_after_hash = sha256(",
+    "\"M006c state changed \""
+  ]
+}

@@ -1,0 +1,81 @@
+{
+  "contract_version": "RND-m005-reconstruction-v0.1",
+  "task_id": "RND-0027",
+  "base_commit": "09f839920a0bf7bede40d8e346ca6c7fcba02cc8",
+  "status": "BLOCKED_DATA_NOT_BOUND",
+  "fixed_behaviour": {
+    "pairs": [
+      "AUDUSD",
+      "EURUSD",
+      "GBPUSD",
+      "USDJPY"
+    ],
+    "timeframe": "M5",
+    "fast_ma": 20,
+    "slow_ma": 50,
+    "vol_window": 12,
+    "vol_ddof": 0,
+    "vol_threshold": 0.0005,
+    "sessions_utc": {
+      "AUDUSD": [
+        11,
+        14
+      ],
+      "EURUSD": [
+        11,
+        13
+      ],
+      "GBPUSD": [
+        11,
+        13
+      ],
+      "USDJPY": [
+        11,
+        13
+      ]
+    },
+    "signal_delay_bars": 1,
+    "minimum_hold_bars": 3
+  },
+  "search_space": {},
+  "declared_trial_count": 1,
+  "reserved_test": {
+    "state": "SEALED_BOUNDARY_BOUND",
+    "start_utc": "2023-01-01T09:40:00Z",
+    "end_utc": "2025-01-01T00:00:00Z",
+    "strategy_metrics_allowed": false,
+    "signal_generation_allowed": false,
+    "trade_simulation_allowed": false,
+    "parameter_selection_allowed": false,
+    "human_open_gate_required": true
+  },
+  "execution_contract": {
+    "bid_ask_required": true,
+    "explicit_entries_exits": true,
+    "overlapping_positions": true,
+    "mark_to_market": true,
+    "currency_exposure": true,
+    "synthetic_return_clipping": false,
+    "future_bar_access": false
+  },
+  "authority": {
+    "strategy_selection": false,
+    "broker_writes": false,
+    "automatic_merge": false,
+    "automatic_promotion": false,
+    "capital_authority": false,
+    "human_review_required": true
+  },
+  "output_contract": {
+    "signal_time": true,
+    "decision_time": true,
+    "execution_time": true,
+    "state_transition": true,
+    "bid_ask_execution_price": true,
+    "transaction_cost": true,
+    "open_position_state": true,
+    "mark_to_market_equity": true,
+    "pair_exposure": true,
+    "currency_leg_exposure": true
+  }
+}

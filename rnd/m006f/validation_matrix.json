@@ -1,0 +1,22 @@
+{
+  "version": "RND-0008-v1.0",
+  "status": "CANDIDATE_PROTOCOL",
+  "minimum": {
+    "accepted_sessions": 25,
+    "accepted_events": 100,
+    "both_required": true
+  },
+  "automatic_promotion": false,
+  "hard_gates": {
+    "broker_write_capability": 0,
+    "network_capability": 0,
+    "submission_capability": 0,
+    "unexplained_duplicate_events": 0,
+    "unexplained_event_omissions": 0,
+    "ledger_corruption": 0,
+    "unexplained_replay_divergence": 0
+  },
+  "deterministic_replay_required_percent": 100.0,
+  "profitability_is_promotion_rule": false,
+  "human_review_required": true
+}
