@@ -2,7 +2,7 @@
   "experiment_id": "EXP-20260930T060717Z-gap-aware-m005-development",
   "task_id": "RND-0034",
   "title": "Gap-aware fixed-M005 development reconstruction — 2015 pilot then 2015-2019",
-  "status": "completed",
+  "status": "complete",
   "created_utc": "2026-09-30T06:07:17Z",
   "git_base": "f67575408ca47ace4196a966f51acfa2b613def1",
   "hypothesis": "The frozen M005 candidate can be reconstructed deterministically on verified 2015-2019 OANDA bid/ask development evidence without synthetic continuity: observation gaps reset indicator and delayed-signal state while preserving any economic position, with explicit executable-price costs and no strategy search.",
