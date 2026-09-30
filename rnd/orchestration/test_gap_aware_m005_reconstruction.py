@@ -5,6 +5,7 @@ import unittest
 
 from gap_aware_m005_reconstruction import (
     GapAwareM005Error,
+    concurrent_unit_normalized_marks,
     population_std,
     reconstruct_pair,
 )
@@ -99,6 +100,22 @@ class GapAwareM005Tests(unittest.TestCase):
         b = reconstruct_pair("AUDUSD", value)
         self.assertEqual(a["events"], b["events"])
         self.assertEqual(a["marks"], b["marks"])
+
+    def test_concurrent_accounting_is_fixed_normalization_not_sizing(self):
+        per_symbol = {symbol: reconstruct_pair(symbol, rows(90)) for symbol in ("AUDUSD", "EURUSD", "GBPUSD", "USDJPY")}
+        value = concurrent_unit_normalized_marks(per_symbol)
+        self.assertEqual("FIXED_ONE_UNIT_RETURN_PER_ACTIVE_PAIR", value["normalization"])
+        self.assertFalse(value["account_currency_pnl"])
+        self.assertFalse(value["capital_allocation"])
+        self.assertFalse(value["portfolio_sizing"])
+        self.assertGreater(len(value["marks"]), 0)
+        for mark in value["marks"]:
+            expected = sum(x["mark_return"] for x in mark["active_pairs"].values())
+            self.assertAlmostEqual(expected, mark["unit_normalized_return_sum"])
+
+    def test_concurrent_accounting_requires_exact_frozen_universe(self):
+        with self.assertRaisesRegex(GapAwareM005Error, "exactly the four"):
+            concurrent_unit_normalized_marks({"AUDUSD": reconstruct_pair("AUDUSD", rows(60))})
 
     def test_no_portfolio_or_promotion_authority(self):
         result = reconstruct_pair("AUDUSD", rows(90))
