@@ -145,6 +145,8 @@ def reconstruct_pair(symbol, rows):
     gaps = []
     trades = []
     censored = []
+    events = []
+    marks = []
 
     position = 0
     bars_held = 0
@@ -210,17 +212,26 @@ def reconstruct_pair(symbol, rows):
         if previous_dt is not None:
             delta = int((dt - previous_dt).total_seconds())
             if delta != M5_SECONDS:
-                gaps.append({
+                gap_event = {
                     "symbol": symbol,
                     "previous_timestamp": previous_dt.strftime("%Y-%m-%dT%H:%M:%SZ"),
                     "next_timestamp": dt.strftime("%Y-%m-%dT%H:%M:%SZ"),
                     "elapsed_seconds": delta,
                     "position_was_open": position != 0,
-                })
+                }
+                gaps.append(gap_event)
+                events.append({"event_type": "GAP", **gap_event})
                 if position != 0 and entry is not None:
                     entry["gap_exposure_count"] = entry.get("gap_exposure_count", 0) + 1
                     entry["gap_elapsed_seconds"] = entry.get("gap_elapsed_seconds", 0) + delta
                 reset_strategy_state()
+                events.append({
+                    "event_type": "STRATEGY_RESET",
+                    "symbol": symbol,
+                    "timestamp": dt.strftime("%Y-%m-%dT%H:%M:%SZ"),
+                    "reason": "OBSERVATION_DISCONTINUITY",
+                    "portfolio_position": position,
+                })
 
         if previous_mid is not None:
             returns.append(mid / previous_mid - 1.0)
@@ -239,16 +250,63 @@ def reconstruct_pair(symbol, rows):
             position = desired
             bars_held = 0
             entry = open_trade(position, dt, bid, ask, mid)
+            events.append({
+                "event_type": "ENTRY",
+                "symbol": symbol,
+                "timestamp": dt.strftime("%Y-%m-%dT%H:%M:%SZ"),
+                "side_value": position,
+                "execution_price": entry["entry_execution_price"],
+            })
         elif position != 0 and desired is not None and desired == 0 and bars_held >= MIN_HOLD_BARS:
-            trades.append(complete_trade(entry, dt, bid, ask, mid, bars_held))
+            completed = complete_trade(entry, dt, bid, ask, mid, bars_held)
+            trades.append(completed)
+            events.append({
+                "event_type": "EXIT",
+                "symbol": symbol,
+                "timestamp": completed["exit_timestamp"],
+                "side_value": entry["side_value"],
+                "execution_price": completed["exit_execution_price"],
+                "net_return": completed["net_return"],
+            })
             position = 0
             bars_held = 0
             entry = None
         elif position != 0 and desired is not None and desired == -position and bars_held >= MIN_HOLD_BARS:
-            trades.append(complete_trade(entry, dt, bid, ask, mid, bars_held))
+            completed = complete_trade(entry, dt, bid, ask, mid, bars_held)
+            trades.append(completed)
+            events.append({
+                "event_type": "EXIT",
+                "symbol": symbol,
+                "timestamp": completed["exit_timestamp"],
+                "side_value": entry["side_value"],
+                "execution_price": completed["exit_execution_price"],
+                "net_return": completed["net_return"],
+            })
             position = desired
             bars_held = 0
             entry = open_trade(position, dt, bid, ask, mid)
+            events.append({
+                "event_type": "ENTRY",
+                "symbol": symbol,
+                "timestamp": dt.strftime("%Y-%m-%dT%H:%M:%SZ"),
+                "side_value": position,
+                "execution_price": entry["entry_execution_price"],
+            })
+
+        mark_return = None
+        if position != 0 and entry is not None:
+            mark_exec = bid if position == 1 else ask
+            if position == 1:
+                mark_return = (mark_exec - entry["entry_execution_price"]) / entry["entry_execution_price"]
+            else:
+                mark_return = (entry["entry_execution_price"] - mark_exec) / entry["entry_execution_price"]
+        marks.append({
+            "symbol": symbol,
+            "timestamp": dt.strftime("%Y-%m-%dT%H:%M:%SZ"),
+            "position": position,
+            "mark_return": mark_return,
+            "strategy_signal_available": raw is not None,
+        })
 
         previous_dt = dt
         previous_mid = mid
@@ -302,6 +360,14 @@ def reconstruct_pair(symbol, rows):
         "trades": trades,
         "censored_trades": censored,
         "gaps": gaps,
+        "events": events,
+        "marks": marks,
+        "event_reconciliation": {
+            "entry_events": sum(1 for x in events if x["event_type"] == "ENTRY"),
+            "exit_events": sum(1 for x in events if x["event_type"] == "EXIT"),
+            "gap_events": sum(1 for x in events if x["event_type"] == "GAP"),
+            "strategy_reset_events": sum(1 for x in events if x["event_type"] == "STRATEGY_RESET"),
+        },
         "by_exit_year": by_year,
         "authority": {
             "strategy_selection": False,
