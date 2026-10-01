@@ -2,7 +2,7 @@
   "task_id": "RND-0035",
   "issue": 39,
   "foundation_sha": "ee163e375dfc2403b34f41f83a962267b23bda69",
-  "plan_status": "DESIGN_FROZEN_GRID_VALUES_PENDING",
+  "plan_status": "NUMERICAL_MATRIX_FROZEN_IMPLEMENTATION_PENDING",
   "outcomes_authorized": false,
   "authorized_years": [2015, 2016, 2017, 2018, 2019],
   "authorized_symbols": ["AUDUSD", "EURUSD", "GBPUSD", "USDJPY"],
@@ -12,6 +12,14 @@
   "broker_writes": false,
   "capital_authority": false,
   "promotion_authority": "HUMAN_ONLY",
+  "design_principles": {
+    "parameter_method": "ONE_FACTOR_AT_A_TIME_AROUND_R000",
+    "no_cartesian_parameter_grid": true,
+    "reason": "Measure local sensitivity while sharply limiting researcher degrees of freedom and trial multiplication.",
+    "no_best_variant_selection": true,
+    "all_declared_trials_count": true,
+    "family_grid_may_not_change_after_family_outcomes": true
+  },
   "known_outcome_disclosures": [
     "AUDUSD adverse overall including gross in RND-0034",
     "EURUSD net-positive overall but concentrated in 2015 in RND-0034",
@@ -19,44 +27,173 @@
     "USDJPY approximately flat gross and net-negative in RND-0034",
     "trade counts declined materially across the observed development years in RND-0034"
   ],
-  "classification_values": [
-    "REFERENCE",
-    "PREDECLARED_ADVERSARIAL",
-    "OUTCOME_INFORMED",
-    "POST_HOC"
-  ],
-  "families": {
-    "A_LOCAL_PARAMETER": {"grid_frozen": false, "outcomes_authorized": false},
-    "B_CONCENTRATION": {"grid_frozen": false, "outcomes_authorized": false},
-    "C_SESSION": {"grid_frozen": false, "outcomes_authorized": false},
-    "D_COST_SLIPPAGE": {"grid_frozen": false, "outcomes_authorized": false},
-    "E_GAP_POLICY": {"grid_frozen": false, "outcomes_authorized": false},
-    "F_EXECUTION": {"grid_frozen": false, "outcomes_authorized": false},
-    "G_DEPENDENCE_RESAMPLING": {"grid_frozen": false, "outcomes_authorized": false}
-  },
-  "trials": [
-    {
-      "trial_id": "R000",
-      "family": "REFERENCE",
-      "classification": "REFERENCE",
-      "source": "RND-0034",
-      "configuration": {
-        "fast_ma": 20,
-        "slow_ma": 50,
-        "volatility_window": 12,
-        "volatility_ddof": 0,
-        "volatility_threshold": 0.0005,
-        "signal_delay_observed_bars": 1,
-        "minimum_hold_observed_bars": 3,
-        "sessions_utc": {
-          "AUDUSD": [11, 14],
-          "EURUSD": [11, 13],
-          "GBPUSD": [11, 13],
-          "USDJPY": [11, 13]
-        }
-      },
-      "status": "REFERENCE_COMPLETE",
-      "new_execution_authorized": false
+  "classification_values": ["REFERENCE", "PREDECLARED_ADVERSARIAL", "OUTCOME_INFORMED", "POST_HOC"],
+  "reference": {
+    "trial_id": "R000",
+    "fast_ma": 20,
+    "slow_ma": 50,
+    "volatility_window": 12,
+    "volatility_ddof": 0,
+    "volatility_threshold": 0.0005,
+    "signal_delay_observed_bars": 1,
+    "minimum_hold_observed_bars": 3,
+    "sessions_utc": {
+      "AUDUSD": [11, 14],
+      "EURUSD": [11, 13],
+      "GBPUSD": [11, 13],
+      "USDJPY": [11, 13]
     }
-  ]
+  },
+  "families": {
+    "A_LOCAL_PARAMETER": {
+      "grid_frozen": true,
+      "outcomes_authorized": false,
+      "classification": "PREDECLARED_ADVERSARIAL",
+      "method": "ONE_FACTOR_AT_A_TIME",
+      "trials": [
+        {"trial_id":"A001","change":{"fast_ma":16}},
+        {"trial_id":"A002","change":{"fast_ma":18}},
+        {"trial_id":"A003","change":{"fast_ma":22}},
+        {"trial_id":"A004","change":{"fast_ma":24}},
+        {"trial_id":"A005","change":{"slow_ma":40}},
+        {"trial_id":"A006","change":{"slow_ma":45}},
+        {"trial_id":"A007","change":{"slow_ma":55}},
+        {"trial_id":"A008","change":{"slow_ma":60}},
+        {"trial_id":"A009","change":{"volatility_window":8}},
+        {"trial_id":"A010","change":{"volatility_window":10}},
+        {"trial_id":"A011","change":{"volatility_window":14}},
+        {"trial_id":"A012","change":{"volatility_window":16}},
+        {"trial_id":"A013","change":{"volatility_threshold":0.0004}},
+        {"trial_id":"A014","change":{"volatility_threshold":0.00045}},
+        {"trial_id":"A015","change":{"volatility_threshold":0.00055}},
+        {"trial_id":"A016","change":{"volatility_threshold":0.0006}},
+        {"trial_id":"A017","change":{"signal_delay_observed_bars":2}},
+        {"trial_id":"A018","change":{"signal_delay_observed_bars":3}},
+        {"trial_id":"A019","change":{"minimum_hold_observed_bars":2}},
+        {"trial_id":"A020","change":{"minimum_hold_observed_bars":4}},
+        {"trial_id":"A021","change":{"minimum_hold_observed_bars":5}}
+      ]
+    },
+    "B_CONCENTRATION": {
+      "grid_frozen": true,
+      "outcomes_authorized": false,
+      "classification": "OUTCOME_INFORMED",
+      "not_strategy_trials": true,
+      "diagnostics": [
+        "PAIR",
+        "YEAR",
+        "PAIR_X_YEAR",
+        "EARLY_2015_2016_VS_LATE_2018_2019",
+        "MIDDLE_2017_SEPARATE",
+        "TRADE_COUNT_DENSITY_BY_PAIR_YEAR",
+        "TOP_1_PERCENT_ABSOLUTE_NET_RETURN_CONTRIBUTION",
+        "TOP_5_PERCENT_ABSOLUTE_NET_RETURN_CONTRIBUTION",
+        "LEAVE_ONE_YEAR_OUT_REFERENCE_AGGREGATION",
+        "LEAVE_ONE_PAIR_OUT_REFERENCE_AGGREGATION"
+      ],
+      "rule": "No diagnostic authorizes deletion or reweighting of adverse observations."
+    },
+    "C_SESSION": {
+      "grid_frozen": true,
+      "outcomes_authorized": false,
+      "classification": "PREDECLARED_ADVERSARIAL",
+      "method": "APPLY_SAME_TRANSFORM_TO_EACH_SYMBOL_REFERENCE_WINDOW",
+      "trials": [
+        {"trial_id":"C001","transform":"SHIFT_MINUS_1H"},
+        {"trial_id":"C002","transform":"SHIFT_PLUS_1H"},
+        {"trial_id":"C003","transform":"OPEN_PLUS_1H"},
+        {"trial_id":"C004","transform":"CLOSE_MINUS_1H"}
+      ],
+      "prohibition": "No independent pair-specific hour search and no Champion/hour-11 reconstruction."
+    },
+    "D_COST_SLIPPAGE": {
+      "grid_frozen": true,
+      "outcomes_authorized": false,
+      "classification": "OUTCOME_INFORMED",
+      "baseline": "OBSERVED_BID_ASK",
+      "stress_application": "ADDITIONAL_ADVERSE_ROUND_TRIP_RETURN_DRAG_PER_COMPLETED_TRADE",
+      "trials": [
+        {"trial_id":"D001","additional_round_trip_bps":0.5},
+        {"trial_id":"D002","additional_round_trip_bps":1.0},
+        {"trial_id":"D003","additional_round_trip_bps":2.0},
+        {"trial_id":"D004","additional_round_trip_bps":5.0}
+      ],
+      "diagnostics": ["BREAK_EVEN_ADDITIONAL_ROUND_TRIP_BPS_BY_PAIR", "GROSS_TO_OBSERVED_NET_TO_STRESSED_NET_BRIDGE"]
+    },
+    "E_GAP_POLICY": {
+      "grid_frozen": true,
+      "outcomes_authorized": false,
+      "classification": "PREDECLARED_ADVERSARIAL",
+      "reference": "RND0034_RESET_STRATEGY_STATE_PRESERVE_ECONOMIC_POSITION",
+      "trials": [
+        {"trial_id":"E001","policy":"POST_GAP_COOLDOWN_1_COMPLETE_SESSION"},
+        {"trial_id":"E002","policy":"POST_GAP_REQUIRE_100_CONTIGUOUS_OBSERVED_BARS_BEFORE_NEW_ENTRY"}
+      ],
+      "rules": [
+        "Existing positions retain RND-0034 economic-survival semantics.",
+        "No synthetic or interpolated price.",
+        "No missing bar counts toward hold or indicator state.",
+        "No historical-calendar candidate is promoted to documentary authority."
+      ]
+    },
+    "F_EXECUTION": {
+      "grid_frozen": true,
+      "outcomes_authorized": false,
+      "classification": "PREDECLARED_ADVERSARIAL",
+      "trials": [
+        {"trial_id":"F001","variant":"ADDITIONAL_1_OBSERVED_BAR_ENTRY_LATENCY"},
+        {"trial_id":"F002","variant":"ADDITIONAL_1_OBSERVED_BAR_EXIT_LATENCY"},
+        {"trial_id":"F003","variant":"ADDITIONAL_1_OBSERVED_BAR_ENTRY_AND_EXIT_LATENCY"},
+        {"trial_id":"F004","variant":"NO_SAME_OBSERVATION_EXIT_AND_REENTRY"}
+      ],
+      "rules": [
+        "Execution remains bid/ask based.",
+        "Latency never permits use of future information.",
+        "A variant is ex-ante conservative operationally even if realized historical PnL happens to improve.",
+        "No favourable intrabar ordering, hindsight fill or mid-price execution."
+      ]
+    },
+    "G_DEPENDENCE_RESAMPLING": {
+      "grid_frozen": true,
+      "outcomes_authorized": false,
+      "classification": "PREDECLARED_ADVERSARIAL",
+      "primary_method": "STATIONARY_BOOTSTRAP",
+      "sampling_unit": "CHRONOLOGICAL_COMPLETED_TRADE_NET_RETURNS_WITH_SYMBOL_LABEL_PRESERVED",
+      "replications_per_configuration": 10000,
+      "seeds": [1729, 271828, 314159],
+      "expected_block_lengths_trades": [10, 20, 40],
+      "configuration_count": 9,
+      "statistics": [
+        "MEAN_NET_RETURN",
+        "COMPOUNDED_NET_EQUITY_INDEX",
+        "MAX_DRAWDOWN",
+        "POSITIVE_TOTAL_NET_RETURN_INDICATOR"
+      ],
+      "reporting": ["PER_PAIR", "FOUR_PAIR_EQUAL_UNIT_CONCURRENT_REFERENCE_AGGREGATION"],
+      "iid_primary_prohibited": true,
+      "note": "All 9 seed/block configurations are counted; bootstrap replications are resamples within those declared configurations, not strategy-selection trials."
+    }
+  },
+  "declared_strategy_variant_trials": {
+    "reference": 1,
+    "family_A": 21,
+    "family_C": 4,
+    "family_D": 4,
+    "family_E": 2,
+    "family_F": 4,
+    "total_including_reference": 36
+  },
+  "declared_resampling_configurations": 9,
+  "execution_gate": {
+    "new_outcomes_may_run": false,
+    "requirements_before_opening": [
+      "IMPLEMENT_PARAMETERIZED_KERNEL_WITHOUT_CHANGING_R000",
+      "TEST_EACH_FAMILY_SEMANTICS_WITH_SYNTHETIC_FIXTURES",
+      "REPRODUCE_RND0034_REFERENCE_INVARIANTS",
+      "VERIFY_TRIAL_PLAN_HASH_AND_DECLARED_COUNTS",
+      "VERIFY_AUTHORIZED_INPUT_IDENTITIES",
+      "VERIFY_VALIDATION_AND_FINAL_TEST_REMAIN_CLOSED",
+      "VERIFY_BROKER_WRITES_AND_CAPITAL_AUTHORITY_FALSE"
+    ]
+  }
 }
