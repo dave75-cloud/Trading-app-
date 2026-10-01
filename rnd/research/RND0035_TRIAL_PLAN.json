@@ -1,0 +1,62 @@
+{
+  "task_id": "RND-0035",
+  "issue": 39,
+  "foundation_sha": "ee163e375dfc2403b34f41f83a962267b23bda69",
+  "plan_status": "DESIGN_FROZEN_GRID_VALUES_PENDING",
+  "outcomes_authorized": false,
+  "authorized_years": [2015, 2016, 2017, 2018, 2019],
+  "authorized_symbols": ["AUDUSD", "EURUSD", "GBPUSD", "USDJPY"],
+  "validation_open": false,
+  "final_test_open": false,
+  "strategy_selection": false,
+  "broker_writes": false,
+  "capital_authority": false,
+  "promotion_authority": "HUMAN_ONLY",
+  "known_outcome_disclosures": [
+    "AUDUSD adverse overall including gross in RND-0034",
+    "EURUSD net-positive overall but concentrated in 2015 in RND-0034",
+    "GBPUSD gross-positive overall and each observed year but net-negative overall after observed bid/ask costs in RND-0034",
+    "USDJPY approximately flat gross and net-negative in RND-0034",
+    "trade counts declined materially across the observed development years in RND-0034"
+  ],
+  "classification_values": [
+    "REFERENCE",
+    "PREDECLARED_ADVERSARIAL",
+    "OUTCOME_INFORMED",
+    "POST_HOC"
+  ],
+  "families": {
+    "A_LOCAL_PARAMETER": {"grid_frozen": false, "outcomes_authorized": false},
+    "B_CONCENTRATION": {"grid_frozen": false, "outcomes_authorized": false},
+    "C_SESSION": {"grid_frozen": false, "outcomes_authorized": false},
+    "D_COST_SLIPPAGE": {"grid_frozen": false, "outcomes_authorized": false},
+    "E_GAP_POLICY": {"grid_frozen": false, "outcomes_authorized": false},
+    "F_EXECUTION": {"grid_frozen": false, "outcomes_authorized": false},
+    "G_DEPENDENCE_RESAMPLING": {"grid_frozen": false, "outcomes_authorized": false}
+  },
+  "trials": [
+    {
+      "trial_id": "R000",
+      "family": "REFERENCE",
+      "classification": "REFERENCE",
+      "source": "RND-0034",
+      "configuration": {
+        "fast_ma": 20,
+        "slow_ma": 50,
+        "volatility_window": 12,
+        "volatility_ddof": 0,
+        "volatility_threshold": 0.0005,
+        "signal_delay_observed_bars": 1,
+        "minimum_hold_observed_bars": 3,
+        "sessions_utc": {
+          "AUDUSD": [11, 14],
+          "EURUSD": [11, 13],
+          "GBPUSD": [11, 13],
+          "USDJPY": [11, 13]
+        }
+      },
+      "status": "REFERENCE_COMPLETE",
+      "new_execution_authorized": false
+    }
+  ]
+}
