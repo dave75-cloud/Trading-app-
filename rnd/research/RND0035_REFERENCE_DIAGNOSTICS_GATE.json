@@ -1,6 +1,6 @@
 {
   "task_id": "RND-0035",
-  "status": "OPEN_REFERENCE_DIAGNOSTICS_AUTHORIZED",
+  "status": "ACTIVE",
   "scope": "R000_REFERENCE_DIAGNOSTICS_ONLY",
   "families": {
     "B_CONCENTRATION": true,
