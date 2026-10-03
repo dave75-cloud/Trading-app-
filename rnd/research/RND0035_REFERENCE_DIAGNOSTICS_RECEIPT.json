@@ -1,0 +1,16 @@
+{
+  "task_id": "RND-0035",
+  "artifact": "R000_REFERENCE_B_D_G_DIAGNOSTICS",
+  "status": "COMPLETE_REQUIRES_HUMAN_REVIEW",
+  "external_report_path": "~/Trading-evidence/rnd0035-r000-reference-diagnostics-20261003.json",
+  "external_report_sha256": "81d037eb5998375ccff13c68dac564722adc183f8970cb656bf4bf0194e1849c",
+  "evidence_identity_pass_match": "20/20",
+  "validation_open": false,
+  "final_test_open": false,
+  "broker_writes": false,
+  "capital_authority": false,
+  "strategy_selection": false,
+  "promotion_authority": "HUMAN_ONLY",
+  "human_review_required": true,
+  "note": "Receipt only. Diagnostic interpretation remains external pending human review. No strategy selection, promotion, validation/final access, broker writes or capital authority is conferred by this record."
+}
