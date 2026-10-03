@@ -1,0 +1,19 @@
+{
+  "task_id": "RND-0037",
+  "status": "COMPLETE",
+  "scope": "FULL_2015_2020_DEVELOPMENT_STRUCTURAL_EVIDENCE_ASSEMBLY",
+  "verified_2015_2019": "20/20",
+  "verified_2020": "4/4",
+  "pair_years": "24/24",
+  "full_development_structural_evidence_complete": true,
+  "external_report_path": "~/Trading-evidence/rnd0037-development-2015-2020-assembly-20261004.json",
+  "external_report_sha256": "82e55ae35c03cf7f2f2414001e7c381dbc4a32364ea9253dc238fce4bfffcc70",
+  "strategy_evaluation": false,
+  "validation_open": false,
+  "final_test_open": false,
+  "broker_writes": false,
+  "capital_authority": false,
+  "automatic_promotion": false,
+  "automatic_merge": false,
+  "human_review_required": true
+}
