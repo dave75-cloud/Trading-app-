@@ -1,0 +1,41 @@
+{
+  "task_id": "RND-0035",
+  "status": "CLOSED_PENDING_LOCAL_VALIDATION",
+  "scope": "R000_REFERENCE_DIAGNOSTICS_ONLY",
+  "families": {
+    "B_CONCENTRATION": false,
+    "D_BREAK_EVEN_COST_DIAGNOSTICS": false,
+    "G_DEPENDENCE_RESAMPLING": false,
+    "G_CONCURRENT_REFERENCE_AGGREGATION": false
+  },
+  "requirements_before_opening": [
+    "LOCAL_TEST_RND0035_CONCENTRATION_DIAGNOSTICS_PASS",
+    "LOCAL_TEST_RND0035_COST_DIAGNOSTICS_PASS",
+    "LOCAL_TEST_RND0035_STATIONARY_BOOTSTRAP_PASS",
+    "LOCAL_TEST_RND0035_CONCURRENT_PORTFOLIO_PASS",
+    "LOCAL_TEST_RND0035_CONCURRENT_REFERENCE_STATS_PASS",
+    "R000_RECONSTRUCTION_IDENTITY_RECONFIRMED",
+    "FROZEN_TRIAL_PLAN_SHA_RECONFIRMED",
+    "AUTHORIZED_INPUT_IDENTITIES_20_OF_20_RECONFIRMED",
+    "VALIDATION_AND_FINAL_REMAIN_CLOSED",
+    "BROKER_WRITES_CAPITAL_STRATEGY_SELECTION_REMAIN_FALSE"
+  ],
+  "sampling": {
+    "G_primary_unit": "CHRONOLOGICAL_COMPLETED_TRADE_NET_RETURNS_WITH_SYMBOL_LABEL_PRESERVED",
+    "G_per_pair_stationary_bootstrap": true,
+    "G_synthetic_concurrent_bootstrap": false,
+    "G_four_pair_reporting": "OBSERVED_TIMESTAMPED_EQUAL_UNIT_R000_REFERENCE_AGGREGATION"
+  },
+  "authority": {
+    "validation_open": false,
+    "final_test_open": false,
+    "strategy_selection": false,
+    "portfolio_sizing": false,
+    "broker_writes": false,
+    "capital_authority": false,
+    "automatic_promotion": false,
+    "automatic_merge": false,
+    "promotion_authority": "HUMAN_ONLY",
+    "human_review_required": true
+  }
+}
