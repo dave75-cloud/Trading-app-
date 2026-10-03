@@ -25,7 +25,9 @@ class RND0035BoundedRunnerTests(unittest.TestCase):
         self.assertEqual("SYNTHETIC_FIXTURE_ONLY", result["mode"])
         self.assertFalse(result["historical_outcomes_generated"])
         self.assertFalse(result["global_outcome_gate_open"])
-        self.assertEqual(["E001", "E002", "F001", "F004"], result["sensitive_trials_rejected"])
+        self.assertTrue(result["integrated_sensitive_families"])
+        for trial_id in ("E001", "E002", "F001", "F002", "F003", "F004"):
+            self.assertIn(trial_id, result["checks"])
 
     def test_fixture_check_preserves_authority_boundary(self):
         result = fixture_self_check(validate_plan(copy.deepcopy(self.plan)))
