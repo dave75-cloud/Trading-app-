@@ -15,8 +15,8 @@ import json
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
-from rnd0035_adversarial_kernel import RND0035KernelError, run_trial_pair
-from rnd0035_trial_plan import RND0035PlanError, load_plan
+from rnd0035_trial_dispatch import run_declared_trial_pair
+from rnd0035_trial_plan import load_plan
 
 
 PLAN_PATH = Path(__file__).parents[1] / "research" / "RND0035_TRIAL_PLAN.json"
@@ -46,31 +46,34 @@ def _fixture_rows(count=90, start="2019-01-02T07:00:00Z", gap_after=None):
     return out
 
 
+def _authority_snapshot(result):
+    return {
+        "completed_trade_count": result["completed_trade_count"],
+        "broker_writes": result["authority"].get("broker_writes", False),
+        "capital_authority": result["authority"].get("capital_authority", False),
+        "validation_open": result["authority"].get("validation_open", False),
+        "final_test_open": result["authority"].get("final_test_open", False),
+    }
+
+
 def fixture_self_check(plan):
     if plan["outcomes_authorized"] or plan["execution_gate"]["new_outcomes_may_run"]:
         raise RND0035RunnerError("fixture launcher requires global outcome gate closed")
 
     checks = {}
     fixture = _fixture_rows()
-    for trial_id in ("R000", "A001", "A017", "C001", "D001", "D004"):
-        result = run_trial_pair(trial_id, "AUDUSD", fixture)
-        checks[trial_id] = {
-            "completed_trade_count": result["completed_trade_count"],
-            "broker_writes": result["authority"].get("broker_writes", False),
-            "capital_authority": result["authority"].get("capital_authority", False),
-            "validation_open": result["authority"].get("validation_open", False),
-            "final_test_open": result["authority"].get("final_test_open", False),
-        }
+    for trial_id in ("R000", "A001", "A017", "C001", "D001", "D004", "F001", "F002", "F003", "F004"):
+        checks[trial_id] = _authority_snapshot(
+            run_declared_trial_pair(trial_id, "AUDUSD", fixture)
+        )
 
-    # E/F are intentionally not executable at this stage.
-    rejected = []
-    for trial_id in ("E001", "E002", "F001", "F004"):
-        try:
-            run_trial_pair(trial_id, "AUDUSD", fixture)
-        except RND0035KernelError:
-            rejected.append(trial_id)
-        else:
-            raise RND0035RunnerError(f"{trial_id}: sensitive family executed before fixture freeze")
+    # E variants require an actual synthetic discontinuity so their frozen
+    # post-gap entry-suppression state machines are exercised.
+    gap_fixture = _fixture_rows(count=420, gap_after=56)
+    for trial_id in ("E001", "E002"):
+        checks[trial_id] = _authority_snapshot(
+            run_declared_trial_pair(trial_id, "AUDUSD", gap_fixture)
+        )
 
     if any(
         value["broker_writes"]
@@ -86,8 +89,8 @@ def fixture_self_check(plan):
         "mode": "SYNTHETIC_FIXTURE_ONLY",
         "historical_outcomes_generated": False,
         "global_outcome_gate_open": False,
+        "integrated_sensitive_families": True,
         "checks": checks,
-        "sensitive_trials_rejected": rejected,
         "status": "PASS",
     }
 
