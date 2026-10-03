@@ -1,0 +1,43 @@
+{
+  "task_id": "RND-0035",
+  "authorization_version": "RND0035-development-outcomes-v1",
+  "status": "ACTIVE",
+  "authorized_stage": "DEVELOPMENT_2015_2019_ADVERSARIAL_STRATEGY_OUTCOMES",
+  "authorized_trial_plan_sha256": "fc63ae360fc812be7318a84a6383bf9ef02fb2812656b69dcceee3298542563b",
+  "authorized_years": [2015, 2016, 2017, 2018, 2019],
+  "authorized_symbols": ["AUDUSD", "EURUSD", "GBPUSD", "USDJPY"],
+  "authorized_families": ["REFERENCE", "A_LOCAL_PARAMETER", "C_SESSION", "D_COST_SLIPPAGE", "E_GAP_POLICY", "F_EXECUTION"],
+  "authorized_strategy_trial_count": 36,
+  "closed_families": ["B_CONCENTRATION", "G_DEPENDENCE_RESAMPLING"],
+  "readiness_evidence": {
+    "r000_semantic_reproduction": "PASS",
+    "development_evidence_identity": "20/20_PASS_MATCH",
+    "synthetic_and_kernel_targeted_tests": "29_PASS",
+    "audit_enrichment": "PASS",
+    "user_instruction": "Proceed with development-period adversarial trial runner and anything else that requires."
+  },
+  "execution_rules": {
+    "all_declared_strategy_trials_must_run": true,
+    "no_best_variant_selection": true,
+    "no_trial_deletion_after_outcomes": true,
+    "no_parameter_grid_changes_after_outcomes": true,
+    "compact_auditable_reporting_required": true,
+    "report_must_be_written_outside_repository": true,
+    "existing_report_overwrite_prohibited": true
+  },
+  "authority": {
+    "development_strategy_outcomes": true,
+    "concentration_diagnostics": false,
+    "dependence_resampling": false,
+    "validation_open": false,
+    "final_test_open": false,
+    "strategy_selection": false,
+    "portfolio_sizing": false,
+    "broker_writes": false,
+    "capital_authority": false,
+    "automatic_promotion": false,
+    "automatic_merge": false,
+    "promotion_authority": "HUMAN_ONLY",
+    "human_review_required": true
+  }
+}
