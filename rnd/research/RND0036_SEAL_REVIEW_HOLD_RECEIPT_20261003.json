@@ -1,0 +1,18 @@
+{
+  "task_id": "RND-0036",
+  "stage": "2020_DEVELOPMENT_SEAL_REVIEW",
+  "status": "HOLD_UNRESOLVED_QUARANTINE_DISCREPANCIES",
+  "verified_shards": "4/4",
+  "boundary_pass": true,
+  "unresolved_symbols": 4,
+  "strategy_evaluation": false,
+  "validation_open": false,
+  "final_test_open": false,
+  "broker_writes": false,
+  "capital_authority": false,
+  "strategy_selection": false,
+  "external_report_path": "~/Trading-evidence/rnd0036-2020-development-seal-review-20261003.json",
+  "external_report_sha256": "4906b75bbb034b27d885f773a547be3ba1e970fe0377278081e9ec7bf0d28055",
+  "human_review_required": true,
+  "seal_authority": false
+}
