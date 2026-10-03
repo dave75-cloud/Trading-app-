@@ -1,0 +1,56 @@
+{
+  "task_id": "RND-0036",
+  "status": "PREDECLARED_NOT_AUTHORIZED_TO_ACQUIRE",
+  "purpose": "CLOSE_REMAINING_RND0029_DEVELOPMENT_DATA_GAP_ONLY",
+  "symbols": ["AUDUSD", "EURUSD", "GBPUSD", "USDJPY"],
+  "granularity": "M5",
+  "source": "OANDA_PRACTICE_HISTORICAL_DECLARATION",
+  "price_components": ["bid", "ask", "mid"],
+  "complete_candles_only": true,
+  "authorized_interval": {
+    "start_inclusive_utc": "2020-01-01T00:00:00Z",
+    "end_exclusive_utc": "2020-12-31T19:15:00Z"
+  },
+  "boundary_binding": {
+    "source": "rnd/research/HISTORICAL_WINDOW_PARTITION_DECLARATION.json",
+    "development_end_exclusive_utc": "2020-12-31T19:15:00Z",
+    "rows_at_or_after_boundary_are_validation": true,
+    "validation_rows_in_development_evidence_prohibited": true
+  },
+  "acquisition_rules": {
+    "raw_provider_evidence_immutable": true,
+    "canonicalization_deterministic": true,
+    "sha256_identity_required": true,
+    "synthetic_rows_prohibited": true,
+    "interpolation_prohibited": true,
+    "backfill_invention_prohibited": true,
+    "gap_ledger_required": true,
+    "calendar_quarantine_semantics_unchanged": true,
+    "all_four_symbols_exact_interval_required": true
+  },
+  "strategy_outcomes_permitted": false,
+  "prohibited_outcome_fields": [
+    "signal", "position", "trade", "return", "pnl", "equity", "drawdown",
+    "hit_rate", "strategy_score", "parameter_selection"
+  ],
+  "explicit_scope_exclusions": [
+    "R000_STRATEGY_EVALUATION",
+    "A016_STRATEGY_EVALUATION",
+    "VOLATILITY_THRESHOLD_EXTENSION",
+    "CHAMPION_RECONSTRUCTION",
+    "VALIDATION_ACQUISITION_AS_DEVELOPMENT",
+    "FINAL_TEST_ACCESS"
+  ],
+  "authority": {
+    "acquisition_authorized": false,
+    "validation_open": false,
+    "final_test_open": false,
+    "strategy_selection": false,
+    "portfolio_sizing": false,
+    "broker_writes": false,
+    "capital_authority": false,
+    "automatic_promotion": false,
+    "automatic_merge": false,
+    "human_review_required": true
+  }
+}
