@@ -89,7 +89,7 @@ class TestRND0035DevelopmentRunner(unittest.TestCase):
             raise AssertionError(f"unexpected json path: {path}")
 
         mock_json.side_effect = json_side_effect
-        result = runner.preflight(self.plan, "/aud/2015", "/cross", "/development")
+        result = runner.preflight(self.plan, "/AUDUSD/2015", "/cross", "/development")
 
         self.assertEqual(result["status"], "PASS")
         self.assertEqual(result["verified_shards"], 20)
