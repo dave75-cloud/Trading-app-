@@ -1,0 +1,36 @@
+{
+  "task_id": "RND-0035",
+  "record_type": "EXTERNAL_DEVELOPMENT_OUTCOME_RECEIPT",
+  "status": "COMPLETE_REQUIRES_HUMAN_REVIEW",
+  "external_report": {
+    "filename": "rnd0035-development-adversarial-outcomes-20261003.json",
+    "sha256": "038af0e5b669c2f8f2ebb1947c1b765810965ed584963246b85a43cce50cc264",
+    "repository_copy": false
+  },
+  "scope": {
+    "years": [2015, 2016, 2017, 2018, 2019],
+    "symbols": ["AUDUSD", "EURUSD", "GBPUSD", "USDJPY"],
+    "strategy_trial_count": 36,
+    "pair_trial_result_count": 144,
+    "evidence_identity_pass_match": "20/20",
+    "families_executed": ["REFERENCE", "A_LOCAL_PARAMETER", "C_SESSION", "D_COST_SLIPPAGE", "E_GAP_POLICY", "F_EXECUTION"],
+    "B_CONCENTRATION": false,
+    "G_DEPENDENCE_RESAMPLING": false
+  },
+  "bindings": {
+    "trial_plan_sha256": "fc63ae360fc812be7318a84a6383bf9ef02fb2812656b69dcceee3298542563b",
+    "development_authorization_sha256": "cb48e2711b9a1c5298b6f3923515fca4cc9984d0324713e1723c9f62b2873ae2"
+  },
+  "authority": {
+    "validation_open": false,
+    "final_test_open": false,
+    "strategy_selection": false,
+    "portfolio_sizing": false,
+    "broker_writes": false,
+    "capital_authority": false,
+    "automatic_promotion": false,
+    "automatic_merge": false,
+    "promotion_authority": "HUMAN_ONLY",
+    "human_review_required": true
+  }
+}
