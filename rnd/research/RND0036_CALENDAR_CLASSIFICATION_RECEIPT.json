@@ -1,0 +1,23 @@
+{
+  "task_id": "RND-0036",
+  "classification_report_external_path": "~/Trading-evidence/rnd0036-2020-calendar-classification-20261003.json",
+  "classification_report_sha256": "d6a8f49f36b8e6d577ca7aa862ea626509f20c61e03455df5cb433b8963a8265",
+  "status": "STRUCTURAL_CLASSIFICATION_COMPLETE_REQUIRES_HUMAN_REVIEW",
+  "summary": {
+    "AUDUSD": {"baseline_unexpected": 243, "candidate_unexpected": 0, "explained_fraction": 1.0, "short_gap_bars": 568, "closure_candidate_bars": 564, "unclassified_gap_bars": 38},
+    "EURUSD": {"baseline_unexpected": 258, "candidate_unexpected": 0, "explained_fraction": 1.0, "short_gap_bars": 272, "closure_candidate_bars": 564, "unclassified_gap_bars": 22},
+    "GBPUSD": {"baseline_unexpected": 258, "candidate_unexpected": 0, "explained_fraction": 1.0, "short_gap_bars": 318, "closure_candidate_bars": 564, "unclassified_gap_bars": 20},
+    "USDJPY": {"baseline_unexpected": 256, "candidate_unexpected": 0, "explained_fraction": 1.0, "short_gap_bars": 294, "closure_candidate_bars": 563, "unclassified_gap_bars": 41},
+    "shared_remaining_unexpected": 0
+  },
+  "candidate_1700_authority": "NONE",
+  "calendar_modified": false,
+  "canonical_evidence_modified": false,
+  "strategy_evaluation": false,
+  "validation_open": false,
+  "final_test_open": false,
+  "broker_writes": false,
+  "capital_authority": false,
+  "strategy_selection": false,
+  "human_review_required": true
+}
