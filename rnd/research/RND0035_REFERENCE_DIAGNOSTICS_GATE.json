@@ -1,14 +1,24 @@
 {
   "task_id": "RND-0035",
-  "status": "CLOSED_PENDING_LOCAL_VALIDATION",
+  "status": "OPEN_REFERENCE_DIAGNOSTICS_AUTHORIZED",
   "scope": "R000_REFERENCE_DIAGNOSTICS_ONLY",
   "families": {
-    "B_CONCENTRATION": false,
-    "D_BREAK_EVEN_COST_DIAGNOSTICS": false,
-    "G_DEPENDENCE_RESAMPLING": false,
-    "G_CONCURRENT_REFERENCE_AGGREGATION": false
+    "B_CONCENTRATION": true,
+    "D_BREAK_EVEN_COST_DIAGNOSTICS": true,
+    "G_DEPENDENCE_RESAMPLING": true,
+    "G_CONCURRENT_REFERENCE_AGGREGATION": true
   },
-  "requirements_before_opening": [
+  "opening_evidence": {
+    "local_rnd0035_test_count": 67,
+    "local_rnd0035_tests": "PASS",
+    "local_validation_head": "c84d7fa04ff926ecefe2719971929b1b0130b6bc",
+    "working_tree_clean": true,
+    "r000_semantic_reproduction": "PASS",
+    "frozen_trial_plan_sha256": "fc63ae360fc812be7318a84a6383bf9ef02fb2812656b69dcceee3298542563b",
+    "authorized_input_identity": "20/20 PASS",
+    "development_outcome_report_sha256": "038af0e5b669c2f8f2ebb1947c1b765810965ed584963246b85a43cce50cc264"
+  },
+  "requirements_satisfied": [
     "LOCAL_TEST_RND0035_CONCENTRATION_DIAGNOSTICS_PASS",
     "LOCAL_TEST_RND0035_COST_DIAGNOSTICS_PASS",
     "LOCAL_TEST_RND0035_STATIONARY_BOOTSTRAP_PASS",
