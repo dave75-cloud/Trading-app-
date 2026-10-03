@@ -20,19 +20,18 @@ ORCH = ROOT / "rnd" / "orchestration"
 if str(ORCH) not in sys.path:
     sys.path.insert(0, str(ORCH))
 
-from gap_aware_m005_reconstruction import reconstruct_pair  # noqa: E402
 from rnd0035_development_runner import PLAN_PATH, _verify_evidence  # noqa: E402
 from rnd0035_reference_diagnostics_runner import analyze_reference_results  # noqa: E402
 from rnd0035_trial_plan import load_plan  # noqa: E402
 from rnd0036_2020_development_acquisition import (  # noqa: E402
     SYMBOLS,
-    START_UTC as START_2020,
     END_UTC as DEVELOPMENT_END,
     SHARD,
     ACQUISITION_PATH,
     CALENDAR_PATH,
     boundary_proof,
 )
+from rnd0038_r000_kernel_adapter import reconstruct_pair_2015_2020  # noqa: E402
 from oanda_historical_quarantine import _json, verify_existing_shard  # noqa: E402
 
 AUTH_PATH = ROOT / "rnd" / "research" / "RND0038_R000_OUTCOME_AUTHORIZATION.json"
@@ -180,7 +179,10 @@ def run(audusd_2015_shard, cross_pair_2015_root, development_2016_2019_root,
         _require(timestamps[-1] < DEVELOPMENT_END, f"{symbol}: validation row detected")
         full_rows[symbol] = rows
 
-    per_symbol = {symbol: reconstruct_pair(symbol, full_rows[symbol]) for symbol in SYMBOLS}
+    per_symbol = {
+        symbol: reconstruct_pair_2015_2020(symbol, full_rows[symbol])
+        for symbol in SYMBOLS
+    }
     diagnostics = analyze_reference_results(per_symbol)
     contribution_2020 = _year2020_contribution(per_symbol)
 
@@ -190,11 +192,11 @@ def run(audusd_2015_shard, cross_pair_2015_root, development_2016_2019_root,
         pair_results[symbol] = {
             "row_count": len(full_rows[symbol]),
             "completed_trade_count": result.get("completed_trade_count"),
-            "hit_rate": result.get("hit_rate"),
-            "gross_equity_index": result.get("gross_equity_index"),
-            "net_equity_index": result.get("net_equity_index"),
-            "max_drawdown": result.get("max_drawdown"),
-            "execution_cost_drag_sum": result.get("execution_cost_drag_sum"),
+            "net_hit_rate": result.get("net_hit_rate"),
+            "completed_trade_gross_equity_index": result.get("completed_trade_gross_equity_index"),
+            "completed_trade_net_equity_index": result.get("completed_trade_net_equity_index"),
+            "completed_trade_net_max_drawdown": result.get("completed_trade_net_max_drawdown"),
+            "total_execution_cost_drag": result.get("total_execution_cost_drag"),
         }
 
     return {
