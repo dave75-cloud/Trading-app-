@@ -1,0 +1,40 @@
+{
+  "task_id": "RND-0035",
+  "status": "COMPLETE_REQUIRES_HUMAN_REVIEW",
+  "source_report_sha256": "81d037eb5998375ccff13c68dac564722adc183f8970cb656bf4bf0194e1849c",
+  "evidence_identity": "20/20",
+  "R000": {
+    "four_pair_equal_unit_normalized_equity_index": 0.9393058526379192,
+    "four_pair_equal_unit_normalized_max_drawdown": -0.06249279932978258,
+    "annual_net_return_sums_all_negative_2015_2019": true,
+    "leave_one_year_out_all_negative": true,
+    "extreme_trade_loss_concentration_explanation_supported": false,
+    "dominant_adverse_pair": "AUDUSD"
+  },
+  "D_cost": {
+    "AUDUSD_break_even_additional_round_trip_bps": 0.0,
+    "EURUSD_break_even_additional_round_trip_bps": 0.409762,
+    "GBPUSD_break_even_additional_round_trip_bps": 0.0,
+    "USDJPY_break_even_additional_round_trip_bps": 0.0,
+    "interpretation": "Reference economics are not comfortably separated from execution friction."
+  },
+  "G_stationary_bootstrap": {
+    "AUDUSD_positive_total_fraction_range": [0.0, 0.0001],
+    "EURUSD_positive_total_fraction_range": [0.6316, 0.6656],
+    "GBPUSD_positive_total_fraction_range": [0.3468, 0.3687],
+    "USDJPY_positive_total_fraction_range": [0.0297, 0.0686],
+    "interpretation": "Dependence-aware resampling does not rescue three of four R000 pairs; EURUSD remains the lone marginally favorable pair."
+  },
+  "scientific_conclusion": "RND-0035 falsifies the proposition that fixed R000 M005 is a robust positive four-pair development strategy over 2015-2019. Higher-volatility gating remains hypothesis-generating only and is quarantined pending 2020 development evidence and a separately predeclared experiment.",
+  "authority": {
+    "validation_open": false,
+    "final_test_open": false,
+    "strategy_selection": false,
+    "portfolio_sizing": false,
+    "broker_writes": false,
+    "capital_authority": false,
+    "automatic_promotion": false,
+    "automatic_merge": false,
+    "promotion_authority": "HUMAN_ONLY"
+  }
+}
