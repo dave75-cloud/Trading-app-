@@ -2,7 +2,11 @@
 
 import unittest
 
-from rnd0035_audit_enrichment import RND0035AuditError, enrich_for_historical_audit
+from rnd0035_audit_enrichment import (
+    RND0035AuditError,
+    compact_historical_audit,
+    enrich_for_historical_audit,
+)
 
 
 def fixture_result(with_events=False):
@@ -36,6 +40,8 @@ def fixture_result(with_events=False):
     return {
         "trial_id": "A001",
         "symbol": "AUDUSD",
+        "row_count": 20,
+        "gap_count": 0,
         "completed_trade_count": 1,
         "censored_trade_count": 0,
         "completed_trade_net_equity_index": 1.0002727024816,
@@ -47,7 +53,7 @@ def fixture_result(with_events=False):
         "censored_trades": [],
         "gaps": [],
         "events": events,
-        "marks": [],
+        "marks": [{"x": 1}],
         "authority": {"broker_writes": False, "capital_authority": False},
     }
 
@@ -75,17 +81,43 @@ class TestRND0035AuditEnrichment(unittest.TestCase):
         self.assertEqual(out["event_reconciliation"]["entry_events"], 1)
         self.assertEqual(out["event_reconciliation"]["exit_events"], 1)
 
+    def test_compact_audit_derives_entry_exit_without_copying_heavy_arrays(self):
+        source = fixture_result()
+        summary = compact_historical_audit(source)
+        self.assertEqual(summary["status"], "PASS")
+        self.assertEqual(summary["event_reconciliation"]["entry_events"], 1)
+        self.assertEqual(summary["event_reconciliation"]["exit_events"], 1)
+        self.assertEqual(
+            summary["event_reconciliation"]["entry_exit_source"],
+            "DERIVED_FROM_COMPLETED_TRADE_LEDGER",
+        )
+        self.assertEqual(summary["elapsed_seconds_sum"], 1200)
+        self.assertEqual(summary["by_exit_year"]["2019"]["trades"], 1)
+        self.assertFalse(summary["marks_retained_in_compact_report"])
+        self.assertEqual(source["marks"], [{"x": 1}])
+
+    def test_compact_audit_uses_complete_implementation_entry_exit_events(self):
+        summary = compact_historical_audit(fixture_result(with_events=True))
+        self.assertEqual(
+            summary["event_reconciliation"]["entry_exit_source"],
+            "IMPLEMENTATION_EVENTS",
+        )
+
     def test_rejects_partial_event_ledger(self):
         source = fixture_result()
         source["events"] = [{"event_type": "ENTRY"}]
         with self.assertRaisesRegex(RND0035AuditError, "partial ENTRY/EXIT"):
             enrich_for_historical_audit(source)
+        with self.assertRaisesRegex(RND0035AuditError, "partial ENTRY/EXIT"):
+            compact_historical_audit(source)
 
     def test_rejects_trade_count_mismatch(self):
         source = fixture_result()
         source["completed_trade_count"] = 2
         with self.assertRaisesRegex(RND0035AuditError, "completed trade count"):
             enrich_for_historical_audit(source)
+        with self.assertRaisesRegex(RND0035AuditError, "completed trade count"):
+            compact_historical_audit(source)
 
 
 if __name__ == "__main__":
