@@ -1,0 +1,17 @@
+{
+  "task_id": "RND-0036",
+  "status": "HUMAN_EVIDENCE_SEAL_COMPLETE",
+  "report_path": "~/Trading-evidence/rnd0036-2020-development-evidence-seal-20261003.json",
+  "report_sha256": "6f97a5f0a5cb05e3b000883fd730b3201b73a5e79b462a7ab98012a59ad6d53e",
+  "verified_shards": "4/4",
+  "boundary_pass": true,
+  "candidate_1700_authority": "NONE",
+  "authoritative_standard_schedule_ledgers_resolved": false,
+  "strategy_evaluation": false,
+  "validation_open": false,
+  "final_test_open": false,
+  "broker_writes": false,
+  "capital_authority": false,
+  "strategy_selection": false,
+  "human_review_required_for_any_strategy_use": true
+}
