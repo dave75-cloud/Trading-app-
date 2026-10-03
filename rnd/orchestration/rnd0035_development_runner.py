@@ -14,14 +14,19 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import sys
 from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[2]
+TOOLS = ROOT / "rnd" / "tools"
+if str(TOOLS) not in sys.path:
+    sys.path.insert(0, str(TOOLS))
 
 from oanda_historical_quarantine import _json, verify_existing_shard
 from oanda_market_calendar import year_shards
 from rnd0035_trial_plan import load_plan
 
 
-ROOT = Path(__file__).resolve().parents[2]
 PLAN_PATH = ROOT / "rnd" / "research" / "RND0035_TRIAL_PLAN.json"
 DEVELOPMENT_YEARS = (2015, 2016, 2017, 2018, 2019)
 STRATEGY_FAMILIES = (
