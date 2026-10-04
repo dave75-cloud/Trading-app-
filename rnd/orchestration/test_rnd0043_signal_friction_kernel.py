@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import math
 import unittest
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 
 import gap_aware_m005_reconstruction as frozen
 import rnd0043_signal_friction_kernel as r
@@ -14,8 +14,6 @@ def rows(start="2015-01-05T10:30:00Z", n=90, spread=0.00010, gap_at=None):
     for i in range(n):
         if gap_at is not None and i==gap_at:
             dt += timedelta(minutes=10)
-        # Alternating but upward-drifting path: enough realized M5 volatility
-        # to exceed the frozen .0005 threshold without using future data.
         mid *= 1.0 + (0.00085 if i%2==0 else -0.00055)
         bid=mid-spread/2
         ask=mid+spread/2
@@ -32,7 +30,6 @@ class TestRND0043SignalFrictionKernel(unittest.TestCase):
 
     def test_ratio_uses_last_12_returns_and_current_spread(self):
         returns=[0.001,-0.001]*6 + [99.0]
-        # last 12 excludes the first element, intentionally proving windowing
         used=returns[-12:]
         bid, ask, mid = 0.9999, 1.0001, 1.0
         got=r.signal_to_friction_ratio(returns,bid,ask,mid)
@@ -54,12 +51,16 @@ class TestRND0043SignalFrictionKernel(unittest.TestCase):
         self.assertTrue(math.isclose(new["completed_trade_gross_equity_index"],old["completed_trade_gross_equity_index"],rel_tol=0,abs_tol=1e-15))
         self.assertEqual(new["gap_count"],old["gap_count"])
 
+    def test_actual_entry_ratio_provenance(self):
+        out=r.reconstruct_pair("AUDUSD",rows(n=120),"F000")
+        for trade in out["trades"]:
+            self.assertIsNotNone(trade["entry_signal_to_friction"])
+        self.assertGreaterEqual(len(out["actual_entry_signal_to_friction_ratios"]),len(out["trades"]))
+
     def test_gate_is_entry_only_not_exit_override(self):
         fixture=rows(spread=0.00010)
         f000=r.reconstruct_pair("AUDUSD",fixture,"F000")
         f003=r.reconstruct_pair("AUDUSD",fixture,"F003")
-        # Strong gate may reduce entries, but kernel remains internally valid
-        # and never creates negative trade counts or synthetic exit authority.
         self.assertLessEqual(f003["completed_trade_count"],f000["completed_trade_count"])
         self.assertGreaterEqual(f003["rejected_entry_signal_count"],0)
         self.assertFalse(f003["authority"]["development_outcomes"])
@@ -76,5 +77,4 @@ class TestRND0043SignalFrictionKernel(unittest.TestCase):
             r.reconstruct_pair("AUDUSD",fixture,"F001")
 
 
-if __name__=="__main__":
-    unittest.main()
+if __name__=="__main__": unittest.main()
