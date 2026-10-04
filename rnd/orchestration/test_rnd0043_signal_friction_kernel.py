@@ -34,8 +34,11 @@ class TestRND0043SignalFrictionKernel(unittest.TestCase):
         returns=[0.001,-0.001]*6 + [99.0]
         # last 12 excludes the first element, intentionally proving windowing
         used=returns[-12:]
-        got=r.signal_to_friction_ratio(returns,0.9999,1.0001,1.0)
-        expected=frozen.population_std(used)/0.0002
+        bid, ask, mid = 0.9999, 1.0001, 1.0
+        got=r.signal_to_friction_ratio(returns,bid,ask,mid)
+        expected_spread=(ask-bid)/mid
+        expected=frozen.population_std(used)/expected_spread
+        self.assertTrue(math.isclose(got["relative_spread"],expected_spread,rel_tol=0,abs_tol=1e-18))
         self.assertTrue(math.isclose(got["signal_to_friction"],expected,rel_tol=0,abs_tol=1e-12))
 
     def test_zero_spread_fails_closed(self):
