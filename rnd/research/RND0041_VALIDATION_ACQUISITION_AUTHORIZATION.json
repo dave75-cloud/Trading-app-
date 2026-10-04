@@ -1,7 +1,7 @@
 {
   "task_id": "RND-0041",
   "status": "ACTIVE",
-  "scope": "VALIDATION_ACQUISITION_AND_SEAL_ONLY",
+  "scope": "VALIDATION_EVIDENCE_ACQUISITION_ONLY",
   "authorized_interval": {
     "start_inclusive_utc": "2020-12-31T19:15:00Z",
     "end_exclusive_utc": "2023-01-01T09:40:00Z"
@@ -13,8 +13,8 @@
   "price_components": ["bid", "ask", "mid"],
   "complete_candles_only": true,
   "acquisition_authorized": true,
-  "candidate_evaluation_authorized": false,
-  "strategy_outcomes_authorized": false,
+  "candidate_evaluation": false,
+  "strategy_outcomes": false,
   "parameter_search": false,
   "strategy_selection": false,
   "reserved_final_open": false,
