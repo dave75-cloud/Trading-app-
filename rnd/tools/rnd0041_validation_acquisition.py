@@ -4,7 +4,6 @@
 from __future__ import annotations
 
 import argparse
-import json
 import os
 import shutil
 import sys
@@ -28,6 +27,7 @@ START_UTC = "2020-12-31T19:15:00Z"
 END_UTC = "2023-01-01T09:40:00Z"
 SHARD = {"year": "validation-2021-2022", "start_utc": START_UTC, "end_utc": END_UTC}
 DECLARATION_PATH = ROOT / "rnd" / "research" / "RND0041_VALIDATION_EVIDENCE_ACQUISITION_DECLARATION.json"
+AUTHORIZATION_PATH = ROOT / "rnd" / "research" / "RND0041_VALIDATION_ACQUISITION_AUTHORIZATION.json"
 ACQUISITION_PATH = ROOT / "rnd" / "research" / "OANDA_HISTORICAL_ACQUISITION_DECLARATION.json"
 CALENDAR_PATH = ROOT / "rnd" / "research" / "OANDA_CALENDAR_QUARANTINE_DECLARATION.json"
 
@@ -41,7 +41,7 @@ def _require(condition, message):
         raise RND0041AcquisitionError(message)
 
 
-def load_declaration(path=DECLARATION_PATH, require_active=False):
+def load_declaration(path=DECLARATION_PATH):
     value = _json(path)
     _require(value.get("task_id") == "RND-0041", "declaration task changed")
     _require(value.get("scope") == "VALIDATION_EVIDENCE_ACQUISITION_AND_STRUCTURAL_SEAL_ONLY", "scope changed")
@@ -60,9 +60,32 @@ def load_declaration(path=DECLARATION_PATH, require_active=False):
     ):
         _require(value.get(key) is False, f"prohibited authority opened: {key}")
     _require(value.get("human_review_required") is True, "human review requirement removed")
-    if require_active:
-        _require(value.get("status") == "ACTIVE", "RND-0041 acquisition is not ACTIVE")
-        _require(value.get("acquisition_authorized") is True, "RND-0041 acquisition not authorized")
+    return value
+
+
+def load_authorization(path=AUTHORIZATION_PATH):
+    value = _json(path)
+    _require(value.get("task_id") == "RND-0041", "authorization task changed")
+    _require(value.get("status") == "ACTIVE", "RND-0041 acquisition authorization inactive")
+    _require(value.get("scope") == "VALIDATION_ACQUISITION_AND_SEAL_ONLY", "authorization scope changed")
+    _require(value.get("authorized_interval") == {
+        "start_inclusive_utc": START_UTC,
+        "end_exclusive_utc": END_UTC,
+    }, "authorization interval changed")
+    _require(value.get("symbols") == list(SYMBOLS), "authorization symbols changed")
+    _require(value.get("timeframe") == "M5", "authorization timeframe changed")
+    _require(value.get("provider") == "OANDA", "authorization provider changed")
+    _require(value.get("environment") == "PRACTICE", "authorization environment changed")
+    _require(value.get("price_components") == ["bid", "ask", "mid"], "authorization price components changed")
+    _require(value.get("complete_candles_only") is True, "complete-candle requirement removed")
+    _require(value.get("acquisition_authorized") is True, "RND-0041 acquisition not authorized")
+    for key in (
+        "candidate_evaluation_authorized", "strategy_outcomes_authorized", "parameter_search",
+        "strategy_selection", "reserved_final_open", "portfolio_sizing", "broker_writes",
+        "capital_authority", "automatic_promotion", "automatic_merge",
+    ):
+        _require(value.get(key) is False, f"prohibited authority opened: {key}")
+    _require(value.get("human_review_required") is True, "human review requirement removed")
     return value
 
 
@@ -93,7 +116,8 @@ def boundary_proof(path, symbol):
 
 
 def acquire(output, resume=False, delay=0.6):
-    load_declaration(require_active=True)
+    load_declaration()
+    load_authorization()
     _require(0.5 <= delay <= 5.0, "request delay must be between 0.5 and 5.0 seconds")
 
     acquisition = _json(ACQUISITION_PATH)
