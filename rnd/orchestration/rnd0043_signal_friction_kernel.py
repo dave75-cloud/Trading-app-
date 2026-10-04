@@ -1,10 +1,8 @@
 #!/usr/bin/env python3
 """RND-0043 isolated development research kernel.
 
-This module preserves the frozen R000 M005 mechanics while adding one optional
-entry-eligibility condition: contemporaneous volatility-to-spread ratio.
-It is pure local computation and has no outcome-run, validation, broker,
-capital, promotion, or merge authority.
+Preserves frozen R000 mechanics and adds one optional entry-eligibility gate:
+contemporaneous volatility-to-spread ratio. Pure local computation only.
 """
 from __future__ import annotations
 
@@ -67,14 +65,16 @@ def validate_rows(rows):
         _require(dt not in seen, "rows: duplicate timestamp")
         _require(previous is None or dt > previous, "rows: timestamps out of order")
         seen.add(dt); previous = dt
-        bid, ask, mid = (_price(row["bid_close"], "bid_close"), _price(row["ask_close"], "ask_close"), _price(row["mid_close"], "mid_close"))
+        bid = _price(row["bid_close"], "bid_close")
+        ask = _price(row["ask_close"], "ask_close")
+        mid = _price(row["mid_close"], "mid_close")
         _require(bid <= mid <= ask, "rows: bid/mid/ask ordering invalid")
         out.append((dt, bid, ask, mid))
     return out
 
 
 def signal_to_friction_ratio(returns, bid, ask, mid):
-    """Use only information available at the current observation."""
+    """Compute the predeclared ratio from the current observation only."""
     _require(isinstance(returns, list) and len(returns) >= VOL_WINDOW, "ratio: 12 contiguous returns required")
     spread = (ask - bid) / mid
     _require(math.isfinite(spread) and spread > 0, "ratio: positive relative spread required")
@@ -85,52 +85,52 @@ def signal_to_friction_ratio(returns, bid, ask, mid):
 
 
 def raw_signal(symbol, closes, returns, dt, bid, ask, mid, arm):
+    """Return base R000 raw signal plus entry eligibility metadata.
+
+    The ratio never changes an exit signal. It controls only whether a nonzero
+    raw signal may later open a new position after the frozen one-bar delay.
+    """
     _require(symbol in SYMBOLS, "unsupported symbol")
     _require(arm in AUTHORIZED_ARMS, "arm outside predeclared RND-0043 set")
     if len(closes) < SLOW or len(returns) < VOL_WINDOW:
-        return None, None, False
+        return None, True, None
     fast = sum(closes[-FAST:]) / FAST
     slow = sum(closes[-SLOW:]) / SLOW
     vol = frozen.population_std(returns[-VOL_WINDOW:])
     start, end = SESSIONS[symbol]
     in_session = dt.weekday() < 5 and start <= dt.hour < end
     if not in_session or vol < VOL_THRESHOLD:
-        return 0, None, False
+        return 0, True, None
     ratio = signal_to_friction_ratio(returns, bid, ask, mid)
     threshold = AUTHORIZED_ARMS[arm]
-    rejected = threshold is not None and ratio["signal_to_friction"] < threshold
-    if rejected:
-        return 0, ratio, True
+    eligible = threshold is None or ratio["signal_to_friction"] >= threshold
     if fast > slow:
-        return 1, ratio, False
+        return 1, eligible, ratio
     if fast < slow:
-        return -1, ratio, False
-    return 0, ratio, False
-
-
-def _trade_return(side, entry_exec, exit_exec, entry_mid, exit_mid):
-    return frozen._trade_return(side, entry_exec, exit_exec, entry_mid, exit_mid)
+        return -1, eligible, ratio
+    return 0, True, ratio
 
 
 def reconstruct_pair(symbol, rows, arm):
     _require(symbol in SYMBOLS, "unsupported symbol")
     _require(arm in AUTHORIZED_ARMS, "arm outside predeclared RND-0043 set")
     parsed = validate_rows(rows)
-    closes, returns, gaps, trades, censored, events, marks = [], [], [], [], [], [], []
+    closes, returns, gaps, trades, censored, marks = [], [], [], [], [], []
     previous_dt = previous_mid = previous_raw = None
-    episode = 0; position = 0; bars_held = 0; entry = None; rejected_entry_signal_count = 0
-    eligible_entry_ratios = []
+    previous_entry_eligible = True
+    episode = 0; position = 0; bars_held = 0; entry = None
+    rejected_entry_signal_count = 0; eligible_entry_ratios = []
 
     def reset_state():
-        nonlocal closes, returns, previous_mid, previous_raw, episode
-        closes=[]; returns=[]; previous_mid=None; previous_raw=None; episode += 1
+        nonlocal closes, returns, previous_mid, previous_raw, previous_entry_eligible, episode
+        closes=[]; returns=[]; previous_mid=None; previous_raw=None; previous_entry_eligible=True; episode += 1
 
     def open_trade(side, dt, bid, ask, mid):
         return {"symbol":symbol,"side":"long" if side==1 else "short","side_value":side,"entry_timestamp":dt.strftime("%Y-%m-%dT%H:%M:%SZ"),"entry_execution_price":ask if side==1 else bid,"entry_mid_price":mid,"episode":episode,"gap_exposure_count":0,"gap_elapsed_seconds":0}
 
     def complete_trade(current, dt, bid, ask, mid, held):
         side=current["side_value"]; exit_exec=bid if side==1 else ask
-        gross,net=_trade_return(side,current["entry_execution_price"],exit_exec,current["entry_mid_price"],mid)
+        gross,net=frozen._trade_return(side,current["entry_execution_price"],exit_exec,current["entry_mid_price"],mid)
         return {"symbol":symbol,"side":current["side"],"entry_timestamp":current["entry_timestamp"],"exit_timestamp":dt.strftime("%Y-%m-%dT%H:%M:%SZ"),"entry_execution_price":current["entry_execution_price"],"exit_execution_price":exit_exec,"entry_mid_price":current["entry_mid_price"],"exit_mid_price":mid,"gross_return":gross,"net_return":net,"execution_cost_drag":gross-net,"holding_bars":held,"gap_exposure_count":current.get("gap_exposure_count",0),"gap_elapsed_seconds":current.get("gap_elapsed_seconds",0),"gap_exposed":current.get("gap_exposure_count",0)>0,"exit_year":dt.year,"episode":current["episode"],"status":"COMPLETE"}
 
     reset_state()
@@ -138,30 +138,45 @@ def reconstruct_pair(symbol, rows, arm):
         if previous_dt is not None:
             delta=int((dt-previous_dt).total_seconds())
             if delta != M5_SECONDS:
-                gap={"symbol":symbol,"previous_timestamp":previous_dt.strftime("%Y-%m-%dT%H:%M:%SZ"),"next_timestamp":dt.strftime("%Y-%m-%dT%H:%M:%SZ"),"elapsed_seconds":delta,"position_was_open":position!=0}
-                gaps.append(gap); events.append({"event_type":"GAP",**gap})
+                gaps.append({"symbol":symbol,"previous_timestamp":previous_dt.strftime("%Y-%m-%dT%H:%M:%SZ"),"next_timestamp":dt.strftime("%Y-%m-%dT%H:%M:%SZ"),"elapsed_seconds":delta,"position_was_open":position!=0})
                 if position!=0 and entry is not None:
                     entry["gap_exposure_count"] += 1; entry["gap_elapsed_seconds"] += delta
                 reset_state()
-        if previous_mid is not None: returns.append(mid/previous_mid-1.0)
+        if previous_mid is not None:
+            returns.append(mid/previous_mid-1.0)
         closes.append(mid)
-        raw,ratio,rejected=raw_signal(symbol,closes,returns,dt,bid,ask,mid,arm)
-        desired=previous_raw; previous_raw=raw
-        if rejected: rejected_entry_signal_count += 1
-        if raw is not None and raw != 0 and ratio is not None: eligible_entry_ratios.append(ratio["signal_to_friction"])
-        if position!=0: bars_held += 1
-        if position==0 and desired is not None and desired!=0:
+
+        raw, entry_eligible, ratio = raw_signal(symbol,closes,returns,dt,bid,ask,mid,arm)
+        desired = previous_raw
+        desired_entry_eligible = previous_entry_eligible
+        previous_raw = raw
+        previous_entry_eligible = entry_eligible
+
+        if raw is not None and raw != 0 and ratio is not None:
+            if entry_eligible:
+                eligible_entry_ratios.append(ratio["signal_to_friction"])
+            else:
+                rejected_entry_signal_count += 1
+
+        if position!=0:
+            bars_held += 1
+
+        if position==0 and desired is not None and desired!=0 and desired_entry_eligible:
             position=desired; bars_held=0; entry=open_trade(position,dt,bid,ask,mid)
         elif position!=0 and desired is not None and desired==0 and bars_held>=MIN_HOLD_BARS:
             trades.append(complete_trade(entry,dt,bid,ask,mid,bars_held)); position=0; bars_held=0; entry=None
         elif position!=0 and desired is not None and desired==-position and bars_held>=MIN_HOLD_BARS:
-            trades.append(complete_trade(entry,dt,bid,ask,mid,bars_held)); position=desired; bars_held=0; entry=open_trade(position,dt,bid,ask,mid)
+            trades.append(complete_trade(entry,dt,bid,ask,mid,bars_held)); position=0; bars_held=0; entry=None
+            if desired_entry_eligible:
+                position=desired; entry=open_trade(position,dt,bid,ask,mid)
+
         mark_return=None
         if position!=0 and entry is not None:
             mark_exec=bid if position==1 else ask
             mark_return=(mark_exec-entry["entry_execution_price"])/entry["entry_execution_price"] if position==1 else (entry["entry_execution_price"]-mark_exec)/entry["entry_execution_price"]
         marks.append({"symbol":symbol,"timestamp":dt.strftime("%Y-%m-%dT%H:%M:%SZ"),"position":position,"mark_return":mark_return})
         previous_dt=dt; previous_mid=mid
+
     if position!=0 and entry is not None:
         censored.append({"symbol":symbol,"entry_timestamp":entry["entry_timestamp"],"status":"RIGHT_CENSORED_END_OF_SAMPLE"})
     net=[x["net_return"] for x in trades]; gross=[x["gross_return"] for x in trades]
