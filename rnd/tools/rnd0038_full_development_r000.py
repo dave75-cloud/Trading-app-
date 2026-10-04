@@ -21,7 +21,6 @@ if str(ORCH) not in sys.path:
     sys.path.insert(0, str(ORCH))
 
 from rnd0035_development_runner import PLAN_PATH, _verify_evidence  # noqa: E402
-from rnd0035_reference_diagnostics_runner import analyze_reference_results  # noqa: E402
 from rnd0035_trial_plan import load_plan  # noqa: E402
 from rnd0036_2020_development_acquisition import (  # noqa: E402
     SYMBOLS,
@@ -31,6 +30,7 @@ from rnd0036_2020_development_acquisition import (  # noqa: E402
     CALENDAR_PATH,
     boundary_proof,
 )
+from rnd0038_reference_diagnostics_adapter import analyze_reference_results_2015_2020  # noqa: E402
 from rnd0038_r000_kernel_adapter import reconstruct_pair_2015_2020  # noqa: E402
 from oanda_historical_quarantine import _json, verify_existing_shard  # noqa: E402
 
@@ -183,7 +183,7 @@ def run(audusd_2015_shard, cross_pair_2015_root, development_2016_2019_root,
         symbol: reconstruct_pair_2015_2020(symbol, full_rows[symbol])
         for symbol in SYMBOLS
     }
-    diagnostics = analyze_reference_results(per_symbol)
+    diagnostics = analyze_reference_results_2015_2020(per_symbol)
     contribution_2020 = _year2020_contribution(per_symbol)
 
     pair_results = {}
