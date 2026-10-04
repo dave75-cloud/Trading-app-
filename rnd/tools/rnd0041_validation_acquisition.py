@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 import os
 import shutil
 import sys
@@ -15,6 +16,7 @@ ORCH = ROOT / "rnd" / "orchestration"
 if str(ORCH) not in sys.path:
     sys.path.insert(0, str(ORCH))
 
+from oanda_historical_acquisition import _utc  # noqa: E402
 from oanda_historical_quarantine import (  # noqa: E402
     _json,
     _write_json,
@@ -60,6 +62,8 @@ def load_declaration(path=DECLARATION_PATH):
     ):
         _require(value.get(key) is False, f"prohibited authority opened: {key}")
     _require(value.get("human_review_required") is True, "human review requirement removed")
+    _require(value.get("status") == "PREDECLARED_NOT_AUTHORIZED_TO_ACQUIRE", "predeclaration state changed")
+    _require(value.get("acquisition_authorized") is False, "predeclaration acquisition gate changed")
     return value
 
 
@@ -67,43 +71,52 @@ def load_authorization(path=AUTHORIZATION_PATH):
     value = _json(path)
     _require(value.get("task_id") == "RND-0041", "authorization task changed")
     _require(value.get("status") == "ACTIVE", "RND-0041 acquisition authorization inactive")
-    _require(value.get("scope") == "VALIDATION_ACQUISITION_AND_SEAL_ONLY", "authorization scope changed")
+    _require(value.get("scope") == "VALIDATION_EVIDENCE_ACQUISITION_ONLY", "authorization scope changed")
     _require(value.get("authorized_interval") == {
         "start_inclusive_utc": START_UTC,
         "end_exclusive_utc": END_UTC,
     }, "authorization interval changed")
     _require(value.get("symbols") == list(SYMBOLS), "authorization symbols changed")
-    _require(value.get("timeframe") == "M5", "authorization timeframe changed")
-    _require(value.get("provider") == "OANDA", "authorization provider changed")
-    _require(value.get("environment") == "PRACTICE", "authorization environment changed")
-    _require(value.get("price_components") == ["bid", "ask", "mid"], "authorization price components changed")
-    _require(value.get("complete_candles_only") is True, "complete-candle requirement removed")
-    _require(value.get("acquisition_authorized") is True, "RND-0041 acquisition not authorized")
+    _require(value.get("acquisition_authorized") is True, "acquisition not authorized")
     for key in (
-        "candidate_evaluation_authorized", "strategy_outcomes_authorized", "parameter_search",
-        "strategy_selection", "reserved_final_open", "portfolio_sizing", "broker_writes",
-        "capital_authority", "automatic_promotion", "automatic_merge",
+        "strategy_outcomes", "candidate_evaluation", "parameter_search",
+        "strategy_selection", "reserved_final_open", "portfolio_sizing",
+        "broker_writes", "capital_authority", "automatic_promotion", "automatic_merge",
     ):
         _require(value.get(key) is False, f"prohibited authority opened: {key}")
     _require(value.get("human_review_required") is True, "human review requirement removed")
     return value
 
 
+def require_acquisition_authority():
+    declaration = load_declaration()
+    authorization = load_authorization()
+    _require(
+        authorization.get("authorized_interval") == declaration.get("authorized_interval"),
+        "authorization/declaration interval mismatch",
+    )
+    _require(authorization.get("symbols") == declaration.get("symbols"), "authorization/declaration symbol mismatch")
+    return declaration, authorization
+
+
 def boundary_proof(path, symbol):
     rows = _json(Path(path) / "canonical_rows.json")
     _require(isinstance(rows, list) and rows, f"{symbol}: canonical rows missing")
+    start = _utc(START_UTC, "validation.start_utc")
+    end = _utc(END_UTC, "validation.end_utc")
     previous = None
     first = last = None
     for row in rows:
         ts = row.get("timestamp_utc") if isinstance(row, dict) else None
         _require(isinstance(ts, str), f"{symbol}: malformed timestamp")
-        _require(START_UTC <= ts < END_UTC, f"{symbol}: row outside validation interval")
+        instant = _utc(ts, f"{symbol}.timestamp_utc")
+        _require(start <= instant < end, f"{symbol}: row outside validation interval")
         if previous is not None:
-            _require(ts > previous, f"{symbol}: timestamps not strictly increasing")
+            _require(instant > previous, f"{symbol}: timestamps not strictly increasing")
         if first is None:
             first = ts
         last = ts
-        previous = ts
+        previous = instant
     return {
         "authorized_start_inclusive_utc": START_UTC,
         "authorized_end_exclusive_utc": END_UTC,
@@ -116,8 +129,7 @@ def boundary_proof(path, symbol):
 
 
 def acquire(output, resume=False, delay=0.6):
-    load_declaration()
-    load_authorization()
+    require_acquisition_authority()
     _require(0.5 <= delay <= 5.0, "request delay must be between 0.5 and 5.0 seconds")
 
     acquisition = _json(ACQUISITION_PATH)
