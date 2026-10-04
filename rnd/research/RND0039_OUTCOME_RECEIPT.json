@@ -1,0 +1,24 @@
+{
+  "task_id": "RND-0039",
+  "status": "COMPLETE_REQUIRES_HUMAN_REVIEW",
+  "scope": "PREDECLARED_TWO_POINT_HIGHER_VOLATILITY_FALSIFICATION",
+  "development_interval": {
+    "start_inclusive_utc": "2015-01-01T00:00:00Z",
+    "end_exclusive_utc": "2020-12-31T19:15:00Z"
+  },
+  "verified_2015_2019": "20/20",
+  "verified_2020": "4/4",
+  "pair_years": "24/24",
+  "thresholds_tested": [0.0005, 0.0006],
+  "external_report_path": "~/Trading-evidence/rnd0039-higher-volatility-falsification-20261004.json",
+  "external_report_sha256": "e9e5bddc67e8d906d2ba4f1a74b1d81a28554a98027989bdc8efef5989f4e772",
+  "parameter_search": false,
+  "strategy_selection": false,
+  "validation_open": false,
+  "final_test_open": false,
+  "broker_writes": false,
+  "capital_authority": false,
+  "automatic_promotion": false,
+  "automatic_merge": false,
+  "human_review_required": true
+}
