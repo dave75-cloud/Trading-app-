@@ -1,0 +1,19 @@
+{
+  "task_id": "RND-0038",
+  "attempt": 1,
+  "classification": "IMPLEMENTATION_COMPATIBILITY_FAILURE_NO_REPORT_WRITTEN",
+  "failure_stage": "POST_RECONSTRUCTION_B_CONCENTRATION_DIAGNOSTICS",
+  "error_type": "RND0035ConcentrationError",
+  "error_message": "trade outside authorized development years",
+  "cause": "Frozen RND-0035 concentration diagnostics authorized only 2015-2019 while RND-0038 legitimately includes development-year 2020.",
+  "strategy_outcomes_report_written": false,
+  "input_evidence_modified": false,
+  "frozen_rnd0035_diagnostics_modified": false,
+  "validation_open": false,
+  "final_test_open": false,
+  "strategy_selection": false,
+  "broker_writes": false,
+  "capital_authority": false,
+  "remediation": "Use RND-0038-only adapter that temporarily widens the frozen concentration year guard to 2015-2020 and restores it immediately after evaluation.",
+  "human_review_required": true
+}
