@@ -1,0 +1,19 @@
+{
+  "task_id": "RND-0038",
+  "status": "COMPLETE_REQUIRES_HUMAN_REVIEW",
+  "scope": "R000_FULL_DEVELOPMENT_2015_2020_REFERENCE_ONLY",
+  "verified_2015_2019": "20/20",
+  "verified_2020": "4/4",
+  "pair_years": "24/24",
+  "external_report_path": "~/Trading-evidence/rnd0038-r000-full-development-2015-2020-20261004.json",
+  "external_report_sha256": "5654fe89201b606d404aed36f8d8893e5b85cee90a3f0f11425067bdec9dd17d",
+  "higher_volatility_outcomes": false,
+  "strategy_selection": false,
+  "validation_open": false,
+  "final_test_open": false,
+  "broker_writes": false,
+  "capital_authority": false,
+  "automatic_promotion": false,
+  "automatic_merge": false,
+  "human_review_required": true
+}
