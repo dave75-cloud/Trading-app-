@@ -4,25 +4,29 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
-from unittest import mock
 
 import rnd0041_validation_acquisition as r
 
 
 class TestRND0041ValidationAcquisition(unittest.TestCase):
-    def test_repository_declaration_is_fail_closed(self):
+    def test_repository_declaration_remains_outcome_closed(self):
         value = r.load_declaration()
-        self.assertEqual(value["status"], "PREDECLARED_NOT_AUTHORIZED_TO_ACQUIRE")
-        self.assertFalse(value["acquisition_authorized"])
         self.assertFalse(value["strategy_outcomes"])
         self.assertFalse(value["candidate_evaluation"])
         self.assertFalse(value["reserved_final_open"])
         self.assertFalse(value["broker_writes"])
         self.assertFalse(value["capital_authority"])
 
-    def test_active_requirement_refuses_current_declaration(self):
-        with self.assertRaises(r.RND0041AcquisitionError):
-            r.load_declaration(require_active=True)
+    def test_repository_authorization_is_acquisition_only(self):
+        value = r.load_authorization()
+        self.assertTrue(value["acquisition_authorized"])
+        self.assertFalse(value["candidate_evaluation_authorized"])
+        self.assertFalse(value["strategy_outcomes_authorized"])
+        self.assertFalse(value["parameter_search"])
+        self.assertFalse(value["strategy_selection"])
+        self.assertFalse(value["reserved_final_open"])
+        self.assertFalse(value["broker_writes"])
+        self.assertFalse(value["capital_authority"])
 
     def test_boundary_proof_accepts_validation_rows_before_final_boundary(self):
         with tempfile.TemporaryDirectory() as tmp:
