@@ -64,7 +64,8 @@ def validate_rows(rows):
         dt = _utc(row["timestamp_utc"])
         _require(dt not in seen, "rows: duplicate timestamp")
         _require(previous is None or dt > previous, "rows: timestamps out of order")
-        seen.add(dt); previous = dt
+        seen.add(dt)
+        previous = dt
         bid = _price(row["bid_close"], "bid_close")
         ask = _price(row["ask_close"], "ask_close")
         mid = _price(row["mid_close"], "mid_close")
@@ -118,67 +119,185 @@ def reconstruct_pair(symbol, rows, arm):
     closes, returns, gaps, trades, censored, marks = [], [], [], [], [], []
     previous_dt = previous_mid = previous_raw = None
     previous_entry_eligible = True
-    episode = 0; position = 0; bars_held = 0; entry = None
-    rejected_entry_signal_count = 0; eligible_entry_ratios = []
+    previous_entry_ratio = None
+    episode = 0
+    position = 0
+    bars_held = 0
+    entry = None
+    rejected_entry_signal_count = 0
+    actual_entry_ratios = []
 
     def reset_state():
-        nonlocal closes, returns, previous_mid, previous_raw, previous_entry_eligible, episode
-        closes=[]; returns=[]; previous_mid=None; previous_raw=None; previous_entry_eligible=True; episode += 1
+        nonlocal closes, returns, previous_mid, previous_raw, previous_entry_eligible, previous_entry_ratio, episode
+        closes = []
+        returns = []
+        previous_mid = None
+        previous_raw = None
+        previous_entry_eligible = True
+        previous_entry_ratio = None
+        episode += 1
 
-    def open_trade(side, dt, bid, ask, mid):
-        return {"symbol":symbol,"side":"long" if side==1 else "short","side_value":side,"entry_timestamp":dt.strftime("%Y-%m-%dT%H:%M:%SZ"),"entry_execution_price":ask if side==1 else bid,"entry_mid_price":mid,"episode":episode,"gap_exposure_count":0,"gap_elapsed_seconds":0}
+    def open_trade(side, dt, bid, ask, mid, source_ratio):
+        value = {
+            "symbol": symbol,
+            "side": "long" if side == 1 else "short",
+            "side_value": side,
+            "entry_timestamp": dt.strftime("%Y-%m-%dT%H:%M:%SZ"),
+            "entry_execution_price": ask if side == 1 else bid,
+            "entry_mid_price": mid,
+            "episode": episode,
+            "gap_exposure_count": 0,
+            "gap_elapsed_seconds": 0,
+            "entry_signal_to_friction": source_ratio["signal_to_friction"] if source_ratio is not None else None,
+        }
+        if source_ratio is not None:
+            actual_entry_ratios.append(source_ratio["signal_to_friction"])
+        return value
 
     def complete_trade(current, dt, bid, ask, mid, held):
-        side=current["side_value"]; exit_exec=bid if side==1 else ask
-        gross,net=frozen._trade_return(side,current["entry_execution_price"],exit_exec,current["entry_mid_price"],mid)
-        return {"symbol":symbol,"side":current["side"],"entry_timestamp":current["entry_timestamp"],"exit_timestamp":dt.strftime("%Y-%m-%dT%H:%M:%SZ"),"entry_execution_price":current["entry_execution_price"],"exit_execution_price":exit_exec,"entry_mid_price":current["entry_mid_price"],"exit_mid_price":mid,"gross_return":gross,"net_return":net,"execution_cost_drag":gross-net,"holding_bars":held,"gap_exposure_count":current.get("gap_exposure_count",0),"gap_elapsed_seconds":current.get("gap_elapsed_seconds",0),"gap_exposed":current.get("gap_exposure_count",0)>0,"exit_year":dt.year,"episode":current["episode"],"status":"COMPLETE"}
+        side = current["side_value"]
+        exit_exec = bid if side == 1 else ask
+        gross, net = frozen._trade_return(
+            side,
+            current["entry_execution_price"],
+            exit_exec,
+            current["entry_mid_price"],
+            mid,
+        )
+        return {
+            "symbol": symbol,
+            "side": current["side"],
+            "entry_timestamp": current["entry_timestamp"],
+            "exit_timestamp": dt.strftime("%Y-%m-%dT%H:%M:%SZ"),
+            "entry_execution_price": current["entry_execution_price"],
+            "exit_execution_price": exit_exec,
+            "entry_mid_price": current["entry_mid_price"],
+            "exit_mid_price": mid,
+            "gross_return": gross,
+            "net_return": net,
+            "execution_cost_drag": gross - net,
+            "holding_bars": held,
+            "gap_exposure_count": current.get("gap_exposure_count", 0),
+            "gap_elapsed_seconds": current.get("gap_elapsed_seconds", 0),
+            "gap_exposed": current.get("gap_exposure_count", 0) > 0,
+            "exit_year": dt.year,
+            "episode": current["episode"],
+            "entry_signal_to_friction": current.get("entry_signal_to_friction"),
+            "status": "COMPLETE",
+        }
 
     reset_state()
-    for dt,bid,ask,mid in parsed:
+    for dt, bid, ask, mid in parsed:
         if previous_dt is not None:
-            delta=int((dt-previous_dt).total_seconds())
+            delta = int((dt - previous_dt).total_seconds())
             if delta != M5_SECONDS:
-                gaps.append({"symbol":symbol,"previous_timestamp":previous_dt.strftime("%Y-%m-%dT%H:%M:%SZ"),"next_timestamp":dt.strftime("%Y-%m-%dT%H:%M:%SZ"),"elapsed_seconds":delta,"position_was_open":position!=0})
-                if position!=0 and entry is not None:
-                    entry["gap_exposure_count"] += 1; entry["gap_elapsed_seconds"] += delta
+                gaps.append({
+                    "symbol": symbol,
+                    "previous_timestamp": previous_dt.strftime("%Y-%m-%dT%H:%M:%SZ"),
+                    "next_timestamp": dt.strftime("%Y-%m-%dT%H:%M:%SZ"),
+                    "elapsed_seconds": delta,
+                    "position_was_open": position != 0,
+                })
+                if position != 0 and entry is not None:
+                    entry["gap_exposure_count"] += 1
+                    entry["gap_elapsed_seconds"] += delta
                 reset_state()
+
         if previous_mid is not None:
-            returns.append(mid/previous_mid-1.0)
+            returns.append(mid / previous_mid - 1.0)
         closes.append(mid)
 
-        raw, entry_eligible, ratio = raw_signal(symbol,closes,returns,dt,bid,ask,mid,arm)
+        raw, entry_eligible, ratio = raw_signal(symbol, closes, returns, dt, bid, ask, mid, arm)
         desired = previous_raw
         desired_entry_eligible = previous_entry_eligible
+        desired_entry_ratio = previous_entry_ratio
         previous_raw = raw
         previous_entry_eligible = entry_eligible
+        previous_entry_ratio = ratio if raw not in (None, 0) else None
 
-        if raw is not None and raw != 0 and ratio is not None:
-            if entry_eligible:
-                eligible_entry_ratios.append(ratio["signal_to_friction"])
-            else:
-                rejected_entry_signal_count += 1
+        if raw is not None and raw != 0 and ratio is not None and not entry_eligible:
+            rejected_entry_signal_count += 1
 
-        if position!=0:
+        if position != 0:
             bars_held += 1
 
-        if position==0 and desired is not None and desired!=0 and desired_entry_eligible:
-            position=desired; bars_held=0; entry=open_trade(position,dt,bid,ask,mid)
-        elif position!=0 and desired is not None and desired==0 and bars_held>=MIN_HOLD_BARS:
-            trades.append(complete_trade(entry,dt,bid,ask,mid,bars_held)); position=0; bars_held=0; entry=None
-        elif position!=0 and desired is not None and desired==-position and bars_held>=MIN_HOLD_BARS:
-            trades.append(complete_trade(entry,dt,bid,ask,mid,bars_held)); position=0; bars_held=0; entry=None
+        if position == 0 and desired is not None and desired != 0 and desired_entry_eligible:
+            position = desired
+            bars_held = 0
+            entry = open_trade(position, dt, bid, ask, mid, desired_entry_ratio)
+        elif position != 0 and desired is not None and desired == 0 and bars_held >= MIN_HOLD_BARS:
+            trades.append(complete_trade(entry, dt, bid, ask, mid, bars_held))
+            position = 0
+            bars_held = 0
+            entry = None
+        elif position != 0 and desired is not None and desired == -position and bars_held >= MIN_HOLD_BARS:
+            trades.append(complete_trade(entry, dt, bid, ask, mid, bars_held))
+            position = 0
+            bars_held = 0
+            entry = None
             if desired_entry_eligible:
-                position=desired; entry=open_trade(position,dt,bid,ask,mid)
+                position = desired
+                entry = open_trade(position, dt, bid, ask, mid, desired_entry_ratio)
 
-        mark_return=None
-        if position!=0 and entry is not None:
-            mark_exec=bid if position==1 else ask
-            mark_return=(mark_exec-entry["entry_execution_price"])/entry["entry_execution_price"] if position==1 else (entry["entry_execution_price"]-mark_exec)/entry["entry_execution_price"]
-        marks.append({"symbol":symbol,"timestamp":dt.strftime("%Y-%m-%dT%H:%M:%SZ"),"position":position,"mark_return":mark_return})
-        previous_dt=dt; previous_mid=mid
+        mark_return = None
+        if position != 0 and entry is not None:
+            mark_exec = bid if position == 1 else ask
+            if position == 1:
+                mark_return = (mark_exec - entry["entry_execution_price"]) / entry["entry_execution_price"]
+            else:
+                mark_return = (entry["entry_execution_price"] - mark_exec) / entry["entry_execution_price"]
+        marks.append({
+            "symbol": symbol,
+            "timestamp": dt.strftime("%Y-%m-%dT%H:%M:%SZ"),
+            "position": position,
+            "mark_return": mark_return,
+        })
+        previous_dt = dt
+        previous_mid = mid
 
-    if position!=0 and entry is not None:
-        censored.append({"symbol":symbol,"entry_timestamp":entry["entry_timestamp"],"status":"RIGHT_CENSORED_END_OF_SAMPLE"})
-    net=[x["net_return"] for x in trades]; gross=[x["gross_return"] for x in trades]
-    net_eq,net_dd=frozen._max_drawdown(net); gross_eq,gross_dd=frozen._max_drawdown(gross)
-    return {"contract_version":"RND0043-signal-friction-kernel-v1","symbol":symbol,"arm":arm,"ratio_threshold":AUTHORIZED_ARMS[arm],"authorized_years":sorted(AUTHORIZED_YEARS),"row_count":len(parsed),"contiguous_episode_count":episode,"gap_count":len(gaps),"completed_trade_count":len(trades),"censored_trade_count":len(censored),"net_hit_rate":sum(1 for x in net if x>0)/len(net) if net else None,"completed_trade_net_equity_index":net_eq,"completed_trade_net_max_drawdown":net_dd,"completed_trade_gross_equity_index":gross_eq,"completed_trade_gross_max_drawdown":gross_dd,"total_execution_cost_drag":sum(x["execution_cost_drag"] for x in trades),"completed_trade_net_return_sum":sum(net),"rejected_entry_signal_count":rejected_entry_signal_count,"eligible_entry_signal_to_friction_ratios":eligible_entry_ratios,"trades":trades,"gaps":gaps,"marks":marks,"authority":{"development_outcomes":False,"strategy_selection":False,"validation_access":False,"reserved_final_open":False,"broker_writes":False,"capital_authority":False,"automatic_promotion":False,"automatic_merge":False}}
+    if position != 0 and entry is not None:
+        censored.append({
+            "symbol": symbol,
+            "entry_timestamp": entry["entry_timestamp"],
+            "entry_signal_to_friction": entry.get("entry_signal_to_friction"),
+            "status": "RIGHT_CENSORED_END_OF_SAMPLE",
+        })
+
+    net = [x["net_return"] for x in trades]
+    gross = [x["gross_return"] for x in trades]
+    net_eq, net_dd = frozen._max_drawdown(net)
+    gross_eq, gross_dd = frozen._max_drawdown(gross)
+    return {
+        "contract_version": "RND0043-signal-friction-kernel-v1",
+        "symbol": symbol,
+        "arm": arm,
+        "ratio_threshold": AUTHORIZED_ARMS[arm],
+        "authorized_years": sorted(AUTHORIZED_YEARS),
+        "row_count": len(parsed),
+        "contiguous_episode_count": episode,
+        "gap_count": len(gaps),
+        "completed_trade_count": len(trades),
+        "censored_trade_count": len(censored),
+        "net_hit_rate": sum(1 for x in net if x > 0) / len(net) if net else None,
+        "completed_trade_net_equity_index": net_eq,
+        "completed_trade_net_max_drawdown": net_dd,
+        "completed_trade_gross_equity_index": gross_eq,
+        "completed_trade_gross_max_drawdown": gross_dd,
+        "total_execution_cost_drag": sum(x["execution_cost_drag"] for x in trades),
+        "completed_trade_net_return_sum": sum(net),
+        "rejected_entry_signal_count": rejected_entry_signal_count,
+        "actual_entry_signal_to_friction_ratios": actual_entry_ratios,
+        "trades": trades,
+        "gaps": gaps,
+        "marks": marks,
+        "authority": {
+            "development_outcomes": False,
+            "strategy_selection": False,
+            "validation_access": False,
+            "reserved_final_open": False,
+            "broker_writes": False,
+            "capital_authority": False,
+            "automatic_promotion": False,
+            "automatic_merge": False,
+        },
+    }
