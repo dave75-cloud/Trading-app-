@@ -1,0 +1,22 @@
+{
+  "task_id": "RND-0042",
+  "status": "COMPLETE_REQUIRES_HUMAN_REVIEW",
+  "classification": "VALIDATION_REJECTED",
+  "candidate_threshold": 0.0006,
+  "validation_interval": {
+    "start_inclusive_utc": "2020-12-31T19:15:00Z",
+    "end_exclusive_utc": "2023-01-01T09:40:00Z"
+  },
+  "structural_seal_sha256": "b2b9a48e204910d3e87ed7af18ad4b47a35ae33681b1d7c5d1e75a15d22af35c",
+  "report_path": "~/Trading-evidence/rnd0042-validation-candidate-20261004.json",
+  "report_sha256": "8636b73a887a082d6cf4b73aadd67b9ac7c6bc2db17d534928d12153df542548",
+  "parameter_search": false,
+  "strategy_selection": false,
+  "reserved_final_open": false,
+  "portfolio_sizing": false,
+  "broker_writes": false,
+  "capital_authority": false,
+  "automatic_promotion": false,
+  "automatic_merge": false,
+  "human_review_required": true
+}
