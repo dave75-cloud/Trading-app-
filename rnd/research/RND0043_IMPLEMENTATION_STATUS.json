@@ -1,0 +1,31 @@
+{
+  "task_id": "RND-0043",
+  "status": "IMPLEMENTED_FIXTURE_TESTING_ONLY",
+  "contract_commit": "6deab3b292f951d62f3af1cc7127f379bcbaf055",
+  "authorized_arms": {
+    "F000": null,
+    "F001": 3.0,
+    "F002": 5.0,
+    "F003": 8.0
+  },
+  "implementation": {
+    "kernel": "rnd/orchestration/rnd0043_signal_friction_kernel.py",
+    "tests": "rnd/orchestration/test_rnd0043_signal_friction_kernel.py",
+    "frozen_r000_source_modified": false,
+    "fixture_testing_authorized": true
+  },
+  "authority": {
+    "development_outcomes": false,
+    "full_development_data_run": false,
+    "parameter_expansion": false,
+    "strategy_selection": false,
+    "validation_access": false,
+    "reserved_final_open": false,
+    "broker_writes": false,
+    "portfolio_sizing": false,
+    "capital_authority": false,
+    "automatic_promotion": false,
+    "automatic_merge": false,
+    "human_review_required": true
+  }
+}
