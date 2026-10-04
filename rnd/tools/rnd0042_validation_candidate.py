@@ -59,6 +59,14 @@ def load_rows(root,symbol):
 def summary(r):
     return {"trades":r["completed_trade_count"],"hit_rate":r["net_hit_rate"],"gross_equity_index":r["completed_trade_gross_equity_index"],"net_equity_index":r["completed_trade_net_equity_index"],"net_max_drawdown":r["completed_trade_net_max_drawdown"],"execution_cost_drag":r["total_execution_cost_drag"]}
 
+def classify(criteria):
+    c1=bool(criteria["1_terminal_equity_positive"]); c2=bool(criteria["2_realized_net_positive"])
+    c3=bool(criteria["3_at_least_3_pairs_nonnegative"]); c4=bool(criteria["4_pair_concentration_ok"])
+    c5=bool(criteria["5_year_concentration_ok"]); c6=bool(criteria["6_drawdown_ok"]); c7=bool(criteria["7_identity_boundary_warmup_ok"])
+    if not (c1 and c2 and c6 and c7): return "VALIDATION_REJECTED"
+    if not (c3 and c4 and c5): return "VALIDATION_INCONCLUSIVE_CONCENTRATED"
+    return "VALIDATION_SUPPORTED"
+
 def run(evidence_root, seal_report):
     authorization()
     req(sha(seal_report)==SEAL_SHA,"structural seal SHA mismatch")
@@ -66,12 +74,10 @@ def run(evidence_root, seal_report):
     req(seal.get("verified_symbols")=="4/4" and seal.get("reserved_final_open") is False,"invalid structural seal")
     results={s:reconstruct_validation_candidate(s,load_rows(evidence_root,s)) for s in SYMBOLS}
     per_pair={s:summary(results[s]) for s in SYMBOLS}
-    trades=[]
     year_sum=defaultdict(float); pair_sum={}
     for s in SYMBOLS:
         pair_trades=results[s]["trades"]
         pair_sum[s]=sum(float(t["net_return"]) for t in pair_trades)
-        trades.extend(pair_trades)
         for t in pair_trades:
             year=str(t["exit_timestamp"])[:4]
             year_sum[year]+=float(t["net_return"])
@@ -85,18 +91,16 @@ def run(evidence_root, seal_report):
     for s in SYMBOLS:
         stream=[{"symbol":s,"net_return":t["net_return"]} for t in results[s]["trades"]]
         boot[s]=[bootstrap_configuration(stream,c["seed"],c["expected_block_length_trades"]) for c in declared_configuration_grid()]
-    c1=concurrent["final_equal_unit_normalized_equity_index"]>1.0
-    c2=concurrent["realized_completed_trade_net_return_sum"]>0
-    c3=sum(1 for s in SYMBOLS if per_pair[s]["net_equity_index"]>=1.0)>=3
-    c4=pair_share<=0.70
-    c5=year_share<=0.70
-    c6=concurrent["equal_unit_normalized_max_drawdown"]>=-0.10
-    c7=True
-    crit={"1_terminal_equity_positive":c1,"2_realized_net_positive":c2,"3_at_least_3_pairs_nonnegative":c3,"4_pair_concentration_ok":c4,"5_year_concentration_ok":c5,"6_drawdown_ok":c6,"7_identity_boundary_warmup_ok":c7}
-    if not (c1 and c2 and c6 and c7): classification="VALIDATION_REJECTED"
-    elif not (c3 and c4 and c5): classification="VALIDATION_INCONCLUSIVE_CONCENTRATED"
-    else: classification="VALIDATION_SUPPORTED"
-    return {"contract_version":"RND0042-validation-candidate-v1","task_id":"RND-0042","candidate_threshold":0.0006,"warmup_rows_used":0,"warmup_policy":"ZERO_OF_AT_MOST_50_STATE_ONLY_ROWS","structural_seal_sha256":SEAL_SHA,"per_pair":per_pair,"pair_net_return_sum":pair_sum,"year_net_return_sum":dict(sorted(year_sum.items())),"max_positive_pair_contribution_share":pair_share,"max_positive_year_contribution_share":year_share,"cost_diagnostics":cost,"stationary_bootstrap":boot,"four_pair_concurrent_reference":concurrent,"criteria":crit,"classification":classification,"parameter_search":False,"strategy_selection":False,"reserved_final_open":False,"broker_writes":False,"capital_authority":False,"automatic_promotion":False,"automatic_merge":False,"status":"COMPLETE_REQUIRES_HUMAN_REVIEW"}
+    crit={
+        "1_terminal_equity_positive":concurrent["final_equal_unit_normalized_equity_index"]>1.0,
+        "2_realized_net_positive":concurrent["realized_completed_trade_net_return_sum"]>0,
+        "3_at_least_3_pairs_nonnegative":sum(1 for s in SYMBOLS if per_pair[s]["net_equity_index"]>=1.0)>=3,
+        "4_pair_concentration_ok":pair_share<=0.70,
+        "5_year_concentration_ok":year_share<=0.70,
+        "6_drawdown_ok":concurrent["equal_unit_normalized_max_drawdown"]>=-0.10,
+        "7_identity_boundary_warmup_ok":True,
+    }
+    return {"contract_version":"RND0042-validation-candidate-v1","task_id":"RND-0042","candidate_threshold":0.0006,"warmup_rows_used":0,"warmup_policy":"ZERO_OF_AT_MOST_50_STATE_ONLY_ROWS","structural_seal_sha256":SEAL_SHA,"per_pair":per_pair,"pair_net_return_sum":pair_sum,"year_net_return_sum":dict(sorted(year_sum.items())),"max_positive_pair_contribution_share":pair_share,"max_positive_year_contribution_share":year_share,"cost_diagnostics":cost,"stationary_bootstrap":boot,"four_pair_concurrent_reference":concurrent,"criteria":crit,"classification":classify(crit),"parameter_search":False,"strategy_selection":False,"reserved_final_open":False,"broker_writes":False,"capital_authority":False,"automatic_promotion":False,"automatic_merge":False,"status":"COMPLETE_REQUIRES_HUMAN_REVIEW"}
 
 def write_new(path,val):
     p=Path(path).expanduser().resolve(); req(not p.exists(),"report exists; overwrite prohibited")
