@@ -1,0 +1,21 @@
+{
+  "task_id": "RND-0041",
+  "status": "STRUCTURALLY_SEALED_REQUIRES_HUMAN_REVIEW",
+  "scope": "VALIDATION_EVIDENCE_STRUCTURAL_SEAL_ONLY",
+  "verified_symbols": "4/4",
+  "external_report": "~/Trading-evidence/rnd0041-validation-structural-seal-20261004.json",
+  "external_report_sha256": "b2b9a48e204910d3e87ed7af18ad4b47a35ae33681b1d7c5d1e75a15d22af35c",
+  "validation_interval": {
+    "start_inclusive_utc": "2020-12-31T19:15:00Z",
+    "end_exclusive_utc": "2023-01-01T09:40:00Z"
+  },
+  "strategy_evaluation": false,
+  "candidate_evaluation": false,
+  "reserved_final_open": false,
+  "broker_writes": false,
+  "portfolio_sizing": false,
+  "capital_authority": false,
+  "automatic_promotion": false,
+  "automatic_merge": false,
+  "human_review_required": true
+}
