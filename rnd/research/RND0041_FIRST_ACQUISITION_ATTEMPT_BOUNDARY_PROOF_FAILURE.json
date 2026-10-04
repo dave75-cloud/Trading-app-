@@ -1,0 +1,20 @@
+{
+  "task_id": "RND-0041",
+  "attempt": 1,
+  "status": "IMPLEMENTATION_FAILURE_NO_STRATEGY_OUTCOMES",
+  "failure_stage": "POST_ACQUISITION_STRUCTURAL_BOUNDARY_PROOF",
+  "observed_error": "AUDUSD: row outside validation interval",
+  "root_cause": "RND-0041 boundary proof compared raw UTC timestamp strings rather than parsed UTC instants. Fractional-second provider timestamps can compare incorrectly against second-resolution boundary strings even when they represent valid in-range instants.",
+  "core_page_window_validation": "PASSED_BEFORE_BOUNDARY_PROOF",
+  "genuine_provider_overfetch_detected": false,
+  "strategy_evaluation": false,
+  "candidate_evaluation": false,
+  "reserved_final_open": false,
+  "broker_writes": false,
+  "capital_authority": false,
+  "strategy_selection": false,
+  "automatic_promotion": false,
+  "automatic_merge": false,
+  "remediation": "Compare parsed UTC instants in RND-0041 boundary proof and regression-test fractional-second provider timestamp formatting. Preserve failed output root separately; do not treat it as sealed or resumable validation evidence.",
+  "human_review_required": true
+}
