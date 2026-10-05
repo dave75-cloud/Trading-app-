@@ -114,6 +114,16 @@ def evaluate_symbol(symbol, rows):
         day = dt.date()
 
         if active is not None:
+            # The delayed entry bar establishes the economic position but does not
+            # count as holding bar 1. Emit its executable mark exactly once here.
+            if dt == active["entry_dt"]:
+                mark_exec = bar["bid"] if active["side"] == 1 else bar["ask"]
+                mark_return = ((mark_exec - active["entry_exec"]) / active["entry_exec"]
+                               if active["side"] == 1
+                               else (active["entry_exec"] - mark_exec) / active["entry_exec"])
+                marks.append({"symbol": symbol, "timestamp": dt.strftime("%Y-%m-%dT%H:%M:%SZ"), "position": active["side"], "mark_return": mark_return})
+                continue
+
             delta = int((dt - previous_position_dt).total_seconds())
             if delta != M5_SECONDS:
                 gap_count += 1
@@ -223,13 +233,6 @@ def evaluate_symbol(symbol, rows):
         held = 0
         gap_count = 0
         previous_position_dt = entry_dt
-        marks.append({
-            "symbol": symbol,
-            "timestamp": entry_dt.strftime("%Y-%m-%dT%H:%M:%SZ"),
-            "position": side,
-            "mark_return": ((entry["bid"] - entry_exec) / entry_exec
-                            if side == 1 else (entry_exec - entry["ask"]) / entry_exec),
-        })
         events.append({
             "event_type": "ENTRY",
             "timestamp": entry_dt.strftime("%Y-%m-%dT%H:%M:%SZ"),
