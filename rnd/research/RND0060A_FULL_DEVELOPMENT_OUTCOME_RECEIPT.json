@@ -1,0 +1,20 @@
+{
+  "task_id": "RND-0060A",
+  "status": "FULL_DEVELOPMENT_COMPLETE",
+  "classification": "DEVELOPMENT_FALSIFIED",
+  "verified_2015_2019": "20/20",
+  "verified_2020": "4/4",
+  "pair_years": "24/24",
+  "trial_count": 1,
+  "parameter_search": false,
+  "external_report_path": "/Users/davidkerr/Trading-evidence/rnd0060a-opening-range-full-development-2015-2020-20261005.json",
+  "external_report_sha256": "52855cc0addf567f6983c324b2fd5a0347a8b5528aaa2544f9deec00f32aa818",
+  "validation_open": false,
+  "final_test_open": false,
+  "reserved_final_access": false,
+  "broker_writes": false,
+  "capital_authority": false,
+  "automatic_promotion": false,
+  "automatic_merge": false,
+  "human_review_required": true
+}
