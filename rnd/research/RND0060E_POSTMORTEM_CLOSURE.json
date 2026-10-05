@@ -1,0 +1,48 @@
+{
+  "task_id": "RND-0060E",
+  "classification": "DEVELOPMENT_FALSIFIED",
+  "status": "CLOSED_NEGATIVE",
+  "mechanism": "VOLATILITY_CONTRACTION_TO_BREAKOUT_EXPANSION",
+  "portfolio": {
+    "final_equal_unit_normalized_equity_index": 0.9696429408194257,
+    "realized_completed_trade_net_return_sum": -0.12142823672229708,
+    "equal_unit_normalized_max_drawdown": -0.03063232212632172
+  },
+  "per_symbol": {
+    "AUDUSD": {"trades": 199, "terminal_net_equity": 0.9683297928895855, "realized_net_sum": -0.032111336480295655, "execution_cost_drag": 0.02618245950886311},
+    "EURUSD": {"trades": 204, "terminal_net_equity": 0.976055709944496, "realized_net_sum": -0.024192902562660497, "execution_cost_drag": 0.012855308398491043},
+    "GBPUSD": {"trades": 263, "terminal_net_equity": 0.9485734706093035, "realized_net_sum": -0.052670398008608614, "execution_cost_drag": 0.02980483657123198},
+    "USDJPY": {"trades": 178, "terminal_net_equity": 0.9875935387939148, "realized_net_sum": -0.012453599670732328, "execution_cost_drag": 0.013599711279694017}
+  },
+  "annual_aggregate_realized_net": {
+    "2015": -0.020107034386717317,
+    "2016": -0.02112504525742763,
+    "2017": -0.013758505934168844,
+    "2018": -0.028429609175753625,
+    "2019": -0.027284138786775564,
+    "2020": -0.01072390318145412
+  },
+  "leave_one_pair_out_realized_net_sum": {
+    "exclude_AUDUSD": -0.08931690024200144,
+    "exclude_EURUSD": -0.09723533415963659,
+    "exclude_GBPUSD": -0.06875783871368848,
+    "exclude_USDJPY": -0.10897463705156477
+  },
+  "scientific_interpretation": [
+    "All four pair buckets were negative.",
+    "All six development years were negative.",
+    "Every leave-one-pair-out aggregate remained negative.",
+    "Integrity reconciliation passed.",
+    "Maximum drawdown remained modest, indicating persistent negative expectancy rather than instability.",
+    "The mechanism is therefore rejected as specified; no nearby ratio, lookback, holding-period, pair-selection or inverse-direction tuning is authorized from this result."
+  ],
+  "governance": {
+    "parameter_search": false,
+    "validation_open": false,
+    "final_test_open": false,
+    "reserved_final_access": false,
+    "broker_writes": false,
+    "capital_authority": false,
+    "automatic_promotion": false
+  }
+}
