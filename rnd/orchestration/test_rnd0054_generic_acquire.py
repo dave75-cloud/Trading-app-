@@ -1,9 +1,14 @@
 import json
+import sys
 import tempfile
 import unittest
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
+
+ROOT = Path(__file__).resolve().parents[2]
+TOOLS = ROOT / "rnd" / "tools"
+sys.path.insert(0, str(TOOLS))
 
 from rnd0054_generic_acquire import acquire_window, wall_clock_m5, RND0054AcquireError
 from rnd0054_generic_verifier import verify_tranche
