@@ -76,6 +76,10 @@ def _trade_return(side, entry_exec, exit_exec, entry_mid, exit_mid):
         net = (entry_exec - exit_exec) / entry_exec
     return gross, net
 
+def _mark_return(side, entry_exec, bar):
+    mark_exec = bar["bid"] if side == 1 else bar["ask"]
+    return ((mark_exec - entry_exec) / entry_exec) if side == 1 else ((entry_exec - mark_exec) / entry_exec)
+
 def _max_drawdown(returns):
     equity = peak = 1.0
     max_dd = 0.0
@@ -95,9 +99,13 @@ def evaluate_symbol(symbol, rows):
 
     trades, events, marks = [], [], []
     contraction_count = breakout_count = 0
+    blocked_until = None
 
     for day in days:
         obs = datetime(day.year, day.month, day.day, OBS_HOUR, OBS_MINUTE, tzinfo=timezone.utc)
+        if blocked_until is not None and obs <= blocked_until:
+            events.append({"event_type": "DAY_SKIPPED_OPEN_POSITION", "timestamp": obs.strftime("%Y-%m-%dT%H:%M:%SZ")})
+            continue
         if obs not in by_dt:
             continue
         i = index[obs]
@@ -105,10 +113,7 @@ def evaluate_symbol(symbol, rows):
             events.append({"event_type": "DAY_SKIPPED_INCOMPLETE_STATE", "timestamp": obs.strftime("%Y-%m-%dT%H:%M:%SZ")})
             continue
         window = parsed[i - (TOTAL_BARS - 1): i + 1]
-        if any(x["dt"].date() != day for x in window):
-            events.append({"event_type": "DAY_SKIPPED_INCOMPLETE_STATE", "timestamp": obs.strftime("%Y-%m-%dT%H:%M:%SZ")})
-            continue
-        if not all(int((window[j]["dt"] - window[j-1]["dt"]).total_seconds()) == M5_SECONDS for j in range(1, len(window))):
+        if any(x["dt"].date() != day for x in window) or not all(int((window[j]["dt"] - window[j-1]["dt"]).total_seconds()) == M5_SECONDS for j in range(1, len(window))):
             events.append({"event_type": "DAY_SKIPPED_INCOMPLETE_STATE", "timestamp": obs.strftime("%Y-%m-%dT%H:%M:%SZ")})
             continue
         baseline = window[:BASELINE_BARS]
@@ -133,11 +138,9 @@ def evaluate_symbol(symbol, rows):
                 events.append({"event_type": "BREAKOUT_SCAN_CANCELLED", "timestamp": dt.strftime("%Y-%m-%dT%H:%M:%SZ"), "reason": "OBSERVATION_DISCONTINUITY"})
                 break
             if bar["mid"] > short_high:
-                signal = (j, 1)
-                break
+                signal = (j, 1); break
             if bar["mid"] < short_low:
-                signal = (j, -1)
-                break
+                signal = (j, -1); break
             j += 1
         if signal is None:
             continue
@@ -154,6 +157,7 @@ def evaluate_symbol(symbol, rows):
             events.append({"event_type": "PENDING_SIGNAL_CANCELLED", "timestamp": entry["dt"].strftime("%Y-%m-%dT%H:%M:%SZ"), "reason": "ENTRY_NOT_ELIGIBLE"})
             continue
         entry_exec = entry["ask"] if side == 1 else entry["bid"]
+        marks.append({"symbol": symbol, "timestamp": entry["dt"].strftime("%Y-%m-%dT%H:%M:%SZ"), "position": side, "mark_return": _mark_return(side, entry_exec, entry)})
         held = 0
         gap_count = 0
         prev_dt = entry["dt"]
@@ -168,14 +172,19 @@ def evaluate_symbol(symbol, rows):
             held += 1
             prev_dt = bar["dt"]
             exit_bar = bar
+            if held < HOLD_BARS:
+                marks.append({"symbol": symbol, "timestamp": bar["dt"].strftime("%Y-%m-%dT%H:%M:%SZ"), "position": side, "mark_return": _mark_return(side, entry_exec, bar)})
             k += 1
         if held < HOLD_BARS:
+            blocked_until = parsed[-1]["dt"]
             events.append({"event_type": "RIGHT_CENSORED", "timestamp": entry["dt"].strftime("%Y-%m-%dT%H:%M:%SZ")})
             continue
+        blocked_until = exit_bar["dt"]
         exit_exec = exit_bar["bid"] if side == 1 else exit_bar["ask"]
         gross, net = _trade_return(side, entry_exec, exit_exec, entry["mid"], exit_bar["mid"])
         trade = {"symbol": symbol, "side": "long" if side == 1 else "short", "entry_timestamp": entry["dt"].strftime("%Y-%m-%dT%H:%M:%SZ"), "exit_timestamp": exit_bar["dt"].strftime("%Y-%m-%dT%H:%M:%SZ"), "holding_bars": held, "gap_exposure_count": gap_count, "entry_execution_price": entry_exec, "exit_execution_price": exit_exec, "entry_mid_price": entry["mid"], "exit_mid_price": exit_bar["mid"], "gross_return": gross, "net_return": net, "execution_cost_drag": gross - net, "exit_year": exit_bar["dt"].year}
         trades.append(trade)
+        marks.append({"symbol": symbol, "timestamp": trade["exit_timestamp"], "position": 0, "mark_return": None})
         events.append({"event_type": "EXIT", "timestamp": trade["exit_timestamp"], "net_return": net})
 
     net_returns = [t["net_return"] for t in trades]
