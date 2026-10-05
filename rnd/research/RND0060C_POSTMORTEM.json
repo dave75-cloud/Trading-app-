@@ -1,0 +1,38 @@
+{
+  "task_id": "RND-0060C",
+  "status": "CLOSED_NEGATIVE_RESULT",
+  "classification": "DEVELOPMENT_FALSIFIED",
+  "report_sha256": "20518f2819baaf2fac2a0a7654982f643f273857364f9e6c8842fc7947aec4e7",
+  "summary": {
+    "portfolio_terminal_equity": 0.9742649167287495,
+    "portfolio_realized_net_sum": -0.10294033308500206,
+    "portfolio_max_drawdown": -0.028556016313844967,
+    "all_four_pair_buckets_negative": true,
+    "all_six_development_years_negative": true,
+    "all_leave_one_pair_out_aggregates_negative": true,
+    "integrity_reconciliation_pass": true,
+    "selection_counts": {
+      "AUDUSD": 368,
+      "EURUSD": 281,
+      "GBPUSD": 524,
+      "USDJPY": 367
+    }
+  },
+  "interpretation": "Cross-sectional USD relative-value convergence at the fixed 11:30 UTC decision point is rejected as a transferable development mechanism. Failure is not explained by one pair, one year, concentration, or integrity defect.",
+  "no_post_hoc_actions": [
+    "do not add a residual threshold",
+    "do not invert convergence to divergence",
+    "do not move the decision timestamp",
+    "do not change lookback or hold period",
+    "do not drop or reweight pairs",
+    "do not add pair-specific rules"
+  ],
+  "development_only": true,
+  "validation_open": false,
+  "final_test_open": false,
+  "reserved_final_access": false,
+  "broker_writes": false,
+  "capital_authority": false,
+  "automatic_promotion": false,
+  "automatic_merge": false
+}
