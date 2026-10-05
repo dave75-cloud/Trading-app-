@@ -24,9 +24,10 @@ def state(**overrides):
 
 def record(start="2026-10-05T07:25:00Z", end="2026-10-05T07:35:00Z", fill="a"):
     hashes = {}
+    canonical_fill = ("e", "f", "a", "b")
     for i, symbol in enumerate(("AUDUSD", "EURUSD", "GBPUSD", "USDJPY")):
         raw = (fill + str(i))[:1] * 64
-        can = chr(ord("e") + i) * 64
+        can = canonical_fill[i] * 64
         hashes[symbol] = {"raw_sha256": raw, "canonical_sha256": can}
     return {
         "candidate_id": "Q003",
