@@ -1,0 +1,21 @@
+{
+  "task_id": "RND-0044",
+  "status": "COMPLETE_REQUIRES_HUMAN_REVIEW",
+  "classification": "RATIO_ONLY_MIXED_OR_NON_MONOTONIC",
+  "report_path": "/Users/davidkerr/Trading-evidence/rnd0044-ratio-only-development-20261005.json",
+  "report_sha256": "8f30a8a12e13786bc1dc730d1468197e3b246c8141be4cee410bf3178547fc7b",
+  "evidence_identity": {
+    "verified_2015_2019": "20/20",
+    "verified_2020": "4/4",
+    "pair_years": "24/24"
+  },
+  "arms": ["Q000", "Q001", "Q002", "Q003"],
+  "strategy_selection": false,
+  "validation_access": false,
+  "reserved_final_open": false,
+  "broker_writes": false,
+  "capital_authority": false,
+  "automatic_promotion": false,
+  "automatic_merge": false,
+  "human_review_required": true
+}
