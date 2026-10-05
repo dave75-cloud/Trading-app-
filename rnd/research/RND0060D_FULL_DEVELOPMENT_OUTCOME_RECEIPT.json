@@ -1,0 +1,19 @@
+{
+  "task_id": "RND-0060D",
+  "status": "COMPLETE",
+  "classification": "DEVELOPMENT_FALSIFIED",
+  "verified_2015_2019": "20/20",
+  "verified_2020": "4/4",
+  "pair_years": "24/24",
+  "trial_count": 1,
+  "parameter_search": false,
+  "report_path": "/Users/davidkerr/Trading-evidence/rnd0060d-three-bar-directional-persistence-full-development-2015-2020-20261005.json",
+  "report_sha256": "8cbfdf7d021c73937a365fa5d314532c1b1c05ea2ce9017e060676e4371b4cf9",
+  "validation_open": false,
+  "final_test_open": false,
+  "reserved_final_access": false,
+  "broker_writes": false,
+  "capital_authority": false,
+  "automatic_promotion": false,
+  "notes": "Durable receipt for the single predeclared RND-0060D 2015-2020 development run. Classification is final for this frozen trial. No parameter rescue, inverse variant, alternate streak length, session change, pair selection, or hold-period tuning is authorized from this result."
+}
