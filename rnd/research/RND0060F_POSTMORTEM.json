@@ -1,0 +1,46 @@
+{
+  "task_id": "RND-0060F",
+  "classification": "NO_REPRODUCIBLE_STRUCTURE",
+  "study_type": "NON_TRADING_SPREAD_STATE_STRUCTURE",
+  "primary_metric": "Spearman(relative_spread_state_ratio, forward_30m_realized_mid_range)",
+  "aggregate_primary_spearman": 0.025446708761342085,
+  "predeclared_threshold": 0.05,
+  "criteria": {
+    "aggregate_primary_spearman_gte_0_05": false,
+    "at_least_3_of_4_symbol_primary_spearman_positive": true,
+    "at_least_3_of_4_symbol_top_quartile_mean_range_gt_bottom_quartile": true,
+    "at_least_4_of_6_annual_pooled_primary_spearman_positive": true,
+    "integrity_reconciliation_pass": true
+  },
+  "descriptive_findings": {
+    "symbol_primary_positive_count": 4,
+    "positive_year_count": 6,
+    "quartile_positive_count": 4,
+    "symbol_primary_spearman": {
+      "AUDUSD": 0.05400269554773647,
+      "EURUSD": 0.018356641030647745,
+      "GBPUSD": 0.013065286309643367,
+      "USDJPY": 0.03896397419952987
+    },
+    "annual_pooled_primary_spearman": {
+      "2015": 0.010844985379372942,
+      "2016": 0.002047679328423282,
+      "2017": 0.009692114298060389,
+      "2018": 0.024168456847734884,
+      "2019": 0.011395685173364638,
+      "2020": 0.06145250665624943
+    }
+  },
+  "interpretation": "The predeclared structure screen failed on effect size, not sign consistency. The relationship was positive across all four symbols, all six pooled years, and all four quartile diagnostics, but aggregate Spearman was only 0.02545 versus the frozen 0.05 threshold. This is retained as a weak descriptive market-state association only. It does not authorize a strategy rule, validation access, candidate freeze, promotion, broker writes, or capital authority.",
+  "next_step_guidance": "Do not convert the weak association directly into a trading rule. Any follow-up must be a separately predeclared development-only market-state study that changes the explanatory variable or structure question, not a threshold search around the observed RND-0060F effect.",
+  "report_sha256": "62cf76ffaaa115d0856ca27d3b1c5d8dd9ebef781baefddb6ec2c7d5d0f324ff",
+  "trade_simulation": false,
+  "pnl": false,
+  "strategy_candidate": false,
+  "validation_open": false,
+  "final_test_open": false,
+  "reserved_final_access": false,
+  "broker_writes": false,
+  "capital_authority": false,
+  "automatic_promotion": false
+}
