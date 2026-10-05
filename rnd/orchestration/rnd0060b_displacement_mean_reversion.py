@@ -93,14 +93,13 @@ def _max_drawdown(returns):
 def evaluate_symbol(symbol, rows):
     _req(symbol in SYMBOLS, "unsupported symbol")
     parsed = validate_rows(rows)
-    by_dt = {row["dt"]: row for row in parsed}
-    index_by_dt = {row["dt"]: i for i, row in enumerate(parsed)}
     start_hour, end_hour = SESSIONS[symbol]
 
     trades = []
     events = []
     marks = []
     signaled_days = set()
+    pending = None
     active = None
     held = 0
     gap_count = 0
@@ -109,8 +108,48 @@ def evaluate_symbol(symbol, rows):
     for i, bar in enumerate(parsed):
         dt = bar["dt"]
         day = dt.date()
+        ts = dt.strftime("%Y-%m-%dT%H:%M:%SZ")
 
-        # Existing economic position is updated before any new signal logic.
+        # Pending signals must execute on the immediately following contiguous
+        # eligible session bar; otherwise they are cancelled and not retried.
+        if pending is not None:
+            delta = int((dt - pending["signal_dt"]).total_seconds())
+            eligible = dt.weekday() < 5 and start_hour <= dt.hour < end_hour
+            if delta == M5_SECONDS and eligible:
+                side = pending["side"]
+                entry_exec = bar["ask"] if side == 1 else bar["bid"]
+                active = {
+                    "side": side,
+                    "entry_dt": dt,
+                    "entry_exec": entry_exec,
+                    "entry_mid": bar["mid"],
+                }
+                held = 0
+                gap_count = 0
+                previous_position_dt = dt
+                events.append({
+                    "event_type": "ENTRY",
+                    "timestamp": ts,
+                    "side_value": side,
+                    "execution_price": entry_exec,
+                })
+                marks.append({
+                    "symbol": symbol,
+                    "timestamp": ts,
+                    "position": side,
+                    "mark_return": 0.0,
+                })
+                pending = None
+                continue
+            events.append({
+                "event_type": "PENDING_SIGNAL_CANCELLED",
+                "timestamp": ts,
+                "reason": "OBSERVATION_DISCONTINUITY_OR_INELIGIBLE_ENTRY",
+            })
+            pending = None
+
+        # Existing economic positions survive gaps; only genuine observed bars
+        # after the entry bar count toward the fixed three-bar hold.
         if active is not None:
             delta = int((dt - previous_position_dt).total_seconds())
             if delta != M5_SECONDS:
@@ -118,7 +157,7 @@ def evaluate_symbol(symbol, rows):
                 events.append({
                     "event_type": "GAP_DURING_POSITION",
                     "previous_timestamp": previous_position_dt.strftime("%Y-%m-%dT%H:%M:%SZ"),
-                    "next_timestamp": dt.strftime("%Y-%m-%dT%H:%M:%SZ"),
+                    "next_timestamp": ts,
                 })
             held += 1
             previous_position_dt = dt
@@ -138,7 +177,7 @@ def evaluate_symbol(symbol, rows):
                     "symbol": symbol,
                     "side": "long" if active["side"] == 1 else "short",
                     "entry_timestamp": active["entry_dt"].strftime("%Y-%m-%dT%H:%M:%SZ"),
-                    "exit_timestamp": dt.strftime("%Y-%m-%dT%H:%M:%SZ"),
+                    "exit_timestamp": ts,
                     "holding_bars": held,
                     "gap_exposure_count": gap_count,
                     "entry_execution_price": active["entry_exec"],
@@ -151,105 +190,61 @@ def evaluate_symbol(symbol, rows):
                     "exit_year": dt.year,
                 }
                 trades.append(trade)
-                events.append({"event_type": "EXIT", "timestamp": trade["exit_timestamp"], "net_return": net})
+                events.append({"event_type": "EXIT", "timestamp": ts, "net_return": net})
                 active = None
                 held = 0
                 gap_count = 0
                 previous_position_dt = None
-                marks.append({
-                    "symbol": symbol,
-                    "timestamp": dt.strftime("%Y-%m-%dT%H:%M:%SZ"),
-                    "position": 0,
-                    "mark_return": None,
-                })
-                continue
-            else:
-                marks.append({
-                    "symbol": symbol,
-                    "timestamp": dt.strftime("%Y-%m-%dT%H:%M:%SZ"),
-                    "position": active["side"],
-                    "mark_return": mark_return,
-                })
+                marks.append({"symbol": symbol, "timestamp": ts, "position": 0, "mark_return": None})
                 continue
 
-        marks.append({
-            "symbol": symbol,
-            "timestamp": dt.strftime("%Y-%m-%dT%H:%M:%SZ"),
-            "position": 0,
-            "mark_return": None,
-        })
+            marks.append({
+                "symbol": symbol,
+                "timestamp": ts,
+                "position": active["side"],
+                "mark_return": mark_return,
+            })
+            continue
+
+        marks.append({"symbol": symbol, "timestamp": ts, "position": 0, "mark_return": None})
 
         if dt.weekday() >= 5 or not (start_hour <= dt.hour < end_hour):
             continue
-        if day in signaled_days:
-            continue
-        if i < LOOKBACK_BARS:
+        if day in signaled_days or i < LOOKBACK_BARS:
             continue
 
         anchor_index = i - LOOKBACK_BARS
-        anchor = parsed[anchor_index]
-        contiguous = True
-        for j in range(anchor_index + 1, i + 1):
-            if int((parsed[j]["dt"] - parsed[j - 1]["dt"]).total_seconds()) != M5_SECONDS:
-                contiguous = False
-                break
+        contiguous = all(
+            int((parsed[j]["dt"] - parsed[j - 1]["dt"]).total_seconds()) == M5_SECONDS
+            for j in range(anchor_index + 1, i + 1)
+        )
         if not contiguous:
             continue
 
+        anchor = parsed[anchor_index]
         displacement = bar["mid"] / anchor["mid"] - 1.0
         side = -1 if displacement >= DISPLACEMENT_THRESHOLD else (1 if displacement <= -DISPLACEMENT_THRESHOLD else 0)
         if side == 0:
             continue
 
         signaled_days.add(day)
+        pending = {"side": side, "signal_dt": dt}
         events.append({
             "event_type": "DISPLACEMENT_SIGNAL",
-            "timestamp": dt.strftime("%Y-%m-%dT%H:%M:%SZ"),
+            "timestamp": ts,
             "displacement": displacement,
             "side_value": side,
         })
-
-        entry_dt_epoch = int(dt.timestamp()) + M5_SECONDS
-        entry_dt = datetime.fromtimestamp(entry_dt_epoch, tz=timezone.utc)
-        entry = by_dt.get(entry_dt)
-        if entry is None:
-            events.append({
-                "event_type": "PENDING_SIGNAL_CANCELLED",
-                "timestamp": entry_dt.strftime("%Y-%m-%dT%H:%M:%SZ"),
-                "reason": "OBSERVATION_DISCONTINUITY",
-            })
-            continue
-        entry_index = index_by_dt[entry_dt]
-        if entry_index != i + 1:
-            events.append({
-                "event_type": "PENDING_SIGNAL_CANCELLED",
-                "timestamp": entry_dt.strftime("%Y-%m-%dT%H:%M:%SZ"),
-                "reason": "OBSERVATION_DISCONTINUITY",
-            })
-            continue
-
-        entry_exec = entry["ask"] if side == 1 else entry["bid"]
-        active = {
-            "side": side,
-            "entry_dt": entry_dt,
-            "entry_exec": entry_exec,
-            "entry_mid": entry["mid"],
-        }
-        held = 0
-        gap_count = 0
-        previous_position_dt = entry_dt
-        events.append({
-            "event_type": "ENTRY",
-            "timestamp": entry_dt.strftime("%Y-%m-%dT%H:%M:%SZ"),
-            "side_value": side,
-            "execution_price": entry_exec,
-        })
-        # The entry bar mark will be emitted on its own iteration and remain active.
 
     if active is not None:
         events.append({
             "event_type": "RIGHT_CENSORED",
             "timestamp": active["entry_dt"].strftime("%Y-%m-%dT%H:%M:%SZ"),
+        })
+    if pending is not None:
+        events.append({
+            "event_type": "PENDING_SIGNAL_CENSORED_END_OF_SAMPLE",
+            "timestamp": pending["signal_dt"].strftime("%Y-%m-%dT%H:%M:%SZ"),
         })
 
     net_returns = [trade["net_return"] for trade in trades]
