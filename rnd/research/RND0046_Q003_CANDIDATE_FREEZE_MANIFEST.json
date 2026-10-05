@@ -1,0 +1,70 @@
+{
+  "task_id": "RND-0046",
+  "status": "FROZEN_CANDIDATE",
+  "candidate_id": "Q003",
+  "human_freeze_approved": true,
+  "freeze_date_brisbane": "2026-10-05",
+  "candidate_definition": {
+    "candidate_id": "Q003",
+    "mechanism": "RND0044_RATIO_ONLY",
+    "signal_to_friction_threshold": 8.0,
+    "absolute_volatility_floor_enabled": false,
+    "symbols": ["AUDUSD", "EURUSD", "GBPUSD", "USDJPY"],
+    "timeframe": "M5",
+    "fast_ma": 20,
+    "slow_ma": 50,
+    "volatility_window": 12,
+    "volatility_ddof": 0,
+    "signal_delay_observations": 1,
+    "minimum_hold_observed_bars": 3,
+    "sessions_utc": {
+      "AUDUSD": [11, 14],
+      "EURUSD": [11, 13],
+      "GBPUSD": [11, 13],
+      "USDJPY": [11, 13]
+    },
+    "execution": {
+      "signals": "mid_close",
+      "long_entry": "ask_close",
+      "long_exit": "bid_close",
+      "short_entry": "bid_close",
+      "short_exit": "ask_close"
+    },
+    "gap_semantics": "RND0034_FROZEN"
+  },
+  "candidate_definition_canonical_sha256": "25c21eb8fe8a6e19a1085741585b87d96a2dbf74f009c0470da608bbf60e3dd4",
+  "development_evidence": {
+    "rnd0044_report": "/Users/davidkerr/Trading-evidence/rnd0044-ratio-only-development-20261005.json",
+    "rnd0044_report_sha256": "8f30a8a12e13786bc1dc730d1468197e3b246c8141be4cee410bf3178547fc7b",
+    "rnd0045_report": "/Users/davidkerr/Trading-evidence/rnd0045-cross-pair-heterogeneity-20261005.json",
+    "rnd0045_report_sha256": "c951fa6cd2febc79400c1578386df4a05ad4bc7827920cc52171fca318225716"
+  },
+  "review_provenance": {
+    "rnd0044_assessment_commit": "ada7abce56d5b304900affc0a606b394b1ece915",
+    "rnd0045_receipt_commit": "9c066713e643b04c77cfebb18ce9ddfdacf4de8e",
+    "rnd0046_review_contract_commit": "a8d9a208a3be46fc303e54da3ac7eba49708e43c",
+    "rnd0046_assessment_commit": "b2e80fc7e9bd4dee4aab7d88cc7a17d3e0887a07"
+  },
+  "known_development_weaknesses": [
+    "AUDUSD remained below 1.0 net equity under Q003 in development.",
+    "USDJPY remained approximately flat under Q003 in development.",
+    "Cross-pair positive treatment-effect concentration was 0.6865762292175398, close to the predeclared 0.70 cap.",
+    "Candidate freeze does not establish unseen-data profitability."
+  ],
+  "governance": {
+    "candidate_rule_changes_after_freeze": false,
+    "new_ratio_thresholds": false,
+    "pair_dropping": false,
+    "pair_specific_rules": false,
+    "pair_weighting_changes": false,
+    "development_retuning": false,
+    "validation_access": false,
+    "reserved_final_open": false,
+    "portfolio_sizing": false,
+    "broker_writes": false,
+    "capital_authority": false,
+    "automatic_promotion": false,
+    "automatic_merge": false,
+    "fresh_validation_requires_separate_human_gate": true
+  }
+}
