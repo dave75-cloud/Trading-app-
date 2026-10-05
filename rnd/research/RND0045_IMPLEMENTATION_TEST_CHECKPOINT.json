@@ -1,0 +1,26 @@
+{
+  "task_id": "RND-0045",
+  "status": "IMPLEMENTATION_AND_FIXTURE_TESTS_PASS",
+  "branch": "agent/rnd-0045-cross-pair-heterogeneity",
+  "tested_head": "2349f7a98019fe765cbaa06deb9f779880879f22",
+  "fixture_tests": {
+    "suite": "rnd/orchestration/test_rnd0045_cross_pair_heterogeneity.py",
+    "tests_run": 9,
+    "result": "PASS"
+  },
+  "production_classification_logic_changed_after_fixture_failure": false,
+  "fixture_only_correction_commit": "2349f7a98019fe765cbaa06deb9f779880879f22",
+  "development_outcomes_authorized": false,
+  "new_ratio_thresholds": false,
+  "pair_dropping": false,
+  "pair_specific_rules": false,
+  "pair_weighting": false,
+  "strategy_selection": false,
+  "validation_access": false,
+  "reserved_final_open": false,
+  "broker_writes": false,
+  "capital_authority": false,
+  "automatic_promotion": false,
+  "automatic_merge": false,
+  "human_review_required": true
+}
