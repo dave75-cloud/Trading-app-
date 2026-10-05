@@ -1,0 +1,21 @@
+{
+  "task_id": "RND-0047",
+  "state": "ACQUISITION_AUTHORIZED",
+  "candidate_id": "Q003",
+  "candidate_fingerprint": "25c21eb8fe8a6e19a1085741585b87d96a2dbf74f009c0470da608bbf60e3dd4",
+  "symbols": ["AUDUSD", "EURUSD", "GBPUSD", "USDJPY"],
+  "timeframe": "M5",
+  "price_components": ["bid", "ask", "mid"],
+  "complete_candles_only": true,
+  "synthetic_fill": false,
+  "strategy_evaluation": false,
+  "reserved_final_access": false,
+  "broker_writes": false,
+  "capital_authority": false,
+  "acquisition_window": {
+    "start_utc": "2026-10-05T07:25:00Z",
+    "end_utc": "2026-10-05T07:35:00Z"
+  },
+  "human_authorization": "Go with fresh evidence acquisition",
+  "purpose": "First prospective post-freeze OANDA PRACTICE evidence tranche; acquisition and sealing only."
+}
