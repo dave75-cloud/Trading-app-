@@ -58,10 +58,14 @@ class RND0045Tests(unittest.TestCase):
             if i < 3:
                 yearly[y] = {"AUDUSD": -0.004, "EURUSD": 0.012, "GBPUSD": 0.010, "USDJPY": 0.008}
             else:
-                yearly[y] = {"AUDUSD": 0.001, "EURUSD": -0.002, "GBPUSD": 0.002, "USDJPY": 0.001}
+                # Preserve 3-of-4 positive full-period pair effects and positive
+                # leave-one-pair-out economics, but deliberately fail the stricter
+                # annual coherence gate: these three years are aggregate-negative.
+                yearly[y] = {"AUDUSD": 0.001, "EURUSD": -0.006, "GBPUSD": 0.001, "USDJPY": 0.001}
         result = h.analyze(base, arm(pair, yearly))
         self.assertEqual(result["classification"], "COMMON_MECHANISM_SUPPORTED_WITH_MATERIAL_HETEROGENEITY")
         self.assertEqual(result["classification_details"]["positive_full_period_pair_count"], 3)
+        self.assertEqual(result["classification_details"]["positive_aggregate_year_count"], 3)
 
     def test_pair_dependent_fixture(self):
         base = zero_arm()
