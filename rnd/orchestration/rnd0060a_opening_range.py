@@ -106,7 +106,6 @@ def _max_drawdown(returns):
 
 def _build_marks(symbol, parsed, intervals):
     entries = {x["entry_dt"]: x for x in intervals}
-    exits = {x["exit_dt"] for x in intervals if x["exit_dt"] is not None}
     marks = []
     active = None
     for bar in parsed:
@@ -114,34 +113,19 @@ def _build_marks(symbol, parsed, intervals):
         if dt in entries:
             _req(active is None, "overlapping same-symbol positions prohibited")
             active = entries[dt]
-        if active is not None and dt in exits and active.get("exit_dt") == dt:
-            marks.append({
-                "symbol": symbol,
-                "timestamp": _z(dt),
-                "position": 0,
-                "mark_return": None,
-            })
+        if active is not None and active.get("exit_dt") == dt:
+            marks.append({"symbol": symbol, "timestamp": _z(dt), "position": 0, "mark_return": None})
             active = None
             continue
         if active is None:
-            marks.append({
-                "symbol": symbol,
-                "timestamp": _z(dt),
-                "position": 0,
-                "mark_return": None,
-            })
+            marks.append({"symbol": symbol, "timestamp": _z(dt), "position": 0, "mark_return": None})
             continue
         side = active["side"]
         if side == 1:
             mark_return = (bar["bid"] - active["entry_exec"]) / active["entry_exec"]
         else:
             mark_return = (active["entry_exec"] - bar["ask"]) / active["entry_exec"]
-        marks.append({
-            "symbol": symbol,
-            "timestamp": _z(dt),
-            "position": side,
-            "mark_return": mark_return,
-        })
+        marks.append({"symbol": symbol, "timestamp": _z(dt), "position": side, "mark_return": mark_return})
     return marks
 
 
@@ -156,9 +140,16 @@ def evaluate_symbol(symbol, rows):
     events = []
     intervals = []
     dates = sorted({x["dt"].date() for x in parsed if x["dt"].weekday() < 5})
+    active_until = None
+    censored_open = False
 
     for day in dates:
+        if censored_open:
+            break
         session_start = datetime(day.year, day.month, day.day, start_hour, tzinfo=timezone.utc)
+        if active_until is not None and session_start <= active_until:
+            events.append({"event_type": "NO_SIGNAL_POSITION_ALREADY_OPEN", "timestamp": _z(session_start)})
+            continue
         first = by_dt.get(session_start)
         if first is None:
             continue
@@ -185,54 +176,36 @@ def evaluate_symbol(symbol, rows):
         entry_dt = session_start + M5
         entry = by_dt.get(entry_dt)
         if entry is None:
-            events.append({
-                "event_type": "PENDING_SIGNAL_CANCELLED",
-                "timestamp": _z(entry_dt),
-                "reason": "OBSERVATION_DISCONTINUITY",
-            })
+            events.append({"event_type": "PENDING_SIGNAL_CANCELLED", "timestamp": _z(entry_dt), "reason": "OBSERVATION_DISCONTINUITY"})
             continue
         _req(entry_dt.hour < end_hour or (entry_dt.hour == end_hour and entry_dt.minute == 0), "entry outside frozen session")
 
         entry_exec = entry["ask"] if side == 1 else entry["bid"]
         entry_mid = entry["mid"]
-        events.append({
-            "event_type": "ENTRY",
-            "timestamp": _z(entry_dt),
-            "side_value": side,
-            "execution_price": entry_exec,
-        })
+        events.append({"event_type": "ENTRY", "timestamp": _z(entry_dt), "side_value": side, "execution_price": entry_exec})
 
-        held = 0
-        cursor_index = index_by_dt[entry_dt] + 1
-        exit_bar = None
+        entry_index = index_by_dt[entry_dt]
+        exit_index = entry_index + HOLD_BARS
+        if exit_index >= len(parsed):
+            intervals.append({"side": side, "entry_dt": entry_dt, "exit_dt": None, "entry_exec": entry_exec})
+            events.append({"event_type": "RIGHT_CENSORED", "timestamp": _z(entry_dt)})
+            censored_open = True
+            continue
+
+        observed = parsed[entry_index + 1: exit_index + 1]
         gap_count = 0
         previous_dt = entry_dt
-        while cursor_index < len(parsed) and held < HOLD_BARS:
-            bar = parsed[cursor_index]
-            if bar["dt"].date() != day:
-                break
-            delta = bar["dt"] - previous_dt
-            if delta != M5:
+        for bar in observed:
+            if bar["dt"] - previous_dt != M5:
                 gap_count += 1
                 events.append({
                     "event_type": "GAP_DURING_POSITION",
                     "previous_timestamp": _z(previous_dt),
                     "next_timestamp": _z(bar["dt"]),
                 })
-            held += 1
-            exit_bar = bar
             previous_dt = bar["dt"]
-            cursor_index += 1
-
-        if held != HOLD_BARS or exit_bar is None:
-            intervals.append({
-                "side": side,
-                "entry_dt": entry_dt,
-                "exit_dt": None,
-                "entry_exec": entry_exec,
-            })
-            events.append({"event_type": "RIGHT_CENSORED", "timestamp": _z(entry_dt)})
-            continue
+        exit_bar = parsed[exit_index]
+        active_until = exit_bar["dt"]
 
         exit_exec = exit_bar["bid"] if side == 1 else exit_bar["ask"]
         gross, net = _trade_return(side, entry_exec, exit_exec, entry_mid, exit_bar["mid"])
@@ -241,7 +214,7 @@ def evaluate_symbol(symbol, rows):
             "side": "long" if side == 1 else "short",
             "entry_timestamp": _z(entry_dt),
             "exit_timestamp": _z(exit_bar["dt"]),
-            "holding_bars": held,
+            "holding_bars": HOLD_BARS,
             "gap_exposure_count": gap_count,
             "entry_execution_price": entry_exec,
             "exit_execution_price": exit_exec,
@@ -253,12 +226,7 @@ def evaluate_symbol(symbol, rows):
             "exit_year": exit_bar["dt"].year,
         }
         trades.append(trade)
-        intervals.append({
-            "side": side,
-            "entry_dt": entry_dt,
-            "exit_dt": exit_bar["dt"],
-            "entry_exec": entry_exec,
-        })
+        intervals.append({"side": side, "entry_dt": entry_dt, "exit_dt": exit_bar["dt"], "entry_exec": entry_exec})
         events.append({"event_type": "EXIT", "timestamp": trade["exit_timestamp"], "net_return": net})
 
     marks = _build_marks(symbol, parsed, intervals)
