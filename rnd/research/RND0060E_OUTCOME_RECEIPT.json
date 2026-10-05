@@ -1,0 +1,21 @@
+{
+  "task_id": "RND-0060E",
+  "branch": "agent/rnd-0060e-volatility-contraction-expansion",
+  "verified_code_head": "a981e04dd485805325564ecdf945974fe8a5ef22",
+  "development_interval": "2015-2020",
+  "verified_2015_2019": "20/20",
+  "verified_2020": "4/4",
+  "pair_years": "24/24",
+  "trial_count": 1,
+  "parameter_search": false,
+  "classification": "DEVELOPMENT_FALSIFIED",
+  "report_path": "/Users/davidkerr/Trading-evidence/rnd0060e-volatility-contraction-expansion-full-development-2015-2020-20261005.json",
+  "report_sha256": "63c64c1e377bf279730a4d8965e2c5f84df9b16482641a7a157a0acd80fb6aa8",
+  "validation_open": false,
+  "final_test_open": false,
+  "reserved_final_access": false,
+  "broker_writes": false,
+  "capital_authority": false,
+  "automatic_promotion": false,
+  "human_review_required": true
+}
