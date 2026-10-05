@@ -45,8 +45,13 @@ def base_rows(day=datetime(2019, 1, 2, tzinfo=timezone.utc), moves=None, omit=No
             out[s].append(row(dt, mid, spread=0.0002 if s != "USDJPY" else 0.02))
 
         if post_gap_symbol == s:
-            # Remove 11:40 only; 11:45 and 11:50 remain genuine observations.
+            # Remove 11:40, then append 11:55 so there are still three genuine
+            # post-entry observations: 11:45, 11:50, 11:55. The missing nominal
+            # 11:40 bar must not count toward the hold.
             out[s] = [r for r in out[s] if r["timestamp_utc"] != z(datetime(day.year, day.month, day.day, 11, 40, tzinfo=timezone.utc))]
+            last_mid = out[s][-1]["mid_close"]
+            dt = datetime(day.year, day.month, day.day, 11, 55, tzinfo=timezone.utc)
+            out[s].append(row(dt, last_mid, spread=0.0002 if s != "USDJPY" else 0.02))
     return out
 
 
@@ -99,6 +104,7 @@ class TestRND0060CCrossSectional(unittest.TestCase):
         t = out["per_symbol"]["AUDUSD"]["trades"][0]
         self.assertEqual(t["gap_exposure_count"], 1)
         self.assertEqual(t["holding_bars"], 3)
+        self.assertEqual(t["exit_timestamp"], "2019-01-02T11:55:00Z")
 
     def test_cost_drag_positive(self):
         out = evaluate_portfolio(base_rows(moves={"GBPUSD": 0.003}))
@@ -114,10 +120,12 @@ class TestRND0060CCrossSectional(unittest.TestCase):
     def test_non_stacking_skips_later_day_if_prior_position_still_open(self):
         first = base_rows(day=datetime(2019, 1, 4, tzinfo=timezone.utc), moves={"AUDUSD": 0.003})
         second = base_rows(day=datetime(2019, 1, 7, tzinfo=timezone.utc), moves={"EURUSD": 0.003})
-        # Remove every AUDUSD observation after Friday entry until Monday 11:35,
-        # so the Friday economic position is still open at Monday 11:30.
+        # Remove every AUDUSD observation after Friday entry until Monday 11:30.
+        # Monday 11:30 itself is retained so the common decision day exists; it
+        # becomes only the first genuine holding observation, leaving the Friday
+        # position open and forcing Monday's new signal to be skipped.
         first["AUDUSD"] = [r for r in first["AUDUSD"] if r["timestamp_utc"] <= "2019-01-04T11:35:00Z"]
-        second["AUDUSD"] = [r for r in second["AUDUSD"] if r["timestamp_utc"] >= "2019-01-07T11:35:00Z"]
+        second["AUDUSD"] = [r for r in second["AUDUSD"] if r["timestamp_utc"] >= "2019-01-07T11:30:00Z"]
         rows = {s: first[s] + second[s] for s in SYMBOLS}
         out = evaluate_portfolio(rows)
         self.assertTrue(any(e["event_type"] == "DAY_SKIPPED_OPEN_POSITION" for e in out["events"]))
