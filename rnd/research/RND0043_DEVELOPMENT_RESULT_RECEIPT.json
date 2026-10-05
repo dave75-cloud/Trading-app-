@@ -1,0 +1,18 @@
+{
+  "task_id": "RND-0043",
+  "result": "MECHANISM_SUPPORTED_FOR_FURTHER_RESEARCH",
+  "report_path": "~/Trading-evidence/rnd0043-signal-friction-development-20261004.json",
+  "report_sha256": "33e6a4855c84c8497203d22a24f60b100d8a1d47e3ce25565536df40d5bff561",
+  "verified_2015_2019": "20/20",
+  "verified_2020": "4/4",
+  "pair_years": "24/24",
+  "arms": ["F000", "F001", "F002", "F003"],
+  "strategy_selection": false,
+  "validation_access": false,
+  "reserved_final_open": false,
+  "broker_writes": false,
+  "capital_authority": false,
+  "automatic_promotion": false,
+  "automatic_merge": false,
+  "human_review_required": true
+}
