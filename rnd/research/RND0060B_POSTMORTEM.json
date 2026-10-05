@@ -1,0 +1,37 @@
+{
+  "task_id": "RND-0060B",
+  "classification": "DEVELOPMENT_FALSIFIED",
+  "report_sha256": "a10d87a4da6e664ca92b838b9085da64b41b03e5c80dd1aea7dbaf77f5d7a762",
+  "portfolio": {
+    "final_equal_unit_normalized_equity_index": 0.957990925359424,
+    "realized_completed_trade_net_return_sum": -0.16803629856230423,
+    "equal_unit_normalized_max_drawdown": -0.04534069120055295
+  },
+  "criteria": {
+    "at_least_3_of_4_pair_terminal_equities_gte_1": false,
+    "at_least_4_of_6_positive_development_years": false,
+    "every_leave_one_pair_out_realized_net_sum_gt_0": false,
+    "integrity_reconciliation_pass": true,
+    "portfolio_max_drawdown_gte_minus_0_10": true,
+    "portfolio_realized_net_sum_gt_0": false,
+    "portfolio_terminal_net_equity_gt_1": false
+  },
+  "interpretation": {
+    "all_four_pairs_net_negative": true,
+    "all_six_years_net_negative": true,
+    "all_leave_one_pair_out_net_negative": true,
+    "integrity_passed": true,
+    "drawdown_screen_passed": true,
+    "near_miss": false,
+    "mechanism_supported": false,
+    "post_hoc_inversion_or_tuning_authorized": false
+  },
+  "status": "CLOSED_NEGATIVE_RESULT",
+  "validation_open": false,
+  "final_test_open": false,
+  "reserved_final_access": false,
+  "broker_writes": false,
+  "capital_authority": false,
+  "automatic_promotion": false,
+  "automatic_merge": false
+}
