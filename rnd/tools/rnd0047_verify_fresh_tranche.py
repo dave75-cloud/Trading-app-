@@ -89,7 +89,7 @@ def main():
         req(manifest.get("row_count") == 2, f"{symbol}: expected exactly two rows")
         req(len(rows) == 2, f"{symbol}: canonical row count mismatch")
 
-        timestamps = [row.get("time") for row in rows]
+        timestamps = [row.get("timestamp_utc") for row in rows]
         req(timestamps == EXPECTED_TIMESTAMPS, f"{symbol}: timestamp sequence mismatch")
         req(all(row.get("complete") is True for row in rows), f"{symbol}: incomplete canonical row")
 
