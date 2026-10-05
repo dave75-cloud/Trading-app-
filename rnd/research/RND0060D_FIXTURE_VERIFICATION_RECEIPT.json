@@ -1,0 +1,18 @@
+{
+  "task_id": "RND-0060D",
+  "status": "VERIFIED",
+  "kernel_test_count": 14,
+  "kernel_test_result": "PASS",
+  "classifier_test_count": 10,
+  "classifier_test_result": "PASS",
+  "combined_fixture_verification": "24/24 TESTS PASS",
+  "verified_head": "0220b0ddb806a6cddf5f23280b060043998c7d75",
+  "development_outcomes_opened": false,
+  "parameter_search": false,
+  "validation_open": false,
+  "final_test_open": false,
+  "reserved_final_access": false,
+  "broker_writes": false,
+  "capital_authority": false,
+  "automatic_promotion": false
+}
