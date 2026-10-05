@@ -3,6 +3,8 @@
 
 No strategy evaluation, signal generation, trade simulation, validation outcome
 classification, broker writes, reserved-final access, or capital authority.
+Provider/market gaps are permitted only when they are explicit in the sealed gap
+ledger and exactly reconcile to the declared wall-clock M5 window.
 """
 from __future__ import annotations
 
@@ -11,7 +13,7 @@ import json
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
-from historical_data_reconstruction import canonical_rows_sha256
+from historical_data_reconstruction import canonical_rows_sha256, validate_candle_rows
 from rnd0054_ledger import (
     CANDIDATE_ID,
     CANDIDATE_FINGERPRINT,
@@ -37,6 +39,10 @@ def _utc(value, role):
         raise RND0054VerifyError(f"{role}: invalid timestamp") from exc
     _req(int(dt.timestamp()) % 300 == 0, f"{role}: M5 boundary required")
     return dt
+
+
+def _z(dt):
+    return dt.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
 def _load(path):
@@ -69,10 +75,18 @@ def _expected_instants(start_utc, end_utc):
     return out
 
 
+def _normalized_list(values, role):
+    _req(isinstance(values, list), f"{role}: list required")
+    return [_utc(value, role) for value in values]
+
+
 def verify_tranche(root, expected_start_utc, expected_end_utc):
     root = Path(root).expanduser().resolve()
     _req(root.is_dir(), "tranche directory missing")
     expected = _expected_instants(expected_start_utc, expected_end_utc)
+    expected_set = set(expected)
+    start = expected[0]
+    end = _utc(expected_end_utc, "end_utc")
 
     receipt = _load(_receipt_path(root))
     _req(receipt.get("candidate_id") == CANDIDATE_ID, "candidate id mismatch")
@@ -104,9 +118,12 @@ def verify_tranche(root, expected_start_utc, expected_end_utc):
         _req(manifest.get("complete_candles_only") is True, f"{symbol}: incomplete candles allowed")
         _req(manifest.get("immutable") is True, f"{symbol}: snapshot not immutable")
 
+        validate_candle_rows(rows)
         actual_instants = [_utc(row.get("timestamp_utc"), f"{symbol}: timestamp") for row in rows]
-        _req(actual_instants == expected, f"{symbol}: timestamp sequence mismatch")
-        _req(all(row.get("complete") is True for row in rows), f"{symbol}: incomplete canonical row")
+        _req(actual_instants == sorted(actual_instants), f"{symbol}: timestamps out of order")
+        _req(len(actual_instants) == len(set(actual_instants)), f"{symbol}: duplicate timestamps")
+        _req(all(start <= ts < end for ts in actual_instants), f"{symbol}: timestamp outside declared window")
+        _req(all(ts in expected_set for ts in actual_instants), f"{symbol}: unexpected M5 timestamp")
         _req(manifest.get("row_count") == len(rows), f"{symbol}: row count mismatch")
 
         canonical_sha = canonical_rows_sha256(rows)
@@ -115,11 +132,16 @@ def verify_tranche(root, expected_start_utc, expected_end_utc):
         _req(raw_sha == manifest.get("sha256"), f"{symbol}: raw SHA mismatch")
 
         _req(isinstance(gap, dict), f"{symbol}: structured gap ledger required")
+        missing = sorted(expected_set - set(actual_instants))
+        unexpected = sorted(set(actual_instants) - expected_set)
+        ledger_missing = sorted(_normalized_list(gap.get("missing_timestamps"), f"{symbol}: missing timestamp"))
+        ledger_unexpected = sorted(_normalized_list(gap.get("unexpected_timestamps"), f"{symbol}: unexpected timestamp"))
         _req(gap.get("expected_count") == len(expected), f"{symbol}: gap expected count mismatch")
         _req(gap.get("actual_count") == len(rows), f"{symbol}: gap actual count mismatch")
-        _req(gap.get("missing_timestamps") == [], f"{symbol}: missing timestamps present")
-        _req(gap.get("unexpected_timestamps") == [], f"{symbol}: unexpected timestamps present")
-        _req(gap.get("complete") is True, f"{symbol}: gap ledger incomplete")
+        _req(ledger_missing == missing, f"{symbol}: gap ledger missing timestamps mismatch")
+        _req(ledger_unexpected == unexpected == [], f"{symbol}: unexpected timestamps present")
+        _req(isinstance(gap.get("complete"), bool), f"{symbol}: gap complete flag invalid")
+        _req(gap.get("complete") is (len(missing) == 0), f"{symbol}: gap complete flag mismatch")
 
         hashes[symbol] = {
             "raw_sha256": raw_sha,
