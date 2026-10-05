@@ -1,0 +1,74 @@
+{
+  "task_id": "RND-0060F",
+  "contract_version": "RND0060F-spread-state-structure-v1",
+  "status": "PREDECLARED_FROZEN",
+  "purpose": "Test whether a fixed intraday relative-spread state has repeatable development-only association with subsequent 30-minute realized price movement, without defining or evaluating a trading strategy.",
+  "independent_of_q003": true,
+  "research_type": "NON_TRADING_MARKET_STATE_STRUCTURE",
+  "datasets": ["DEVELOPMENT_2015_2020"],
+  "symbols": ["AUDUSD", "EURUSD", "GBPUSD", "USDJPY"],
+  "timeframe": "M5",
+  "observation_time_utc": "11:30",
+  "state_definition": {
+    "current_relative_spread": "(ask_close - bid_close) / mid_close at 11:30 UTC",
+    "baseline_window_bars": 12,
+    "baseline_window": "10:30 through 11:25 UTC inclusive, exactly 12 immediately preceding contiguous M5 observations",
+    "baseline_statistic": "median(relative_spread)",
+    "spread_state_ratio": "current_relative_spread / baseline_median_relative_spread",
+    "requirements": [
+      "all 13 observations from 10:30 through 11:30 UTC must be present, complete, unique, ordered, and contiguous on the M5 grid",
+      "bid_close <= mid_close <= ask_close",
+      "all prices and spreads must be positive finite numbers",
+      "baseline median relative spread must be positive"
+    ]
+  },
+  "forward_response": {
+    "horizon_minutes": 30,
+    "required_future_bars": 6,
+    "window": "11:35 through 12:00 UTC inclusive, exactly 6 subsequent contiguous M5 observations",
+    "absolute_close_return": "abs(mid_close_12_00 / mid_close_11_30 - 1)",
+    "realized_mid_range": "(max(mid_high over 11:35..12:00) - min(mid_low over 11:35..12:00)) / mid_close_11_30",
+    "gap_policy": "if any required future observation is missing or non-contiguous, the observation day is structurally ineligible; no interpolation or synthetic bar is permitted"
+  },
+  "analysis": {
+    "primary_association": "Spearman rank correlation between spread_state_ratio and forward realized_mid_range",
+    "secondary_association": "Spearman rank correlation between spread_state_ratio and forward absolute_close_return",
+    "quartile_diagnostic": "within each symbol, compare mean forward realized_mid_range for top quartile versus bottom quartile of spread_state_ratio; quartiles are descriptive only and create no executable threshold",
+    "annual_diagnostic": "pool all four symbols within each development year and compute primary Spearman association",
+    "no_directional_return_test": true,
+    "no_trade_simulation": true,
+    "no_execution_cost_model": true,
+    "no_pnl": true
+  },
+  "predeclared_structure_screen": {
+    "classification_values": ["MARKET_STATE_STRUCTURE_DETECTED", "NO_REPRODUCIBLE_STRUCTURE"],
+    "criteria_all_required": {
+      "at_least_3_of_4_symbol_primary_spearman_positive": true,
+      "at_least_4_of_6_annual_pooled_primary_spearman_positive": true,
+      "aggregate_primary_spearman_gte": 0.05,
+      "at_least_3_of_4_symbol_top_quartile_mean_range_gt_bottom_quartile": true,
+      "integrity_reconciliation_pass": true
+    },
+    "interpretation": "MARKET_STATE_STRUCTURE_DETECTED authorizes only later human review of whether a separate predeclared strategy hypothesis is scientifically justified. It does not freeze a candidate, open validation, or authorize trading."
+  },
+  "prohibitions": {
+    "parameter_search": true,
+    "alternative_observation_times": true,
+    "alternative_baseline_windows": true,
+    "alternative_forward_horizons": true,
+    "pair_selection": true,
+    "directional_rule": true,
+    "trade_entry_rule": true,
+    "trade_exit_rule": true,
+    "validation_2021_2022_access": true,
+    "reserved_final_2023_2024_access": true,
+    "q003_reference": true,
+    "broker_writes": true,
+    "capital_authority": true,
+    "automatic_promotion": true,
+    "automatic_merge": true
+  },
+  "declared_trial_count": 1,
+  "parameter_search": false,
+  "human_review_required": true
+}
