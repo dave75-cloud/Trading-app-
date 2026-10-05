@@ -1,0 +1,26 @@
+{
+  "task_id": "RND-0060E",
+  "status": "FIXTURE_VERIFIED",
+  "branch": "agent/rnd-0060e-volatility-contraction-expansion",
+  "verified_head": "4a1c58a39f9fda3985e081e0f771abf1f521723c",
+  "kernel_suite": {
+    "test_file": "rnd/orchestration/test_rnd0060e_volatility_contraction_expansion.py",
+    "tests_run": 14,
+    "result": "PASS"
+  },
+  "classifier_suite": {
+    "test_file": "rnd/orchestration/test_rnd0060e_full_development.py",
+    "tests_run": 10,
+    "result": "PASS"
+  },
+  "combined_tests": 24,
+  "parameter_search": false,
+  "development_outcomes_opened": false,
+  "validation_open": false,
+  "final_test_open": false,
+  "reserved_final_access": false,
+  "broker_writes": false,
+  "capital_authority": false,
+  "automatic_promotion": false,
+  "human_review_required": true
+}
