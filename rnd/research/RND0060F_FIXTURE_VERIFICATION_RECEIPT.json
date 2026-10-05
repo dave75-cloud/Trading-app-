@@ -1,0 +1,19 @@
+{
+  "task_id": "RND-0060F",
+  "branch": "agent/rnd-0060f-spread-state-structure",
+  "verified_head": "f003d1e7b7c517b6d1b43a358e3d03671f67ad47",
+  "kernel_tests": {"passed": 14, "failed": 0},
+  "classifier_tests": {"passed": 10, "failed": 0},
+  "total_tests": {"passed": 24, "failed": 0},
+  "trial_count": 1,
+  "parameter_search": false,
+  "development_only": true,
+  "non_trading_market_state_study": true,
+  "validation_open": false,
+  "final_test_open": false,
+  "reserved_final_access": false,
+  "broker_writes": false,
+  "capital_authority": false,
+  "automatic_promotion": false,
+  "status": "FIXTURE_VERIFICATION_PASS"
+}
