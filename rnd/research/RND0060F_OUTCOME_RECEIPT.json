@@ -1,0 +1,23 @@
+{
+  "task_id": "RND-0060F",
+  "branch": "agent/rnd-0060f-spread-state-structure",
+  "execution_head": "79e2066e060af6e99bb81008491bd318367851c1",
+  "report_path": "/Users/davidkerr/Trading-evidence/rnd0060f-spread-state-structure-full-development-2015-2020-20261006.json",
+  "report_sha256": "62cf76ffaaa115d0856ca27d3b1c5d8dd9ebef781baefddb6ec2c7d5d0f324ff",
+  "classification": "NO_REPRODUCIBLE_STRUCTURE",
+  "verified_2015_2019": "20/20",
+  "verified_2020": "4/4",
+  "pair_years": "24/24",
+  "trial_count": 1,
+  "parameter_search": false,
+  "trade_simulation": false,
+  "pnl": false,
+  "strategy_candidate": false,
+  "validation_open": false,
+  "final_test_open": false,
+  "reserved_final_access": false,
+  "broker_writes": false,
+  "capital_authority": false,
+  "automatic_promotion": false,
+  "human_review_required": true
+}
