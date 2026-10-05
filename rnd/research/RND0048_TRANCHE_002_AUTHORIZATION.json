@@ -1,0 +1,24 @@
+{
+  "task_id": "RND-0048",
+  "tranche_id": "002",
+  "state": "AUTHORIZED_WAITING_FOR_WINDOW_CLOSE",
+  "candidate_id": "Q003",
+  "candidate_fingerprint": "25c21eb8fe8a6e19a1085741585b87d96a2dbf74f009c0470da608bbf60e3dd4",
+  "previous_tranche_id": "001",
+  "previous_end_utc": "2026-10-05T07:35:00Z",
+  "acquisition_window": {
+    "start_utc": "2026-10-05T07:35:00Z",
+    "end_utc": "2026-10-12T07:35:00Z"
+  },
+  "symbols": ["AUDUSD", "EURUSD", "GBPUSD", "USDJPY"],
+  "timeframe": "M5",
+  "price_components": ["bid", "ask", "mid"],
+  "complete_candles_only": true,
+  "synthetic_fill": false,
+  "strategy_evaluation": false,
+  "reserved_final_access": false,
+  "broker_writes": false,
+  "capital_authority": false,
+  "human_authorized": true,
+  "early_run_prohibited": true
+}
