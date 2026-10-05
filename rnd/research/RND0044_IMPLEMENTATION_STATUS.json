@@ -1,0 +1,28 @@
+{
+  "task_id": "RND-0044",
+  "status": "IMPLEMENTED_FIXTURE_TEST_PENDING",
+  "branch": "agent/rnd-0044-ratio-only-replacement",
+  "contract_commit": "62e2d5ab285dca0ab14d4cd742f7c3a43da40fe5",
+  "scope": "RATIO_ONLY_KERNEL_IMPLEMENTATION_AND_FIXTURE_TESTING_ONLY",
+  "ratio_only_arms": {
+    "Q001": 3.0,
+    "Q002": 5.0,
+    "Q003": 8.0
+  },
+  "reference_arm": "Q000_FROZEN_R000_REFERENCE_ONLY",
+  "absolute_volatility_floor_enabled_in_ratio_only_arms": false,
+  "fixture_testing_authorized": true,
+  "development_outcomes_authorized": false,
+  "full_2015_2020_run_authorized": false,
+  "new_ratio_thresholds": false,
+  "pair_specific_thresholds": false,
+  "strategy_selection": false,
+  "validation_access": false,
+  "reserved_final_open": false,
+  "portfolio_sizing": false,
+  "broker_writes": false,
+  "capital_authority": false,
+  "automatic_promotion": false,
+  "automatic_merge": false,
+  "human_review_required": true
+}
