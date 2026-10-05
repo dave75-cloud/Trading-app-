@@ -1,7 +1,15 @@
 #!/usr/bin/env python3
 """Pure outcome-blind operational status/recovery kernel for RND-0055."""
 
-from rnd0054_weekly_cli import recompute_ledger
+from pathlib import Path
+import sys
+
+ROOT = Path(__file__).resolve().parents[2]
+TOOLS = ROOT / "rnd" / "tools"
+if str(TOOLS) not in sys.path:
+    sys.path.insert(0, str(TOOLS))
+
+from rnd0054_weekly_cli import recompute_ledger  # noqa: E402
 from rnd0054_weekly_workflow import plan_next
 
 
