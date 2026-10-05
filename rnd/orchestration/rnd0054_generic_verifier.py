@@ -47,6 +47,15 @@ def _sha(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
+def _receipt_path(root):
+    generic = root / "rnd0054_acquisition_receipt.json"
+    legacy = root / "rnd0047_acquisition_receipt.json"
+    if generic.is_file():
+        return generic
+    _req(legacy.is_file(), "acquisition receipt missing")
+    return legacy
+
+
 def _expected_instants(start_utc, end_utc):
     start = _utc(start_utc, "start_utc")
     end = _utc(end_utc, "end_utc")
@@ -65,7 +74,7 @@ def verify_tranche(root, expected_start_utc, expected_end_utc):
     _req(root.is_dir(), "tranche directory missing")
     expected = _expected_instants(expected_start_utc, expected_end_utc)
 
-    receipt = _load(root / "rnd0047_acquisition_receipt.json")
+    receipt = _load(_receipt_path(root))
     _req(receipt.get("candidate_id") == CANDIDATE_ID, "candidate id mismatch")
     _req(receipt.get("candidate_fingerprint") == CANDIDATE_FINGERPRINT, "candidate fingerprint mismatch")
     _req(receipt.get("symbols") == list(SYMBOLS), "symbol universe mismatch")
