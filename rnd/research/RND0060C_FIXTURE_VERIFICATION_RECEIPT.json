@@ -1,0 +1,20 @@
+{
+  "task_id": "RND-0060C",
+  "status": "FIXTURE_VERIFICATION_COMPLETE",
+  "verified_head": "ba001ebc76291f849aed7374c61723185a5bbde2",
+  "human_run_evidence": {
+    "test_rnd0060c_cross_sectional_usd_relative_value.py": "14/14 PASS",
+    "test_rnd0060c_full_development.py": "10/10 PASS"
+  },
+  "development_only": true,
+  "trial_count": 1,
+  "parameter_search": false,
+  "validation_open": false,
+  "final_test_open": false,
+  "reserved_final_access": false,
+  "broker_writes": false,
+  "capital_authority": false,
+  "automatic_promotion": false,
+  "automatic_merge": false,
+  "human_review_required": true
+}
