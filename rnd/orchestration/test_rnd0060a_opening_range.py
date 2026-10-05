@@ -51,6 +51,19 @@ def day_rows(signal="LONG", omit=None, gap_after_entry=False):
     return rows
 
 
+def weekend_gap_rows():
+    rows = []
+    start = datetime(2019, 1, 4, 10, 0, tzinfo=timezone.utc)
+    for i in range(12):
+        rows.append(row(start + timedelta(minutes=5 * i), 1.1000, high=1.1010, low=1.0990))
+    rows.append(row(datetime(2019, 1, 4, 11, 0, tzinfo=timezone.utc), 1.1020, high=1.1022, low=1.1018))
+    rows.append(row(datetime(2019, 1, 4, 11, 5, tzinfo=timezone.utc), 1.1022, high=1.1024, low=1.1020))
+    rows.append(row(datetime(2019, 1, 7, 10, 50, tzinfo=timezone.utc), 1.1024, high=1.1026, low=1.1022))
+    rows.append(row(datetime(2019, 1, 7, 10, 55, tzinfo=timezone.utc), 1.1026, high=1.1028, low=1.1024))
+    rows.append(row(datetime(2019, 1, 7, 11, 0, tzinfo=timezone.utc), 1.1028, high=1.1030, low=1.1026))
+    return rows
+
+
 class TestRND0060AOpeningRange(unittest.TestCase):
     def test_long_breakout_executes_next_bar_and_holds_three_observed_bars(self):
         out = evaluate_symbol("AUDUSD", day_rows("LONG"))
@@ -93,6 +106,23 @@ class TestRND0060AOpeningRange(unittest.TestCase):
         self.assertEqual(trade["exit_timestamp"], "2019-01-02T11:25:00Z")
         self.assertEqual(trade["holding_bars"], 3)
         self.assertEqual(trade["gap_exposure_count"], 1)
+
+    def test_position_survives_weekend_and_blocks_second_session_signal(self):
+        out = evaluate_symbol("AUDUSD", weekend_gap_rows())
+        self.assertEqual(out["trade_count"], 1)
+        trade = out["trades"][0]
+        self.assertEqual(trade["exit_timestamp"], "2019-01-07T11:00:00Z")
+        self.assertEqual(trade["holding_bars"], 3)
+        self.assertEqual(trade["gap_exposure_count"], 1)
+        self.assertTrue(any(e["event_type"] == "NO_SIGNAL_POSITION_ALREADY_OPEN" for e in out["events"]))
+
+    def test_executable_marks_active_at_entry_and_flat_at_exit(self):
+        out = evaluate_symbol("AUDUSD", day_rows("LONG"))
+        by_ts = {m["timestamp"]: m for m in out["marks"]}
+        self.assertEqual(by_ts["2019-01-02T11:05:00Z"]["position"], 1)
+        self.assertIsNotNone(by_ts["2019-01-02T11:05:00Z"]["mark_return"])
+        self.assertEqual(by_ts["2019-01-02T11:20:00Z"]["position"], 0)
+        self.assertIsNone(by_ts["2019-01-02T11:20:00Z"]["mark_return"])
 
     def test_bid_ask_cost_drag_is_positive(self):
         trade = evaluate_symbol("AUDUSD", day_rows("LONG"))["trades"][0]
