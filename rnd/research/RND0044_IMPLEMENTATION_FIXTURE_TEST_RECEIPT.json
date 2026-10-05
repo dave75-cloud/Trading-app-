@@ -1,0 +1,23 @@
+{
+  "task_id": "RND-0044",
+  "status": "IMPLEMENTATION_FIXTURE_TEST_PASS",
+  "branch": "agent/rnd-0044-ratio-only-replacement",
+  "tested_head": "e0a65ad9779b20a2c95a9e82e542d599a122ddb9",
+  "test_module": "rnd/orchestration/test_rnd0044_ratio_only_kernel.py",
+  "tests_run": 8,
+  "tests_passed": 8,
+  "fixture_gate": "PASS",
+  "ratio_only_semantics_verified": true,
+  "legacy_absolute_volatility_floor_removed_for_q001_q002_q003": true,
+  "authorized_ratio_thresholds": [3.0, 5.0, 8.0],
+  "development_outcomes_authorized": false,
+  "validation_access": false,
+  "reserved_final_open": false,
+  "strategy_selection": false,
+  "portfolio_sizing": false,
+  "broker_writes": false,
+  "capital_authority": false,
+  "automatic_promotion": false,
+  "automatic_merge": false,
+  "human_review_required": true
+}
