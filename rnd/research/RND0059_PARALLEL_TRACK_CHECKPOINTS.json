@@ -1,0 +1,38 @@
+{
+  "task_id": "RND-0059",
+  "status": "PARALLEL_TRACKS_UNMERGED",
+  "tracks": {
+    "RND-0055": {
+      "branch": "agent/rnd-0055-prospective-ops-hardening",
+      "contract_commit": "c8d2624a49440861ce9d35d3775d6a07745be10e",
+      "test_head": "a799c32f68b7fe4d5eceaa559cfee8a4b90e6cce",
+      "purpose": "prospective operations status and recovery"
+    },
+    "RND-0056": {
+      "branch": "agent/rnd-0056-shadow-risk-engine",
+      "contract_commit": "2b4ec11d93300aebb319f3c614b973f3a17f3968",
+      "test_head": "05f74f7aa82609856608130363a446afd27990fe",
+      "purpose": "portfolio-aware fixture shadow risk"
+    },
+    "RND-0057": {
+      "branch": "agent/rnd-0057-control-api-schemas",
+      "contract_commit": "4d2c801c17c865ecb504c1323529dce6e3363eef",
+      "test_head": "11fc07d0e0b59d55410a13774029c7ffc4a95754",
+      "purpose": "machine-readable control and authority contracts"
+    },
+    "RND-0058": {
+      "branch": "agent/rnd-0058-shadow-execution-simulator",
+      "contract_commit": "5b68c15126dc27d57e8abe9b8140cac1b202396a",
+      "test_head": "331fa087fbf720da9a410a14265329720e831d53",
+      "purpose": "fixture-only shadow execution and reconciliation"
+    }
+  },
+  "candidate_fingerprint": "25c21eb8fe8a6e19a1085741585b87d96a2dbf74f009c0470da608bbf60e3dd4",
+  "q003_outcomes_opened": false,
+  "reserved_final_access": false,
+  "broker_writes": false,
+  "capital_authority": false,
+  "automatic_merge": false,
+  "automatic_promotion": false,
+  "merge_authority": "HUMAN_ONLY"
+}
