@@ -1,0 +1,30 @@
+{
+  "task_id": "RND-0045",
+  "status": "COMPLETE_REQUIRES_HUMAN_REVIEW",
+  "classification": "COMMON_MECHANISM_SUPPORTED_FOR_CANDIDATE_REVIEW",
+  "source": {
+    "report_path": "/Users/davidkerr/Trading-evidence/rnd0045-cross-pair-heterogeneity-20261005.json",
+    "report_sha256": "c951fa6cd2febc79400c1578386df4a05ad4bc7827920cc52171fca318225716"
+  },
+  "predeclared_result_summary": {
+    "positive_full_period_pair_count": 4,
+    "positive_aggregate_year_count": 5,
+    "years_with_at_least_3_positive_pairs": 5,
+    "leave_one_pair_out_all_positive": true,
+    "max_positive_pair_share": 0.6865762292175398
+  },
+  "governance": {
+    "pair_dropping": false,
+    "new_ratio_thresholds": false,
+    "pair_specific_rules": false,
+    "pair_weighting": false,
+    "strategy_selection": false,
+    "validation_access": false,
+    "reserved_final_open": false,
+    "broker_writes": false,
+    "capital_authority": false,
+    "automatic_promotion": false,
+    "automatic_merge": false,
+    "human_review_required": true
+  }
+}
