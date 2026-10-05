@@ -11,6 +11,7 @@ import argparse
 import hashlib
 import json
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -45,6 +46,14 @@ def sha256_bytes(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
+def utc_instant(value, role):
+    req(isinstance(value, str) and value.endswith("Z"), f"{role}: UTC Z timestamp required")
+    try:
+        return datetime.fromisoformat(value[:-1] + "+00:00").astimezone(timezone.utc)
+    except ValueError as exc:
+        raise VerifyError(f"{role}: invalid timestamp") from exc
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--tranche", required=True)
@@ -66,9 +75,12 @@ def main():
     req(window.get("start_utc") == EXPECTED_START, "tranche start mismatch")
     req(window.get("end_utc") == EXPECTED_END, "tranche end mismatch")
 
+    expected_instants = [utc_instant(x, "expected timestamp") for x in EXPECTED_TIMESTAMPS]
+
     rows_by_symbol = {}
     raw_sha_by_symbol = {}
     canonical_sha_by_symbol = {}
+    provider_timestamps_by_symbol = {}
 
     for symbol in SYMBOLS:
         sdir = root / symbol
@@ -90,7 +102,11 @@ def main():
         req(len(rows) == 2, f"{symbol}: canonical row count mismatch")
 
         timestamps = [row.get("timestamp_utc") for row in rows]
-        req(timestamps == EXPECTED_TIMESTAMPS, f"{symbol}: timestamp sequence mismatch")
+        actual_instants = [utc_instant(x, f"{symbol}: canonical timestamp") for x in timestamps]
+        req(
+            actual_instants == expected_instants,
+            f"{symbol}: timestamp sequence mismatch actual={timestamps!r}",
+        )
         req(all(row.get("complete") is True for row in rows), f"{symbol}: incomplete canonical row")
 
         canonical_sha = canonical_rows_sha256(rows)
@@ -98,13 +114,17 @@ def main():
         raw_sha = sha256_bytes(raw_bundle)
         req(raw_sha == manifest.get("sha256"), f"{symbol}: raw bundle SHA mismatch")
 
-        # With a two-slot tranche, any gap entry means the evidence is not a full
-        # two-candle structural smoke test and must fail closed.
-        req(gap_ledger in ([], {}), f"{symbol}: unexpected gap ledger entries")
+        req(isinstance(gap_ledger, dict), f"{symbol}: structured gap ledger required")
+        req(gap_ledger.get("expected_count") == 2, f"{symbol}: gap ledger expected count mismatch")
+        req(gap_ledger.get("actual_count") == 2, f"{symbol}: gap ledger actual count mismatch")
+        req(gap_ledger.get("missing_timestamps") == [], f"{symbol}: missing timestamps present")
+        req(gap_ledger.get("unexpected_timestamps") == [], f"{symbol}: unexpected timestamps present")
+        req(gap_ledger.get("complete") is True, f"{symbol}: gap ledger incomplete")
 
         rows_by_symbol[symbol] = len(rows)
         raw_sha_by_symbol[symbol] = raw_sha
         canonical_sha_by_symbol[symbol] = canonical_sha
+        provider_timestamps_by_symbol[symbol] = timestamps
 
     print("RND0047_FRESH_TRANCHE_VERIFY: PASS")
     print(f"candidate_fingerprint={CANDIDATE_FINGERPRINT}")
@@ -116,6 +136,7 @@ def main():
     print("broker_writes=FALSE")
     print("capital_authority=FALSE")
     for s in SYMBOLS:
+        print(f"{s}_provider_timestamps={provider_timestamps_by_symbol[s]}")
         print(f"{s}_raw_sha256={raw_sha_by_symbol[s]}")
         print(f"{s}_canonical_sha256={canonical_sha_by_symbol[s]}")
 
