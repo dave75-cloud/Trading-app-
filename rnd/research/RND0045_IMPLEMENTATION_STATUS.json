@@ -1,0 +1,20 @@
+{
+  "task_id": "RND-0045",
+  "status": "IMPLEMENTED_FIXTURE_TEST_PENDING_HUMAN_RUN",
+  "branch": "agent/rnd-0045-cross-pair-heterogeneity",
+  "frozen_mechanism": "RND0044_Q003_RATIO_ONLY_8_0",
+  "development_outcomes_authorized": false,
+  "new_ratio_thresholds": false,
+  "pair_dropping": false,
+  "pair_specific_rules": false,
+  "pair_weighting": false,
+  "strategy_selection": false,
+  "validation_access": false,
+  "reserved_final_open": false,
+  "portfolio_sizing": false,
+  "broker_writes": false,
+  "capital_authority": false,
+  "automatic_promotion": false,
+  "automatic_merge": false,
+  "human_review_required": true
+}
