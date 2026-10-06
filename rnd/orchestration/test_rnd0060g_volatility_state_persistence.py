@@ -116,9 +116,11 @@ class RND0060GKernelTests(unittest.TestCase):
 
     def test_14_summary_preserves_no_authority_flags(self):
         rows = []
-        for d, cr in enumerate((0.0015, 0.0020, 0.0025, 0.0030)):
-            day = _day_rows(current_return=cr, forward_return=0.0005 + d * 0.0002)
-            shift = timedelta(days=d)
+        shifts = (0, 1, 2, 5)
+        current_returns = (0.0015, 0.0020, 0.0025, 0.0030)
+        for idx, (shift_days, cr) in enumerate(zip(shifts, current_returns)):
+            day = _day_rows(current_return=cr, forward_return=0.0005 + idx * 0.0002)
+            shift = timedelta(days=shift_days)
             for r in day:
                 dt = datetime.fromisoformat(r["timestamp_utc"][:-1] + "+00:00") + shift
                 r = dict(r)
