@@ -1,0 +1,38 @@
+{
+  "task_id": "RND-0060G",
+  "classification": "NO_REPRODUCIBLE_STRUCTURE",
+  "scientific_interpretation": "Weak but sign-consistent volatility-state association; insufficient aggregate effect size under the predeclared screen.",
+  "report_sha256": "66ef1514ab21ae32ee697b10e0beb295dd34e1c6eb805566caa9c6e6d2bd7905",
+  "aggregate_primary_spearman": 0.02347941484168922,
+  "frozen_effect_size_threshold": 0.05,
+  "symbol_primary_positive_count": 4,
+  "quartile_positive_count": 4,
+  "positive_year_count": 4,
+  "annual_pooled_primary_spearman": {
+    "2015": -0.023546251634929762,
+    "2016": 0.0054095300764198,
+    "2017": 0.07312183915232055,
+    "2018": -0.01341074926589326,
+    "2019": 0.07228876491178186,
+    "2020": 0.08217903481138746
+  },
+  "per_symbol_primary_spearman": {
+    "AUDUSD": 0.036939729787115044,
+    "EURUSD": 0.029304585787791514,
+    "GBPUSD": 0.0625406932502433,
+    "USDJPY": 0.027450358554095406
+  },
+  "integrity_reconciliation_pass": true,
+  "trade_simulation": false,
+  "pnl": false,
+  "strategy_candidate": false,
+  "parameter_search": false,
+  "validation_open": false,
+  "final_test_open": false,
+  "reserved_final_access": false,
+  "broker_writes": false,
+  "capital_authority": false,
+  "automatic_promotion": false,
+  "closure": "CLOSED_NO_REPRODUCIBLE_STRUCTURE",
+  "anti_mining_note": "Do not relax the 0.05 threshold, change the 11:30 observation time, alter the 6/18 windows, substitute volatility estimators, select GBPUSD, or tune quartile cutoffs based on this result. Any such work requires a new independently justified and predeclared task."
+}
