@@ -1,0 +1,28 @@
+{
+  "task_id": "RND-0060H",
+  "branch": "agent/rnd-0060h-cross-sectional-dispersion-state",
+  "verified_head": "83ddcb755beed51682d8c94258df43e9f0aaf50a",
+  "kernel_fixture_module": "rnd/orchestration/test_rnd0060h_cross_sectional_dispersion_state.py",
+  "kernel_tests": {
+    "passed": 14,
+    "failed": 0,
+    "status": "PASS"
+  },
+  "classifier_fixture_module": "rnd/orchestration/test_rnd0060h_structure_classifier.py",
+  "classifier_tests": {
+    "passed": 10,
+    "failed": 0,
+    "status": "PASS"
+  },
+  "combined_tests": 24,
+  "parameter_search": false,
+  "trade_simulation": false,
+  "pnl": false,
+  "validation_open": false,
+  "final_test_open": false,
+  "reserved_final_access": false,
+  "broker_writes": false,
+  "capital_authority": false,
+  "development_outcomes_opened": false,
+  "status": "PRE_OUTCOME_FIXTURE_VERIFICATION_PASS"
+}
