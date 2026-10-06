@@ -1,0 +1,27 @@
+{
+  "task_id": "RND-0060K",
+  "status": "PRE_OUTCOME_VERIFICATION_PASS",
+  "hostile_kernel_fixture_suite": {
+    "module": "test_rnd0060k_close_location_pressure_structure.py",
+    "result": "14/14 PASS"
+  },
+  "classifier_fixture_suite": {
+    "module": "test_rnd0060k_structure_classifier.py",
+    "result": "10/10 PASS"
+  },
+  "combined_fixture_result": "24/24 PASS",
+  "verified_code_head_before_receipt": "9b5aa301c073ae35e47c32e888b460f14497ddc2",
+  "development_only": true,
+  "parameter_search": false,
+  "trade_simulation": false,
+  "pnl": false,
+  "strategy_candidate": false,
+  "validation_open": false,
+  "final_test_open": false,
+  "reserved_final_access": false,
+  "broker_writes": false,
+  "capital_authority": false,
+  "automatic_promotion": false,
+  "automatic_merge": false,
+  "human_gate_required_before_any_promotion_or_authority_change": true
+}
