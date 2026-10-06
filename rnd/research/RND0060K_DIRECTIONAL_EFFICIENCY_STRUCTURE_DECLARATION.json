@@ -1,0 +1,56 @@
+{
+  "task_id": "RND-0060K",
+  "title": "USD-oriented 30-minute close-location pressure structure",
+  "status": "FROZEN_BEFORE_OUTCOME",
+  "independent_of_q003": true,
+  "development_only": true,
+  "dataset": "DEVELOPMENT_2015_2020",
+  "hypothesis": "At the fixed 11:30 UTC observation time, a pair's USD-oriented close location within its immediately preceding 30-minute realized mid-price range has a repeatable association with that pair's next 30-minute USD-oriented return.",
+  "fixed_parameters": {
+    "symbols": ["AUDUSD", "EURUSD", "GBPUSD", "USDJPY"],
+    "timeframe": "M5",
+    "observation_time_utc": "11:30",
+    "lookback_intervals": 6,
+    "forward_horizon_intervals": 6,
+    "usd_orientation": {
+      "AUDUSD": -1,
+      "EURUSD": -1,
+      "GBPUSD": -1,
+      "USDJPY": 1
+    },
+    "raw_close_location": "2*((OBS_CLOSE-CURRENT_30M_LOW)/(CURRENT_30M_HIGH-CURRENT_30M_LOW))-1",
+    "usd_oriented_close_location_pressure": "raw_close_location * usd_orientation",
+    "primary_response": "NEXT_30M_USD_ORIENTED_CLOSE_RETURN",
+    "cross_sectional_activity_context": "RND0060H_DISPERSION_RETAINED_AS_DESCRIPTIVE_CONTEXT_ONLY",
+    "activity_threshold": null,
+    "pair_selection": false,
+    "trade_simulation": false,
+    "pnl": false
+  },
+  "declared_trial_count": 1,
+  "parameter_search": false,
+  "screen": {
+    "aggregate_primary_spearman_gte_0_05": true,
+    "at_least_4_of_6_annual_primary_spearman_positive": true,
+    "at_least_3_of_4_symbol_primary_spearman_positive": true,
+    "top_quartile_mean_primary_response_gt_bottom_quartile": true,
+    "integrity_reconciliation_pass": true
+  },
+  "success_classification": "DIRECTIONAL_PRESSURE_STRUCTURE_DETECTED",
+  "failure_classification": "NO_REPRODUCIBLE_DIRECTIONAL_PRESSURE_STRUCTURE",
+  "prohibited_rescues": [
+    "invert_sign_after_outcome",
+    "change_observation_time_after_outcome",
+    "change_lookback_after_outcome",
+    "change_forward_horizon_after_outcome",
+    "threshold_mining",
+    "pair_cherry_picking",
+    "condition_on_rnd0060h_quantiles_after_outcome"
+  ],
+  "validation_open": false,
+  "final_test_open": false,
+  "reserved_final_access": false,
+  "broker_writes": false,
+  "capital_authority": false,
+  "automatic_promotion": false
+}
