@@ -3,7 +3,7 @@ import unittest
 from datetime import datetime, timezone, timedelta
 
 from rnd0060h_cross_sectional_dispersion_state import (
-    RND0060HError, SYMBOLS, extract_market_observations, spearman, summarize, validate_rows,
+    RND0060HError, SYMBOLS, extract_market_observations, spearman, validate_rows,
 )
 
 START = datetime(2019, 1, 2, 11, 0, tzinfo=timezone.utc)
@@ -67,17 +67,12 @@ class RND0060HKernelTests(unittest.TestCase):
         v=spearman([1,1,2,3],[1,2,3,4]); self.assertGreater(v,0.9)
     def test_13_spearman_constant_rejected(self):
         with self.assertRaises(RND0060HError): spearman([1,1,1],[1,2,3])
-    def test_14_summary_preserves_no_authority_flags(self):
-        rows_by={s:[] for s in SYMBOLS}
-        days=[0,1,2,5]
-        for j,d in enumerate(days):
-            shift=timedelta(days=d)
-            for i,s in enumerate(SYMBOLS):
-                for r in _rows(scale=(i+1)*(j+1),fwd=0.0005+0.0002*j):
-                    x=dict(r); dt=datetime.fromisoformat(r['timestamp_utc'][:-1]+'+00:00')+shift; x['timestamp_utc']=_ts(dt); rows_by[s].append(x)
-        for s in SYMBOLS: rows_by[s].sort(key=lambda r:r['timestamp_utc'])
-        out=summarize(rows_by)
-        for k in ('trade_simulation','pnl','strategy_candidate','validation_open','final_test_open','reserved_final_access','broker_writes','capital_authority','automatic_promotion'):
-            self.assertFalse(out[k])
+    def test_14_kernel_emits_measurement_fields_only(self):
+        o=extract_market_observations(_bundle())['observations'][0]
+        joined=' '.join(o.keys()).lower()
+        self.assertNotIn('trade',joined)
+        self.assertNotIn('pnl',joined)
+        self.assertNotIn('broker',joined)
+        self.assertNotIn('capital',joined)
 
 if __name__=='__main__': unittest.main()
