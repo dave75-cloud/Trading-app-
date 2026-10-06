@@ -70,7 +70,7 @@ class RND0060KKernelTests(unittest.TestCase):
         self.assertEqual(d["exclusions"][0]["reason"],"REQUIRED_CROSS_SECTION_OBSERVATION_MISSING")
 
     def test_10_degenerate_range_excludes_day(self):
-        b=_bundle(); b["GBPUSD"]=_rows(flat_range=True)
+        b=_bundle(); b["GBPUSD"]=_rows(drift=0.0, forward=0.0, flat_range=True)
         d=extract_pressure_observations(b)
         self.assertEqual(d["observations"],[])
         self.assertEqual(d["exclusions"][0]["reason"],"DEGENERATE_CURRENT_30M_RANGE")
@@ -89,9 +89,14 @@ class RND0060KKernelTests(unittest.TestCase):
 
     def test_14_summary_preserves_no_authority_flags(self):
         rows_by={s:[] for s in SYMBOLS}
-        specs=[]
-        for year in range(2015,2021):
-            specs.extend([(year,1,2,1),(year,1,3,2)])
+        specs=[
+            (2015,1,5,1),(2015,1,6,2),
+            (2016,1,4,1),(2016,1,5,2),
+            (2017,1,2,1),(2017,1,3,2),
+            (2018,1,2,1),(2018,1,3,2),
+            (2019,1,2,1),(2019,1,3,2),
+            (2020,1,2,1),(2020,1,3,2),
+        ]
         for year,month,day,mult in specs:
             base=datetime(year,month,day,11,0,tzinfo=timezone.utc)
             for i,s in enumerate(SYMBOLS):
