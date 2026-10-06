@@ -1,0 +1,23 @@
+{
+  "task_id": "RND-0060J",
+  "status": "PRE_OUTCOME_VERIFICATION_COMPLETE",
+  "branch": "agent/rnd-0060j-signed-dispersion-directional-structure",
+  "verified_head_before_receipt": "4900be4bd20890d20998bcfc288398643ff4b9ee",
+  "kernel_hostile_tests": {"passed": 14, "total": 14},
+  "classifier_tests": {"passed": 10, "total": 10},
+  "combined": "24/24",
+  "parameter_search": false,
+  "trade_simulation": false,
+  "pnl": false,
+  "validation_open": false,
+  "final_test_open": false,
+  "reserved_final_access": false,
+  "broker_writes": false,
+  "capital_authority": false,
+  "automatic_promotion": false,
+  "notes": [
+    "Three initial hostile fixture expectations used the inverse USD-orientation convention and were corrected in fixtures only at commit 4900be4bd20890d20998bcfc288398643ff4b9ee.",
+    "Frozen declaration, kernel, classifier, and governed development runner were unchanged by that correction.",
+    "No development outcome was opened before this receipt."
+  ]
+}
