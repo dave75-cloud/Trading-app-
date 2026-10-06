@@ -1,0 +1,28 @@
+{
+  "task_id": "RND-0060G",
+  "branch": "agent/rnd-0060g-volatility-state-persistence",
+  "verified_head": "626fc3532f980c1f771c9fdfdf6b3d0b84f31ade",
+  "kernel_suite": {
+    "test_module": "rnd/orchestration/test_rnd0060g_volatility_state_persistence.py",
+    "tests": 14,
+    "status": "PASS"
+  },
+  "classifier_suite": {
+    "test_module": "rnd/orchestration/test_rnd0060g_full_development.py",
+    "tests": 10,
+    "status": "PASS"
+  },
+  "combined_tests": 24,
+  "combined_status": "PASS",
+  "parameter_search": false,
+  "development_outcomes_opened": false,
+  "validation_open": false,
+  "final_test_open": false,
+  "reserved_final_access": false,
+  "trade_simulation": false,
+  "pnl": false,
+  "broker_writes": false,
+  "capital_authority": false,
+  "automatic_promotion": false,
+  "human_gate_required_before_any_strategy_or_validation_action": true
+}
