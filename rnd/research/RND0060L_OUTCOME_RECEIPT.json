@@ -1,0 +1,64 @@
+{
+  "task_id": "RND-0060L",
+  "status": "COMPLETE_REQUIRES_HUMAN_REVIEW",
+  "classification": "ACTIVITY_STATE_ECONOMIC_UTILITY_DETECTED",
+  "report_path": "~/Trading-evidence/rnd0060l-activity-state-economic-utility-full-development-2015-2020-20261006.json",
+  "report_sha256": "5e736cd361f7b3c4aaf88fe23b36c6c9e70c0491a0b754c740f520a3d0a96b18",
+  "evidence": {
+    "verified_2015_2019": "20/20",
+    "verified_2020": "4/4",
+    "pair_years": "24/24",
+    "eligible_observation_count": 1531,
+    "excluded_market_day_count": 18
+  },
+  "predeclared_screen": {
+    "aggregate_primary_spearman_gte_0_05": true,
+    "at_least_4_of_6_annual_primary_spearman_positive": true,
+    "at_least_3_of_4_symbol_primary_spearman_positive": true,
+    "top_quartile_mean_primary_response_gt_bottom_quartile": true,
+    "integrity_reconciliation_pass": true
+  },
+  "diagnostics": {
+    "aggregate_primary_spearman": 0.25656062862750517,
+    "positive_year_count": 6,
+    "positive_symbol_count": 4,
+    "annual_primary_spearman": {
+      "2015": 0.18936527695915986,
+      "2016": 0.23654462831417972,
+      "2017": 0.24438626446594575,
+      "2018": 0.2223132552514509,
+      "2019": 0.24544986790573553,
+      "2020": 0.27843846913614356
+    },
+    "per_symbol_primary_spearman": {
+      "AUDUSD": 0.19280499335682402,
+      "EURUSD": 0.1918787987924565,
+      "GBPUSD": 0.16858302669138697,
+      "USDJPY": 0.1853879496503626
+    },
+    "quartile_diagnostic": {
+      "bottom_quartile_mean_market_wide_movement_to_friction_ratio": 13.157853407531393,
+      "top_quartile_mean_market_wide_movement_to_friction_ratio": 15.796320614828995,
+      "quartile_size": 382
+    }
+  },
+  "governance": {
+    "development_only": true,
+    "declared_trial_count": 1,
+    "parameter_search": false,
+    "threshold_search": false,
+    "trade_simulation": false,
+    "pnl": false,
+    "strategy_candidate": false,
+    "validation_open": false,
+    "final_test_open": false,
+    "reserved_final_access": false,
+    "prospective_candidate_outcomes_open": false,
+    "broker_writes": false,
+    "capital_authority": false,
+    "automatic_promotion": false,
+    "automatic_merge": false
+  },
+  "interpretation": "RND-0060H cross-sectional activity state is associated with materially better next-30-minute movement relative to contemporaneous spread friction across all six development years and all four symbols. This is not a directional signal, strategy, P&L result, sizing rule, or execution authority.",
+  "next_step_constraint": "Any use as a filter, execution-control input, risk input, sizing input, or strategy-admissibility condition requires a separate predeclared human-reviewed task. No threshold or trading rule is authorized by this result."
+}
