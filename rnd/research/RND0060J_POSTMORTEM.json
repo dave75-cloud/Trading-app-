@@ -1,0 +1,47 @@
+{
+  "task_id": "RND-0060J",
+  "status": "CLOSED",
+  "classification": "NO_REPRODUCIBLE_DIRECTIONAL_STRUCTURE",
+  "report_sha256": "b352b2cf545199c4cd2ac93555b52cf2e084039c5c21edebe0807c527e28b296",
+  "eligible_observation_count": 1531,
+  "excluded_observation_count": 18,
+  "aggregate_primary_spearman": -0.044183450385575695,
+  "positive_year_count": 1,
+  "positive_symbol_count": 1,
+  "annual_primary_spearman": {
+    "2015": -0.11845990282330884,
+    "2016": -0.01647758121436974,
+    "2017": -0.01157655093910074,
+    "2018": -0.06698497559053165,
+    "2019": -0.08721447104861918,
+    "2020": 0.028905035881780068
+  },
+  "per_symbol_primary_spearman": {
+    "AUDUSD": -0.06133460976077021,
+    "EURUSD": -0.051480263692071995,
+    "GBPUSD": 0.007306445020729109,
+    "USDJPY": -0.047888417801406416
+  },
+  "quartile_diagnostic": {
+    "bottom_quartile_mean_forward_equal_weight_usd_oriented_return": 6.39554379195679e-05,
+    "quartile_size": 382,
+    "top_quartile_mean_forward_equal_weight_usd_oriented_return": -7.0929741642551445e-06
+  },
+  "interpretation": "RND-0060H cross-sectional dispersion remains a strong market-activity/magnitude state, but signing that state by the contemporaneous equal-weight USD-oriented direction does not provide reproducible next-30-minute directional information.",
+  "prohibitions": [
+    "Do not invert the RND-0060J sign rule as a post-hoc rescue.",
+    "Do not tune observation time, lookback, forward horizon, pair set, weighting, sign convention, or thresholds from this result.",
+    "Do not cherry-pick 2020 or GBPUSD based on observed diagnostics.",
+    "Do not open validation, reserved final, broker, capital, or promotion authority from this task."
+  ],
+  "retained_result": "RND-0060H cross-sectional activity structure remains valid and separate from RND-0060J directional failure.",
+  "trade_simulation": false,
+  "pnl": false,
+  "strategy_candidate": false,
+  "validation_open": false,
+  "final_test_open": false,
+  "reserved_final_access": false,
+  "broker_writes": false,
+  "capital_authority": false,
+  "automatic_promotion": false
+}
