@@ -1,0 +1,89 @@
+{
+  "task_id": "RND-0060I",
+  "title": "Activity-Conditioned Single-Pair Range Breakout Candidate",
+  "status": "PREDECLARED_DEVELOPMENT_CANDIDATE",
+  "parent_structure_task": "RND-0060H",
+  "independent_of_q003": true,
+  "purpose": "Test one fixed trading mechanism that uses the RND-0060H cross-sectional dispersion result only as an activity-state gate, without inferring directional edge from that result.",
+  "dataset": "DEVELOPMENT_2015_2020_ONLY",
+  "symbols": ["AUDUSD", "EURUSD", "GBPUSD", "USDJPY"],
+  "timeframe": "M5",
+  "observation_time_utc": "11:30",
+  "usd_orientation": {"AUDUSD": -1, "EURUSD": -1, "GBPUSD": -1, "USDJPY": 1},
+  "state_definition": {
+    "lookback_intervals": 6,
+    "interval_start_utc": "11:00",
+    "interval_end_utc": "11:30",
+    "per_symbol_return": "orientation * (mid_close_11_30 / mid_close_11_00 - 1)",
+    "cross_sectional_dispersion": "population standard deviation of the four USD-oriented returns"
+  },
+  "activity_gate": {
+    "reference_window_prior_eligible_market_days": 60,
+    "reference_quantile": 0.75,
+    "quantile_method": "NEAREST_RANK",
+    "nearest_rank_index_one_based": 45,
+    "gate_rule": "current cross-sectional dispersion must be strictly greater than the 45th ordered value of the immediately preceding 60 eligible market-day dispersion states",
+    "warmup_rule": "no candidate opportunity until 60 prior eligible market days exist",
+    "future_information_prohibited": true
+  },
+  "pair_selection": {
+    "rule": "select the unique symbol with the largest absolute USD-oriented 30-minute return at 11:30 UTC",
+    "tie_rule": "NO_TRADE"
+  },
+  "breakout_range": {
+    "bars": 6,
+    "timestamps_utc": ["11:05", "11:10", "11:15", "11:20", "11:25", "11:30"],
+    "upper": "maximum mid_high of the six bars",
+    "lower": "minimum mid_low of the six bars"
+  },
+  "trigger_and_entry": {
+    "trigger_bar_utc": "11:35",
+    "long_trigger": "11:35 mid_close strictly greater than frozen upper range",
+    "short_trigger": "11:35 mid_close strictly less than frozen lower range",
+    "otherwise": "NO_TRADE",
+    "entry_bar_utc": "11:40",
+    "entry_rule": "next contiguous genuine M5 bar after trigger",
+    "long_entry_price": "ask_close",
+    "short_entry_price": "bid_close"
+  },
+  "exit": {
+    "hold_subsequent_genuine_observations": 3,
+    "expected_exit_bar_utc": "11:55",
+    "long_exit_price": "bid_close",
+    "short_exit_price": "ask_close",
+    "gap_rule": "if an open economic position encounters a gap, position persists and hold count advances only on genuine observations"
+  },
+  "portfolio": {
+    "maximum_positions_per_market_day": 1,
+    "position_weight": 1.0,
+    "overlapping_positions": false
+  },
+  "costs": "realized directly through bid/ask entry and exit prices; no synthetic spread assumption",
+  "predeclared_candidate_screen": {
+    "aggregate_realized_net_gt_0": true,
+    "terminal_normalized_equity_gt_1": true,
+    "at_least_4_of_6_annual_realized_net_positive": true,
+    "at_least_3_of_4_symbol_realized_net_positive": true,
+    "all_six_leave_one_year_out_realized_net_positive": true,
+    "maximum_drawdown_gt_minus_0_10": true,
+    "integrity_reconciliation_pass": true
+  },
+  "classification_if_all_screen_criteria_pass": "DEVELOPMENT_CANDIDATE_SUPPORTED_FOR_HUMAN_REVIEW",
+  "classification_otherwise": "DEVELOPMENT_CANDIDATE_FALSIFIED",
+  "declared_trial_count": 1,
+  "parameter_search": false,
+  "alternate_thresholds_prohibited": true,
+  "alternate_reference_windows_prohibited": true,
+  "alternate_pair_selection_prohibited": true,
+  "alternate_breakout_windows_prohibited": true,
+  "alternate_trigger_times_prohibited": true,
+  "alternate_hold_times_prohibited": true,
+  "post_hoc_direction_reversal_prohibited": true,
+  "validation_open": false,
+  "final_test_open": false,
+  "reserved_final_access": false,
+  "broker_writes": false,
+  "capital_authority": false,
+  "automatic_promotion": false,
+  "automatic_merge": false
+}
