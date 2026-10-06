@@ -36,7 +36,11 @@ class RND0060LClassifierTests(unittest.TestCase):
 
     def test_02_aggregate_threshold_failure_rejects(self):
         rows=_passing()
-        for r in rows: r["market_wide_movement_to_friction_ratio"]=1.0 if int(r["timestamp_utc"][8:10])%2==0 else 2.0
+        # Symmetric 1,2,2,1 response against state 1,2,3,4 has zero
+        # rank correlation. This isolates the frozen aggregate >= 0.05 gate.
+        for r in rows:
+            day=int(r["timestamp_utc"][8:10])
+            r["market_wide_movement_to_friction_ratio"]=1.0 if day in (2,5) else 2.0
         self.assertEqual(classify_observations(rows)["classification"],"NO_REPRODUCIBLE_ACTIVITY_STATE_ECONOMIC_UTILITY")
 
     def test_03_annual_breadth_failure_rejects(self):
