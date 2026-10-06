@@ -1,0 +1,36 @@
+{
+  "task_id": "RND-0060L",
+  "status": "PRE_OUTCOME_VERIFICATION_COMPLETE",
+  "verified_head": "4c8d88a8fb3528ed11b087d238f4452bddb84f88",
+  "hostile_measurement_integrity_tests": {
+    "count": 14,
+    "result": "PASS"
+  },
+  "classifier_tests": {
+    "count": 10,
+    "result": "PASS"
+  },
+  "combined_tests": {
+    "count": 24,
+    "result": "PASS"
+  },
+  "fixture_correction_only": true,
+  "scientific_definition_changed": false,
+  "classifier_threshold_changed": false,
+  "development_outcome_opened": false,
+  "development_only": true,
+  "declared_trial_count": 1,
+  "parameter_search": false,
+  "threshold_search": false,
+  "trade_simulation": false,
+  "pnl": false,
+  "strategy_candidate": false,
+  "validation_open": false,
+  "final_test_open": false,
+  "reserved_final_access": false,
+  "prospective_candidate_outcomes_open": false,
+  "broker_writes": false,
+  "capital_authority": false,
+  "automatic_promotion": false,
+  "automatic_merge": false
+}
