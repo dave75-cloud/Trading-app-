@@ -1,0 +1,52 @@
+{
+  "task_id": "RND-0060H",
+  "title": "Cross-Sectional Dispersion State Structure",
+  "status": "PREDECLARED_FROZEN",
+  "mode": "NON_TRADING_MARKET_STATE_STRUCTURE",
+  "independent_of_q003": true,
+  "hypothesis": "At a fixed 11:30 UTC observation time, cross-sectional dispersion of four USD-oriented 30-minute returns has a repeatable development-only association with subsequent 30-minute market-wide realized movement.",
+  "development_interval": "2015-01-01T00:00:00Z to 2020-12-31T19:15:00Z exclusive",
+  "symbols": ["AUDUSD", "EURUSD", "GBPUSD", "USDJPY"],
+  "fixed_parameters": {
+    "timeframe": "M5",
+    "observation_time_utc": "11:30",
+    "lookback_intervals": 6,
+    "lookback_horizon_minutes": 30,
+    "usd_orientation": {
+      "AUDUSD": -1,
+      "EURUSD": -1,
+      "GBPUSD": -1,
+      "USDJPY": 1
+    },
+    "usd_oriented_return": "orientation * (mid_close_11_30 / mid_close_11_00 - 1)",
+    "cross_sectional_state": "POPULATION_STANDARD_DEVIATION_OF_FOUR_USD_ORIENTED_30_MINUTE_RETURNS",
+    "forward_horizon_intervals": 6,
+    "forward_horizon_minutes": 30,
+    "primary_response": "EQUAL_WEIGHT_MEAN_OF_FOUR_FORWARD_RELATIVE_REALIZED_MID_RANGES",
+    "per_symbol_forward_relative_range": "(max_forward_mid_high-min_forward_mid_low)/mid_close_11_30",
+    "secondary_response": "POPULATION_STANDARD_DEVIATION_OF_FOUR_FORWARD_USD_ORIENTED_30_MINUTE_CLOSE_RETURNS",
+    "trade_simulation": false,
+    "pnl": false
+  },
+  "predeclared_structure_screen": {
+    "aggregate_primary_spearman_gte": 0.05,
+    "minimum_positive_annual_pooled_primary_spearman_years_of_6": 4,
+    "minimum_symbols_with_positive_state_vs_own_forward_range_spearman_of_4": 3,
+    "top_quartile_mean_primary_response_gt_bottom_quartile": true,
+    "integrity_reconciliation_pass": true,
+    "all_required": true
+  },
+  "declared_trial_count": 1,
+  "parameter_search": false,
+  "pair_selection": false,
+  "time_search": false,
+  "threshold_search": false,
+  "strategy_candidate": false,
+  "validation_open": false,
+  "final_test_open": false,
+  "reserved_final_access": false,
+  "broker_writes": false,
+  "capital_authority": false,
+  "automatic_promotion": false,
+  "automatic_merge": false
+}
