@@ -52,15 +52,15 @@ class RND0060JKernelTests(unittest.TestCase):
         o = derive_directional_observations(_bundle())["observations"][0]
         self.assertAlmostEqual(abs(o["signed_dispersion_state"]), o["cross_sectional_dispersion_state"], places=15)
 
-    def test_04_positive_breadth_gives_positive_sign(self):
+    def test_04_quote_moves_imply_negative_usd_breadth_under_frozen_orientation(self):
         o = derive_directional_observations(_bundle())["observations"][0]
-        self.assertEqual(o["directional_sign"], 1.0)
+        self.assertEqual(o["directional_sign"], -1.0)
 
-    def test_05_negative_breadth_gives_negative_sign(self):
+    def test_05_reversed_quote_moves_imply_positive_usd_breadth(self):
         b = _bundle(currents=(-0.001, -0.002, -0.003, 0.001))
         o = derive_directional_observations(b)["observations"][0]
-        self.assertEqual(o["directional_sign"], -1.0)
-        self.assertLess(o["signed_dispersion_state"], 0.0)
+        self.assertEqual(o["directional_sign"], 1.0)
+        self.assertGreater(o["signed_dispersion_state"], 0.0)
 
     def test_06_zero_breadth_maps_to_zero_sign(self):
         b = _bundle(currents=(0.001, -0.001, 0.001, 0.001))
@@ -72,9 +72,9 @@ class RND0060JKernelTests(unittest.TestCase):
         vals = list(o["per_symbol_forward_usd_oriented_return"].values())
         self.assertAlmostEqual(o["forward_equal_weight_usd_oriented_return"], sum(vals)/4.0, places=15)
 
-    def test_08_usdjpy_orientation_is_opposite_quote_convention(self):
+    def test_08_usdjpy_orientation_preserves_quote_sign_for_usd_orientation(self):
         o = derive_directional_observations(_bundle())["observations"][0]
-        self.assertGreater(o["per_symbol_forward_usd_oriented_return"]["USDJPY"], 0.0)
+        self.assertLess(o["per_symbol_forward_usd_oriented_return"]["USDJPY"], 0.0)
 
     def test_09_missing_cross_section_bar_excludes_day(self):
         b = _bundle()
