@@ -1,0 +1,23 @@
+{
+  "task_id": "RND-0060K",
+  "status": "COMPLETE",
+  "classification": "NO_REPRODUCIBLE_DIRECTIONAL_PRESSURE_STRUCTURE",
+  "report_path": "/Users/davidkerr/Trading-evidence/rnd0060k-close-location-pressure-full-development-2015-2020-20261006.json",
+  "report_sha256": "ee48a83e5cceb5723e102128d4fc0985e8bfe0c86b82f4d201a2b6f99be76e48",
+  "verified_2015_2019": "20/20",
+  "verified_2020": "4/4",
+  "pair_years": "24/24",
+  "trial_count": 1,
+  "parameter_search": false,
+  "trade_simulation": false,
+  "pnl": false,
+  "validation_open": false,
+  "final_test_open": false,
+  "reserved_final_access": false,
+  "broker_writes": false,
+  "capital_authority": false,
+  "automatic_promotion": false,
+  "automatic_merge": false,
+  "human_review_required": true,
+  "note": "Outcome receipt only. No nearby rescue, inversion, thresholding, pair selection, time-window alteration, validation opening, final-test opening, broker authority, capital authority, promotion, or merge is authorized by this receipt."
+}
