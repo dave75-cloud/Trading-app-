@@ -1,0 +1,33 @@
+{
+  "task_id": "RND-0060S",
+  "receipt_type": "COMPLETION_RECEIPT",
+  "branch": "agent/rnd-0060s-prospective-operations-evidence-integrity",
+  "design_freeze_commit": "0838d85dfb1098cd79eb5cd4509e6c4124ec65cf",
+  "kernel_commit": "c25fd4ed3b80eeade2254c97493bac1fd9a565db",
+  "fixture_commit": "b74938361a097a70f23949fb3fadf85602847b46",
+  "hostile_fixture_result": {
+    "tests_run": 18,
+    "tests_passed": 18,
+    "status": "PASS"
+  },
+  "prospective_start_utc": "2026-10-09T02:33:50Z",
+  "minimum_calendar_days": 180,
+  "minimum_non_defer_observations": 100,
+  "pre_start_evidence_allowed": false,
+  "historical_backfill_counts_as_prospective": false,
+  "duplicate_tranche_allowed": false,
+  "overlap_allowed": false,
+  "explicit_gap_recording_required": true,
+  "recovery_tagging_required": true,
+  "early_readout_allowed": false,
+  "validation_open": false,
+  "final_test_open": false,
+  "reserved_final_access": false,
+  "q003_prospective_outcomes_open": false,
+  "trade_simulation": false,
+  "pnl": false,
+  "broker_writes": false,
+  "capital_authority": false,
+  "automatic_promotion": false,
+  "status": "COMPLETE"
+}
