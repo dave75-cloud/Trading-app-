@@ -1,0 +1,29 @@
+{
+  "task_id": "RND-0060R",
+  "receipt_type": "PRE_START_VERIFICATION",
+  "verified_head": "9cba91dccab1e745bde49902af8f8e6e05345caa",
+  "spec_freeze_commit": "4ae0ef31547512ae9e3150dd4c7b190bba53ea4c",
+  "kernel_commit": "88417f08b189d6c23e77135b04ed0c7936294c44",
+  "fixture_commit": "9cba91dccab1e745bde49902af8f8e6e05345caa",
+  "hostile_fixture_result": {
+    "tests_run": 18,
+    "tests_passed": 18,
+    "status": "PASS"
+  },
+  "activity_cutpoint": 0.0003990789273159821,
+  "minimum_calendar_days": 180,
+  "minimum_non_defer_observations": 100,
+  "pre_start_backfill_prohibited": true,
+  "historical_confirmation_reuse_prohibited": true,
+  "q003_prospective_outcomes_open": false,
+  "validation_open": false,
+  "final_test_open": false,
+  "reserved_final_access": false,
+  "trade_simulation": false,
+  "pnl": false,
+  "broker_writes": false,
+  "capital_authority": false,
+  "automatic_promotion": false,
+  "prospective_start_timestamp": null,
+  "status": "PRE_START_GATE_PASSED_PENDING_HUMAN_START_GATE"
+}
