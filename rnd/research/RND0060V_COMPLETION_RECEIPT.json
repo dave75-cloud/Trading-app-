@@ -1,0 +1,53 @@
+{
+  "task_id": "RND-0060V",
+  "status": "COMPLETE_ARCHITECTURE_VERIFIED",
+  "branch": "agent/rnd-0060v-shadow-execution-risk-realism",
+  "design_commit": "e47b8095af0c5c191e78dca31418462864a0491e",
+  "kernel_commit": "106e04905a13bcaab184211161d6fe4c64d9d8b2",
+  "hostile_fixture_commit": "430646da93263db516929f677c10d765b4210238",
+  "verified_head": "e1256a665d1fc85ec0d4fc943869bbaf6ee04b6d",
+  "fixture_only_float_correction": {
+    "commit": "e1256a665d1fc85ec0d4fc943869bbaf6ee04b6d",
+    "description": "Replaced exact binary-float equality with tolerant comparison for one adverse short-slippage fixture; kernel and frozen RND-0060V semantics unchanged."
+  },
+  "verification": {
+    "test_module": "test_rnd0060v_shadow_execution_risk_realism.py",
+    "tests_run": 20,
+    "tests_passed": 20,
+    "result": "OK",
+    "worktree_status_short": "CLEAN"
+  },
+  "verified_invariants": [
+    "LONG executes from ask-side reference only",
+    "SHORT executes from bid-side reference only",
+    "adverse-only slippage enforced",
+    "negative/favourable slippage fails closed",
+    "stale and invalid quotes reject",
+    "closed/unknown session rejects",
+    "disconnected/unknown provider rejects",
+    "partial fill cannot exceed authorization",
+    "rejected fill creates zero exposure",
+    "duplicate request cannot double-fill",
+    "cancel/replace cannot enlarge, invert, or substitute",
+    "timestamp regression/latency violation rejects",
+    "stale risk or portfolio state rejects",
+    "reconciliation pending/failed blocks new exposure",
+    "kill state dominates execution",
+    "filled_exposure <= authorized_exposure <= requested_exposure",
+    "SHADOW_ONLY is immutable",
+    "broker_write_authority remains FALSE",
+    "audit lineage is complete",
+    "deterministic replay yields identical output"
+  ],
+  "strategy_outcome_evaluated": false,
+  "pnl_evaluated": false,
+  "q003_prospective_outcomes_open": false,
+  "rnd0060r_prospective_outcomes_open": false,
+  "validation_2021_2022_open": false,
+  "reserved_final_2023_2024_open": false,
+  "broker_writes": false,
+  "capital_authority": false,
+  "live_execution_authority": false,
+  "automatic_promotion": false,
+  "automatic_merge": false
+}
