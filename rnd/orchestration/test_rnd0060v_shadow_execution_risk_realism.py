@@ -35,7 +35,7 @@ class TestRND0060V(unittest.TestCase):
     def test_03_adverse_slippage_sign(self):
         lo=simulate_shadow_execution(s(direction='LONG',slippage=0.0003),q(),r())
         sh=simulate_shadow_execution(s(direction='SHORT',slippage=0.0003,request_id='X2'),q(),r())
-        self.assertEqual(lo['simulated_fill_price'],1.1005); self.assertEqual(sh['simulated_fill_price'],1.0997)
+        self.assertAlmostEqual(lo['simulated_fill_price'],1.1005,places=12); self.assertAlmostEqual(sh['simulated_fill_price'],1.0997,places=12)
 
     def test_04_negative_slippage_fails(self):
         with self.assertRaises(RND0060VError): simulate_shadow_execution(s(slippage=-0.1),q(),r())
