@@ -1,0 +1,38 @@
+{
+  "task_id": "RND-0060W",
+  "status": "COMPLETE_INTEGRATION_REHEARSAL_VERIFIED",
+  "branch": "agent/rnd-0060w-end-to-end-shadow-integration-rehearsal",
+  "design_commit": "88a0ad40013102d1be2aa0feffbf5266d0bd376a",
+  "orchestrator_commit": "3660d92b691c49003f5486a0aab50813bee0711e",
+  "verified_test_head": "83b719ce63af34f99228cb27e380c4bf2ff77a16",
+  "hostile_tests": {
+    "passed": 24,
+    "total": 24,
+    "result": "OK"
+  },
+  "verification": {
+    "provenance_gate": "VERIFIED",
+    "activity_admissibility": "VERIFIED",
+    "risk_authorization": "VERIFIED",
+    "shadow_execution_realism": "VERIFIED",
+    "reconciliation": "VERIFIED",
+    "audit_lineage": "VERIFIED",
+    "kill_precedence": "VERIFIED",
+    "deterministic_replay": "VERIFIED"
+  },
+  "governance": {
+    "strategy_outcome_opened": false,
+    "q003_prospective_outcomes_opened": false,
+    "rnd0060r_prospective_outcomes_opened": false,
+    "validation_2021_2022_opened": false,
+    "reserved_final_2023_2024_opened": false,
+    "broker_writes": false,
+    "capital_authority": false,
+    "live_execution": false,
+    "automatic_promotion": false,
+    "automatic_merge": false
+  },
+  "mode": "SHADOW_ONLY",
+  "broker_write_authority": false,
+  "human_only_gates_preserved": true
+}
