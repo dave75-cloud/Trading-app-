@@ -30,14 +30,24 @@ class Tests(unittest.TestCase):
         }
 
     def fixture_compute(self, shard, pair):
-        return {"windows":{"TOKYO_OPEN":{
-            "primary":{f"offset:{off:+d}":{
-                "eligible":1,"missing":int(t in self.source[pair][1])}
-                for off,t in ((15,self.a),(20,self.b))},
-            "exclude_jan1_dec25_sensitivity":{f"offset:{off:+d}":{
-                "eligible":1,"missing":int(t in self.source[pair][1])}
-                for off,t in ((15,self.a),(20,self.b))},
-        }}}
+        # The production aggregator visits BOTH Tokyo boundaries. At close,
+        # this fixture has no missing timestamps; return complete offset keys.
+        windows = {}
+        for boundary in ("OPEN", "CLOSE"):
+            offsets = {
+                f"offset:{off:+d}": {
+                    "eligible": 1,
+                    "missing": int(boundary == "OPEN" and t in self.source[pair][1]),
+                }
+                for off, t in ((15, self.a), (20, self.b))
+            }
+            windows[f"TOKYO_{boundary}"] = {
+                "primary": {k: dict(v) for k, v in offsets.items()},
+                "exclude_jan1_dec25_sensitivity": {
+                    k: dict(v) for k, v in offsets.items()
+                },
+            }
+        return {"windows": windows}
 
     def mocked(self):
         with patch.object(target,"verified_sets",return_value=self.source):
