@@ -175,6 +175,10 @@ READ_ONLY_PRACTICE_HOST_ALLOWLIST = {
     "rnd/research/OANDA_HISTORICAL_ACQUISITION_DECLARATION.json",
     "rnd/orchestration/oanda_historical_acquisition.py",
     "rnd/orchestration/test_oanda_historical_acquisition.py",
+    # Audited GET-only OANDA Practice candle acquisition wrappers; no order endpoints.
+    "rnd/tools/rnd0047_fresh_validation_acquire.py",
+    "rnd/tools/rnd0048_tranche002_acquire.py",
+    "rnd/tools/rnd0054_generic_acquire.py",
 }
 
 broker_hits = []

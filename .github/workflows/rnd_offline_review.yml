@@ -1,0 +1,51 @@
+name: R&D Offline Validation Review
+
+on:
+  pull_request:
+  # Intentionally PR-only: no broker, scheduler, deployment, or trading triggers.
+
+permissions:
+  contents: read
+
+jobs:
+  rnd-offline-review:
+    name: R&D offline tests and governance
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+      PYTHONNOUSERSITE: "1"
+      PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+    steps:
+      - name: Checkout proposed PR merge
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python 3.13
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Check cumulative protected paths across complete PR
+        run: python3 rnd/tools/ci_cumulative_path_guard.py
+
+      - name: Run deterministic R&D admission and session-clock tests
+        working-directory: rnd/orchestration
+        run: |
+          python3 -m unittest -v \
+            test_rnd0062_research_admission_standard.py \
+            test_rnd0074_session_clock_rehearsal.py
+
+      - name: Run synthetic historical metadata tests
+        working-directory: rnd/tools
+        run: python3 -m unittest -v test_rnd0074_development_metadata_audit.py
+
+      - name: Audit R&D workspace governance
+        run: python3 rnd/tools/audit_workspace.py
+
+      - name: State strict authority boundary
+        run: |
+          echo "Offline synthetic checks only; no historical market dataset access."
+          echo "No network broker calls, order writes, deploys or live trading."
+          echo "No candidate promotion, research admission, or automatic merge."
